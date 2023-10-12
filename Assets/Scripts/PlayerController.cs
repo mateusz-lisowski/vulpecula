@@ -17,19 +17,25 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidBody;
     private Animator animator;
 
+    private BoxCollider2D groundCheck;
+    private BoxCollider2D wallCheck;
+
     private bool isFacingRight = true;
-    private bool isWalking;
+    private bool isWalking = false;
+    private bool isGrounded = false;
+    private bool isFacingWall = false;
 
     private int score = 0;
 
-    private bool IsGrounded()
+    private void check_collisions()
     {
-        return Physics2D.Raycast(this.transform.position, Vector2.down, rayLength, groundLayer.value);
-    }
+		isGrounded = groundCheck.IsTouchingLayers(groundLayer) && rigidBody.velocity.y <= 0;
+		isFacingWall = wallCheck.IsTouchingLayers(groundLayer);
+	}
 
 	private void Jump() 
     {
-        if (IsGrounded())
+        if (isGrounded)
         {
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
@@ -57,6 +63,9 @@ public class PlayerController : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        groundCheck = transform.GetChild(0).GetComponent<BoxCollider2D>();
+        wallCheck = transform.GetChild(1).GetComponent<BoxCollider2D>();
     }
 
     // Start is called before the first frame update
@@ -68,26 +77,29 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isWalking = false;
+        check_collisions();
+		isWalking = false;
 
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) 
         {
-            transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            isWalking = true;
-            if (!isFacingRight)
+            if (!isFacingWall)
             {
-                Flip();
+                transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                isWalking = true;
             }
+            if (!isFacingRight)
+                Flip();
 		}
 
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
-            transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-			isWalking = true;
+            if (!isFacingWall)
+            {
+                transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                isWalking = true;
+            }
 			if (isFacingRight)
-			{
 				Flip();
-			}
 		}
 
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
@@ -95,9 +107,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-		// Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 0.1f, false);
-
-		animator.SetBool("isGrounded", IsGrounded());
+		animator.SetBool("isGrounded", isGrounded);
 		animator.SetBool("isWalking", isWalking);
 	}
 }
