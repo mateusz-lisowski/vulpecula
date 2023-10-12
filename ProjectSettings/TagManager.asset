@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Bonus
   layers:
   - Default
   - TransparentFX
@@ -49,6 +50,9 @@ TagManager:
     locked: 0
   - name: Props
     uniqueID: 4026928817
+    locked: 0
+  - name: Items
+    uniqueID: 2666157029
     locked: 0
   - name: Platforms
     uniqueID: 2059121161
