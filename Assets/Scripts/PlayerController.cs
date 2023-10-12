@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D wallCheck;
 
     private bool isFacingRight = true;
-    private bool isWalking = false;
+    private bool isMoving = false;
     private bool isGrounded = false;
     private bool isFacingWall = false;
 
@@ -78,14 +78,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         check_collisions();
-		isWalking = false;
+		isMoving = false;
 
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) 
         {
             if (!isFacingWall)
             {
                 transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-                isWalking = true;
+				isMoving = true;
             }
             if (!isFacingRight)
                 Flip();
@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
             if (!isFacingWall)
             {
                 transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-                isWalking = true;
+				isMoving = true;
             }
 			if (isFacingRight)
 				Flip();
@@ -108,6 +108,7 @@ public class PlayerController : MonoBehaviour
         }
 
 		animator.SetBool("isGrounded", isGrounded);
-		animator.SetBool("isWalking", isWalking);
+		animator.SetBool("isFalling", rigidBody.velocity.y < 0);
+		animator.SetBool("isMoving", isMoving);
 	}
 }
