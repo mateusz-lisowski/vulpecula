@@ -45,6 +45,9 @@ TagManager:
   - name: Background
     uniqueID: 2274104453
     locked: 0
+  - name: Props Background
+    uniqueID: 4255069353
+    locked: 0
   - name: Tilemap
     uniqueID: 776997345
     locked: 0
