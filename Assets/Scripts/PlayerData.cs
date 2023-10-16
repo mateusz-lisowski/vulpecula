@@ -21,13 +21,36 @@ public class PlayerData : ScriptableObject
 	[HideInInspector] public float runDeccelAmount; // calculated decceleration force
 
 	[Space(10)]
-	
+
 	[Header("Dash")]
 	public float dashDistance; // maximum reachable distance of a dash
 	public float dashTime; // time to reach the maximum distance of a dash
 	public float dashCooldown; // minimum time between two consecutive dashes
 	public int dashesCount; // number of dashes
 	[HideInInspector] public float dashForce; // calculated dash force
+
+	[Space(5)]
+	[Range(0.01f, 0.5f)] public float dashInputBufferTime; // time within which too early dash will still be performed
+
+	[Space(10)]
+
+	[Header("Wall Slide")]
+	public float wallSlideMaxSpeed; // maximum wall slide speed
+	public float wallSlideAcceleration; // acceleration (0 = none, wallSlideMaxSpeed = instant)
+	public float wallSlideDecceleration; // decceleration (0 = none, wallSlideMaxSpeed = instant)
+	[HideInInspector] public float wallSlideAccelAmount; // calculated acceleration force
+	[HideInInspector] public float wallSlideDeccelAmount; // calculated decceleration force
+
+	[Space(5)]
+
+	[Header("Wall Jump")]
+	public float wallJumpForce; // force to jump off a wall
+	[Range(0f, 1f)] public float wallJumpInputReduction; // input reduction while wall jumping
+	public float wallJumpTime; // time to reduce the input while wall jumping
+	public float wallJumpMinTime; // minimum time of a wall jump (prevent isGrounded)
+
+	[Space(5)]
+	[Range(0.01f, 0.5f)] public float wallJumpCoyoteTime; // time after falling off a wall where you can still wall jump
 
 	[Space(10)]
 
@@ -38,18 +61,15 @@ public class PlayerData : ScriptableObject
 	public int jumpsCount; // number of jumps (2 = double jump)
 	[HideInInspector] public float jumpForce; // calculated jump force
 
-	[Header("Both Jumps")]
+	[Space(5)]
 	public float jumpCutGravityMult; // gravityScale multiplier when released jump button
 	public float jumpHangVelocityThreshold; // y velocity at top of the jump below which to "hang"
 	[Range(0f, 1)] public float jumpHangGravityMult; // gravity reduction while "hanging"
 	public float jumpHangSpeedMult;  // speed increase while "hanging"
 
-	[Space(10)]
-
-	[Header("Assists")]
+	[Space(5)]
 	[Range(0.01f, 0.5f)] public float coyoteTime; // time after falling off a platform where you can still jump
 	[Range(0.01f, 0.5f)] public float jumpInputBufferTime; // time within which too early jump will still be performed
-	[Range(0.01f, 0.5f)] public float dashInputBufferTime; // time within which too early dash will still be performed
 
 
 	private void OnValidate()
@@ -63,5 +83,8 @@ public class PlayerData : ScriptableObject
 
 		runAccelAmount = (50 * runAcceleration) / runMaxSpeed;
 		runDeccelAmount = (50 * runDecceleration) / runMaxSpeed;
+
+		wallSlideAccelAmount = (50 * wallSlideAcceleration) / wallSlideMaxSpeed;
+		wallSlideDeccelAmount = (50 * wallSlideDecceleration) / wallSlideMaxSpeed;
 	}
 }

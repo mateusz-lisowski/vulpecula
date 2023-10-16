@@ -8898,12 +8898,16 @@ MonoBehaviour:
   <isFalling>k__BackingField: 0
   <isGrounded>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
+  <isLastFacedWallRight>k__BackingField: 0
   <jumpsLeft>k__BackingField: 0
   <dashesLeft>k__BackingField: 0
+  <lastTurnTime>k__BackingField: 0
   <lastGroundedTime>k__BackingField: 0
+  <lastWallHoldingTime>k__BackingField: 0
   <lastJumpInputTime>k__BackingField: 0
+  <lastWallJumpTime>k__BackingField: 0
   <lastDashInputTime>k__BackingField: 0
-  <lastBeginDashTime>k__BackingField: 0
+  <lastDashTime>k__BackingField: 0
   <jumpCooldown>k__BackingField: 0
   <dashCooldown>k__BackingField: 0
 --- !u!95 &396151829
@@ -9743,8 +9747,8 @@ Transform:
   m_GameObject: {fileID: 1108052939}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.33, y: -0.3, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.6, z: 1}
+  m_LocalPosition: {x: 0.33, y: -0.35, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.55, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 396151825}

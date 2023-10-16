@@ -14,14 +14,18 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 	[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
 	[field: Space(10)]
+	[field: SerializeField, ReadOnly] public float lastTurnTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastWallHoldingTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastJumpInputTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastWallJumpTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastDashInputTime { get; private set; }
-	[field: SerializeField, ReadOnly] public float lastBeginDashTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastDashTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float dashCooldown { get; private set; }
@@ -52,9 +56,11 @@ public class PlayerMovement : MonoBehaviour
 		isFacingRight = true;
 
 		lastGroundedTime = float.PositiveInfinity;
+		lastWallHoldingTime = float.PositiveInfinity;
 		lastJumpInputTime = float.PositiveInfinity;
+		lastWallJumpTime = float.PositiveInfinity;
 		lastDashInputTime = float.PositiveInfinity;
-		lastBeginDashTime = float.PositiveInfinity;
+		lastDashTime = float.PositiveInfinity;
 
 		jumpCooldown = 0;
 		dashCooldown = 0;
@@ -74,12 +80,15 @@ public class PlayerMovement : MonoBehaviour
 		updateInputs();
 		updateCollisions();
 
+		updateWallFacing();
+
 		updateDash();
 		updateJump();
 
 		animator.SetBool("isGrounded", isGrounded);
 		animator.SetBool("isFalling", rigidBody.velocity.y < 0);
 		animator.SetBool("isMoving", isMoving);
+		animator.SetBool("isWallHolding", lastWallHoldingTime == 0);
 	}
 
 	// handle run
@@ -88,16 +97,22 @@ public class PlayerMovement : MonoBehaviour
 		if (!isDashing)
 		{
 			updateRun();
+
+			if (lastWallHoldingTime == 0)
+				updateWallSlide();
 		}
 	}
 
 
 	private void updateTimers()
 	{
+		lastTurnTime += Time.deltaTime;
 		lastGroundedTime += Time.deltaTime;
+		lastWallHoldingTime += Time.deltaTime;
 		lastJumpInputTime += Time.deltaTime;
+		lastWallJumpTime += Time.deltaTime;
 		lastDashInputTime += Time.deltaTime;
-		lastBeginDashTime += Time.deltaTime;
+		lastDashTime += Time.deltaTime;
 
 		jumpCooldown -= Time.deltaTime;
 		dashCooldown -= Time.deltaTime;
@@ -105,6 +120,8 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Flip()
 	{
+		lastTurnTime = 0;
+
 		isFacingRight = !isFacingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x = -theScale.x;
@@ -141,6 +158,13 @@ public class PlayerMovement : MonoBehaviour
 		isGrounded = groundCheck.IsTouchingLayers(groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(groundLayer);
 
+		// disable registering wall collision immediately after turning because wallCheck's hitbox
+		// needs time to get updated
+		if (lastTurnTime < 0.1f)
+		{
+			isFacingWall = false;
+		}
+
 		if (isJumping && !isFalling)
 		{
 			isGrounded = false;
@@ -152,6 +176,15 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	private void updateWallFacing()
+	{
+		if (!isGrounded && isFacingWall)
+			lastWallHoldingTime = 0;
+
+		if (isFacingWall)
+			isLastFacedWallRight = isFacingRight;
+	}
+
 	private bool canDash()
 	{
 		return dashCooldown <= 0 && lastDashInputTime < data.dashInputBufferTime && dashesLeft > 0;
@@ -159,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
 	private void dash()
 	{
 		isDashing = true;
-		lastBeginDashTime = 0;
+		lastDashTime = 0;
 		lastDashInputTime = float.PositiveInfinity;
 		dashCooldown = data.dashTime + data.dashCooldown;
 
@@ -186,7 +219,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		if (isDashing)
-			if (dashCutInput || lastBeginDashTime >= data.dashTime
+			if (dashCutInput || lastDashTime >= data.dashTime
 				|| isFacingWall || Mathf.Abs(rigidBody.velocity.y) > 0.01f)
 			{
 				isDashing = false;
@@ -200,15 +233,16 @@ public class PlayerMovement : MonoBehaviour
 		}
 		trail.emitting = isDashing;
 
-		if (isGrounded)
+		if (isGrounded || lastWallHoldingTime == 0)
 		{
 			dashesLeft = data.dashesCount;
 		}
 	}
-
+	
 	private bool canJump()
 	{
-		return jumpCooldown <= 0 && lastJumpInputTime < data.jumpInputBufferTime && jumpsLeft > 0;
+		return jumpCooldown <= 0 && lastJumpInputTime < data.jumpInputBufferTime 
+			&& jumpsLeft > 0 && lastWallJumpTime >= data.wallJumpTime;
 	}
 	private bool canJumpCut()
 	{
@@ -230,10 +264,28 @@ public class PlayerMovement : MonoBehaviour
 			force -= rigidBody.velocity.y;
 			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
 		}
+
+		if (lastWallHoldingTime < data.wallJumpCoyoteTime)
+		{
+			lastWallHoldingTime = float.PositiveInfinity;
+			lastWallJumpTime = 0;
+
+			if (isLastFacedWallRight == isFacingRight)
+				Flip();
+
+			float forceDirection = isFacingRight ? 1.0f : -1.0f;
+
+			float wallJumpForce = data.wallJumpForce;
+			rigidBody.AddForce(wallJumpForce * forceDirection * Vector2.right, ForceMode2D.Impulse);
+		}
 	}
 	private void updateGravityScale()
 	{
 		if (isDashing)
+		{
+			rigidBody.gravityScale = 0;
+		}
+		else if (lastWallHoldingTime == 0)
 		{
 			rigidBody.gravityScale = 0;
 		}
@@ -254,7 +306,7 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void updateJump()
 	{
-		if (!isGrounded && rigidBody.velocity.y <= 0)
+		if (!isGrounded && lastWallHoldingTime != 0 && rigidBody.velocity.y <= 0)
 		{
 			isFalling = true;
 		}
@@ -271,12 +323,13 @@ public class PlayerMovement : MonoBehaviour
 
 		updateGravityScale();
 
-		if (isGrounded)
+		if ((isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wallJumpMinTime)
 		{
 			jumpsLeft = data.jumpsCount;
 			isJumping = false;
 			isFalling = false;
 			lastGroundedTime = 0;
+			lastWallJumpTime = float.PositiveInfinity;
 		}
 
 		if (rigidBody.velocity.y < -data.maxFallSpeed)
@@ -290,6 +343,12 @@ public class PlayerMovement : MonoBehaviour
 	private void updateRun()
 	{
 		float targetSpeed = moveInput.x * data.runMaxSpeed;
+
+		if (lastWallJumpTime < data.wallJumpTime)
+		{
+			targetSpeed = Mathf.Lerp(targetSpeed, rigidBody.velocity.x, data.wallJumpInputReduction);
+		}
+
 		float accelRate = targetSpeed == 0 ? data.runDeccelAmount : data.runAccelAmount;
 
 		if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jumpHangVelocityThreshold)
@@ -302,5 +361,16 @@ public class PlayerMovement : MonoBehaviour
 		float movement = speedDif * accelRate;
 
 		rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
+	}
+
+	private void updateWallSlide()
+	{
+		float targetSpeed = Mathf.Min(moveInput.y, 0f) * data.wallSlideMaxSpeed;
+		float accelRate = targetSpeed == 0 ? data.wallSlideDeccelAmount : data.wallSlideAccelAmount;
+
+		float speedDif = targetSpeed - rigidBody.velocity.y;
+		float movement = speedDif * accelRate;
+
+		rigidBody.AddForce(movement * Vector2.up, ForceMode2D.Force);
 	}
 }
