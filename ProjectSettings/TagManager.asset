@@ -54,11 +54,14 @@ TagManager:
   - name: Props
     uniqueID: 4026928817
     locked: 0
-  - name: Items
-    uniqueID: 2666157029
-    locked: 0
   - name: Platforms
     uniqueID: 2059121161
+    locked: 0
+  - name: Particles
+    uniqueID: 228446519
+    locked: 0
+  - name: Items
+    uniqueID: 2666157029
     locked: 0
   - name: Player and Enemies
     uniqueID: 1400974387

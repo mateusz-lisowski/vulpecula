@@ -21,8 +21,14 @@ MonoBehaviour:
   runDecceleration: 4
   runAccelAmount: 14.285714
   runDeccelAmount: 28.571428
+  dashDistance: 2
+  dashTime: 0.15
+  dashCooldown: 0.1
+  dashesCount: 1
+  dashForce: 13.333333
   jumpHeight: 1.5
   jumpTimeToApex: 0.3
+  jumpCooldown: 0.1
   jumpsCount: 2
   jumpForce: 10
   jumpCutGravityMult: 2
@@ -31,3 +37,4 @@ MonoBehaviour:
   jumpHangSpeedMult: 1.2
   coyoteTime: 0.1
   jumpInputBufferTime: 0.05
+  dashInputBufferTime: 0.05

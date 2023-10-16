@@ -10,25 +10,34 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isJumping { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isDashing { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
+	[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastJumpInputTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastDashInputTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastBeginDashTime { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
+	[field: SerializeField, ReadOnly] public float dashCooldown { get; private set; }
 
 
 	private Rigidbody2D rigidBody;
     private Animator animator;
 
+    private TrailRenderer trail;
     private BoxCollider2D groundCheck;
     private BoxCollider2D wallCheck;
 
 	private Vector2 moveInput;
 
-	[field: SerializeField, ReadOnly] public bool jumpCutInput { get; private set; }
+	private bool jumpCutInput = false;
+	private bool dashCutInput = false;
 
 
 	private void Awake()
@@ -36,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 
+		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
 		groundCheck = transform.Find("Ground Check").GetComponent<BoxCollider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<BoxCollider2D>();
 
@@ -43,6 +53,11 @@ public class PlayerMovement : MonoBehaviour
 
 		lastGroundedTime = float.PositiveInfinity;
 		lastJumpInputTime = float.PositiveInfinity;
+		lastDashInputTime = float.PositiveInfinity;
+		lastBeginDashTime = float.PositiveInfinity;
+
+		jumpCooldown = 0;
+		dashCooldown = 0;
 	}
 
 	// handle inputs and jumping
@@ -59,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
 		updateInputs();
 		updateCollisions();
 
+		updateDash();
 		updateJump();
 
 		animator.SetBool("isGrounded", isGrounded);
@@ -69,7 +85,10 @@ public class PlayerMovement : MonoBehaviour
 	// handle run
 	void FixedUpdate()
 	{
-		updateRun();
+		if (!isDashing)
+		{
+			updateRun();
+		}
 	}
 
 
@@ -77,6 +96,11 @@ public class PlayerMovement : MonoBehaviour
 	{
 		lastGroundedTime += Time.deltaTime;
 		lastJumpInputTime += Time.deltaTime;
+		lastDashInputTime += Time.deltaTime;
+		lastBeginDashTime += Time.deltaTime;
+
+		jumpCooldown -= Time.deltaTime;
+		dashCooldown -= Time.deltaTime;
 	}
 
 	private void Flip()
@@ -97,13 +121,19 @@ public class PlayerMovement : MonoBehaviour
 
 		isMoving = moveInput.x != 0;
 
-		if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
-			Flip();
+		if (!isDashing)
+			if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
+				Flip();
 
 		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Z))
 			lastJumpInputTime = 0;
 
 		jumpCutInput = !Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.Z);
+
+		if (Input.GetKeyDown(KeyCode.C))
+			lastDashInputTime = 0;
+
+		dashCutInput = !Input.GetKey(KeyCode.C);
 	}
 	
 	private void updateCollisions()
@@ -121,10 +151,64 @@ public class PlayerMovement : MonoBehaviour
 			moveInput.x = 0;
 		}
 	}
-    
+
+	private bool canDash()
+	{
+		return dashCooldown <= 0 && lastDashInputTime < data.dashInputBufferTime && dashesLeft > 0;
+	}
+	private void dash()
+	{
+		isDashing = true;
+		lastBeginDashTime = 0;
+		lastDashInputTime = float.PositiveInfinity;
+		dashCooldown = data.dashTime + data.dashCooldown;
+
+		dashesLeft--;
+
+		float forceDirection = isFacingRight ? 1.0f : -1.0f;
+
+		float force = data.dashForce;
+		if (Mathf.Sign(forceDirection) == Mathf.Sign(rigidBody.velocity.x))
+			force -= Mathf.Abs(rigidBody.velocity.x);
+
+		if (force > 0)
+		{
+			rigidBody.AddForce(force * forceDirection * Vector2.right, ForceMode2D.Impulse);
+		}
+
+		rigidBody.AddForce(-rigidBody.velocity.y * Vector2.up, ForceMode2D.Impulse);
+	}
+	private void updateDash()
+	{
+		if (canDash())
+		{
+			dash();
+		}
+
+		if (isDashing)
+			if (dashCutInput || lastBeginDashTime >= data.dashTime
+				|| isFacingWall || Mathf.Abs(rigidBody.velocity.y) > 0.01f)
+			{
+				isDashing = false;
+			}
+
+		if (isDashing)
+		{
+			isJumping = false;
+			isFalling = false;
+			isGrounded = false;
+		}
+		trail.emitting = isDashing;
+
+		if (isGrounded)
+		{
+			dashesLeft = data.dashesCount;
+		}
+	}
+
 	private bool canJump()
 	{
-		return lastJumpInputTime < data.jumpInputBufferTime && jumpsLeft > 0;
+		return jumpCooldown <= 0 && lastJumpInputTime < data.jumpInputBufferTime && jumpsLeft > 0;
 	}
 	private bool canJumpCut()
 	{
@@ -136,6 +220,7 @@ public class PlayerMovement : MonoBehaviour
 		isFalling = false;
 		isGrounded = false;
 		lastJumpInputTime = float.PositiveInfinity;
+		jumpCooldown = data.jumpCooldown;
 
 		jumpsLeft--;
 
@@ -148,7 +233,11 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void updateGravityScale()
 	{
-		if (isJumping && canJumpCut())
+		if (isDashing)
+		{
+			rigidBody.gravityScale = 0;
+		}
+		else if (isJumping && canJumpCut())
 		{
 			rigidBody.gravityScale = data.gravityScale * data.jumpCutGravityMult;
 		}

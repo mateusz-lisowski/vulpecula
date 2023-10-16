@@ -11,7 +11,7 @@ public class PlayerData : ScriptableObject
 	public float fallGravityMult; // gravityScale multiplier when falling
 	public float maxFallSpeed; // maximum fall speed
 
-	[Space(20)]
+	[Space(10)]
 
 	[Header("Run")]
 	public float runMaxSpeed; // maximum running speed
@@ -20,11 +20,21 @@ public class PlayerData : ScriptableObject
 	[HideInInspector] public float runAccelAmount; // calculated acceleration force
 	[HideInInspector] public float runDeccelAmount; // calculated decceleration force
 
-	[Space(20)]
+	[Space(10)]
+	
+	[Header("Dash")]
+	public float dashDistance; // maximum reachable distance of a dash
+	public float dashTime; // time to reach the maximum distance of a dash
+	public float dashCooldown; // minimum time between two consecutive dashes
+	public int dashesCount; // number of dashes
+	[HideInInspector] public float dashForce; // calculated dash force
+
+	[Space(10)]
 
 	[Header("Jump")]
 	public float jumpHeight; // maximum reachable height of a jump
 	public float jumpTimeToApex; // time to reach the maximum height of a jump
+	public float jumpCooldown; // minimum time between two consecutive jumps
 	public int jumpsCount; // number of jumps (2 = double jump)
 	[HideInInspector] public float jumpForce; // calculated jump force
 
@@ -34,15 +44,20 @@ public class PlayerData : ScriptableObject
 	[Range(0f, 1)] public float jumpHangGravityMult; // gravity reduction while "hanging"
 	public float jumpHangSpeedMult;  // speed increase while "hanging"
 
+	[Space(10)]
+
 	[Header("Assists")]
 	[Range(0.01f, 0.5f)] public float coyoteTime; // time after falling off a platform where you can still jump
 	[Range(0.01f, 0.5f)] public float jumpInputBufferTime; // time within which too early jump will still be performed
+	[Range(0.01f, 0.5f)] public float dashInputBufferTime; // time within which too early dash will still be performed
 
 
 	private void OnValidate()
 	{
 		gravityStrength = -(2 * jumpHeight) / (jumpTimeToApex * jumpTimeToApex);
 		jumpForce = Mathf.Abs(gravityStrength) * jumpTimeToApex;
+
+		dashForce = dashDistance / dashTime;
 
 		gravityScale = gravityStrength / Physics2D.gravity.y;
 
