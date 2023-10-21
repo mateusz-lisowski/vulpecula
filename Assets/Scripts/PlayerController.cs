@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
 
     private int score = 0;
 
+    private bool finishedLevel = false;
+
     private bool IsGrounded()
     {
         return Physics2D.Raycast(this.transform.position, Vector2.down, rayLength, groundLayer.value);
@@ -50,6 +52,12 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Score: " + score);
 
             other.gameObject.SetActive(false);
+		}
+
+        if (other.CompareTag("LevelEnd") && finishedLevel == false)
+		{
+            finishedLevel = true;
+            Debug.Log("Level finished!");
 		}
 	}
 
