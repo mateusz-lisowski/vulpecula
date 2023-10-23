@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     const float rayLength = 1.5f;
 
     [Header("Movement parameters")]
@@ -20,7 +19,12 @@ public class PlayerController : MonoBehaviour
     private bool isFacingRight = true;
     private bool isWalking;
 
+    private Vector2 startPosition;
+    private int lives = 3;
     private int score = 0;
+
+    private const int keysNumber = 3;
+    private int keysFound = 0;
 
     private bool finishedLevel = false;
 
@@ -44,6 +48,20 @@ public class PlayerController : MonoBehaviour
         transform.localScale = theScale;
 	}
 
+    private void Death()
+    {
+        lives -= 1;
+        if (lives != 0)
+        {
+            this.transform.position = startPosition;
+            Debug.Log("Lives: " + lives);
+        }
+        else
+        {
+            Debug.Log("Game Over");
+        }
+    }
+
 	private void OnTriggerEnter2D(Collider2D other)
 	{
 		if (other.CompareTag("Bonus"))
@@ -55,16 +73,57 @@ public class PlayerController : MonoBehaviour
 		}
 
         if (other.CompareTag("LevelEnd") && finishedLevel == false)
-		{
-            finishedLevel = true;
-            Debug.Log("Level finished!");
-		}
-	}
+            if (keysFound == keysNumber)
+		    {
+                finishedLevel = true;
+                Debug.Log("Level finished!");
+		    }
+            else
+            {
+                Debug.Log("Not enough keys");
+            }
+
+        if (other.CompareTag("Enemy"))
+        {
+            if (this.transform.position.y > other.transform.position.y)
+            {
+                score += 1;
+                Debug.Log("Killed an enemy");
+            }
+            else
+            {
+                Death();
+            }
+        }
+
+        if (other.CompareTag("Key"))
+        {
+            keysFound += 1;
+            Debug.Log("Found key");
+
+            other.gameObject.SetActive(false);
+        }
+
+        if (other.CompareTag("Heart"))
+        {
+            lives += 1;
+            Debug.Log("Increased live to " + lives);
+
+            other.gameObject.SetActive(false);
+        }
+
+        if (other.CompareTag("FallLevel"))
+        {
+            Death();
+        }
+    }
 
 	private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        startPosition = this.transform.position;
     }
 
     // Start is called before the first frame update
