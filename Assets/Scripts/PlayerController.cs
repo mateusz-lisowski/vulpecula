@@ -148,36 +148,39 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isWalking = false;
-
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) 
+        if (GameManager.instance.currentGameState == GameState.GS_GAME)
         {
-            transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            isWalking = true;
-            if (!isFacingRight)
+            isWalking = false;
+
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
-                Flip();
+                transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                isWalking = true;
+                if (!isFacingRight)
+                {
+                    Flip();
+                }
             }
-		}
 
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-			isWalking = true;
-			if (isFacingRight)
-			{
-				Flip();
-			}
-		}
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            {
+                transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                isWalking = true;
+                if (isFacingRight)
+                {
+                    Flip();
+                }
+            }
 
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
+
+            // Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 0.1f, false);
+
+            animator.SetBool("isGrounded", IsGrounded());
+            animator.SetBool("isWalking", isWalking);
         }
-
-		// Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 0.1f, false);
-
-		animator.SetBool("isGrounded", IsGrounded());
-		animator.SetBool("isWalking", isWalking);
 	}
 }
