@@ -116,9 +116,22 @@ public class PlayerController : MonoBehaviour
         {
             Death();
         }
+
+        if (other.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(other.transform);
+        }
     }
 
-	private void Awake()
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("MovingPlatform"))
+        {
+            transform.SetParent(null);
+        }
+    }
+
+    private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
