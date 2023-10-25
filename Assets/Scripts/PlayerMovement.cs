@@ -173,12 +173,13 @@ public class PlayerMovement : MonoBehaviour
 		if (isFacingWall)
 		{
 			moveInput.x = 0;
+			isMoving = false;
 		}
 	}
 
 	private void updateWallFacing()
 	{
-		if (!isGrounded && isFacingWall)
+		if (!isGrounded && isFacingWall && data.wallSlideEnabled)
 			lastWallHoldingTime = 0;
 
 		if (isFacingWall)

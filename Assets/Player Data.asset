@@ -27,6 +27,7 @@ MonoBehaviour:
   dashesCount: 1
   dashForce: 13.333333
   dashInputBufferTime: 0.05
+  wallSlideEnabled: 0
   wallSlideMaxSpeed: 20
   wallSlideAcceleration: 1
   wallSlideDecceleration: 6

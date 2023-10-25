@@ -35,6 +35,7 @@ public class PlayerData : ScriptableObject
 	[Space(10)]
 
 	[Header("Wall Slide")]
+	public bool wallSlideEnabled; // 'true' if can hold, slide, and jump off walls
 	public float wallSlideMaxSpeed; // maximum wall slide speed
 	public float wallSlideAcceleration; // acceleration (0 = none, wallSlideMaxSpeed = instant)
 	public float wallSlideDecceleration; // decceleration (0 = none, wallSlideMaxSpeed = instant)
