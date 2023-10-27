@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     private bool isWalking;
 
     private Vector2 startPosition;
-    private int lives = 3;
 
     private bool finishedLevel = false;
 
@@ -46,11 +45,10 @@ public class PlayerController : MonoBehaviour
 
     private void Death()
     {
-        lives -= 1;
-        if (lives != 0)
+        GameManager.instance.RemoveLive();
+        if (!GameManager.instance.IsDead())
         {
             this.transform.position = startPosition;
-            Debug.Log("Lives: " + lives);
         }
         else
         {
@@ -81,7 +79,7 @@ public class PlayerController : MonoBehaviour
         {
             if (this.transform.position.y > other.transform.position.y)
             {
-                GameManager.instance.AddPoints(1);
+                GameManager.instance.KilledEnemy();
                 Debug.Log("Killed an enemy");
             }
             else
@@ -98,9 +96,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Heart"))
         {
-            lives += 1;
-            Debug.Log("Increased live to " + lives);
-
+            GameManager.instance.AddLive();
             other.gameObject.SetActive(false);
         }
 
