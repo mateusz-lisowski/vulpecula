@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
+using TMPro;
 
 public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER }
 
@@ -10,10 +13,20 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public GameState currentGameState = GameState.GS_PAUSEMENU;
+    public Canvas inGameCanvas;
+    public TMP_Text scoreText;
+    public Image[] keysTab;
 
-    void SetGameState(GameState newGameState) 
+    private int score = 0;
+    private int keysFound = 0;
+
+    private const int keysNumber = 3;
+
+
+    void SetGameState(GameState newGameState)
     {
         currentGameState = newGameState;
+        inGameCanvas.enabled = true;
     }
 
     public void PauseMenu()
@@ -36,10 +49,33 @@ public class GameManager : MonoBehaviour
         SetGameState(GameState.GS_GAME_OVER);
     }
 
+    public void AddPoints(int points)
+    {
+        score += points;
+        scoreText.text = score.ToString();
+    }
+
+    public void AddKeys()
+    {
+        keysTab[keysFound].color = Color.red;
+        keysFound++;
+    }
+
+    public bool IsEnoughKeys()
+    {
+        return keysFound == keysNumber;
+    }
+
 
     void Awake() 
     {
         instance = this;
+
+        for (int i = 0; i < keysNumber; i++)
+        {
+            keysTab[i].color = Color.gray;
+        }
+
     }
 
     // Start is called before the first frame update

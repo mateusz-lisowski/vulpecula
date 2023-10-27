@@ -21,10 +21,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 startPosition;
     private int lives = 3;
-    private int score = 0;
-
-    private const int keysNumber = 3;
-    private int keysFound = 0;
 
     private bool finishedLevel = false;
 
@@ -66,14 +62,12 @@ public class PlayerController : MonoBehaviour
 	{
 		if (other.CompareTag("Bonus"))
 		{
-            score += 1;
-            Debug.Log("Score: " + score);
-
+            GameManager.instance.AddPoints(1);
             other.gameObject.SetActive(false);
 		}
 
         if (other.CompareTag("LevelEnd") && finishedLevel == false)
-            if (keysFound == keysNumber)
+            if (GameManager.instance.IsEnoughKeys())
 		    {
                 finishedLevel = true;
                 Debug.Log("Level finished!");
@@ -87,7 +81,7 @@ public class PlayerController : MonoBehaviour
         {
             if (this.transform.position.y > other.transform.position.y)
             {
-                score += 1;
+                GameManager.instance.AddPoints(1);
                 Debug.Log("Killed an enemy");
             }
             else
@@ -98,9 +92,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Key"))
         {
-            keysFound += 1;
-            Debug.Log("Found key");
-
+            GameManager.instance.AddKeys();
             other.gameObject.SetActive(false);
         }
 
