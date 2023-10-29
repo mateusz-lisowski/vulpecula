@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameState currentGameState = GameState.GS_PAUSEMENU;
+    public GameState currentGameState;
     public Canvas inGameCanvas;
 
     public TMP_Text scoreText;
@@ -42,22 +42,26 @@ public class GameManager : MonoBehaviour
 
     public void PauseMenu()
     {
+        Time.timeScale = 0.0f;
         SetGameState(GameState.GS_PAUSEMENU);
     }
 
     public void InGame()
     {
-        SetGameState(GameState.GS_GAME);
+		Time.timeScale = 1.0f;
+		SetGameState(GameState.GS_GAME);
     }
 
-    public void LevelComplited()
+    public void LevelCompleted()
     {
-        SetGameState(GameState.GS_LEVELCOMPLETED);
+		Debug.Log("Level finished!");
+		SetGameState(GameState.GS_LEVELCOMPLETED);
     }
 
     public void GameOver()
     {
-        SetGameState(GameState.GS_GAME_OVER);
+		Debug.Log("Game Over");
+		SetGameState(GameState.GS_GAME_OVER);
     }
 
     public void AddPoints(int points)
@@ -123,6 +127,7 @@ public class GameManager : MonoBehaviour
     void Awake() 
     {
         instance = this;
+        this.currentGameState = GameState.GS_GAME;
 
         for (int i = 0; i < maxKeysNumber; i++)
         {

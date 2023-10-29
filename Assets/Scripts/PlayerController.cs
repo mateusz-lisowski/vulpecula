@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 startPosition;
 
-    private bool finishedLevel = false;
 
     private bool IsGrounded()
     {
@@ -52,7 +51,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Game Over");
+			GameManager.instance.GameOver();
         }
     }
 
@@ -64,11 +63,10 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
 		}
 
-        if (other.CompareTag("LevelEnd") && finishedLevel == false)
+        if (other.CompareTag("LevelEnd") && GameManager.instance.currentGameState == GameState.GS_GAME)
             if (GameManager.instance.IsEnoughKeys())
 		    {
-                finishedLevel = true;
-                Debug.Log("Level finished!");
+                GameManager.instance.LevelCompleted();
 		    }
             else
             {
@@ -136,10 +134,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.currentGameState == GameState.GS_GAME)
-        {
-            isWalking = false;
+        isWalking = false;
 
+        if (GameManager.instance.currentGameState == GameState.GS_GAME
+            || GameManager.instance.currentGameState == GameState.GS_LEVELCOMPLETED)
+        {
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
@@ -166,9 +165,9 @@ public class PlayerController : MonoBehaviour
             }
 
             // Debug.DrawRay(transform.position, rayLength * Vector3.down, Color.white, 0.1f, false);
-
-            animator.SetBool("isGrounded", IsGrounded());
-            animator.SetBool("isWalking", isWalking);
         }
+
+        animator.SetBool("isGrounded", IsGrounded());
+        animator.SetBool("isWalking", isWalking);
 	}
 }
