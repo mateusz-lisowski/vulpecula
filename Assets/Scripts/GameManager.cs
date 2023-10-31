@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameState currentGameState;
+    public GameState currentGameState = GameState.GS_PAUSEMENU;
     public Canvas inGameCanvas;
 
     public TMP_Text scoreText;
@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
     void Awake() 
     {
         instance = this;
-        this.currentGameState = GameState.GS_GAME;
+        InGame();
 
         for (int i = 0; i < maxKeysNumber; i++)
         {
