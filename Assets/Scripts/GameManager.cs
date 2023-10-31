@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER }
 
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     public void LevelCompleted()
     {
-		Debug.Log("Level finished!");
+		Debug.Log("Level finished in " + timer + " seconds!");
 		SetGameState(GameState.GS_LEVELCOMPLETED);
     }
 
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
 		Debug.Log("Game Over");
 		SetGameState(GameState.GS_GAME_OVER);
     }
+
 
     public void AddPoints(int points)
     {
@@ -160,10 +162,21 @@ public class GameManager : MonoBehaviour
             PauseMenu();
         }
 
-        // Increase timer
-        timer += Time.deltaTime;
+		if (Input.GetKey(KeyCode.R))
+		{
+			ResetScene();
+		}
+
+		// Increase timer
+		timer += Time.deltaTime;
         int minutes = (int)(timer / 60);
         int seconds = (int)(timer % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
+
+
+    void ResetScene()
+    {
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
 }
