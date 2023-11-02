@@ -5,6 +5,7 @@ public class EnemyData : ScriptableObject
 {
 	[Header("Info")]
 	public bool defaultFacingRight; // 'true' if the sprite faces right
+	public Vector2 centerOffset; // offset to the center of the body
 
 	[HideInInspector] public float gravityStrength;
 	[HideInInspector] public float gravityScale;

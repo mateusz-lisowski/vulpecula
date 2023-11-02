@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Pig Data
   m_EditorClassIdentifier: 
   defaultFacingRight: 1
-  gravityStrength: -33.333332
+  centerOffset: {x: -0.2, y: -0.425}
+  gravityStrength: -111.1111
   gravityScale: 1
   runEnabled: 1
   runMaxSpeed: 10
@@ -25,4 +26,4 @@ MonoBehaviour:
   jumpHeight: 1.5
   jumpTimeToApex: 0.3
   jumpCooldown: 2
-  jumpForce: 10
+  jumpForce: 33.333332

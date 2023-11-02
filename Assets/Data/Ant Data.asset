@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Ant Data
   m_EditorClassIdentifier: 
   defaultFacingRight: 0
+  centerOffset: {x: 0.4, y: -0.5}
   gravityStrength: 0
   gravityScale: 1
   runEnabled: 1

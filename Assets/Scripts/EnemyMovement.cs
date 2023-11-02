@@ -89,11 +89,30 @@ public class EnemyMovement : MonoBehaviour
 		jumpCooldown -= Time.deltaTime;
 	}
 
+	private bool isFacingSlope()
+	{
+		Vector2 center = (Vector2)transform.position + data.centerOffset;
+
+		Vector2 sourceLow = new Vector2(center.x, center.y - 0.2f);
+		Vector2 sourceHigh = new Vector2(center.x, center.y + 0.2f);
+
+		Vector2 dir = isFacingRight ? Vector2.right : Vector2.left;
+
+		RaycastHit2D hitLow = Physics2D.Raycast(sourceLow, dir, Mathf.Infinity, groundLayer.value);
+		RaycastHit2D hitHigh = Physics2D.Raycast(sourceHigh, dir, Mathf.Infinity, groundLayer.value);
+
+		return Mathf.Abs(hitHigh.point.x - hitLow.point.x) > 0.1f;
+	}
 	private void updateCollisions()
 	{
 		isGrounded = groundCheck.IsTouchingLayers(groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(groundLayer);
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(groundLayer);
+
+		if (isFacingWall && isFacingSlope())
+		{
+			isFacingWall = false;
+		}
 
 		// disable registering wall/fall collision immediately after turning because wallCheck and
 		// fallCheck hitboxes need time to get updated
@@ -127,7 +146,7 @@ public class EnemyMovement : MonoBehaviour
 	{
 		moveInput = new Vector2();
 
-		if (isFacingWall || isNoGroundAhead)
+		if (isFacingWall || (isNoGroundAhead && isGrounded))
 		{
 			Flip();
 		}
