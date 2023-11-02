@@ -1,6 +1,4 @@
-using System.ComponentModel;
 using UnityEngine;
-
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -69,12 +67,6 @@ public class PlayerMovement : MonoBehaviour
 	// handle inputs and jumping
 	void Update()
 	{
-		// tmp for debugging
-		if (Input.GetKey(KeyCode.X))
-			Time.timeScale = 0.05f;
-		else
-			Time.timeScale = 1.0f;
-
 		updateTimers();
 
 		updateInputs();
