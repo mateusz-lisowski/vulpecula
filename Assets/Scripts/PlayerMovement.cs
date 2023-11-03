@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -115,9 +116,7 @@ public class PlayerMovement : MonoBehaviour
 		lastTurnTime = 0;
 
 		isFacingRight = !isFacingRight;
-		Vector3 theScale = transform.localScale;
-		theScale.x = -theScale.x;
-		transform.localScale = theScale;
+		transform.Rotate(0, 180, 0);
 	}
 	private void updateInputs()
 	{

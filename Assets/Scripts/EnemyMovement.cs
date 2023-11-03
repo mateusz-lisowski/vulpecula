@@ -5,7 +5,6 @@ public class EnemyMovement : MonoBehaviour
 {
 	public EnemyData data;
 	public LayerMask groundLayer;
-	public bool awakeMoveRight;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
@@ -25,6 +24,7 @@ public class EnemyMovement : MonoBehaviour
 
 	private Rigidbody2D rigidBody;
 	private Animator animator;
+	private Transform centerDirection;
 
 	private BoxCollider2D groundCheck;
 	private BoxCollider2D wallCheck;
@@ -37,16 +37,13 @@ public class EnemyMovement : MonoBehaviour
 	{
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
+		centerDirection = transform.Find("Direction").GetComponent<Transform>();
 
 		groundCheck = transform.Find("Ground Check").GetComponent<BoxCollider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<BoxCollider2D>();
 		fallCheck = transform.Find("Fall Check").GetComponent<BoxCollider2D>();
 
-		isFacingRight = data.defaultFacingRight;
-		if (awakeMoveRight != isFacingRight)
-		{
-			Flip();
-		}
+		isFacingRight = centerDirection.transform.right.x > 0;
 
 		lastGroundedTime = float.PositiveInfinity;
 		lastJumpInputTime = float.PositiveInfinity;
@@ -91,7 +88,7 @@ public class EnemyMovement : MonoBehaviour
 
 	private bool isFacingSlope()
 	{
-		Vector2 center = (Vector2)transform.position + data.centerOffset;
+		Vector2 center = centerDirection.position;
 
 		Vector2 sourceLow = new Vector2(center.x, center.y - 0.2f);
 		Vector2 sourceHigh = new Vector2(center.x, center.y + 0.2f);
@@ -138,9 +135,7 @@ public class EnemyMovement : MonoBehaviour
 		lastTurnTime = 0;
 
 		isFacingRight = !isFacingRight;
-		Vector3 theScale = transform.localScale;
-		theScale.x = -theScale.x;
-		transform.localScale = theScale;
+		transform.Rotate(0, 180, 0);
 	}
 	private void updateInputs()
 	{
