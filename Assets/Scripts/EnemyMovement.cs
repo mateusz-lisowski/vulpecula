@@ -4,14 +4,16 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
 	public EnemyData data;
+	public GameObject attackPrefab;
+	public LayerMask playerLayer;
 	public LayerMask groundLayer;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isJumping { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isDashing { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isProvoked { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isNoGroundAhead { get; private set; }
 	[field: Space(10)]
@@ -20,15 +22,18 @@ public class EnemyMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastJumpInputTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
+	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
 
 	private Rigidbody2D rigidBody;
 	private Animator animator;
 	private Transform centerDirection;
+	private Transform attackPosition;
 
 	private BoxCollider2D groundCheck;
 	private BoxCollider2D wallCheck;
 	private BoxCollider2D fallCheck;
+	private BoxCollider2D attackCheck;
 
 	private Vector2 moveInput;
 
@@ -38,10 +43,12 @@ public class EnemyMovement : MonoBehaviour
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 		centerDirection = transform.Find("Direction").GetComponent<Transform>();
+		attackPosition = transform.Find("Attack").GetComponent<Transform>();
 
 		groundCheck = transform.Find("Ground Check").GetComponent<BoxCollider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<BoxCollider2D>();
 		fallCheck = transform.Find("Fall Check").GetComponent<BoxCollider2D>();
+		attackCheck = transform.Find("Attack Check").GetComponent<BoxCollider2D>();
 
 		isFacingRight = centerDirection.transform.right.x > 0;
 
@@ -59,6 +66,7 @@ public class EnemyMovement : MonoBehaviour
 		updateCollisions();
 		updateInputs();
 
+		updateAttack();
 		updateJump();
 
 		foreach (AnimatorControllerParameter param in animator.parameters)
@@ -84,6 +92,7 @@ public class EnemyMovement : MonoBehaviour
 		lastJumpInputTime += Time.deltaTime;
 
 		jumpCooldown -= Time.deltaTime;
+		attackCooldown -= Time.deltaTime;
 	}
 
 	private bool isFacingSlope()
@@ -105,6 +114,7 @@ public class EnemyMovement : MonoBehaviour
 		isGrounded = groundCheck.IsTouchingLayers(groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(groundLayer);
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(groundLayer);
+		isProvoked = attackCheck.IsTouchingLayers(playerLayer);
 
 		if (isFacingWall && isFacingSlope())
 		{
@@ -155,6 +165,24 @@ public class EnemyMovement : MonoBehaviour
 
 		if (data.jumpEnabled && jumpCooldown <= 0)
 			lastJumpInputTime = 0;
+	}
+
+	private bool canAttack()
+	{
+		return attackCooldown <= 0 && isProvoked;
+	}
+	private void attack()
+	{
+		attackCooldown = data.attackCooldown;
+
+		Instantiate(attackPrefab, attackPosition.position, attackPosition.rotation);
+	}
+	private void updateAttack()
+	{
+		if (canAttack())
+		{
+			attack();
+		}
 	}
 
 	private bool canJump()

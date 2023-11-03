@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c827d9ac5ff1be547b87ca562e021ff4, type: 3}
   m_Name: Ant Data
   m_EditorClassIdentifier: 
-  defaultFacingRight: 0
-  centerOffset: {x: 0.4, y: -0.5}
   gravityStrength: 0
   gravityScale: 1
   runEnabled: 1
@@ -27,3 +25,4 @@ MonoBehaviour:
   jumpTimeToApex: 0
   jumpCooldown: 0
   jumpForce: 0
+  attackCooldown: 0.8

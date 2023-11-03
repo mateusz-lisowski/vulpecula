@@ -26,6 +26,11 @@ public class EnemyData : ScriptableObject
 	public float jumpCooldown; // minimum time between two consecutive jumps
 	[HideInInspector] public float jumpForce; // calculated jump force
 
+	[Space(10)]
+
+	[Header("Attack")]
+	public float attackCooldown;// minimum time between two consecutive attacks
+
 
 	private void OnValidate()
 	{
