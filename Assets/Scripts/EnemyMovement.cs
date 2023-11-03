@@ -30,10 +30,10 @@ public class EnemyMovement : MonoBehaviour
 	private Transform centerDirection;
 	private Transform attackPosition;
 
-	private BoxCollider2D groundCheck;
-	private BoxCollider2D wallCheck;
-	private BoxCollider2D fallCheck;
-	private BoxCollider2D attackCheck;
+	private Collider2D groundCheck;
+	private Collider2D wallCheck;
+	private Collider2D fallCheck;
+	private Collider2D attackCheck;
 
 	private Vector2 moveInput;
 
@@ -45,10 +45,10 @@ public class EnemyMovement : MonoBehaviour
 		centerDirection = transform.Find("Direction").GetComponent<Transform>();
 		attackPosition = transform.Find("Attack").GetComponent<Transform>();
 
-		groundCheck = transform.Find("Ground Check").GetComponent<BoxCollider2D>();
-		wallCheck = transform.Find("Wall Check").GetComponent<BoxCollider2D>();
-		fallCheck = transform.Find("Fall Check").GetComponent<BoxCollider2D>();
-		attackCheck = transform.Find("Attack Check").GetComponent<BoxCollider2D>();
+		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
+		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
+		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
+		attackCheck = transform.Find("Attack Check").GetComponent<Collider2D>();
 
 		isFacingRight = centerDirection.transform.right.x > 0;
 

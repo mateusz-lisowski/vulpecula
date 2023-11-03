@@ -1,9 +1,12 @@
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class PlayerMovement : MonoBehaviour
 {
 	public PlayerData data;
+	public LayerMask enemyAttackLayer;
 	public LayerMask groundLayer;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
@@ -12,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isDashing { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isTouchingAttack { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
 	[field: Space(10)]
@@ -20,12 +25,14 @@ public class PlayerMovement : MonoBehaviour
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastTurnTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastHurtTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastWallHoldingTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastJumpInputTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastWallJumpTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastDashInputTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastDashTime { get; private set; }
 	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public float hurtCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float dashCooldown { get; private set; }
 
@@ -33,9 +40,11 @@ public class PlayerMovement : MonoBehaviour
 	private Rigidbody2D rigidBody;
     private Animator animator;
 
+	private Transform hitbox;
+	private Collider2D[] hitboxColliders;
     private TrailRenderer trail;
-    private BoxCollider2D groundCheck;
-    private BoxCollider2D wallCheck;
+    private Collider2D groundCheck;
+    private Collider2D wallCheck;
 
 	private Vector2 moveInput;
 
@@ -49,12 +58,20 @@ public class PlayerMovement : MonoBehaviour
 		animator = GetComponent<Animator>();
 
 		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
-		groundCheck = transform.Find("Ground Check").GetComponent<BoxCollider2D>();
-		wallCheck = transform.Find("Wall Check").GetComponent<BoxCollider2D>();
+		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
+		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
+
+		hitbox = transform.Find("Hitbox");
+		hitboxColliders = new Collider2D[] {
+			hitbox.Find("Torso").GetComponent<Collider2D>(),
+			hitbox.Find("Legs").GetComponent<Collider2D>(),
+		};
 
 		isFacingRight = true;
 
+		lastTurnTime = float.PositiveInfinity;
 		lastGroundedTime = float.PositiveInfinity;
+		lastHurtTime = float.PositiveInfinity;
 		lastWallHoldingTime = float.PositiveInfinity;
 		lastJumpInputTime = float.PositiveInfinity;
 		lastWallJumpTime = float.PositiveInfinity;
@@ -72,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
 		updateInputs();
 		updateCollisions();
+		updateHurt();
 
 		updateWallFacing();
 
@@ -79,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
 		updateJump();
 
 		animator.SetBool("isGrounded", isGrounded);
+		animator.SetBool("isDistressed", isDistressed);
 		animator.SetBool("isFalling", rigidBody.velocity.y < 0);
 		animator.SetBool("isMoving", isMoving);
 		animator.SetBool("isWallHolding", lastWallHoldingTime == 0);
@@ -101,12 +120,14 @@ public class PlayerMovement : MonoBehaviour
 	{
 		lastTurnTime += Time.deltaTime;
 		lastGroundedTime += Time.deltaTime;
+		lastHurtTime += Time.deltaTime;
 		lastWallHoldingTime += Time.deltaTime;
 		lastJumpInputTime += Time.deltaTime;
 		lastWallJumpTime += Time.deltaTime;
 		lastDashInputTime += Time.deltaTime;
 		lastDashTime += Time.deltaTime;
 
+		hurtCooldown -= Time.deltaTime;
 		jumpCooldown -= Time.deltaTime;
 		dashCooldown -= Time.deltaTime;
 	}
@@ -129,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
 
 		isMoving = moveInput.x != 0;
 
-		if (!isDashing)
+		if (!isDashing && !isDistressed)
 			if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
 				Flip();
 
@@ -148,6 +169,7 @@ public class PlayerMovement : MonoBehaviour
     {
 		isGrounded = groundCheck.IsTouchingLayers(groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(groundLayer);
+		isTouchingAttack = hitboxColliders.Any(c => c.IsTouchingLayers(enemyAttackLayer));
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -168,9 +190,52 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	private void setInvulnerability(bool val)
+	{
+		int layer = val ? LayerMask.NameToLayer("Player Invulnerable") : LayerMask.NameToLayer("Player");
+
+		foreach (Collider2D c in hitboxColliders)
+			c.gameObject.layer = layer;
+	}
+	private void updateHurt()
+	{
+		if (isTouchingAttack && hurtCooldown <= 0)
+		{
+			isDistressed = true;
+			lastHurtTime = 0;
+			hurtCooldown = data.hurtInvulTime;
+
+			setInvulnerability(true);
+			StartCoroutine(Effects.Flashing(gameObject, data.hurtInvulTime));
+
+			float force = data.hurtKnockbackForce;
+			if (force > rigidBody.velocity.y)
+			{
+				force -= rigidBody.velocity.y;
+				rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+			}
+		}
+
+		if (hurtCooldown <= 0)
+			setInvulnerability(false);
+
+		if (isDistressed && lastHurtTime >= data.hurtDistressTime)
+			isDistressed = false;
+
+		if (isDistressed)
+		{
+			isDashing = false;
+			isJumping = false;
+			isGrounded = false;
+
+			moveInput.y = 0;
+			moveInput.x = isFacingRight ? -1 : 1;
+		}
+	}
+
 	private void updateWallFacing()
 	{
-		if (!isGrounded && isFacingWall && data.wallSlideEnabled)
+		if (!isGrounded && !isDistressed && isFacingWall && data.wallSlideEnabled)
 			lastWallHoldingTime = 0;
 
 		if (isFacingWall)
@@ -179,7 +244,8 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool canDash()
 	{
-		return dashCooldown <= 0 && lastDashInputTime < data.dashInputBufferTime && dashesLeft > 0;
+		return dashCooldown <= 0 && lastDashInputTime < data.dashInputBufferTime && dashesLeft > 0
+			&& !isDistressed;
 	}
 	private void dash()
 	{
@@ -234,11 +300,12 @@ public class PlayerMovement : MonoBehaviour
 	private bool canJump()
 	{
 		return jumpCooldown <= 0 && lastJumpInputTime < data.jumpInputBufferTime 
-			&& jumpsLeft > 0 && lastWallJumpTime >= data.wallJumpTime;
+			&& jumpsLeft > 0 && lastWallJumpTime >= data.wallJumpTime
+			&& !isDistressed;
 	}
 	private bool canJumpCut()
 	{
-		return jumpCutInput && !isFalling;
+		return jumpCutInput && !isFalling && !isDistressed;
 	}
 	private void jump()
 	{
@@ -339,6 +406,11 @@ public class PlayerMovement : MonoBehaviour
 		if (lastWallJumpTime < data.wallJumpTime)
 		{
 			targetSpeed = Mathf.Lerp(targetSpeed, rigidBody.velocity.x, data.wallJumpInputReduction);
+		}
+
+		if (isDistressed)
+		{
+			targetSpeed = moveInput.x * data.hurtKnockbackMaxSpeed;
 		}
 
 		float accelRate = targetSpeed == 0 ? data.runDeccelAmount : data.runAccelAmount;

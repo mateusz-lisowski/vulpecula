@@ -9809,8 +9809,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1786336819}
-  - {fileID: 1475811828}
+  - {fileID: 504923408}
   - {fileID: 2076482517}
   - {fileID: 1108052940}
   - {fileID: 1991112462}
@@ -9856,6 +9855,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 18f7920bae5a96143b2fae235a56f260, type: 2}
+  enemyAttackLayer:
+    serializedVersion: 2
+    m_Bits: 512
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -9865,17 +9867,21 @@ MonoBehaviour:
   <isDashing>k__BackingField: 0
   <isFalling>k__BackingField: 0
   <isGrounded>k__BackingField: 0
+  <isDistressed>k__BackingField: 0
+  <isTouchingAttack>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
   <isLastFacedWallRight>k__BackingField: 0
   <jumpsLeft>k__BackingField: 0
   <dashesLeft>k__BackingField: 0
   <lastTurnTime>k__BackingField: 0
   <lastGroundedTime>k__BackingField: 0
+  <lastHurtTime>k__BackingField: 0
   <lastWallHoldingTime>k__BackingField: 0
   <lastJumpInputTime>k__BackingField: 0
   <lastWallJumpTime>k__BackingField: 0
   <lastDashInputTime>k__BackingField: 0
   <lastDashTime>k__BackingField: 0
+  <hurtCooldown>k__BackingField: 0
   <jumpCooldown>k__BackingField: 0
   <dashCooldown>k__BackingField: 0
 --- !u!95 &396151829
@@ -9966,6 +9972,39 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 491055971482929264, guid: a62beb971c873de4c908d5ba807fa7d6, type: 3}
   m_PrefabInstance: {fileID: 1339043437}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &504923407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 504923408}
+  m_Layer: 8
+  m_Name: Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &504923408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504923407}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.095, y: -0.325, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1786336819}
+  - {fileID: 1475811828}
+  m_Father: {fileID: 396151825}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -15530,7 +15569,7 @@ GameObject:
   - component: {fileID: 1475811828}
   - component: {fileID: 1475811829}
   m_Layer: 8
-  m_Name: Legs Hitbox
+  m_Name: Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15544,12 +15583,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1475811827}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.095, y: -0.75, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.425, z: 0}
   m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 396151825}
+  m_Father: {fileID: 504923408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &1475811829
 CapsuleCollider2D:
@@ -15797,7 +15836,7 @@ GameObject:
   - component: {fileID: 1786336819}
   - component: {fileID: 1786336820}
   m_Layer: 8
-  m_Name: Torso HItbox
+  m_Name: Torso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15811,12 +15850,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1786336818}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.095, y: -0.325, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7, y: 0.65, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 396151825}
+  m_Father: {fileID: 504923408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1786336820
 BoxCollider2D:

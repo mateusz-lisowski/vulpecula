@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3177704467584714419}
   - component: {fileID: 7006395369889824067}
   - component: {fileID: 874670362927507667}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: enemy-attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8848779873147501475}
   - component: {fileID: 3118199568389470475}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 2, z: 1}
+  m_LocalScale: {x: 4, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3177704467584714419}

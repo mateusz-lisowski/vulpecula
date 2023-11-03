@@ -13,31 +13,19 @@ MonoBehaviour:
   m_Name: Player Data
   m_EditorClassIdentifier: 
   gravityStrength: -33.333332
-  gravityScale: 3.397893
+  gravityScale: 1.111111
   fallGravityMult: 1.2
   maxFallSpeed: 20
+  hurtInvulTime: 1.2
+  hurtDistressTime: 0.5
+  hurtKnockbackMaxSpeed: 5
+  hurtKnockbackHeightScale: 0.7
+  hurtKnockbackForce: 11.666666
   runMaxSpeed: 7
   runAcceleration: 2
   runDecceleration: 4
   runAccelAmount: 14.285714
   runDeccelAmount: 28.571428
-  dashDistance: 2
-  dashTime: 0.15
-  dashCooldown: 0.1
-  dashesCount: 1
-  dashForce: 13.333333
-  dashInputBufferTime: 0.05
-  wallSlideEnabled: 0
-  wallSlideMaxSpeed: 20
-  wallSlideAcceleration: 1
-  wallSlideDecceleration: 6
-  wallSlideAccelAmount: 2.5
-  wallSlideDeccelAmount: 15
-  wallJumpForce: 10
-  wallJumpInputReduction: 0.6
-  wallJumpTime: 0.6
-  wallJumpMinTime: 0.1
-  wallJumpCoyoteTime: 0.1
   jumpHeight: 1.5
   jumpTimeToApex: 0.3
   jumpCooldown: 0.1
@@ -49,3 +37,20 @@ MonoBehaviour:
   jumpHangSpeedMult: 1.2
   coyoteTime: 0.1
   jumpInputBufferTime: 0.05
+  wallSlideEnabled: 0
+  wallSlideMaxSpeed: 20
+  wallSlideAcceleration: 1
+  wallSlideDecceleration: 6
+  wallSlideAccelAmount: 2.5
+  wallSlideDeccelAmount: 15
+  wallJumpForce: 10
+  wallJumpInputReduction: 0.6
+  wallJumpTime: 0.6
+  wallJumpMinTime: 0.1
+  wallJumpCoyoteTime: 0.1
+  dashDistance: 2
+  dashTime: 0.15
+  dashCooldown: 0.1
+  dashesCount: 1
+  dashForce: 13.333333
+  dashInputBufferTime: 0.05
