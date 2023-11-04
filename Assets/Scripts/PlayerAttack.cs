@@ -99,6 +99,9 @@ public class PlayerAttack : MonoBehaviour
 	private void OnDrawGizmosSelected()
 	{
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireCube(attackForwardPosition(), transform.lossyScale);
+		if (rigidBody == null)
+			Gizmos.DrawWireCube(transform.position, transform.lossyScale);
+		else
+			Gizmos.DrawWireCube(attackForwardPosition(), transform.lossyScale);
 	}
 }

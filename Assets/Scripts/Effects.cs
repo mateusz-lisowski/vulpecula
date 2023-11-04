@@ -13,7 +13,7 @@ public class Effects : ScriptableObject
 	[Range(0f, 1f)] public float flashingAlpha;
 
 
-	private void OnEnable()
+	Effects()
 	{
 		instance = this;
 	}

@@ -31,7 +31,6 @@ public class EnemyMovement : MonoBehaviour
 	private Transform centerDirection;
 
 	private Transform hitbox;
-	private Collider2D[] hitboxColliders;
 	private Collider2D attackCheck;
 	private Collider2D groundCheck;
 	private Collider2D wallCheck;
@@ -49,15 +48,11 @@ public class EnemyMovement : MonoBehaviour
 		animator = GetComponent<Animator>();
 		centerDirection = transform.Find("Direction").GetComponent<Transform>();
 
+		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
 		attackCheck = transform.Find("Attack").GetComponent<Collider2D>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
 		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
-
-		hitbox = transform.Find("Hitbox");
-		hitboxColliders = new Collider2D[] {
-			hitbox.Find("Torso").GetComponent<Collider2D>(),
-		};
 
 		enemyLayer = LayerMask.NameToLayer("Enemies");
 		enemyInvulnerableLayer = LayerMask.NameToLayer("Enemies Invulnerable");
@@ -126,7 +121,7 @@ public class EnemyMovement : MonoBehaviour
 	{
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
-		isTouchingAttack = hitboxColliders.Any(c => c.IsTouchingLayers(data.playerAttackLayer));
+		isTouchingAttack = rigidBody.IsTouchingLayers(data.playerAttackLayer);
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.groundLayer);
 		isProvoked = attackCheck.IsTouchingLayers(data.playerLayer);
 
@@ -205,8 +200,10 @@ public class EnemyMovement : MonoBehaviour
 	{
 		int layer = val ? enemyInvulnerableLayer : enemyLayer;
 
-		foreach (Collider2D c in hitboxColliders)
-			c.gameObject.layer = layer;
+		foreach (Transform child in hitbox)
+			child.gameObject.layer = layer;
+
+		hitbox.gameObject.layer = layer;
 	}
 	private void updateHurt()
 	{

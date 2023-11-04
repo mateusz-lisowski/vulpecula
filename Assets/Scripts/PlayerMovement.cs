@@ -39,7 +39,6 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
 
 	private Transform hitbox;
-	private Collider2D[] hitboxColliders;
     private TrailRenderer trail;
     private Collider2D groundCheck;
     private Collider2D wallCheck;
@@ -58,15 +57,10 @@ public class PlayerMovement : MonoBehaviour
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 
+		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
 		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
-
-		hitbox = transform.Find("Hitbox");
-		hitboxColliders = new Collider2D[] {
-			hitbox.Find("Torso").GetComponent<Collider2D>(),
-			hitbox.Find("Legs").GetComponent<Collider2D>(),
-		};
 
 		playerLayer = LayerMask.NameToLayer("Player");
 		playerInvulnerableLayer = LayerMask.NameToLayer("Player Invulnerable");
@@ -170,7 +164,7 @@ public class PlayerMovement : MonoBehaviour
     {
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
-		isTouchingAttack = hitboxColliders.Any(c => c.IsTouchingLayers(data.enemyAttackLayer));
+		isTouchingAttack = rigidBody.IsTouchingLayers(data.enemyAttackLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -215,8 +209,10 @@ public class PlayerMovement : MonoBehaviour
 	{
 		int layer = val ? playerInvulnerableLayer : playerLayer;
 
-		foreach (Collider2D c in hitboxColliders)
-			c.gameObject.layer = layer;
+		foreach (Transform child in hitbox)
+			child.gameObject.layer = layer;
+
+		hitbox.gameObject.layer = layer;
 	}
 	private void updateHurt()
 	{
