@@ -15669,10 +15669,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: pig
       objectReference: {fileID: 0}
-    - target: {fileID: 1533992438684531747, guid: 4a01b6b3c8eb1c74cbfa32f4c873b85c, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1752425426174575088, guid: 4a01b6b3c8eb1c74cbfa32f4c873b85c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -19
@@ -15711,10 +15707,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1752425426174575088, guid: 4a01b6b3c8eb1c74cbfa32f4c873b85c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4736977267285008729, guid: 4a01b6b3c8eb1c74cbfa32f4c873b85c, type: 3}
-      propertyPath: awakeMoveRight
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

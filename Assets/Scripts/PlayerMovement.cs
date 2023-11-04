@@ -206,7 +206,13 @@ public class PlayerMovement : MonoBehaviour
 		AttackController otherData = other.GetComponent<AttackController>();
 
 		if (otherData == null)
-			return;
+		{
+			other = other.parent;
+			otherData = other.GetComponent<AttackController>();
+
+			if (otherData == null)
+				return;
+		}
 
 		if (otherData.isVertical)
 			return;
