@@ -6,8 +6,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 	public PlayerData data;
-	public LayerMask enemyAttackLayer;
-	public LayerMask groundLayer;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
@@ -46,6 +44,9 @@ public class PlayerMovement : MonoBehaviour
     private Collider2D groundCheck;
     private Collider2D wallCheck;
 
+	private LayerMask playerLayer;
+	private LayerMask playerInvulnerableLayer;
+
 	private Vector2 moveInput;
 
 	private bool jumpCutInput = false;
@@ -66,6 +67,9 @@ public class PlayerMovement : MonoBehaviour
 			hitbox.Find("Torso").GetComponent<Collider2D>(),
 			hitbox.Find("Legs").GetComponent<Collider2D>(),
 		};
+
+		playerLayer = LayerMask.NameToLayer("Player");
+		playerInvulnerableLayer = LayerMask.NameToLayer("Player Invulnerable");
 
 		isFacingRight = true;
 
@@ -167,9 +171,9 @@ public class PlayerMovement : MonoBehaviour
 	
 	private void updateCollisions()
     {
-		isGrounded = groundCheck.IsTouchingLayers(groundLayer);
-		isFacingWall = wallCheck.IsTouchingLayers(groundLayer);
-		isTouchingAttack = hitboxColliders.Any(c => c.IsTouchingLayers(enemyAttackLayer));
+		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
+		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
+		isTouchingAttack = hitboxColliders.Any(c => c.IsTouchingLayers(data.enemyAttackLayer));
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -190,37 +194,47 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	private bool canHurt()
+	{
+		return isTouchingAttack && hurtCooldown <= 0;
+	}
+	private void hurt()
+	{
+		isDistressed = true;
+		lastHurtTime = 0;
+		hurtCooldown = data.hurtInvulTime;
+
+		setInvulnerability(true);
+		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+
+		float force = data.hurtKnockbackForce;
+		if (force > rigidBody.velocity.y)
+		{
+			force -= rigidBody.velocity.y;
+			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+		}
+	}
 	private void setInvulnerability(bool val)
 	{
-		int layer = val ? LayerMask.NameToLayer("Player Invulnerable") : LayerMask.NameToLayer("Player");
+		int layer = val ? playerInvulnerableLayer : playerLayer;
 
 		foreach (Collider2D c in hitboxColliders)
 			c.gameObject.layer = layer;
 	}
 	private void updateHurt()
 	{
-		if (isTouchingAttack && hurtCooldown <= 0)
+		if (canHurt())
 		{
-			isDistressed = true;
-			lastHurtTime = 0;
-			hurtCooldown = data.hurtInvulTime;
-
-			setInvulnerability(true);
-			StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
-
-			float force = data.hurtKnockbackForce;
-			if (force > rigidBody.velocity.y)
-			{
-				force -= rigidBody.velocity.y;
-				rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
-			}
+			hurt();
 		}
 
 		if (hurtCooldown <= 0)
 			setInvulnerability(false);
 
 		if (isDistressed && lastHurtTime >= data.hurtDistressTime)
+		{
 			isDistressed = false;
+		}
 
 		if (isDistressed)
 		{

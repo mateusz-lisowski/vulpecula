@@ -4,9 +4,6 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
 	public EnemyData data;
-	public GameObject attackPrefab;
-	public LayerMask playerLayer;
-	public LayerMask groundLayer;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
@@ -28,11 +25,12 @@ public class EnemyMovement : MonoBehaviour
 	private Rigidbody2D rigidBody;
 	private Animator animator;
 	private Transform centerDirection;
-	private Transform attackPosition;
 
 	private Collider2D groundCheck;
 	private Collider2D wallCheck;
 	private Collider2D fallCheck;
+
+	private EnemyAttack attackData;
 	private Collider2D attackCheck;
 
 	private Vector2 moveInput;
@@ -43,12 +41,14 @@ public class EnemyMovement : MonoBehaviour
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 		centerDirection = transform.Find("Direction").GetComponent<Transform>();
-		attackPosition = transform.Find("Attack").GetComponent<Transform>();
 
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
 		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
-		attackCheck = transform.Find("Attack Check").GetComponent<Collider2D>();
+
+		Transform attackTransform = transform.Find("Attack");
+		attackData = attackTransform.GetComponent<EnemyAttack>();
+		attackCheck = attackTransform.GetComponent<Collider2D>();
 
 		isFacingRight = centerDirection.transform.right.x > 0;
 
@@ -104,17 +104,17 @@ public class EnemyMovement : MonoBehaviour
 
 		Vector2 dir = isFacingRight ? Vector2.right : Vector2.left;
 
-		RaycastHit2D hitLow = Physics2D.Raycast(sourceLow, dir, Mathf.Infinity, groundLayer.value);
-		RaycastHit2D hitHigh = Physics2D.Raycast(sourceHigh, dir, Mathf.Infinity, groundLayer.value);
+		RaycastHit2D hitLow = Physics2D.Raycast(sourceLow, dir, Mathf.Infinity, data.groundLayer.value);
+		RaycastHit2D hitHigh = Physics2D.Raycast(sourceHigh, dir, Mathf.Infinity, data.groundLayer.value);
 
 		return Mathf.Abs(hitHigh.point.x - hitLow.point.x) > 0.1f;
 	}
 	private void updateCollisions()
 	{
-		isGrounded = groundCheck.IsTouchingLayers(groundLayer);
-		isFacingWall = wallCheck.IsTouchingLayers(groundLayer);
-		isNoGroundAhead = !fallCheck.IsTouchingLayers(groundLayer);
-		isProvoked = attackCheck.IsTouchingLayers(playerLayer);
+		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
+		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
+		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.groundLayer);
+		isProvoked = attackCheck.IsTouchingLayers(data.playerLayer);
 
 		if (isFacingWall && isFacingSlope())
 		{
@@ -175,7 +175,7 @@ public class EnemyMovement : MonoBehaviour
 	{
 		attackCooldown = data.attackCooldown;
 
-		Instantiate(attackPrefab, attackPosition.position, attackPosition.rotation);
+		attackData.launch(data);
 	}
 	private void updateAttack()
 	{

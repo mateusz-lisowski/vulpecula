@@ -3,11 +3,17 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Data")]
 public class EnemyData : ScriptableObject
 {
+	public LayerMask playerLayer;
+	public LayerMask groundLayer;
+	public GameObject attackPrefab;
+
+	[Space(5)]
+
 	[Header("Gravity")]
 	[HideInInspector] public float gravityStrength;
 	[HideInInspector] public float gravityScale;
 
-	[Space(5)]
+	[Space(10)]
 
 	[Header("Run")]
 	public bool runEnabled; // 'true' if can run
@@ -29,7 +35,9 @@ public class EnemyData : ScriptableObject
 	[Space(10)]
 
 	[Header("Attack")]
-	public float attackCooldown;// minimum time between two consecutive attacks
+	public float attackCooldown; // minimum time between two consecutive attacks
+	public float attackCastTime; // time needed for the attack to hurt
+	public float attackLastTime; // time after the cast the attack can hurt
 
 
 	private void OnValidate()

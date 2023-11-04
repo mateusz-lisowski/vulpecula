@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c827d9ac5ff1be547b87ca562e021ff4, type: 3}
   m_Name: Enemy Pig Data
   m_EditorClassIdentifier: 
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
   gravityStrength: -111.1111
   gravityScale: 1
   runEnabled: 1
@@ -26,3 +33,5 @@ MonoBehaviour:
   jumpCooldown: 2
   jumpForce: 33.333332
   attackCooldown: 1
+  attackCastTime: 0
+  attackLastTime: 0.5

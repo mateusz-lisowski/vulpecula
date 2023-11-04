@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Data")]
 public class PlayerData : ScriptableObject
 {
+	public LayerMask groundLayer;
+	public LayerMask enemyAttackLayer;
+
 	[Space(5)]
 
 	[Header("Gravity")]
