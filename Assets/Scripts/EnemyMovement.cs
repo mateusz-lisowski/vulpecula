@@ -21,11 +21,9 @@ public class EnemyMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastHurtTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastJumpInputTime { get; private set; }
-	[field: SerializeField, ReadOnly] public float lastAttackTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float hurtCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
-	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
 
 	private Rigidbody2D rigidBody;
@@ -34,12 +32,10 @@ public class EnemyMovement : MonoBehaviour
 
 	private Transform hitbox;
 	private Collider2D[] hitboxColliders;
+	private Collider2D attackCheck;
 	private Collider2D groundCheck;
 	private Collider2D wallCheck;
 	private Collider2D fallCheck;
-
-	private EnemyAttack attackData;
-	private Collider2D attackCheck;
 
 	private LayerMask enemyLayer;
 	private LayerMask enemyInvulnerableLayer;
@@ -53,13 +49,10 @@ public class EnemyMovement : MonoBehaviour
 		animator = GetComponent<Animator>();
 		centerDirection = transform.Find("Direction").GetComponent<Transform>();
 
+		attackCheck = transform.Find("Attack").GetComponent<Collider2D>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
 		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
-
-		Transform attackTransform = transform.Find("Attack");
-		attackData = attackTransform.GetComponent<EnemyAttack>();
-		attackCheck = attackTransform.GetComponent<Collider2D>();
 
 		hitbox = transform.Find("Hitbox");
 		hitboxColliders = new Collider2D[] {
@@ -75,9 +68,6 @@ public class EnemyMovement : MonoBehaviour
 		lastGroundedTime = float.PositiveInfinity;
 		lastHurtTime = float.PositiveInfinity;
 		lastJumpInputTime = float.PositiveInfinity;
-		lastAttackTime = float.PositiveInfinity;
-
-		jumpCooldown = 0;
 	}
 
 	// handle timers and animations
@@ -89,7 +79,6 @@ public class EnemyMovement : MonoBehaviour
 		updateInputs();
 		updateHurt();
 
-		updateAttack();
 		updateJump();
 
 		foreach (AnimatorControllerParameter param in animator.parameters)
@@ -117,7 +106,6 @@ public class EnemyMovement : MonoBehaviour
 
 		hurtCooldown -= Time.deltaTime;
 		jumpCooldown -= Time.deltaTime;
-		attackCooldown -= Time.deltaTime;
 	}
 
 	private bool isFacingSlope()
@@ -242,25 +230,6 @@ public class EnemyMovement : MonoBehaviour
 
 			moveInput.y = 0;
 			moveInput.x = isFacingRight ? -1 : 1;
-		}
-	}
-
-	private bool canAttack()
-	{
-		return attackCooldown <= 0 && isProvoked;
-	}
-	private void attack()
-	{
-		lastAttackTime = 0;
-		attackCooldown = data.attackCooldown;
-
-		attackData.launch(data);
-	}
-	private void updateAttack()
-	{
-		if (canAttack())
-		{
-			attack();
 		}
 	}
 
