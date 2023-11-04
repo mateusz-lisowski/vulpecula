@@ -76,11 +76,4 @@ public class EnemyAttack : MonoBehaviour
 			attack();
 		}
 	}
-
-
-	private void OnDrawGizmosSelected()
-	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireCube(transform.position, transform.lossyScale);
-	}
 }

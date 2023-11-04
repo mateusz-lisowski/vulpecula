@@ -6,6 +6,7 @@ public class PlayerData : ScriptableObject
 	public LayerMask groundLayer;
 	public LayerMask enemyAttackLayer;
 	public GameObject attackForwardPrefab;
+	public GameObject attackDownPrefab;
 
 	[Space(5)]
 
@@ -30,6 +31,11 @@ public class PlayerData : ScriptableObject
 	public float attackCooldown; // minimum time between two consecutive attacks
 	public float attackCastTime; // time needed for the attack to hurt
 	public float attackLastTime; // time after the cast the attack can hurt
+
+	[Space(5)]
+
+	public float attackDownBounceHeight; // maximum reachable height of a down hit bounce
+	[HideInInspector] public float attackDownBounceForce; // calculated down hit bounce force
 
 	[Space(5)]
 	public float attackVelocityOffsetScale; // attack offset based on the player velocity
@@ -102,6 +108,7 @@ public class PlayerData : ScriptableObject
 		gravityStrength = -(2 * jumpHeight) / (jumpTimeToApex * jumpTimeToApex);
 		jumpForce = Mathf.Abs(gravityStrength) * jumpTimeToApex;
 		hurtKnockbackForce = Mathf.Abs(gravityStrength) * hurtDistressTime * hurtKnockbackHeightScale;
+		attackDownBounceForce = Mathf.Sqrt(2 * Mathf.Abs(gravityStrength) * attackDownBounceHeight);
 
 		dashForce = dashDistance / dashTime;
 

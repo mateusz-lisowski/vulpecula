@@ -19,6 +19,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   attackForwardPrefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
+  attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
   fallGravityMult: 1.2
   maxFallSpeed: 20
   gravityStrength: -33.333332
@@ -31,6 +32,8 @@ MonoBehaviour:
   attackCooldown: 0.5
   attackCastTime: 0
   attackLastTime: 0.5
+  attackDownBounceHeight: 2.5
+  attackDownBounceForce: 12.909945
   attackVelocityOffsetScale: 0.065
   attackInputBufferTime: 0.05
   runMaxSpeed: 7

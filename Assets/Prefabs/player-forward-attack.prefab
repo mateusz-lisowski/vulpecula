@@ -152,6 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e00763fd9782c74fbf94602788c5d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitLayer:
+    serializedVersion: 2
+    m_Bits: 2176
+  <isVertical>k__BackingField: 0
 --- !u!1 &7803952656950435132
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,6 +166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1383508698901435033}
   - component: {fileID: 4799682981326531425}
+  - component: {fileID: 578102071968704463}
   m_Layer: 10
   m_Name: Hitbox
   m_TagString: Untagged
@@ -219,3 +224,17 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
+--- !u!114 &578102071968704463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7803952656950435132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81fa5ba6d41b5be4a9341bcc9802196c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 0, b: 0, a: 1}
+  showAlways: 1

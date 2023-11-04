@@ -48,8 +48,11 @@ public class PlayerMovement : MonoBehaviour
 
 	private Vector2 moveInput;
 
+	private bool currentJumpCuttable = false;
 	private bool jumpCutInput = false;
 	private bool dashCutInput = false;
+
+	[HideInInspector] public bool registeredDownHitJump;
 
 
 	private void Awake()
@@ -200,6 +203,13 @@ public class PlayerMovement : MonoBehaviour
 			return;
 
 		Transform other = contact[0].transform;
+		AttackController otherData = other.GetComponent<AttackController>();
+
+		if (otherData == null)
+			return;
+
+		if (otherData.isVertical)
+			return;
 
 		// if attack faces the same direction
 		if (Vector2.Dot(transform.right, other.right) > 0)
@@ -335,7 +345,7 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private bool canJumpCut()
 	{
-		return jumpCutInput && !isFalling && !isDistressed;
+		return jumpCutInput && currentJumpCuttable && !isFalling && !isDistressed;
 	}
 	private void jump()
 	{
@@ -345,9 +355,9 @@ public class PlayerMovement : MonoBehaviour
 		lastJumpInputTime = float.PositiveInfinity;
 		jumpCooldown = data.jumpCooldown;
 
-		jumpsLeft--;
+		currentJumpCuttable = !registeredDownHitJump;
 
-		float force = data.jumpForce;
+		float force = !registeredDownHitJump ? data.jumpForce : data.attackDownBounceForce;
 		if (force > rigidBody.velocity.y)
 		{
 			force -= rigidBody.velocity.y;
@@ -405,9 +415,12 @@ public class PlayerMovement : MonoBehaviour
 			jumpsLeft--;
 		}
 
-		if (canJump())
+		if (canJump() || registeredDownHitJump)
 		{
 			jump();
+			if (!registeredDownHitJump)
+				jumpsLeft--;
+			registeredDownHitJump = false;
 		}
 
 		updateGravityScale();

@@ -187,6 +187,13 @@ public class EnemyMovement : MonoBehaviour
 			return;
 
 		Transform other = contact[0].transform;
+		AttackController otherData = other.GetComponent<AttackController>();
+
+		if (otherData == null)
+			return;
+
+		if (otherData.isVertical)
+			return;
 
 		// if attack faces the same direction
 		if (Vector2.Dot(transform.right, other.right) > 0)

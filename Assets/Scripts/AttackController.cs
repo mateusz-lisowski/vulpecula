@@ -1,12 +1,24 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class AttackController : MonoBehaviour
 {
+	public LayerMask hitLayer;
+	[field: Space(10)]
+	[field: SerializeField, ReadOnly] public bool isVertical { get; private set; }
+
 	private Transform sprite;
 	private Collider2D hitbox;
 
+	private Action<AttackController> hitCallback;
+
+
+	public void setVertical(bool val = true)
+	{
+		isVertical = val;
+	}
 
 	private IEnumerator hitboxEnabler(float start, float lasts)
 	{
@@ -38,6 +50,11 @@ public class AttackController : MonoBehaviour
 		}
 	}
 
+	public void setHitCallback(Action<AttackController> callback)
+	{
+		hitCallback = callback;
+	}
+	
 
 	private void Awake()
 	{
@@ -45,17 +62,15 @@ public class AttackController : MonoBehaviour
 		hitbox = transform.Find("Hitbox").GetComponent<Collider2D>();
 	}
 
-	// destroy when Sprite is destroyed
 	void Update()
 	{
+		if (hitbox.IsTouchingLayers(hitLayer))
+		{
+			if (hitCallback != null)
+				hitCallback(this);
+		}
+
 		if (sprite.IsDestroyed())
 			Destroy(gameObject);
-	}
-
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireCube(hitbox.transform.position, hitbox.transform.lossyScale);
 	}
 }
