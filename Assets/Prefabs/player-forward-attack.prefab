@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1832843752990325840}
   - component: {fileID: 4718434191153659317}
   - component: {fileID: 7435062126430504229}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7795842406278423175}
   - component: {fileID: 5518660301845342751}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: player-forward-attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1383508698901435033}
   - component: {fileID: 4799682981326531425}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

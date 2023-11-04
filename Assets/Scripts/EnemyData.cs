@@ -3,8 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Data")]
 public class EnemyData : ScriptableObject
 {
-	public LayerMask playerLayer;
 	public LayerMask groundLayer;
+	public LayerMask playerLayer;
+	public LayerMask playerAttackLayer;
 	public GameObject attackPrefab;
 
 	[Space(5)]
@@ -12,6 +13,15 @@ public class EnemyData : ScriptableObject
 	[Header("Gravity")]
 	[HideInInspector] public float gravityStrength;
 	[HideInInspector] public float gravityScale;
+	
+	[Space(10)]
+
+	[Header("Hurt")]
+	public float hurtInvulTime; // time of invulnerability after getting hit
+	public float hurtDistressTime; // time to ignore input after getting hit
+	public float hurtKnockbackMaxSpeed; // maximum knockback speed
+	[Range(0.5f, 1.0f)] public float hurtKnockbackHeightScale; // knockback height
+	[HideInInspector] public float hurtKnockbackForce; // calculated hit knockback force
 
 	[Space(10)]
 
@@ -51,6 +61,9 @@ public class EnemyData : ScriptableObject
 		}
 		else
 			gravityScale = 1;
+
+		hurtKnockbackForce = Mathf.Abs(gravityScale * Physics2D.gravity.y) 
+			* hurtDistressTime * hurtKnockbackHeightScale;
 
 		if (runEnabled)
 		{

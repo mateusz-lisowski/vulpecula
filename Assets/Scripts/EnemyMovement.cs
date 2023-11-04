@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,15 +11,19 @@ public class EnemyMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isJumping { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isTouchingAttack { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isProvoked { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isNoGroundAhead { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastTurnTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastHurtTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastJumpInputTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastAttackTime { get; private set; }
 	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public float hurtCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
@@ -27,12 +32,17 @@ public class EnemyMovement : MonoBehaviour
 	private Animator animator;
 	private Transform centerDirection;
 
+	private Transform hitbox;
+	private Collider2D[] hitboxColliders;
 	private Collider2D groundCheck;
 	private Collider2D wallCheck;
 	private Collider2D fallCheck;
 
 	private EnemyAttack attackData;
 	private Collider2D attackCheck;
+
+	private LayerMask enemyLayer;
+	private LayerMask enemyInvulnerableLayer;
 
 	private Vector2 moveInput;
 
@@ -51,10 +61,19 @@ public class EnemyMovement : MonoBehaviour
 		attackData = attackTransform.GetComponent<EnemyAttack>();
 		attackCheck = attackTransform.GetComponent<Collider2D>();
 
+		hitbox = transform.Find("Hitbox");
+		hitboxColliders = new Collider2D[] {
+			hitbox.Find("Torso").GetComponent<Collider2D>(),
+		};
+
+		enemyLayer = LayerMask.NameToLayer("Enemies");
+		enemyInvulnerableLayer = LayerMask.NameToLayer("Enemies Invulnerable");
+
 		isFacingRight = centerDirection.transform.right.x > 0;
 
 		lastTurnTime = float.PositiveInfinity;
 		lastGroundedTime = float.PositiveInfinity;
+		lastHurtTime = float.PositiveInfinity;
 		lastJumpInputTime = float.PositiveInfinity;
 		lastAttackTime = float.PositiveInfinity;
 
@@ -68,6 +87,7 @@ public class EnemyMovement : MonoBehaviour
 
 		updateCollisions();
 		updateInputs();
+		updateHurt();
 
 		updateAttack();
 		updateJump();
@@ -92,8 +112,10 @@ public class EnemyMovement : MonoBehaviour
 	{
 		lastTurnTime += Time.deltaTime;
 		lastGroundedTime += Time.deltaTime;
+		lastHurtTime += Time.deltaTime;
 		lastJumpInputTime += Time.deltaTime;
 
+		hurtCooldown -= Time.deltaTime;
 		jumpCooldown -= Time.deltaTime;
 		attackCooldown -= Time.deltaTime;
 	}
@@ -116,6 +138,7 @@ public class EnemyMovement : MonoBehaviour
 	{
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
+		isTouchingAttack = hitboxColliders.Any(c => c.IsTouchingLayers(data.playerAttackLayer));
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.groundLayer);
 		isProvoked = attackCheck.IsTouchingLayers(data.playerLayer);
 
@@ -168,6 +191,58 @@ public class EnemyMovement : MonoBehaviour
 
 		if (data.jumpEnabled && jumpCooldown <= 0)
 			lastJumpInputTime = 0;
+	}
+
+	private bool canHurt()
+	{
+		return isTouchingAttack && hurtCooldown <= 0;
+	}
+	private void hurt()
+	{
+		isDistressed = true;
+		lastHurtTime = 0;
+		hurtCooldown = data.hurtInvulTime;
+
+		setInvulnerability(true);
+		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+
+		float force = data.hurtKnockbackForce;
+		if (force > rigidBody.velocity.y)
+		{
+			force -= rigidBody.velocity.y;
+			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+		}
+	}
+	private void setInvulnerability(bool val)
+	{
+		int layer = val ? enemyInvulnerableLayer : enemyLayer;
+
+		foreach (Collider2D c in hitboxColliders)
+			c.gameObject.layer = layer;
+	}
+	private void updateHurt()
+	{
+		if (canHurt())
+		{
+			hurt();
+		}
+
+		if (hurtCooldown <= 0)
+			setInvulnerability(false);
+
+		if (isDistressed && lastHurtTime >= data.hurtDistressTime)
+		{
+			isDistressed = false;
+		}
+
+		if (isDistressed)
+		{
+			isJumping = false;
+			isGrounded = false;
+
+			moveInput.y = 0;
+			moveInput.x = isFacingRight ? -1 : 1;
+		}
 	}
 
 	private bool canAttack()
