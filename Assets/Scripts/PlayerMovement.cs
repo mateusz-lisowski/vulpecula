@@ -206,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
 			hurtCooldown = data.hurtInvulTime;
 
 			setInvulnerability(true);
-			StartCoroutine(Effects.Flashing(gameObject, data.hurtInvulTime));
+			StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
 
 			float force = data.hurtKnockbackForce;
 			if (force > rigidBody.velocity.y)

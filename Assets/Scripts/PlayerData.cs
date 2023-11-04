@@ -3,13 +3,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Data")]
 public class PlayerData : ScriptableObject
 {
-	[Header("Gravity")]
-	[HideInInspector] public float gravityStrength;
-	[HideInInspector] public float gravityScale;
-
 	[Space(5)]
+
+	[Header("Gravity")]
 	public float fallGravityMult; // gravityScale multiplier when falling
 	public float maxFallSpeed; // maximum fall speed
+	[HideInInspector] public float gravityStrength;
+	[HideInInspector] public float gravityScale;
 
 	[Space(10)]
 

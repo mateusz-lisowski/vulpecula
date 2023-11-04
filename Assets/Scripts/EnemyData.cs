@@ -7,7 +7,7 @@ public class EnemyData : ScriptableObject
 	[HideInInspector] public float gravityStrength;
 	[HideInInspector] public float gravityScale;
 
-	[Space(10)]
+	[Space(5)]
 
 	[Header("Run")]
 	public bool runEnabled; // 'true' if can run
