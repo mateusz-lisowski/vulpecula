@@ -4,19 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Effects Data")]
 public class Effects : ScriptableObject
 {
-    public static Effects instance;
+	public static Effects instance;
 
 	[Space(5)]
 
 	[Header("Flashing")]
 	public float flashingFrequency;
 	[Range(0f, 1f)] public float flashingAlpha;
-
-
-	Effects()
-	{
-		instance = this;
-	}
 
 
 	public IEnumerator Flashing(GameObject target, float time)
