@@ -15,6 +15,13 @@ public class EnemyData : ScriptableObject
 
 	[Space(10)]
 
+	[Header("Attack")]
+	public float attackCooldown; // minimum time between two consecutive attacks
+	public float attackCastTime; // time needed for the attack to hurt
+	public float attackLastTime; // time after the cast the attack can hurt
+
+	[Space(10)]
+
 	[Header("Run")]
 	public bool runEnabled; // 'true' if can run
 	public float runMaxSpeed; // maximum running speed
@@ -31,13 +38,6 @@ public class EnemyData : ScriptableObject
 	public float jumpTimeToApex; // time to reach the maximum height of a jump
 	public float jumpCooldown; // minimum time between two consecutive jumps
 	[HideInInspector] public float jumpForce; // calculated jump force
-
-	[Space(10)]
-
-	[Header("Attack")]
-	public float attackCooldown; // minimum time between two consecutive attacks
-	public float attackCastTime; // time needed for the attack to hurt
-	public float attackLastTime; // time after the cast the attack can hurt
 
 
 	private void OnValidate()

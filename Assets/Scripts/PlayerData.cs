@@ -5,6 +5,7 @@ public class PlayerData : ScriptableObject
 {
 	public LayerMask groundLayer;
 	public LayerMask enemyAttackLayer;
+	public GameObject attackForwardPrefab;
 
 	[Space(5)]
 
@@ -22,6 +23,17 @@ public class PlayerData : ScriptableObject
 	public float hurtKnockbackMaxSpeed; // maximum knockback speed
 	[Range(0.5f, 1.0f)] public float hurtKnockbackHeightScale; // knockback height
 	[HideInInspector] public float hurtKnockbackForce; // calculated hit knockback force
+
+	[Space(10)]
+
+	[Header("Attack")]
+	public float attackCooldown; // minimum time between two consecutive attacks
+	public float attackCastTime; // time needed for the attack to hurt
+	public float attackLastTime; // time after the cast the attack can hurt
+
+	[Space(5)]
+	public float attackVelocityOffsetScale; // attack offset based on the player velocity
+	[Range(0.01f, 0.5f)] public float attackInputBufferTime; // time within which too early attack will still be performed
 
 	[Space(10)]
 

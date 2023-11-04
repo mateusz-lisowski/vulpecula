@@ -17,6 +17,7 @@ public class EnemyMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastTurnTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastJumpInputTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastAttackTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
@@ -52,8 +53,10 @@ public class EnemyMovement : MonoBehaviour
 
 		isFacingRight = centerDirection.transform.right.x > 0;
 
+		lastTurnTime = float.PositiveInfinity;
 		lastGroundedTime = float.PositiveInfinity;
 		lastJumpInputTime = float.PositiveInfinity;
+		lastAttackTime = float.PositiveInfinity;
 
 		jumpCooldown = 0;
 	}
@@ -173,6 +176,7 @@ public class EnemyMovement : MonoBehaviour
 	}
 	private void attack()
 	{
+		lastAttackTime = 0;
 		attackCooldown = data.attackCooldown;
 
 		attackData.launch(data);

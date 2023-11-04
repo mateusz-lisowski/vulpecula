@@ -81,12 +81,9 @@ public class PlayerMovement : MonoBehaviour
 		lastWallJumpTime = float.PositiveInfinity;
 		lastDashInputTime = float.PositiveInfinity;
 		lastDashTime = float.PositiveInfinity;
-
-		jumpCooldown = 0;
-		dashCooldown = 0;
 	}
 
-	// handle inputs and jumping
+	// handle inputs, dashing, and jumping
 	void Update()
 	{
 		updateTimers();
@@ -258,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool canDash()
 	{
-		return dashCooldown <= 0 && lastDashInputTime < data.dashInputBufferTime && dashesLeft > 0
+		return dashCooldown <= 0 && lastDashInputTime <= data.dashInputBufferTime && dashesLeft > 0
 			&& !isDistressed;
 	}
 	private void dash()
@@ -313,7 +310,7 @@ public class PlayerMovement : MonoBehaviour
 	
 	private bool canJump()
 	{
-		return jumpCooldown <= 0 && lastJumpInputTime < data.jumpInputBufferTime 
+		return jumpCooldown <= 0 && lastJumpInputTime <= data.jumpInputBufferTime 
 			&& jumpsLeft > 0 && lastWallJumpTime >= data.wallJumpTime
 			&& !isDistressed;
 	}
