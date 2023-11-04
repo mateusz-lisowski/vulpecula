@@ -247,7 +247,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2669229480847899964}
   - component: {fileID: 5737880956009919875}
-  m_Layer: 7
+  m_Layer: 13
   m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,7 +324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9041976028202437825}
   - component: {fileID: 8547301872942223977}
-  m_Layer: 7
+  m_Layer: 13
   m_Name: Fall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -402,7 +402,7 @@ GameObject:
   - component: {fileID: 5216733286932967786}
   - component: {fileID: 1533992438684531747}
   - component: {fileID: 2967208680964356299}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,7 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2435603641533253003}
   m_Layer: 7
-  m_Name: Direction
+  m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -525,7 +525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2206275383897797304}
   - component: {fileID: 6327330540574072490}
-  m_Layer: 7
+  m_Layer: 13
   m_Name: Wall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -9675,6 +9675,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 663711746}
     m_Modifications:
+    - target: {fileID: 1205692095989755948, guid: 26b45518357f01845910c7bb4fcac655, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8467975499801039442, guid: 26b45518357f01845910c7bb4fcac655, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -10447,6 +10451,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 663711746}
     m_Modifications:
+    - target: {fileID: 1205692095989755948, guid: 26b45518357f01845910c7bb4fcac655, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2116331165275165228, guid: 26b45518357f01845910c7bb4fcac655, type: 3}
       propertyPath: awakeMoveRight
       value: 1
@@ -10586,7 +10594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1108052940}
   - component: {fileID: 1108052941}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: Wall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16119,7 +16127,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2076482517}
   - component: {fileID: 2076482518}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}

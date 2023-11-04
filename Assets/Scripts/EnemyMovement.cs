@@ -1,5 +1,3 @@
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
@@ -28,7 +26,7 @@ public class EnemyMovement : MonoBehaviour
 
 	private Rigidbody2D rigidBody;
 	private Animator animator;
-	private Transform centerDirection;
+	private Transform center;
 
 	private Transform hitbox;
 	private Collider2D attackCheck;
@@ -46,7 +44,7 @@ public class EnemyMovement : MonoBehaviour
 	{
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
-		centerDirection = transform.Find("Direction").GetComponent<Transform>();
+		center = transform.Find("Center").GetComponent<Transform>();
 
 		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
 		attackCheck = transform.Find("Attack").GetComponent<Collider2D>();
@@ -57,7 +55,7 @@ public class EnemyMovement : MonoBehaviour
 		enemyLayer = LayerMask.NameToLayer("Enemies");
 		enemyInvulnerableLayer = LayerMask.NameToLayer("Enemies Invulnerable");
 
-		isFacingRight = centerDirection.transform.right.x > 0;
+		isFacingRight = center.transform.right.x > 0;
 
 		lastTurnTime = float.PositiveInfinity;
 		lastGroundedTime = float.PositiveInfinity;
@@ -105,10 +103,8 @@ public class EnemyMovement : MonoBehaviour
 
 	private bool isFacingSlope()
 	{
-		Vector2 center = centerDirection.position;
-
-		Vector2 sourceLow = new Vector2(center.x, center.y - 0.2f);
-		Vector2 sourceHigh = new Vector2(center.x, center.y + 0.2f);
+		Vector2 sourceLow = new Vector2(center.position.x, center.position.y - 0.2f);
+		Vector2 sourceHigh = new Vector2(center.position.x, center.position.y + 0.2f);
 
 		Vector2 dir = isFacingRight ? Vector2.right : Vector2.left;
 
@@ -180,21 +176,21 @@ public class EnemyMovement : MonoBehaviour
 	{
 		return isTouchingAttack && hurtCooldown <= 0;
 	}
-	private void hurt()
+	private void setDistressDirection()
 	{
-		isDistressed = true;
-		lastHurtTime = 0;
-		hurtCooldown = data.hurtInvulTime;
+		ContactFilter2D filter = new ContactFilter2D().NoFilter();
+		filter.SetLayerMask(data.playerAttackLayer);
+		filter.useLayerMask = true;
 
-		setInvulnerability(true);
-		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+		Collider2D[] contact = new Collider2D[1];
+		if (rigidBody.OverlapCollider(filter, contact) == 0)
+			return;
 
-		float force = data.hurtKnockbackForce;
-		if (force > rigidBody.velocity.y)
-		{
-			force -= rigidBody.velocity.y;
-			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
-		}
+		Transform other = contact[0].transform;
+
+		// if attack faces the same direction
+		if (Vector2.Dot(transform.right, other.right) > 0)
+			Flip();
 	}
 	private void setInvulnerability(bool val)
 	{
@@ -204,6 +200,23 @@ public class EnemyMovement : MonoBehaviour
 			child.gameObject.layer = layer;
 
 		hitbox.gameObject.layer = layer;
+	}
+	private void hurt()
+	{
+		isDistressed = true;
+		lastHurtTime = 0;
+		hurtCooldown = data.hurtInvulTime;
+
+		setDistressDirection();
+		setInvulnerability(true);
+		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+
+		float force = data.hurtKnockbackForce;
+		if (force > rigidBody.velocity.y)
+		{
+			force -= rigidBody.velocity.y;
+			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+		}
 	}
 	private void updateHurt()
 	{

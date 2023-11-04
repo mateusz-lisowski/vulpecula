@@ -189,21 +189,21 @@ public class PlayerMovement : MonoBehaviour
 	{
 		return isTouchingAttack && hurtCooldown <= 0;
 	}
-	private void hurt()
+	private void setDistressDirection()
 	{
-		isDistressed = true;
-		lastHurtTime = 0;
-		hurtCooldown = data.hurtInvulTime;
+		ContactFilter2D filter = new ContactFilter2D().NoFilter();
+		filter.SetLayerMask(data.enemyAttackLayer);
+		filter.useLayerMask = true;
 
-		setInvulnerability(true);
-		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+		Collider2D[] contact = new Collider2D[1];
+		if (rigidBody.OverlapCollider(filter, contact) == 0)
+			return;
 
-		float force = data.hurtKnockbackForce;
-		if (force > rigidBody.velocity.y)
-		{
-			force -= rigidBody.velocity.y;
-			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
-		}
+		Transform other = contact[0].transform;
+
+		// if attack faces the same direction
+		if (Vector2.Dot(transform.right, other.right) > 0)
+			Flip();
 	}
 	private void setInvulnerability(bool val)
 	{
@@ -213,6 +213,25 @@ public class PlayerMovement : MonoBehaviour
 			child.gameObject.layer = layer;
 
 		hitbox.gameObject.layer = layer;
+	}
+	private void hurt()
+	{
+		isDistressed = true;
+		lastHurtTime = 0;
+		hurtCooldown = data.hurtInvulTime;
+
+		setDistressDirection();
+		setInvulnerability(true);
+		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+
+		float force = data.hurtKnockbackForce;
+		if (force > rigidBody.velocity.y)
+		{
+			force -= rigidBody.velocity.y;
+			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+		}
+
+		Flip();
 	}
 	private void updateHurt()
 	{
@@ -226,6 +245,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isDistressed && lastHurtTime >= data.hurtDistressTime)
 		{
+			Flip();
 			isDistressed = false;
 		}
 
@@ -235,8 +255,11 @@ public class PlayerMovement : MonoBehaviour
 			isJumping = false;
 			isGrounded = false;
 
+			if (isFacingWall)
+				Flip();
+
 			moveInput.y = 0;
-			moveInput.x = isFacingRight ? -1 : 1;
+			moveInput.x = isFacingRight ? 1 : -1;
 		}
 	}
 
