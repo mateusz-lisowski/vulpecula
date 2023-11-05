@@ -85,6 +85,8 @@ public class PlayerAttack : MonoBehaviour
 
 	public void attackForwardInstantiate()
 	{
+		movement.isAttacking = false;
+
 		GameObject currentAttack = Instantiate(data.attackForwardPrefab, 
 			attackForwardTransform.position, attackForwardTransform.rotation);
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
@@ -106,6 +108,8 @@ public class PlayerAttack : MonoBehaviour
 	}
 	public void attackDownInstantiate()
 	{
+		movement.isAttacking = false;
+
 		GameObject currentAttack = Instantiate(data.attackDownPrefab, 
 			attackDownTransform.position, attackDownTransform.rotation);
 
@@ -127,12 +131,17 @@ public class PlayerAttack : MonoBehaviour
 	private bool canAttack()
 	{
 		return attackCooldown <= 0 && lastAttackInputTime <= data.attackInputBufferTime
-			&& !movement.isDistressed;
+			&& !movement.isDistressed && !movement.isAttacking;
 	}
 	private void updateAttack()
 	{
+		if (movement.isDistressed)
+			movement.isAttacking = false;
+
 		if (canAttack())
 		{
+			movement.isAttacking = true;
+
 			if (isAttackDownInput)
 				attackDown();
 			else
