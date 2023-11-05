@@ -61,13 +61,12 @@ public class EnemyAttack : MonoBehaviour
 		lastAttackTime = 0;
 		attackCooldown = data.attackCooldown;
 
-		GameObject currentAttack = Instantiate(
-			data.attackPrefab, transform.position, transform.rotation);
+		GameObject currentAttack = Instantiate(data.attackPrefab, transform);
 
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setCollisionTime(data.attackCastTime, data.attackLastTime);
-		currentAttackData.setHitboxSize(transform.localScale);
+		currentAttackData.setHitboxSize(new Vector2(1f, 1f));
 	}
 	private void updateAttack()
 	{

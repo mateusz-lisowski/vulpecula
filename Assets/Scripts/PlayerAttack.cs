@@ -14,28 +14,28 @@ public class PlayerAttack : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
 
-	private Transform playerTransform;
 	private PlayerMovement movement;
 	private PlayerData data;
 
 	private Rigidbody2D rigidBody;
 	private Animator animator;
 
-	private Transform forwardTransform;
-	private Transform downTransform;
+	private Transform attackTransform;
+	private Transform attackForwardTransform;
+	private Transform attackDownTransform;
 
 
 	private void Awake()
 	{
-		playerTransform = transform.parent;
-		movement = playerTransform.GetComponent<PlayerMovement>();
+		movement = transform.GetComponent<PlayerMovement>();
 		data = movement.data;
 
-		rigidBody = playerTransform.GetComponent<Rigidbody2D>();
-		animator = playerTransform.GetComponent<Animator>();
+		rigidBody = transform.GetComponent<Rigidbody2D>();
+		animator = transform.GetComponent<Animator>();
 
-		forwardTransform = transform.Find("Forward");
-		downTransform = transform.Find("Down");
+		attackTransform = transform.Find("Attack");
+		attackForwardTransform = attackTransform.Find("Forward");
+		attackDownTransform = attackTransform.Find("Down");
 
 		lastAttackInputTime = float.PositiveInfinity;
 		lastAttackTime = float.PositiveInfinity;
@@ -79,22 +79,23 @@ public class PlayerAttack : MonoBehaviour
 
 	private void updateAttackPosition()
 	{
-		transform.position = (Vector2)transform.parent.position 
+		attackTransform.position = (Vector2)transform.position 
 			+ rigidBody.velocity * data.attackVelocityOffsetScale;
 	}
 
+	public void attackForwardInstantiate()
+	{
+		GameObject currentAttack = Instantiate(data.attackForwardPrefab, 
+			attackForwardTransform.position, attackForwardTransform.rotation);
+		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
+
+		currentAttackData.setCollisionTime(data.attackCastTime, data.attackLastTime);
+		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
+	}
 	private void attackForward()
 	{
 		lastAttackTime = 0;
 		attackCooldown = data.attackCooldown;
-
-		GameObject currentAttack = Instantiate(
-			data.attackForwardPrefab, forwardTransform.position, transform.rotation);
-
-		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
-
-		currentAttackData.setCollisionTime(data.attackCastTime, data.attackLastTime);
-		currentAttackData.setHitboxSize(forwardTransform.localScale);
 	}
 	
 	private void attackDownHitCallback(AttackController attackData)
@@ -102,21 +103,23 @@ public class PlayerAttack : MonoBehaviour
 		movement.registeredDownHitJump = true;
 		attackData.setHitCallback(null);
 	}
+	public void attackDownInstantiate()
+	{
+		GameObject currentAttack = Instantiate(data.attackDownPrefab, 
+			attackDownTransform.position, attackDownTransform.rotation);
+
+		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
+
+		currentAttackData.setCollisionTime(data.attackCastTime, data.attackLastTime);
+		currentAttackData.setHitboxSize(attackDownTransform.localScale);
+		currentAttackData.setHitCallback(attackDownHitCallback);
+		currentAttackData.setVertical();
+	}
 	private void attackDown()
 	{
 		lastAttackTime = 0;
 		lastAttackDownTime = 0;
 		attackCooldown = data.attackCooldown;
-
-		GameObject currentAttack = Instantiate(
-			data.attackDownPrefab, downTransform.position, transform.rotation);
-
-		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
-
-		currentAttackData.setCollisionTime(data.attackCastTime, data.attackLastTime);
-		currentAttackData.setHitboxSize(downTransform.localScale);
-		currentAttackData.setHitCallback(attackDownHitCallback);
-		currentAttackData.setVertical();
 	}
 
 	private bool canAttack()

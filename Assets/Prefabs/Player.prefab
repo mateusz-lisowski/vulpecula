@@ -240,7 +240,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5470671596442281111}
-  - component: {fileID: 4019286987127834296}
   m_Layer: 8
   m_Name: Attack
   m_TagString: Untagged
@@ -265,22 +264,6 @@ Transform:
   - {fileID: 6979564297770308376}
   m_Father: {fileID: 3832259940529436474}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4019286987127834296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2874029411080082444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5268bf53cd40d71469edf2e8ffe1af11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <isAttackDownInput>k__BackingField: 0
-  <lastAttackInputTime>k__BackingField: 0
-  <lastAttackTime>k__BackingField: 0
-  <attackCooldown>k__BackingField: 0
 --- !u!1 &2932387326757978465
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,6 +589,7 @@ GameObject:
   - component: {fileID: 3161954301237374811}
   - component: {fileID: 7730965748514213015}
   - component: {fileID: 7855963956060272660}
+  - component: {fileID: 7745948289286802684}
   - component: {fileID: 5553025889998909665}
   m_Layer: 8
   m_Name: Player
@@ -750,6 +734,23 @@ MonoBehaviour:
   <jumpCooldown>k__BackingField: 0
   <dashCooldown>k__BackingField: 0
   registeredDownHitJump: 0
+--- !u!114 &7745948289286802684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367288690823563264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5268bf53cd40d71469edf2e8ffe1af11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <isAttackDownInput>k__BackingField: 0
+  <lastAttackInputTime>k__BackingField: 0
+  <lastAttackTime>k__BackingField: 0
+  <lastAttackDownTime>k__BackingField: 0
+  <attackCooldown>k__BackingField: 0
 --- !u!95 &5553025889998909665
 Animator:
   serializedVersion: 5
