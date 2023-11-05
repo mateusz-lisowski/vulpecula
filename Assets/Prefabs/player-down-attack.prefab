@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5221137894813954743}
   - component: {fileID: 48487069953489777}
   - component: {fileID: 7389452789087813582}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 8542204149645799593}
   - component: {fileID: 1870036981637745771}
   - component: {fileID: 3533432375527037070}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: player-down-attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitLayer:
     serializedVersion: 2
-    m_Bits: 2176
+    m_Bits: 2560
   <isVertical>k__BackingField: 0
 --- !u!95 &3533432375527037070
 Animator:

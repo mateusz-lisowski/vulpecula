@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2787628816381798416}
   - component: {fileID: 4669360722883422849}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,7 +77,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5266757604092671919}
   - component: {fileID: 7709070352045807006}
-  m_Layer: 13
+  m_Layer: 7
   m_Name: Wall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1367343169702273542}
   - component: {fileID: 17058731581403566}
-  m_Layer: 13
+  m_Layer: 7
   m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 7896816204720726917}
   - component: {fileID: 3983134536804366728}
   - component: {fileID: 1891483724572851601}
-  m_Layer: 13
+  m_Layer: 7
   m_Name: Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3504617653628317460}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 2116331165275165228}
   - component: {fileID: 1872270867609251435}
   - component: {fileID: 6927976745624334900}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: ant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -540,7 +540,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2477685917013733505}
   - component: {fileID: 8747581608663776396}
-  m_Layer: 13
+  m_Layer: 7
   m_Name: Fall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerData : ScriptableObject
 {
 	public LayerMask groundLayer;
-	public LayerMask enemyAttackLayer;
 	public GameObject attackForwardPrefab;
 	public GameObject attackDownPrefab;
 

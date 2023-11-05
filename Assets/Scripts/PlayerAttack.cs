@@ -90,6 +90,8 @@ public class PlayerAttack : MonoBehaviour
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
+
+		currentAttackData.resolve();
 	}
 	private void attackForward()
 	{
@@ -112,6 +114,8 @@ public class PlayerAttack : MonoBehaviour
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();
+
+		currentAttackData.resolve();
 	}
 	private void attackDown()
 	{

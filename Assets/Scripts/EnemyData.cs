@@ -5,7 +5,6 @@ public class EnemyData : ScriptableObject
 {
 	public LayerMask groundLayer;
 	public LayerMask playerLayer;
-	public LayerMask playerAttackLayer;
 	public GameObject attackPrefab;
 
 	[Space(5)]

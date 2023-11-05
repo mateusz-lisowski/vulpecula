@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isTouchingAttack { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
 	[field: Space(10)]
@@ -46,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 	private LayerMask playerLayer;
 	private LayerMask playerInvulnerableLayer;
 
+	private AttackController hitContact = null;
 	private Vector2 moveInput;
 
 	private bool currentJumpCuttable = false;
@@ -163,11 +163,14 @@ public class PlayerMovement : MonoBehaviour
 		dashCutInput = !Input.GetKey(KeyCode.C);
 	}
 	
+	public void hit(AttackController contact)
+	{
+		hitContact = contact;
+	}
 	private void updateCollisions()
     {
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
-		isTouchingAttack = rigidBody.IsTouchingLayers(data.enemyAttackLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -190,35 +193,15 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool canHurt()
 	{
-		return isTouchingAttack && hurtCooldown <= 0;
+		return hitContact != null && hurtCooldown <= 0;
 	}
 	private void setDistressDirection()
 	{
-		ContactFilter2D filter = new ContactFilter2D().NoFilter();
-		filter.SetLayerMask(data.enemyAttackLayer);
-		filter.useLayerMask = true;
-
-		Collider2D[] contact = new Collider2D[1];
-		if (rigidBody.OverlapCollider(filter, contact) == 0)
-			return;
-
-		Transform other = contact[0].transform;
-		AttackController otherData = other.GetComponent<AttackController>();
-
-		if (otherData == null)
-		{
-			other = other.parent;
-			otherData = other.GetComponent<AttackController>();
-
-			if (otherData == null)
-				return;
-		}
-
-		if (otherData.isVertical)
+		if (hitContact.isVertical)
 			return;
 
 		// if attack faces the same direction
-		if (Vector2.Dot(transform.right, other.right) > 0)
+		if (Vector2.Dot(transform.right, hitContact.transform.right) > 0)
 			Flip();
 	}
 	private void setInvulnerability(bool val)
@@ -252,9 +235,8 @@ public class PlayerMovement : MonoBehaviour
 	private void updateHurt()
 	{
 		if (canHurt())
-		{
 			hurt();
-		}
+		hitContact = null;
 
 		if (hurtCooldown <= 0)
 			setInvulnerability(false);

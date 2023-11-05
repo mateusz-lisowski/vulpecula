@@ -10,7 +10,6 @@ public class EnemyMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isTouchingAttack { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isProvoked { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isNoGroundAhead { get; private set; }
@@ -37,6 +36,7 @@ public class EnemyMovement : MonoBehaviour
 	private LayerMask enemyLayer;
 	private LayerMask enemyInvulnerableLayer;
 
+	private AttackController hitContact = null;
 	private Vector2 moveInput;
 
 
@@ -52,8 +52,8 @@ public class EnemyMovement : MonoBehaviour
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
 		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
 
-		enemyLayer = LayerMask.NameToLayer("Enemies");
-		enemyInvulnerableLayer = LayerMask.NameToLayer("Enemies Invulnerable");
+		enemyLayer = LayerMask.NameToLayer("Enemy");
+		enemyInvulnerableLayer = LayerMask.NameToLayer("Enemy Invulnerable");
 
 		isFacingRight = center.transform.right.x > 0;
 
@@ -103,6 +103,10 @@ public class EnemyMovement : MonoBehaviour
 		jumpCooldown -= Time.deltaTime;
 	}
 
+	public void hit(AttackController contact)
+	{
+		hitContact = contact;
+	}
 	private bool isFacingSlope()
 	{
 		Vector2 sourceLow = new Vector2(center.position.x, center.position.y - 0.2f);
@@ -119,7 +123,6 @@ public class EnemyMovement : MonoBehaviour
 	{
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
-		isTouchingAttack = rigidBody.IsTouchingLayers(data.playerAttackLayer);
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.groundLayer);
 		isProvoked = attackCheck.IsTouchingLayers(data.playerLayer);
 
@@ -176,35 +179,15 @@ public class EnemyMovement : MonoBehaviour
 
 	private bool canHurt()
 	{
-		return isTouchingAttack && hurtCooldown <= 0;
+		return hitContact != null && hurtCooldown <= 0;
 	}
 	private void setDistressDirection()
 	{
-		ContactFilter2D filter = new ContactFilter2D().NoFilter();
-		filter.SetLayerMask(data.playerAttackLayer);
-		filter.useLayerMask = true;
-
-		Collider2D[] contact = new Collider2D[1];
-		if (rigidBody.OverlapCollider(filter, contact) == 0)
-			return;
-
-		Transform other = contact[0].transform;
-		AttackController otherData = other.GetComponent<AttackController>();
-
-		if (otherData == null)
-		{
-			other = other.parent;
-			otherData = other.GetComponent<AttackController>();
-
-			if (otherData == null)
-				return;
-		}
-
-		if (otherData.isVertical)
+		if (hitContact.isVertical)
 			return;
 
 		// if attack faces the same direction
-		if (Vector2.Dot(transform.right, other.right) > 0)
+		if (Vector2.Dot(transform.right, hitContact.transform.right) > 0)
 			Flip();
 	}
 	private void setInvulnerability(bool val)
@@ -236,9 +219,8 @@ public class EnemyMovement : MonoBehaviour
 	private void updateHurt()
 	{
 		if (canHurt())
-		{
 			hurt();
-		}
+		hitContact = null;
 
 		if (hurtCooldown <= 0)
 			setInvulnerability(false);

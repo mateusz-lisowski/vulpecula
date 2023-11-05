@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackController : MonoBehaviour
@@ -40,28 +39,25 @@ public class AttackController : MonoBehaviour
 	}
 
 
-	public void hitboxEnable()
-	{
-		hitbox.gameObject.SetActive(true);
-	}
-	public void hitboxDisable()
-	{
-		hitbox.gameObject.SetActive(false);
-	}
-
-
 	private void Awake()
 	{
 		hitbox = transform.Find("Hitbox").GetComponent<Collider2D>();
 	}
 
-	void Update()
+	public void resolve()
 	{
-		if (hitbox.IsTouchingLayers(hitLayer))
-		{
-			if (hitCallback != null)
-				hitCallback(this);
-		}
-	}
+		ContactFilter2D filter = new ContactFilter2D().NoFilter();
+		filter.SetLayerMask(hitLayer);
+		filter.useLayerMask = true;
 
+		List<Collider2D> contacts = new List<Collider2D>();
+		if (hitbox.OverlapCollider(filter, contacts) == 0)
+			return;
+
+		if (hitCallback != null)
+			hitCallback(this);
+
+		foreach (Collider2D contact in contacts)
+			contact.SendMessageUpwards("hit", this);
+	}
 }

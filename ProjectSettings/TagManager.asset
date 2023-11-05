@@ -12,13 +12,13 @@ TagManager:
   - Water
   - UI
   - Ground
-  - Enemies
-  - Player
-  - Enemies Attack
-  - Player Attack
-  - Enemies Invulnerable
-  - Player Invulnerable
   - Detection
+  - Player
+  - Enemy
+  - Player Invulnerable
+  - Enemy Invulnerable
+  - 
+  - 
   - 
   - 
   - 
