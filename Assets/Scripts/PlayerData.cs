@@ -29,8 +29,6 @@ public class PlayerData : ScriptableObject
 
 	[Header("Attack")]
 	public float attackCooldown; // minimum time between two consecutive attacks
-	public float attackCastTime; // time needed for the attack to hurt
-	public float attackLastTime; // time after the cast the attack can hurt
 
 	[Space(5)]
 

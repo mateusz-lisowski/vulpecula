@@ -10,22 +10,24 @@ public class EnemyAttack : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
 
-	private Transform enemyTransform;
 	private EnemyMovement movement;
 	private EnemyData data;
 
 	private Rigidbody2D rigidBody;
 	private Animator animator;
 
+	private Transform attackTransform;
+
 
 	private void Awake()
 	{
-		enemyTransform = transform.parent;
-		movement = enemyTransform.GetComponent<EnemyMovement>();
+		movement = transform.GetComponent<EnemyMovement>();
 		data = movement.data;
 
-		rigidBody = enemyTransform.GetComponent<Rigidbody2D>();
-		animator = enemyTransform.GetComponent<Animator>();
+		rigidBody = transform.GetComponent<Rigidbody2D>();
+		animator = transform.GetComponent<Animator>();
+
+		attackTransform = transform.Find("Attack");
 
 		lastAttackTime = float.PositiveInfinity;
 	}
@@ -56,17 +58,19 @@ public class EnemyAttack : MonoBehaviour
 	{
 		return attackCooldown <= 0 && movement.isProvoked && !movement.isDistressed;
 	}
+	public void attackInstantiate()
+	{
+		GameObject currentAttack = Instantiate(data.attackPrefab,
+			attackTransform.position, attackTransform.rotation);
+
+		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
+
+		currentAttackData.setHitboxSize(attackTransform.localScale);
+	}
 	private void attack()
 	{
 		lastAttackTime = 0;
 		attackCooldown = data.attackCooldown;
-
-		GameObject currentAttack = Instantiate(data.attackPrefab, transform);
-
-		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
-
-		currentAttackData.setCollisionTime(data.attackCastTime, data.attackLastTime);
-		currentAttackData.setHitboxSize(new Vector2(1f, 1f));
 	}
 	private void updateAttack()
 	{

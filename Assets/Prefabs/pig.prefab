@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 4640541177064275691}
   - component: {fileID: 4528161077207577769}
   - component: {fileID: 4736977267285008729}
+  - component: {fileID: 3167838822522320794}
   - component: {fileID: 2141256828441471710}
   m_Layer: 7
   m_Name: pig
@@ -216,6 +217,21 @@ MonoBehaviour:
   <lastJumpInputTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
   <jumpCooldown>k__BackingField: 0
+--- !u!114 &3167838822522320794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258747344204474044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85cfcf1720fe92d43acb32fac737bbee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <isAttacking>k__BackingField: 0
+  <lastAttackTime>k__BackingField: 0
+  <attackCooldown>k__BackingField: 0
 --- !u!95 &2141256828441471710
 Animator:
   serializedVersion: 5
@@ -401,7 +417,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5216733286932967786}
   - component: {fileID: 1533992438684531747}
-  - component: {fileID: 2967208680964356299}
   - component: {fileID: 2549594033856648059}
   m_Layer: 13
   m_Name: Attack
@@ -470,21 +485,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6, y: 0.9}
   m_EdgeRadius: 0
---- !u!114 &2967208680964356299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5474203348391535556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85cfcf1720fe92d43acb32fac737bbee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <isAttacking>k__BackingField: 0
-  <lastAttackTime>k__BackingField: 0
-  <attackCooldown>k__BackingField: 0
 --- !u!114 &2549594033856648059
 MonoBehaviour:
   m_ObjectHideFlags: 0

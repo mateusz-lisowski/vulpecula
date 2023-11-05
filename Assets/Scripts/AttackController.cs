@@ -9,7 +9,6 @@ public class AttackController : MonoBehaviour
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isVertical { get; private set; }
 
-	private Transform sprite;
 	private Collider2D hitbox;
 
 	private Action<AttackController> hitCallback;
@@ -18,21 +17,6 @@ public class AttackController : MonoBehaviour
 	public void setVertical(bool val = true)
 	{
 		isVertical = val;
-	}
-
-	private IEnumerator hitboxEnabler(float start, float lasts)
-	{
-		yield return new WaitForSeconds(start);
-
-		hitbox.enabled = true;
-		yield return new WaitForSeconds(lasts);
-
-		hitbox.enabled = false;
-	}
-	public void setCollisionTime(float start, float lasts)
-	{
-		hitbox.enabled = false;
-		StartCoroutine(hitboxEnabler(start, lasts));
 	}
 
 	public void setHitboxSize(Vector2 size)
@@ -54,11 +38,20 @@ public class AttackController : MonoBehaviour
 	{
 		hitCallback = callback;
 	}
-	
+
+
+	public void hitboxEnable()
+	{
+		hitbox.gameObject.SetActive(true);
+	}
+	public void hitboxDisable()
+	{
+		hitbox.gameObject.SetActive(false);
+	}
+
 
 	private void Awake()
 	{
-		sprite = transform.Find("Sprite");
 		hitbox = transform.Find("Hitbox").GetComponent<Collider2D>();
 	}
 
@@ -69,8 +62,6 @@ public class AttackController : MonoBehaviour
 			if (hitCallback != null)
 				hitCallback(this);
 		}
-
-		if (sprite.IsDestroyed())
-			Destroy(gameObject);
 	}
+
 }

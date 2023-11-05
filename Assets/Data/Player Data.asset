@@ -30,8 +30,6 @@ MonoBehaviour:
   hurtKnockbackHeightScale: 0.7
   hurtKnockbackForce: 11.666666
   attackCooldown: 0.5
-  attackCastTime: 0
-  attackLastTime: 0.5
   attackDownBounceHeight: 2.5
   attackDownBounceForce: 12.909945
   attackVelocityOffsetScale: 0

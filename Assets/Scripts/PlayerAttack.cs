@@ -89,7 +89,6 @@ public class PlayerAttack : MonoBehaviour
 			attackForwardTransform.position, attackForwardTransform.rotation);
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
 
-		currentAttackData.setCollisionTime(data.attackCastTime, data.attackLastTime);
 		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
 	}
 	private void attackForward()
@@ -110,7 +109,6 @@ public class PlayerAttack : MonoBehaviour
 
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
 
-		currentAttackData.setCollisionTime(data.attackCastTime, data.attackLastTime);
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();

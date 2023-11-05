@@ -77,6 +77,8 @@ public class EnemyMovement : MonoBehaviour
 		foreach (AnimatorControllerParameter param in animator.parameters)
 			if (param.name == "isGrounded")
 				animator.SetBool("isGrounded", isGrounded);
+			else if (param.name == "isDistressed")
+				animator.SetBool("isDistressed", isDistressed);
 			else if (param.name == "isFalling") 
 				animator.SetBool("isFalling", rigidBody.velocity.y < 0);
 			else if (param.name == "isMoving")
@@ -304,6 +306,11 @@ public class EnemyMovement : MonoBehaviour
 	private void updateRun()
 	{
 		float targetSpeed = moveInput.x * data.runMaxSpeed;
+
+		if (isDistressed)
+		{
+			targetSpeed = moveInput.x * data.hurtKnockbackMaxSpeed;
+		}
 
 		float accelRate = targetSpeed == 0 ? data.runDeccelAmount : data.runAccelAmount;
 
