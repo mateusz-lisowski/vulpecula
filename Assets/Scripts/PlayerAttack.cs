@@ -9,6 +9,7 @@ public class PlayerAttack : MonoBehaviour
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastAttackInputTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastAttackTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastAttackDownTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
@@ -38,6 +39,7 @@ public class PlayerAttack : MonoBehaviour
 
 		lastAttackInputTime = float.PositiveInfinity;
 		lastAttackTime = float.PositiveInfinity;
+		lastAttackDownTime = float.PositiveInfinity;
 	}
 
 	// handle inputs
@@ -51,7 +53,10 @@ public class PlayerAttack : MonoBehaviour
 		updateAttack();
 
 		if (lastAttackTime == 0)
-			animator.SetTrigger("isAttacking");
+			if (lastAttackDownTime == 0)
+				animator.SetTrigger("isAttackingDown");
+			else
+				animator.SetTrigger("isAttacking");
 	}
 
 
@@ -59,6 +64,7 @@ public class PlayerAttack : MonoBehaviour
 	{
 		lastAttackInputTime += Time.deltaTime;
 		lastAttackTime += Time.deltaTime;
+		lastAttackDownTime += Time.deltaTime;
 
 		attackCooldown -= Time.deltaTime;
 	}
@@ -99,6 +105,7 @@ public class PlayerAttack : MonoBehaviour
 	private void attackDown()
 	{
 		lastAttackTime = 0;
+		lastAttackDownTime = 0;
 		attackCooldown = data.attackCooldown;
 
 		GameObject currentAttack = Instantiate(

@@ -34,7 +34,7 @@ MonoBehaviour:
   attackLastTime: 0.5
   attackDownBounceHeight: 2.5
   attackDownBounceForce: 12.909945
-  attackVelocityOffsetScale: 0.03
+  attackVelocityOffsetScale: 0
   attackInputBufferTime: 0.05
   runMaxSpeed: 7
   runAcceleration: 2
