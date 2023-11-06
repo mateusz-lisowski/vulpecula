@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9166678890914042074}
   - component: {fileID: 5518660301845342751}
   - component: {fileID: 6150923696156314491}
-  m_Layer: 7
+  m_Layer: 1
   m_Name: player-forward-attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitLayer:
     serializedVersion: 2
-    m_Bits: 2560
+    m_Bits: 196608
   <isVertical>k__BackingField: 0
 --- !u!95 &6150923696156314491
 Animator:
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 1383508698901435033}
   - component: {fileID: 4799682981326531425}
   - component: {fileID: 578102071968704463}
-  m_Layer: 7
+  m_Layer: 20
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

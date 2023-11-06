@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4750702366738759334}
   - component: {fileID: 6907050958584456934}
-  m_Layer: 9
+  m_Layer: 16
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 4736977267285008729}
   - component: {fileID: 3167838822522320794}
   - component: {fileID: 2141256828441471710}
-  m_Layer: 9
+  m_Layer: 16
   m_Name: pig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,7 +207,6 @@ MonoBehaviour:
   <isFalling>k__BackingField: 0
   <isGrounded>k__BackingField: 0
   <isDistressed>k__BackingField: 0
-  <isTouchingAttack>k__BackingField: 0
   <isProvoked>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
@@ -263,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2669229480847899964}
   - component: {fileID: 5737880956009919875}
-  m_Layer: 7
+  m_Layer: 20
   m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -340,7 +339,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9041976028202437825}
   - component: {fileID: 8547301872942223977}
-  m_Layer: 7
+  m_Layer: 20
   m_Name: Fall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -418,7 +417,7 @@ GameObject:
   - component: {fileID: 5216733286932967786}
   - component: {fileID: 1533992438684531747}
   - component: {fileID: 2549594033856648059}
-  m_Layer: 7
+  m_Layer: 20
   m_Name: Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -508,7 +507,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2435603641533253003}
-  m_Layer: 9
+  m_Layer: 16
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -540,7 +539,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2206275383897797304}
   - component: {fileID: 6327330540574072490}
-  m_Layer: 7
+  m_Layer: 20
   m_Name: Wall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}

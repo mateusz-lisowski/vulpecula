@@ -14,13 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 256
   playerLayer:
     serializedVersion: 2
-    m_Bits: 256
-  playerAttackLayer:
-    serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 4096
   attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
   gravityStrength: -33.333332
   gravityScale: 1

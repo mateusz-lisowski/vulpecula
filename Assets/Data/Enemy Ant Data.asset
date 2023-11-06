@@ -14,13 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 256
   playerLayer:
     serializedVersion: 2
-    m_Bits: 256
-  playerAttackLayer:
-    serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 4096
   attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
   gravityStrength: 0
   gravityScale: 1
@@ -28,10 +25,8 @@ MonoBehaviour:
   hurtDistressTime: 0.2
   hurtKnockbackMaxSpeed: 2
   hurtKnockbackHeightScale: 0.9
-  hurtKnockbackForce: 5.4
+  hurtKnockbackForce: 3.3333335
   attackCooldown: 0.8
-  attackCastTime: 0
-  attackLastTime: 0.5
   runEnabled: 1
   runMaxSpeed: 3
   runAcceleration: 2.5
