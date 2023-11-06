@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Bonus
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -12,21 +11,21 @@ TagManager:
   - 
   - Water
   - UI
+  - 
+  - 
   - Ground
   - 
   - 
   - 
+  - Player
+  - Player Invulnerable
   - 
   - 
+  - Enemy
+  - Enemy Invulnerable
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Detection
   - 
   - 
   - 
@@ -57,14 +56,17 @@ TagManager:
   - name: Platforms
     uniqueID: 2059121161
     locked: 0
-  - name: Particles
-    uniqueID: 228446519
-    locked: 0
   - name: Items
     uniqueID: 2666157029
     locked: 0
-  - name: Player and Enemies
+  - name: Enemies
     uniqueID: 1400974387
+    locked: 0
+  - name: Player
+    uniqueID: 2638639625
+    locked: 0
+  - name: Particles
+    uniqueID: 228446519
     locked: 0
   - name: Foreground
     uniqueID: 4126192999
