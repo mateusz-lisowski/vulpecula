@@ -6,12 +6,17 @@ using System;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER }
+public enum GameState { GS_PAUSEMENU, GS_GAME, GS_LEVELCOMPLETED, GS_GAME_OVER, GS_OPTIONS }
 
 
 public class GameManager : MonoBehaviour
 {
+    const string keyHighScore = "HighScoreLevel1";
+
     public static GameManager instance;
+    public Canvas pauseMenuCanvas;
+    public Canvas levelCompletedCanvas;
+    public Canvas optionsCanvas;
 
     public GameState currentGameState = GameState.GS_PAUSEMENU;
     public Canvas inGameCanvas;
@@ -20,31 +25,80 @@ public class GameManager : MonoBehaviour
     public TMP_Text timerText;
     public TMP_Text enemiesText;
 
+    public TMP_Text LCscoreText;
+    public TMP_Text LChighScoreText;
+
     public Image[] keysTab;
     public Image[] livesTab;
 
 
     private float timer = 0.0f;
 
-    private int score = 0;
+    public int score = 0;
     private int keysFound = 0;
-    private int lives = 3;
+    public int lives = 3;
     private int enemiesKilled = 0;
 
     private const int maxKeysNumber = 3;
     private const int maxLivesNumber = 4;
 
 
+    public void OnResumeButtonClicked()
+    {
+        InGame();
+    }
+    public void OnRestartButtonClicked()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void OnOptionsMenuButtonClicked()
+    {
+        Options();
+    }
+    public void OnReturnToMainMenuButtonClicked()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+
     void SetGameState(GameState newGameState)
     {
+        if(newGameState == GameState.GS_LEVELCOMPLETED)
+        {
+            Scene currentScene = SceneManager.GetActiveScene();
+
+            if(currentScene.name == "Level1")
+            {
+                int highScore = PlayerPrefs.GetInt(keyHighScore);
+
+                if (highScore < score)
+                {
+                    highScore = score;
+                    PlayerPrefs.SetInt(keyHighScore, highScore);
+                }
+
+                LCscoreText.SetText("Your score = " + score);
+                LChighScoreText.SetText("Your best score = " + highScore);
+            }
+        }
+
         currentGameState = newGameState;
         inGameCanvas.enabled = true;
+        pauseMenuCanvas.enabled = currentGameState == GameState.GS_PAUSEMENU;
+        optionsCanvas.enabled = currentGameState == GameState.GS_OPTIONS;
+        levelCompletedCanvas.enabled = currentGameState == GameState.GS_LEVELCOMPLETED;
     }
 
     public void PauseMenu()
     {
         Time.timeScale = 0.0f;
         SetGameState(GameState.GS_PAUSEMENU);
+    }
+
+    public void Options()
+    {
+        Time.timeScale = 0.0f;
+        SetGameState(GameState.GS_OPTIONS);
     }
 
     public void InGame()
@@ -56,7 +110,7 @@ public class GameManager : MonoBehaviour
     public void LevelCompleted()
     {
 		Debug.Log("Level finished in " + timer + " seconds!");
-		SetGameState(GameState.GS_LEVELCOMPLETED);
+        SetGameState(GameState.GS_LEVELCOMPLETED);
     }
 
     public void GameOver()
@@ -65,6 +119,19 @@ public class GameManager : MonoBehaviour
 		SetGameState(GameState.GS_GAME_OVER);
     }
 
+
+    public void IncreaseQuality()
+    {
+        QualitySettings.IncreaseLevel();
+    }
+    public void DecreaseQuality()
+    {
+        QualitySettings.DecreaseLevel();
+    }
+    public void SetVolume(float val)
+    {
+        AudioListener.volume = val;
+    }
 
     public void AddPoints(int points)
     {
@@ -128,6 +195,9 @@ public class GameManager : MonoBehaviour
 
     void Awake() 
     {
+        if (!PlayerPrefs.HasKey(keyHighScore))
+            PlayerPrefs.SetInt(keyHighScore, 0);
+
         instance = this;
         InGame();
 
@@ -152,20 +222,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && currentGameState == GameState.GS_PAUSEMENU)
         {
             InGame();
         }
-
-        if (Input.GetKey(KeyCode.P))
+        else if (Input.GetKeyDown(KeyCode.Escape) && currentGameState == GameState.GS_GAME)
         {
             PauseMenu();
         }
-
-		if (Input.GetKey(KeyCode.R))
-		{
-			ResetScene();
-		}
 
 		// Increase timer
 		timer += Time.deltaTime;
@@ -174,9 +238,4 @@ public class GameManager : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-
-    void ResetScene()
-    {
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-	}
 }

@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     [Range(0.01f, 20.0f)] [SerializeField] private float jumpForce = 6.0f; // jump force of the player
     [Space(10)]
     public LayerMask groundLayer;
+    [SerializeField] private AudioClip bSound;
+    [SerializeField] private AudioClip LCSound;
+    private AudioSource source;
 
     private Rigidbody2D rigidBody;
     private Animator animator;
@@ -59,6 +62,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if (other.CompareTag("Bonus"))
 		{
+            source.PlayOneShot(bSound, AudioListener.volume);
             GameManager.instance.AddPoints(1);
             other.gameObject.SetActive(false);
 		}
@@ -66,6 +70,8 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("LevelEnd") && GameManager.instance.currentGameState == GameState.GS_GAME)
             if (GameManager.instance.IsEnoughKeys())
 		    {
+                source.PlayOneShot(LCSound, AudioListener.volume);
+                GameManager.instance.score += 100 * GameManager.instance.lives;
                 GameManager.instance.LevelCompleted();
 		    }
             else
@@ -121,6 +127,8 @@ public class PlayerController : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        source = GetComponent<AudioSource>();
 
         startPosition = this.transform.position;
     }
