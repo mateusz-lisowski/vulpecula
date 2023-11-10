@@ -14,8 +14,6 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
-	[field: Space(5)]
-	[field: SerializeField, ReadOnly] public bool canPassPlatform { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 	[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
@@ -28,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastWallJumpTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastDashInputTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastDashTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastPassInputTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastPassTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float hurtCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
@@ -44,7 +44,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private LayerMask playerLayer;
 	private LayerMask playerInvulnerableLayer;
-	private LayerMask passingLayer;
 
 	private AttackController hitContact = null;
 	private Vector2 moveInput;
@@ -68,7 +67,6 @@ public class PlayerMovement : MonoBehaviour
 
 		playerLayer = LayerMask.NameToLayer("Player");
 		playerInvulnerableLayer = LayerMask.NameToLayer("Player Invulnerable");
-		passingLayer = 1 << LayerMask.NameToLayer("Platform Passable");
 
 		isFacingRight = true;
 
@@ -80,9 +78,11 @@ public class PlayerMovement : MonoBehaviour
 		lastWallJumpTime = float.PositiveInfinity;
 		lastDashInputTime = float.PositiveInfinity;
 		lastDashTime = float.PositiveInfinity;
+		lastPassInputTime = float.PositiveInfinity;
+		lastPassTime = float.PositiveInfinity;
 	}
 
-	// handle inputs, dashing, and jumping
+	// handle inputs, platform passing, dashing, and jumping
 	void Update()
 	{
 		updateTimers();
@@ -93,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
 		updateWallFacing();
 
+		updatePass();
 		updateDash();
 		updateJump();
 
@@ -126,6 +127,8 @@ public class PlayerMovement : MonoBehaviour
 		lastWallJumpTime += Time.deltaTime;
 		lastDashInputTime += Time.deltaTime;
 		lastDashTime += Time.deltaTime;
+		lastPassInputTime += Time.deltaTime;
+		lastPassTime += Time.deltaTime;
 
 		hurtCooldown -= Time.deltaTime;
 		jumpCooldown -= Time.deltaTime;
@@ -163,6 +166,9 @@ public class PlayerMovement : MonoBehaviour
 			lastDashInputTime = 0;
 
 		dashCutInput = !Input.GetKey(KeyCode.C);
+
+		if (Input.GetKeyDown(KeyCode.DownArrow))
+			lastPassInputTime = 0;
 	}
 	
 	public void hit(AttackController contact)
@@ -173,7 +179,6 @@ public class PlayerMovement : MonoBehaviour
     {
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.wallLayer);
-		canPassPlatform = rigidBody.IsTouchingLayers(passingLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -271,6 +276,30 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isFacingWall)
 			isLastFacedWallRight = isFacingRight;
+	}
+
+	private bool canPass()
+	{
+		return lastPassInputTime <= data.passInputBufferTime && isGrounded && !isDistressed;
+	}
+	private void updatePass()
+	{
+		if (canPass())
+		{
+			lastPassTime = 0;
+			isGrounded = false;
+		}
+
+		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
+		int new_mask = mask;
+
+		if (lastPassTime >= data.passTime)
+			new_mask |= data.passableLayer;
+		else
+			new_mask &= ~data.passableLayer;
+
+		if (mask != new_mask)
+			Physics2D.SetLayerCollisionMask(playerLayer, new_mask);
 	}
 
 	private bool canDash()

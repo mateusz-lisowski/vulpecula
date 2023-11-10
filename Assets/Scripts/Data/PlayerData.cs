@@ -5,6 +5,7 @@ public class PlayerData : ScriptableObject
 {
 	public LayerMask groundLayer;
 	public LayerMask wallLayer;
+	public LayerMask passableLayer;
 	public LayerMask attackLayer;
 	public GameObject attackForwardPrefab;
 	public GameObject attackDownPrefab;
@@ -100,6 +101,13 @@ public class PlayerData : ScriptableObject
 
 	[Space(5)]
 	[Range(0.01f, 0.5f)] public float dashInputBufferTime; // time within which too early dash will still be performed
+
+	[Space(10)]
+
+	[Header("Platform Passing")]
+
+	public float passTime; // time to ignore collision with passable platforms after input
+	[Range(0.01f, 0.5f)] public float passInputBufferTime; // time within which too early pass will still be performed
 
 
 	private void OnValidate()
