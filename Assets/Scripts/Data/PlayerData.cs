@@ -3,13 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Player")]
 public class PlayerData : ScriptableObject
 {
-	public LayerMask groundLayer;
-	public LayerMask wallLayer;
-	public LayerMask passableLayer;
-	public LayerMask attackLayer;
-	public GameObject attackForwardPrefab;
-	public GameObject attackDownPrefab;
-
 	[Space(5)]
 
 	[Header("Gravity")]
@@ -30,10 +23,12 @@ public class PlayerData : ScriptableObject
 	[Space(10)]
 
 	[Header("Attack")]
+	public LayerMask attackLayer;
+	public GameObject attackForwardPrefab;
+	public GameObject attackDownPrefab;
 	public float attackCooldown; // minimum time between two consecutive attacks
 
 	[Space(5)]
-
 	public float attackDownBounceHeight; // maximum reachable height of a down hit bounce
 	[HideInInspector] public float attackDownBounceForce; // calculated down hit bounce force
 
@@ -44,6 +39,7 @@ public class PlayerData : ScriptableObject
 	[Space(10)]
 
 	[Header("Run")]
+	public LayerMask groundLayer;
 	public float runMaxSpeed; // maximum running speed
 	public float runAcceleration; // acceleration (0 = none, runMaxSpeed = instant)
 	public float runDecceleration; // decceleration (0 = none, runMaxSpeed = instant)
@@ -72,7 +68,7 @@ public class PlayerData : ScriptableObject
 	[Space(10)]
 
 	[Header("Wall Slide")]
-	public bool wallSlideEnabled; // 'true' if can hold, slide, and jump off walls
+	public LayerMask wallLayer;
 	public float wallSlideMaxSpeed; // maximum wall slide speed
 	public float wallSlideAcceleration; // acceleration (0 = none, wallSlideMaxSpeed = instant)
 	public float wallSlideDecceleration; // decceleration (0 = none, wallSlideMaxSpeed = instant)
@@ -82,6 +78,7 @@ public class PlayerData : ScriptableObject
 	[Space(5)]
 
 	[Header("Wall Jump")]
+	public LayerMask wallJumpLayer;
 	public float wallJumpForce; // force to jump off a wall
 	[Range(0f, 1f)] public float wallJumpInputReduction; // input reduction while wall jumping
 	public float wallJumpTime; // time to reduce the input while wall jumping
@@ -105,7 +102,7 @@ public class PlayerData : ScriptableObject
 	[Space(10)]
 
 	[Header("Platform Passing")]
-
+	public LayerMask passableLayer;
 	public float passTime; // time to ignore collision with passable platforms after input
 	[Range(0.01f, 0.5f)] public float passInputBufferTime; // time within which too early pass will still be performed
 

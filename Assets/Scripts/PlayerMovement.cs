@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 	[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
@@ -179,6 +181,7 @@ public class PlayerMovement : MonoBehaviour
     {
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.wallLayer);
+		canWallJump = rigidBody.IsTouchingLayers(data.wallJumpLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -271,7 +274,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void updateWallFacing()
 	{
-		if (!isGrounded && !isDistressed && isFacingWall && data.wallSlideEnabled)
+		if (!isGrounded && !isDistressed && isFacingWall && canWallJump)
 			lastWallHoldingTime = 0;
 
 		if (isFacingWall)

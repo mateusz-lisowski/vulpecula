@@ -12,17 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959b8a97c82f64141b36d6592d6c54b6, type: 3}
   m_Name: Player Data
   m_EditorClassIdentifier: 
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 768
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  attackLayer:
-    serializedVersion: 2
-    m_Bits: 196608
-  attackForwardPrefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
-  attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
   fallGravityMult: 1.2
   maxFallSpeed: 20
   gravityStrength: -33.333332
@@ -32,11 +21,19 @@ MonoBehaviour:
   hurtKnockbackMaxSpeed: 5
   hurtKnockbackHeightScale: 0.7
   hurtKnockbackForce: 11.666666
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 196608
+  attackForwardPrefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
+  attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
   attackCooldown: 0.5
   attackDownBounceHeight: 2.5
   attackDownBounceForce: 12.909945
   attackVelocityOffsetScale: 0
   attackInputBufferTime: 0.05
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 768
   runMaxSpeed: 7
   runAcceleration: 2
   runDecceleration: 4
@@ -53,12 +50,17 @@ MonoBehaviour:
   jumpHangSpeedMult: 1.2
   coyoteTime: 0.1
   jumpInputBufferTime: 0.05
-  wallSlideEnabled: 0
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 256
   wallSlideMaxSpeed: 20
   wallSlideAcceleration: 1
   wallSlideDecceleration: 6
   wallSlideAccelAmount: 2.5
   wallSlideDeccelAmount: 15
+  wallJumpLayer:
+    serializedVersion: 2
+    m_Bits: 2097152
   wallJumpForce: 10
   wallJumpInputReduction: 0.6
   wallJumpTime: 0.6
@@ -70,3 +72,8 @@ MonoBehaviour:
   dashesCount: 1
   dashForce: 13.333333
   dashInputBufferTime: 0.05
+  passableLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  passTime: 0.2
+  passInputBufferTime: 0.05

@@ -3,11 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Enemy")]
 public class EnemyData : ScriptableObject
 {
-	public LayerMask groundLayer;
-	public LayerMask targetLayer;
-	public LayerMask attackLayer;
-	public GameObject attackPrefab;
-
 	[Space(5)]
 
 	[Header("Gravity")]
@@ -26,11 +21,15 @@ public class EnemyData : ScriptableObject
 	[Space(10)]
 
 	[Header("Attack")]
+	public LayerMask targetLayer;
+	public LayerMask attackLayer;
+	public GameObject attackPrefab;
 	public float attackCooldown; // minimum time between two consecutive attacks
 
 	[Space(10)]
 
 	[Header("Run")]
+	public LayerMask groundLayer;
 	public bool runEnabled; // 'true' if can run
 	public float runMaxSpeed; // maximum running speed
 	public float runAcceleration; // acceleration (0 = none, runMaxSpeed = instant)
