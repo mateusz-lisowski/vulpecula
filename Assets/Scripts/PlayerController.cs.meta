@@ -3,7 +3,12 @@ guid: 2ff3a32f6b7c6914090f98055585db25
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - bonusSound: {instanceID: 0}
+  - LevelEndSound: {instanceID: 0}
+  - jumpSound: {instanceID: 0}
+  - enemyKillSound: {instanceID: 0}
+  - deathSound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -28028,8 +28028,11 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  bSound: {fileID: 8300000, guid: d65727eec8a5d4e419609f28db762464, type: 3}
-  LCSound: {fileID: 8300000, guid: 0c2f5e196afe4644d9b1ffb8d644851d, type: 3}
+  bonusSound: {fileID: 8300000, guid: d65727eec8a5d4e419609f28db762464, type: 3}
+  LevelEndSound: {fileID: 8300000, guid: be2840cf7e4c00748853fedece5ff83c, type: 3}
+  jumpSound: {fileID: 8300000, guid: 495f5e3fa5d659a43a434597535efc23, type: 3}
+  enemyKillSound: {fileID: 8300000, guid: 047280d175c149941b2e898c3caee1c9, type: 3}
+  deathSound: {fileID: 8300000, guid: 346b1172a4215154cba592672385de96, type: 3}
 --- !u!61 &2035399481
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -28179,11 +28182,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 596e0f53d0760684897f73aa6d85324a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.05
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

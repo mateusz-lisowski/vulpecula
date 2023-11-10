@@ -13,8 +13,11 @@ public class PlayerController : MonoBehaviour
     [Space(10)]
     public LayerMask groundLayer;
 
-    [SerializeField] private AudioClip bSound;
-    [SerializeField] private AudioClip LCSound;
+    [SerializeField] private AudioClip bonusSound;
+    [SerializeField] private AudioClip LevelEndSound;
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip enemyKillSound;
+    [SerializeField] private AudioClip deathSound;
 
     private AudioSource source;
 
@@ -36,6 +39,7 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded())
         {
+            source.PlayOneShot(jumpSound, AudioListener.volume);
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }
@@ -49,6 +53,7 @@ public class PlayerController : MonoBehaviour
 
     private void Death()
     {
+        source.PlayOneShot(deathSound, AudioListener.volume);
         GameManager.instance.RemoveLive();
         if (!GameManager.instance.IsDead())
         {
@@ -64,7 +69,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if (other.CompareTag("Bonus"))
 		{
-            source.PlayOneShot(bSound, AudioListener.volume);
+            source.PlayOneShot(bonusSound, AudioListener.volume);
             GameManager.instance.AddPoints(1);
             other.gameObject.SetActive(false);
 		}
@@ -72,7 +77,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("LevelEnd") && GameManager.instance.currentGameState == GameState.GS_GAME)
             if (GameManager.instance.IsEnoughKeys())
 		    {
-                source.PlayOneShot(LCSound, AudioListener.volume);
+                source.PlayOneShot(LevelEndSound, AudioListener.volume);
                 GameManager.instance.score += 100 * GameManager.instance.lives;
                 GameManager.instance.LevelCompleted();
 		    }
@@ -85,6 +90,7 @@ public class PlayerController : MonoBehaviour
         {
             if (this.transform.position.y > other.transform.position.y)
             {
+                source.PlayOneShot(enemyKillSound, AudioListener.volume);
                 GameManager.instance.KilledEnemy();
                 Debug.Log("Killed an enemy");
             }
@@ -96,12 +102,14 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Key"))
         {
+            source.PlayOneShot(bonusSound, AudioListener.volume);
             GameManager.instance.AddKeys();
             other.gameObject.SetActive(false);
         }
 
         if (other.CompareTag("Heart"))
         {
+            source.PlayOneShot(bonusSound, AudioListener.volume);
             GameManager.instance.AddLive();
             other.gameObject.SetActive(false);
         }
