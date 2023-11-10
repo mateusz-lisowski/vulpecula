@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundLayer:
     serializedVersion: 2
+    m_Bits: 768
+  wallLayer:
+    serializedVersion: 2
     m_Bits: 256
   attackLayer:
     serializedVersion: 2

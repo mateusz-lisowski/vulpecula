@@ -720,6 +720,7 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
   <isLastFacedWallRight>k__BackingField: 0
+  <canPassPlatform>k__BackingField: 0
   <jumpsLeft>k__BackingField: 0
   <dashesLeft>k__BackingField: 0
   <lastTurnTime>k__BackingField: 0

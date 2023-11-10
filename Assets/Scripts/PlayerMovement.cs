@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public bool canPassPlatform { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 	[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
@@ -42,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private LayerMask playerLayer;
 	private LayerMask playerInvulnerableLayer;
+	private LayerMask passingLayer;
 
 	private AttackController hitContact = null;
 	private Vector2 moveInput;
@@ -65,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
 		playerLayer = LayerMask.NameToLayer("Player");
 		playerInvulnerableLayer = LayerMask.NameToLayer("Player Invulnerable");
+		passingLayer = 1 << LayerMask.NameToLayer("Platform Passable");
 
 		isFacingRight = true;
 
@@ -168,7 +172,8 @@ public class PlayerMovement : MonoBehaviour
 	private void updateCollisions()
     {
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
-		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
+		isFacingWall = wallCheck.IsTouchingLayers(data.wallLayer);
+		canPassPlatform = rigidBody.IsTouchingLayers(passingLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
