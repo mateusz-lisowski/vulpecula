@@ -1,11 +1,10 @@
-using System;
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class Camera2DFollow : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
+	public LayerMask hiddenLayers;
+
     public Transform target;
     public PolygonCollider2D boundary;
 
@@ -14,6 +13,12 @@ public class Camera2DFollow : MonoBehaviour
 	public float xSmooth = 8f; // How smoothly the camera catches up with it's target movement in the x axis.
 	public float ySmooth = 8f; // How smoothly the camera catches up with it's target movement in the y axis.
 
+	private void OnValidate()
+	{
+		Camera camera = transform.GetComponent<Camera>();
+
+		camera.cullingMask = ~hiddenLayers;
+	}
 
 	private void Update()
 	{
