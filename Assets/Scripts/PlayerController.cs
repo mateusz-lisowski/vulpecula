@@ -12,8 +12,10 @@ public class PlayerController : MonoBehaviour
     [Range(0.01f, 20.0f)] [SerializeField] private float jumpForce = 6.0f; // jump force of the player
     [Space(10)]
     public LayerMask groundLayer;
+
     [SerializeField] private AudioClip bSound;
     [SerializeField] private AudioClip LCSound;
+
     private AudioSource source;
 
     private Rigidbody2D rigidBody;
