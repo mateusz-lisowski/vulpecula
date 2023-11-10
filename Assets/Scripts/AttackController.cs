@@ -4,14 +4,22 @@ using UnityEngine;
 
 public class AttackController : MonoBehaviour
 {
-	public LayerMask hitLayer;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isVertical { get; private set; }
 
 	private Collider2D hitbox;
 
 	private Action<AttackController> hitCallback;
+	private LayerMask hitLayer;
 
+
+	public void setAttack(ScriptableObject data)
+	{
+		if (data is PlayerData)
+			hitLayer = ((PlayerData)data).attackLayer;
+		else if (data is EnemyData)
+			hitLayer = ((EnemyData)data).attackLayer;
+	}
 
 	public void setVertical(bool val = true)
 	{

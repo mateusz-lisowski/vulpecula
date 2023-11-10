@@ -15,6 +15,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 196608
   attackForwardPrefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
   attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
   fallGravityMult: 1.2

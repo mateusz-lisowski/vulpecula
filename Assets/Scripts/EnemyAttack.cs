@@ -65,6 +65,7 @@ public class EnemyAttack : MonoBehaviour
 
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
 
+		currentAttackData.setAttack(data);
 		currentAttackData.setHitboxSize(attackTransform.localScale);
 
 		currentAttackData.resolve();

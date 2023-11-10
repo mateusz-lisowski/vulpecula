@@ -1,9 +1,10 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Player Data")]
+[CreateAssetMenu(menuName = "Data/Player")]
 public class PlayerData : ScriptableObject
 {
 	public LayerMask groundLayer;
+	public LayerMask attackLayer;
 	public GameObject attackForwardPrefab;
 	public GameObject attackDownPrefab;
 

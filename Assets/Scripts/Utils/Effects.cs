@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Effects Data")]
+[CreateAssetMenu(menuName = "Data/Effects")]
 public class Effects : ScriptableObject
 {
 	public static Effects instance;

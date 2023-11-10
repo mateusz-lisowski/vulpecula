@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -91,6 +89,7 @@ public class PlayerAttack : MonoBehaviour
 			attackForwardTransform.position, attackForwardTransform.rotation);
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
 
+		currentAttackData.setAttack(data);
 		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
 
 		currentAttackData.resolve();
@@ -115,6 +114,7 @@ public class PlayerAttack : MonoBehaviour
 
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
 
+		currentAttackData.setAttack(data);
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();

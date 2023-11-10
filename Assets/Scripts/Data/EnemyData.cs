@@ -1,10 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Enemy Data")]
+[CreateAssetMenu(menuName = "Data/Enemy")]
 public class EnemyData : ScriptableObject
 {
 	public LayerMask groundLayer;
-	public LayerMask playerLayer;
+	public LayerMask targetLayer;
+	public LayerMask attackLayer;
 	public GameObject attackPrefab;
 
 	[Space(5)]

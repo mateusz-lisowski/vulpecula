@@ -124,7 +124,7 @@ public class EnemyMovement : MonoBehaviour
 		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.groundLayer);
-		isProvoked = attackCheck.IsTouchingLayers(data.playerLayer);
+		isProvoked = attackCheck.IsTouchingLayers(data.targetLayer);
 
 		if (isFacingWall && isFacingSlope())
 		{
