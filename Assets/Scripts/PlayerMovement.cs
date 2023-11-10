@@ -182,7 +182,7 @@ public class PlayerMovement : MonoBehaviour
 			isFacingWall = false;
 		}
 
-		if (isJumping && !isFalling)
+		if ((isJumping && !isFalling) || (isFalling && rigidBody.velocity.y < -0.01f))
 		{
 			isGrounded = false;
 		}
