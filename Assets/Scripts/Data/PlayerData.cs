@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(menuName = "Data/Player")]
 public class PlayerData : ScriptableObject
@@ -177,6 +178,11 @@ public class PlayerData : ScriptableObject
 		[Tooltip("Time within which too early pass will still be performed")]
 		[Range(0.01f, 0.5f)] public float inputBufferTime;
 	}
+	[System.Serializable] public struct GroundDropping
+	{
+		[Tooltip("Layer detecting whether can ground drop")]
+		public LayerMask canDropLayer;
+	}
 
 	public Gravity gravity;
 	public Hurt hurt;
@@ -186,6 +192,7 @@ public class PlayerData : ScriptableObject
 	public Wall wall;
 	public Dash dash;
 	public PlatformPassing platformPassing;
+	public GroundDropping groundDropping;
 
 	private void OnValidate()
 	{

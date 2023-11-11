@@ -22,6 +22,7 @@ public class EnemyMovement : MonoBehaviour
 
 	private Rigidbody2D rigidBody;
 	private Animator animator;
+	private SpriteRenderer spriteRenderer;
 	private Transform center;
 
 	private Transform hitbox;
@@ -41,6 +42,7 @@ public class EnemyMovement : MonoBehaviour
 	{
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
 		center = transform.Find("Center").GetComponent<Transform>();
 
 		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
@@ -193,7 +195,8 @@ public class EnemyMovement : MonoBehaviour
 
 		setDistressDirection();
 		setInvulnerability(true);
-		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurt.invulnerabilityTime));
+		StartCoroutine(Effects.instance.flashing.run(
+			spriteRenderer, data.hurt.invulnerabilityTime));
 
 		float force = data.hurt.knockbackForce;
 		if (force > rigidBody.velocity.y)

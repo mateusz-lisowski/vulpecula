@@ -12,32 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c827d9ac5ff1be547b87ca562e021ff4, type: 3}
   m_Name: Enemy Pig Data
   m_EditorClassIdentifier: 
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 768
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 4096
-  attackLayer:
-    serializedVersion: 2
-    m_Bits: 4096
-  attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
-  gravityStrength: -33.333332
-  gravityScale: 1
-  hurtInvulTime: 0.5
-  hurtDistressTime: 0.5
-  hurtKnockbackMaxSpeed: 4
-  hurtKnockbackHeightScale: 0.9
-  hurtKnockbackForce: 8.333334
-  attackCooldown: 1
-  runEnabled: 1
-  runMaxSpeed: 10
-  runAcceleration: 2
-  runDecceleration: 4
-  runAccelAmount: 10
-  runDeccelAmount: 20
-  jumpEnabled: 0
-  jumpHeight: 1.5
-  jumpTimeToApex: 0.3
-  jumpCooldown: 2
-  jumpForce: 10
+  gravity:
+    strength: -30
+    scale: 1
+  hurt:
+    invulnerabilityTime: 0.5
+    distressTime: 0.5
+    knockbackMaxSpeed: 4
+    knockbackHeightScale: 0.9
+    knockbackForce: 8.333334
+  attack:
+    provokeLayers:
+      serializedVersion: 2
+      m_Bits: 4096
+    hitLayers:
+      serializedVersion: 2
+      m_Bits: 4096
+    attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
+    cooldown: 1
+  run:
+    groundLayers:
+      serializedVersion: 2
+      m_Bits: 768
+    maxSpeed: 10
+    acceleration: 2
+    deceleration: 4
+    accelerationForce: 10
+    decelerationForce: 20

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
+	[field: SerializeField, ReadOnly] public bool canGroundDrop { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 	[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
@@ -38,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private Rigidbody2D rigidBody;
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
 
 	private Transform hitbox;
     private TrailRenderer trail;
@@ -61,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
 
 		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
 		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
@@ -95,9 +100,11 @@ public class PlayerMovement : MonoBehaviour
 
 		updateWallFacing();
 
-		updatePass();
 		updateDash();
 		updateJump();
+
+		updatePass();
+		updateGroundBreak();
 
 		animator.SetBool("isGrounded", isGrounded);
 		animator.SetBool("isDistressed", isDistressed);
@@ -182,6 +189,7 @@ public class PlayerMovement : MonoBehaviour
 		isGrounded = groundCheck.IsTouchingLayers(data.run.groundLayers);
 		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
 		canWallJump = rigidBody.IsTouchingLayers(data.wall.canJumpLayer);
+		canGroundDrop = groundCheck.IsTouchingLayers(data.groundDropping.canDropLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -232,7 +240,8 @@ public class PlayerMovement : MonoBehaviour
 
 		setDistressDirection();
 		setInvulnerability(true);
-		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurt.invulnerabilityTime));
+		StartCoroutine(Effects.instance.flashing.run(
+			spriteRenderer, data.hurt.invulnerabilityTime));
 
 		float force = data.hurt.knockbackForce;
 		if (force > rigidBody.velocity.y)
@@ -279,30 +288,6 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isFacingWall)
 			isLastFacedWallRight = isFacingRight;
-	}
-
-	private bool canPass()
-	{
-		return lastPassInputTime <= data.platformPassing.inputBufferTime && isGrounded && !isDistressed;
-	}
-	private void updatePass()
-	{
-		if (canPass())
-		{
-			lastPassTime = 0;
-			isGrounded = false;
-		}
-
-		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
-		int new_mask = mask;
-
-		if (lastPassTime >= data.platformPassing.time)
-			new_mask |= data.platformPassing.layers;
-		else
-			new_mask &= ~data.platformPassing.layers;
-
-		if (mask != new_mask)
-			Physics2D.SetLayerCollisionMask(playerLayer, new_mask);
 	}
 
 	private bool canDash()
@@ -462,6 +447,59 @@ public class PlayerMovement : MonoBehaviour
 			rigidBody.AddForce(
 				(data.gravity.maxFallSpeed + rigidBody.velocity.y) * Vector2.down, 
 				ForceMode2D.Impulse);
+		}
+	}
+
+	private bool canPass()
+	{
+		return lastPassInputTime <= data.platformPassing.inputBufferTime && isGrounded && !isDistressed;
+	}
+	private void updatePass()
+	{
+		if (canPass())
+		{
+			lastPassTime = 0;
+			isGrounded = false;
+		}
+
+		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
+		int new_mask = mask;
+
+		if (lastPassTime >= data.platformPassing.time)
+			new_mask |= data.platformPassing.layers;
+		else
+			new_mask &= ~data.platformPassing.layers;
+
+		if (mask != new_mask)
+			Physics2D.SetLayerCollisionMask(playerLayer, new_mask);
+	}
+
+	private bool canTriggerGroundDrop()
+	{
+		return canGroundDrop && isGrounded;
+	}
+	private void triggerGroundBreak()
+	{
+		ContactFilter2D filter = new ContactFilter2D().NoFilter();
+		filter.SetLayerMask(data.groundDropping.canDropLayer);
+		filter.useLayerMask = true;
+
+		List<Collider2D> contacts = new List<Collider2D>();
+		if (rigidBody.OverlapCollider(filter, contacts) == 0)
+			return;
+
+		foreach (Collider2D contact in contacts)
+		{
+			GroundDroppingController controller = contact.GetComponent<GroundDroppingController>();
+
+			controller.triggerDrop(groundCheck.bounds);
+		}
+	}
+	private void updateGroundBreak()
+	{
+		if (canTriggerGroundDrop())
+		{
+			triggerGroundBreak();
 		}
 	}
 

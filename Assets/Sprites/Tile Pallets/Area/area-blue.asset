@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: area-blue
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300000, guid: 496edda357a506d42b1f392759d4ba30, type: 3}
-  m_Color: {r: 0, g: 0, b: 0.627451, a: 0.2509804}
+  m_Color: {r: 0, g: 0.5019608, b: 1, a: 0.3764706}
   m_Transform:
     e00: 1
     e01: 0

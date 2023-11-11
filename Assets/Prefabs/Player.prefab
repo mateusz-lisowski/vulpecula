@@ -72,7 +72,7 @@ TrailRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 228446519
-  m_SortingLayer: 9
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Time: 0.5
   m_PreviewTimeScale: 1
@@ -657,7 +657,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1656327671
-  m_SortingLayer: 8
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 72de0c64f2c6a498096698322c976a67, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -720,7 +720,8 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
   <isLastFacedWallRight>k__BackingField: 0
-  <canPassPlatform>k__BackingField: 0
+  <canWallJump>k__BackingField: 0
+  <canGroundDrop>k__BackingField: 0
   <jumpsLeft>k__BackingField: 0
   <dashesLeft>k__BackingField: 0
   <lastTurnTime>k__BackingField: 0
@@ -731,6 +732,8 @@ MonoBehaviour:
   <lastWallJumpTime>k__BackingField: 0
   <lastDashInputTime>k__BackingField: 0
   <lastDashTime>k__BackingField: 0
+  <lastPassInputTime>k__BackingField: 0
+  <lastPassTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
   <jumpCooldown>k__BackingField: 0
   <dashCooldown>k__BackingField: 0

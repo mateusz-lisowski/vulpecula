@@ -12,68 +12,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959b8a97c82f64141b36d6592d6c54b6, type: 3}
   m_Name: Player Data
   m_EditorClassIdentifier: 
-  fallGravityMult: 1.2
-  maxFallSpeed: 20
-  gravityStrength: -33.333332
-  gravityScale: 1.111111
-  hurtInvulTime: 1.2
-  hurtDistressTime: 0.5
-  hurtKnockbackMaxSpeed: 5
-  hurtKnockbackHeightScale: 0.7
-  hurtKnockbackForce: 11.666666
-  attackLayer:
-    serializedVersion: 2
-    m_Bits: 196608
-  attackForwardPrefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
-  attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
-  attackCooldown: 0.5
-  attackDownBounceHeight: 2.5
-  attackDownBounceForce: 12.909945
-  attackVelocityOffsetScale: 0
-  attackInputBufferTime: 0.05
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 768
-  runMaxSpeed: 7
-  runAcceleration: 2
-  runDecceleration: 4
-  runAccelAmount: 14.285714
-  runDeccelAmount: 28.571428
-  jumpHeight: 1.5
-  jumpTimeToApex: 0.3
-  jumpCooldown: 0.1
-  jumpsCount: 2
-  jumpForce: 10
-  jumpCutGravityMult: 2
-  jumpHangVelocityThreshold: 1
-  jumpHangGravityMult: 0.8
-  jumpHangSpeedMult: 1.2
-  coyoteTime: 0.1
-  jumpInputBufferTime: 0.05
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  wallSlideMaxSpeed: 20
-  wallSlideAcceleration: 1
-  wallSlideDecceleration: 6
-  wallSlideAccelAmount: 2.5
-  wallSlideDeccelAmount: 15
-  wallJumpLayer:
-    serializedVersion: 2
-    m_Bits: 2097152
-  wallJumpForce: 10
-  wallJumpInputReduction: 0.6
-  wallJumpTime: 0.6
-  wallJumpMinTime: 0.1
-  wallJumpCoyoteTime: 0.1
-  dashDistance: 2
-  dashTime: 0.15
-  dashCooldown: 0.1
-  dashesCount: 1
-  dashForce: 13.333333
-  dashInputBufferTime: 0.05
-  passableLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  passTime: 0.2
-  passInputBufferTime: 0.05
+  gravity:
+    fallMultiplier: 1.2
+    maxFallSpeed: 20
+    strength: -33.333332
+    scale: 1.111111
+  hurt:
+    invulnerabilityTime: 1.2
+    distressTime: 0.5
+    knockbackMaxSpeed: 5
+    knockbackHeightScale: 0.7
+    knockbackForce: 11.904761
+  attack:
+    hitLayers:
+      serializedVersion: 2
+      m_Bits: 196608
+    attackForwardPrefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
+    attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
+    cooldown: 0.5
+    attackDownBounceHeight: 2.5
+    attackDownBounceForce: 12.909945
+    hitboxOffsetScale: 0
+    inputBufferTime: 0.05
+  run:
+    groundLayers:
+      serializedVersion: 2
+      m_Bits: 768
+    maxSpeed: 7
+    acceleration: 2
+    deceleration: 4
+    accelerationForce: 14.285714
+    decelerationForce: 28.571428
+  jump:
+    maxHeight: 1.5
+    timeToApex: 0.3
+    cooldown: 0.1
+    jumpsCount: 2
+    force: 10
+    jumpCutGravityMultiplier: 2
+    hangingVelocityThreshold: 1
+    hangingGravityMultiplier: 0.8
+    hangingSpeedMultiplier: 1.2
+    coyoteTime: 0.1
+    inputBufferTime: 0.05
+  wall:
+    layers:
+      serializedVersion: 2
+      m_Bits: 256
+    slideMaxSpeed: 20
+    slideAcceleration: 1
+    slideDeceleration: 6
+    slideAccelerationForce: 2.5
+    slideDecelerationForce: 15
+    canJumpLayer:
+      serializedVersion: 2
+      m_Bits: 2097152
+    jumpForce: 10
+    jumpInputReduction: 0.6
+    jumpTime: 0.6
+    jumpMinTime: 0.1
+    jumpCoyoteTime: 0.1
+  dash:
+    distance: 2
+    time: 0.15
+    cooldown: 0.1
+    dashesCount: 1
+    force: 13.333333
+    inputBufferTime: 0.05
+  platformPassing:
+    layers:
+      serializedVersion: 2
+      m_Bits: 512
+    time: 0.2
+    inputBufferTime: 0.05
+  groundDropping:
+    canDropLayer:
+      serializedVersion: 2
+      m_Bits: 4194304
+    droppingController: {fileID: 0}
