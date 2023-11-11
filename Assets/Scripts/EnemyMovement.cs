@@ -6,7 +6,6 @@ public class EnemyMovement : MonoBehaviour
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isJumping { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
@@ -17,10 +16,8 @@ public class EnemyMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastTurnTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastHurtTime { get; private set; }
-	[field: SerializeField, ReadOnly] public float lastJumpInputTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float hurtCooldown { get; private set; }
-	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
 
 
 	private Rigidbody2D rigidBody;
@@ -60,7 +57,6 @@ public class EnemyMovement : MonoBehaviour
 		lastTurnTime = float.PositiveInfinity;
 		lastGroundedTime = float.PositiveInfinity;
 		lastHurtTime = float.PositiveInfinity;
-		lastJumpInputTime = float.PositiveInfinity;
 	}
 
 	// handle timers and animations
@@ -97,10 +93,8 @@ public class EnemyMovement : MonoBehaviour
 		lastTurnTime += Time.deltaTime;
 		lastGroundedTime += Time.deltaTime;
 		lastHurtTime += Time.deltaTime;
-		lastJumpInputTime += Time.deltaTime;
 
 		hurtCooldown -= Time.deltaTime;
-		jumpCooldown -= Time.deltaTime;
 	}
 
 	public void hit(AttackController contact)
@@ -114,17 +108,17 @@ public class EnemyMovement : MonoBehaviour
 
 		Vector2 dir = isFacingRight ? Vector2.right : Vector2.left;
 
-		RaycastHit2D hitLow = Physics2D.Raycast(sourceLow, dir, Mathf.Infinity, data.groundLayer.value);
-		RaycastHit2D hitHigh = Physics2D.Raycast(sourceHigh, dir, Mathf.Infinity, data.groundLayer.value);
+		RaycastHit2D hitLow = Physics2D.Raycast(sourceLow, dir, Mathf.Infinity, data.run.groundLayers);
+		RaycastHit2D hitHigh = Physics2D.Raycast(sourceHigh, dir, Mathf.Infinity, data.run.groundLayers);
 
 		return Mathf.Abs(hitHigh.point.x - hitLow.point.x) > 0.1f;
 	}
 	private void updateCollisions()
 	{
-		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
-		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
-		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.groundLayer);
-		isProvoked = attackCheck.IsTouchingLayers(data.targetLayer);
+		isGrounded = groundCheck.IsTouchingLayers(data.run.groundLayers);
+		isFacingWall = wallCheck.IsTouchingLayers(data.run.groundLayers);
+		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.run.groundLayers);
+		isProvoked = attackCheck.IsTouchingLayers(data.attack.provokeLayers);
 
 		if (isFacingWall && isFacingSlope())
 		{
@@ -137,11 +131,6 @@ public class EnemyMovement : MonoBehaviour
 		{
 			isFacingWall = false;
 			isNoGroundAhead = false;
-		}
-
-		if (isJumping && !isFalling)
-		{
-			isGrounded = false;
 		}
 
 		if (isFacingWall)
@@ -172,9 +161,6 @@ public class EnemyMovement : MonoBehaviour
 			moveInput.x += -1;
 
 		isMoving = moveInput.x != 0;
-
-		if (data.jumpEnabled && jumpCooldown <= 0)
-			lastJumpInputTime = 0;
 	}
 
 	private bool canHurt()
@@ -203,13 +189,13 @@ public class EnemyMovement : MonoBehaviour
 	{
 		isDistressed = true;
 		lastHurtTime = 0;
-		hurtCooldown = data.hurtInvulTime;
+		hurtCooldown = data.hurt.invulnerabilityTime;
 
 		setDistressDirection();
 		setInvulnerability(true);
-		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurt.invulnerabilityTime));
 
-		float force = data.hurtKnockbackForce;
+		float force = data.hurt.knockbackForce;
 		if (force > rigidBody.velocity.y)
 		{
 			force -= rigidBody.velocity.y;
@@ -225,14 +211,13 @@ public class EnemyMovement : MonoBehaviour
 		if (hurtCooldown <= 0)
 			setInvulnerability(false);
 
-		if (isDistressed && lastHurtTime >= data.hurtDistressTime)
+		if (isDistressed && lastHurtTime >= data.hurt.distressTime)
 		{
 			isDistressed = false;
 		}
 
 		if (isDistressed)
 		{
-			isJumping = false;
 			isGrounded = false;
 
 			moveInput.y = 0;
@@ -240,28 +225,9 @@ public class EnemyMovement : MonoBehaviour
 		}
 	}
 
-	private bool canJump()
-	{
-		return jumpCooldown <= 0 && lastJumpInputTime == 0;
-	}
-	private void jump()
-	{
-		isJumping = true;
-		isFalling = false;
-		isGrounded = false;
-		lastJumpInputTime = float.PositiveInfinity;
-		jumpCooldown = data.jumpCooldown;
-
-		float force = data.jumpForce;
-		if (force > rigidBody.velocity.y)
-		{
-			force -= rigidBody.velocity.y;
-			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
-		}
-	}
 	private void updateGravityScale()
 	{
-		rigidBody.gravityScale = data.gravityScale;
+		rigidBody.gravityScale = data.gravity.scale;
 	}
 	private void updateJump()
 	{
@@ -270,16 +236,10 @@ public class EnemyMovement : MonoBehaviour
 			isFalling = true;
 		}
 
-		if (canJump())
-		{
-			jump();
-		}
-
 		updateGravityScale();
 
 		if (isGrounded)
 		{
-			isJumping = false;
 			isFalling = false;
 			lastGroundedTime = 0;
 		}
@@ -287,14 +247,14 @@ public class EnemyMovement : MonoBehaviour
 
 	private void updateRun()
 	{
-		float targetSpeed = moveInput.x * data.runMaxSpeed;
+		float targetSpeed = moveInput.x * data.run.maxSpeed;
 
 		if (isDistressed)
 		{
-			targetSpeed = moveInput.x * data.hurtKnockbackMaxSpeed;
+			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
 		}
 
-		float accelRate = targetSpeed == 0 ? data.runDeccelAmount : data.runAccelAmount;
+		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
 
 		float speedDif = targetSpeed - rigidBody.velocity.x;
 		float movement = speedDif * accelRate;

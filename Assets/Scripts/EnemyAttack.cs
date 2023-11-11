@@ -60,7 +60,7 @@ public class EnemyAttack : MonoBehaviour
 	}
 	public void attackInstantiate()
 	{
-		GameObject currentAttack = Instantiate(data.attackPrefab,
+		GameObject currentAttack = Instantiate(data.attack.attackPrefab,
 			attackTransform.position, attackTransform.rotation);
 
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
@@ -73,7 +73,7 @@ public class EnemyAttack : MonoBehaviour
 	private void attack()
 	{
 		lastAttackTime = 0;
-		attackCooldown = data.attackCooldown;
+		attackCooldown = data.attack.cooldown;
 	}
 	private void updateAttack()
 	{

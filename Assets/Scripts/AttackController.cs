@@ -10,15 +10,15 @@ public class AttackController : MonoBehaviour
 	private Collider2D hitbox;
 
 	private Action<AttackController> hitCallback;
-	private LayerMask hitLayer;
+	private LayerMask hitLayers;
 
 
 	public void setAttack(ScriptableObject data)
 	{
 		if (data is PlayerData)
-			hitLayer = ((PlayerData)data).attackLayer;
+			hitLayers = ((PlayerData)data).attack.hitLayers;
 		else if (data is EnemyData)
-			hitLayer = ((EnemyData)data).attackLayer;
+			hitLayers = ((EnemyData)data).attack.hitLayers;
 	}
 
 	public void setVertical(bool val = true)
@@ -55,7 +55,7 @@ public class AttackController : MonoBehaviour
 	public void resolve()
 	{
 		ContactFilter2D filter = new ContactFilter2D().NoFilter();
-		filter.SetLayerMask(hitLayer);
+		filter.SetLayerMask(hitLayers);
 		filter.useLayerMask = true;
 
 		List<Collider2D> contacts = new List<Collider2D>();

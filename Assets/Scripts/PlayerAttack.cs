@@ -78,14 +78,14 @@ public class PlayerAttack : MonoBehaviour
 	private void updateAttackPosition()
 	{
 		attackTransform.position = (Vector2)transform.position 
-			+ rigidBody.velocity * data.attackVelocityOffsetScale;
+			+ rigidBody.velocity * data.attack.hitboxOffsetScale;
 	}
 
 	public void attackForwardInstantiate()
 	{
 		movement.isAttacking = false;
 
-		GameObject currentAttack = Instantiate(data.attackForwardPrefab, 
+		GameObject currentAttack = Instantiate(data.attack.attackForwardPrefab, 
 			attackForwardTransform.position, attackForwardTransform.rotation);
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
 
@@ -97,7 +97,7 @@ public class PlayerAttack : MonoBehaviour
 	private void attackForward()
 	{
 		lastAttackTime = 0;
-		attackCooldown = data.attackCooldown;
+		attackCooldown = data.attack.cooldown;
 	}
 	
 	private void attackDownHitCallback(AttackController attackData)
@@ -109,7 +109,7 @@ public class PlayerAttack : MonoBehaviour
 	{
 		movement.isAttacking = false;
 
-		GameObject currentAttack = Instantiate(data.attackDownPrefab, 
+		GameObject currentAttack = Instantiate(data.attack.attackDownPrefab, 
 			attackDownTransform.position, attackDownTransform.rotation);
 
 		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
@@ -125,12 +125,12 @@ public class PlayerAttack : MonoBehaviour
 	{
 		lastAttackTime = 0;
 		lastAttackDownTime = 0;
-		attackCooldown = data.attackCooldown;
+		attackCooldown = data.attack.cooldown;
 	}
 
 	private bool canAttack()
 	{
-		return attackCooldown <= 0 && lastAttackInputTime <= data.attackInputBufferTime
+		return attackCooldown <= 0 && lastAttackInputTime <= data.attack.inputBufferTime
 			&& !movement.isDistressed && !movement.isAttacking;
 	}
 	private void updateAttack()

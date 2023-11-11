@@ -179,9 +179,9 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void updateCollisions()
     {
-		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
-		isFacingWall = wallCheck.IsTouchingLayers(data.wallLayer);
-		canWallJump = rigidBody.IsTouchingLayers(data.wallJumpLayer);
+		isGrounded = groundCheck.IsTouchingLayers(data.run.groundLayers);
+		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
+		canWallJump = rigidBody.IsTouchingLayers(data.wall.canJumpLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -228,13 +228,13 @@ public class PlayerMovement : MonoBehaviour
 	{
 		isDistressed = true;
 		lastHurtTime = 0;
-		hurtCooldown = data.hurtInvulTime;
+		hurtCooldown = data.hurt.invulnerabilityTime;
 
 		setDistressDirection();
 		setInvulnerability(true);
-		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurt.invulnerabilityTime));
 
-		float force = data.hurtKnockbackForce;
+		float force = data.hurt.knockbackForce;
 		if (force > rigidBody.velocity.y)
 		{
 			force -= rigidBody.velocity.y;
@@ -252,7 +252,7 @@ public class PlayerMovement : MonoBehaviour
 		if (hurtCooldown <= 0)
 			setInvulnerability(false);
 
-		if (isDistressed && lastHurtTime >= data.hurtDistressTime)
+		if (isDistressed && lastHurtTime >= data.hurt.distressTime)
 		{
 			Flip();
 			isDistressed = false;
@@ -283,7 +283,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool canPass()
 	{
-		return lastPassInputTime <= data.passInputBufferTime && isGrounded && !isDistressed;
+		return lastPassInputTime <= data.platformPassing.inputBufferTime && isGrounded && !isDistressed;
 	}
 	private void updatePass()
 	{
@@ -296,10 +296,10 @@ public class PlayerMovement : MonoBehaviour
 		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
 		int new_mask = mask;
 
-		if (lastPassTime >= data.passTime)
-			new_mask |= data.passableLayer;
+		if (lastPassTime >= data.platformPassing.time)
+			new_mask |= data.platformPassing.layers;
 		else
-			new_mask &= ~data.passableLayer;
+			new_mask &= ~data.platformPassing.layers;
 
 		if (mask != new_mask)
 			Physics2D.SetLayerCollisionMask(playerLayer, new_mask);
@@ -307,7 +307,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool canDash()
 	{
-		return dashCooldown <= 0 && lastDashInputTime <= data.dashInputBufferTime && dashesLeft > 0
+		return dashCooldown <= 0 && lastDashInputTime <= data.dash.inputBufferTime && dashesLeft > 0
 			&& !isDistressed;
 	}
 	private void dash()
@@ -315,13 +315,13 @@ public class PlayerMovement : MonoBehaviour
 		isDashing = true;
 		lastDashTime = 0;
 		lastDashInputTime = float.PositiveInfinity;
-		dashCooldown = data.dashTime + data.dashCooldown;
+		dashCooldown = data.dash.time + data.dash.cooldown;
 
 		dashesLeft--;
 
 		float forceDirection = isFacingRight ? 1.0f : -1.0f;
 
-		float force = data.dashForce;
+		float force = data.dash.force;
 		if (Mathf.Sign(forceDirection) == Mathf.Sign(rigidBody.velocity.x))
 			force -= Mathf.Abs(rigidBody.velocity.x);
 
@@ -340,7 +340,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		if (isDashing)
-			if (dashCutInput || lastDashTime >= data.dashTime
+			if (dashCutInput || lastDashTime >= data.dash.time
 				|| isFacingWall || Mathf.Abs(rigidBody.velocity.y) > 0.01f)
 			{
 				isDashing = false;
@@ -356,14 +356,14 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isGrounded || lastWallHoldingTime == 0)
 		{
-			dashesLeft = data.dashesCount;
+			dashesLeft = data.dash.dashesCount;
 		}
 	}
 	
 	private bool canJump()
 	{
-		return jumpCooldown <= 0 && lastJumpInputTime <= data.jumpInputBufferTime 
-			&& jumpsLeft > 0 && lastWallJumpTime >= data.wallJumpTime
+		return jumpCooldown <= 0 && lastJumpInputTime <= data.jump.inputBufferTime 
+			&& jumpsLeft > 0 && lastWallJumpTime >= data.wall.jumpTime
 			&& !isDistressed;
 	}
 	private bool canJumpCut()
@@ -376,18 +376,18 @@ public class PlayerMovement : MonoBehaviour
 		isFalling = false;
 		isGrounded = false;
 		lastJumpInputTime = float.PositiveInfinity;
-		jumpCooldown = data.jumpCooldown;
+		jumpCooldown = data.jump.cooldown;
 
 		currentJumpCuttable = !registeredDownHitJump;
 
-		float force = !registeredDownHitJump ? data.jumpForce : data.attackDownBounceForce;
+		float force = !registeredDownHitJump ? data.jump.force : data.attack.attackDownBounceForce;
 		if (force > rigidBody.velocity.y)
 		{
 			force -= rigidBody.velocity.y;
 			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
 		}
 
-		if (lastWallHoldingTime < data.wallJumpCoyoteTime)
+		if (lastWallHoldingTime < data.wall.jumpCoyoteTime)
 		{
 			lastWallHoldingTime = float.PositiveInfinity;
 			lastWallJumpTime = 0;
@@ -397,7 +397,7 @@ public class PlayerMovement : MonoBehaviour
 
 			float forceDirection = isFacingRight ? 1.0f : -1.0f;
 
-			float wallJumpForce = data.wallJumpForce;
+			float wallJumpForce = data.wall.jumpForce;
 			rigidBody.AddForce(wallJumpForce * forceDirection * Vector2.right, ForceMode2D.Impulse);
 		}
 	}
@@ -413,18 +413,18 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else if (isJumping && canJumpCut())
 		{
-			rigidBody.gravityScale = data.gravityScale * data.jumpCutGravityMult;
+			rigidBody.gravityScale = data.gravity.scale * data.jump.jumpCutGravityMultiplier;
 		}
-		else if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jumpHangVelocityThreshold)
+		else if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
 		{
-			rigidBody.gravityScale = data.gravityScale * data.jumpHangGravityMult;
+			rigidBody.gravityScale = data.gravity.scale * data.jump.hangingGravityMultiplier;
 		}
 		else if (isFalling)
 		{
-			rigidBody.gravityScale = data.gravityScale * data.fallGravityMult;
+			rigidBody.gravityScale = data.gravity.scale * data.gravity.fallMultiplier;
 		}
 		else
-			rigidBody.gravityScale = data.gravityScale;
+			rigidBody.gravityScale = data.gravity.scale;
 	}
 	private void updateJump()
 	{
@@ -432,8 +432,8 @@ public class PlayerMovement : MonoBehaviour
 		{
 			isFalling = true;
 		}
-		if (isFalling && !isJumping && jumpsLeft == data.jumpsCount 
-			&& lastGroundedTime >= data.coyoteTime)
+		if (isFalling && !isJumping && jumpsLeft == data.jump.jumpsCount 
+			&& lastGroundedTime >= data.jump.coyoteTime)
 		{
 			jumpsLeft--;
 		}
@@ -448,43 +448,43 @@ public class PlayerMovement : MonoBehaviour
 
 		updateGravityScale();
 
-		if ((isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wallJumpMinTime)
+		if ((isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wall.jumpMinTime)
 		{
-			jumpsLeft = data.jumpsCount;
+			jumpsLeft = data.jump.jumpsCount;
 			isJumping = false;
 			isFalling = false;
 			lastGroundedTime = 0;
 			lastWallJumpTime = float.PositiveInfinity;
 		}
 
-		if (rigidBody.velocity.y < -data.maxFallSpeed)
+		if (rigidBody.velocity.y < -data.gravity.maxFallSpeed)
 		{
 			rigidBody.AddForce(
-				(data.maxFallSpeed + rigidBody.velocity.y) * Vector2.down, 
+				(data.gravity.maxFallSpeed + rigidBody.velocity.y) * Vector2.down, 
 				ForceMode2D.Impulse);
 		}
 	}
 
 	private void updateRun()
 	{
-		float targetSpeed = moveInput.x * data.runMaxSpeed;
+		float targetSpeed = moveInput.x * data.run.maxSpeed;
 
-		if (lastWallJumpTime < data.wallJumpTime)
+		if (lastWallJumpTime < data.wall.jumpTime)
 		{
-			targetSpeed = Mathf.Lerp(targetSpeed, rigidBody.velocity.x, data.wallJumpInputReduction);
+			targetSpeed = Mathf.Lerp(targetSpeed, rigidBody.velocity.x, data.wall.jumpInputReduction);
 		}
 
 		if (isDistressed)
 		{
-			targetSpeed = moveInput.x * data.hurtKnockbackMaxSpeed;
+			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
 		}
 
-		float accelRate = targetSpeed == 0 ? data.runDeccelAmount : data.runAccelAmount;
+		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
 
-		if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jumpHangVelocityThreshold)
+		if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
 		{
-			targetSpeed *= data.jumpHangSpeedMult;
-			accelRate *= data.jumpHangSpeedMult;
+			targetSpeed *= data.jump.hangingSpeedMultiplier;
+			accelRate *= data.jump.hangingSpeedMultiplier;
 		}
 
 		float speedDif = targetSpeed - rigidBody.velocity.x;
@@ -495,8 +495,9 @@ public class PlayerMovement : MonoBehaviour
 
 	private void updateWallSlide()
 	{
-		float targetSpeed = Mathf.Min(moveInput.y, 0f) * data.wallSlideMaxSpeed;
-		float accelRate = targetSpeed == 0 ? data.wallSlideDeccelAmount : data.wallSlideAccelAmount;
+		float targetSpeed = Mathf.Min(moveInput.y, 0f) * data.wall.slideMaxSpeed;
+		float accelRate = targetSpeed == 0 ? data.wall.slideDecelerationForce 
+			: data.wall.slideAccelerationForce;
 
 		float speedDif = targetSpeed - rigidBody.velocity.y;
 		float movement = speedDif * accelRate;
