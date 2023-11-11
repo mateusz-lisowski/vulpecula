@@ -170,8 +170,6 @@ public class PlayerData : ScriptableObject
 	{
 		[Tooltip("Layers that can be passed through")]
 		public LayerMask layers;
-		[Tooltip("Time to ignore collision with passable layers after input")]
-		public float time;
 
 		[Space(10)]
 

@@ -83,10 +83,8 @@ MonoBehaviour:
     layers:
       serializedVersion: 2
       m_Bits: 512
-    time: 0.2
     inputBufferTime: 0.05
   groundDropping:
     canDropLayer:
       serializedVersion: 2
       m_Bits: 4194304
-    droppingController: {fileID: 0}

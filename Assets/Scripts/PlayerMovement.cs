@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isPassing { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
 	[field: SerializeField, ReadOnly] public bool canGroundDrop { get; private set; }
@@ -32,7 +33,6 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastDashInputTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastDashTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastPassInputTime { get; private set; }
-	[field: SerializeField, ReadOnly] public float lastPassTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float hurtCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
@@ -47,12 +47,15 @@ public class PlayerMovement : MonoBehaviour
     private TrailRenderer trail;
     private Collider2D groundCheck;
     private Collider2D wallCheck;
+    private Collider2D passingCheck;
 
 	private LayerMask playerLayer;
 	private LayerMask playerInvulnerableLayer;
+	private LayerMask currentGroundLayers;
 
 	private AttackController hitContact = null;
 	private Vector2 moveInput;
+	private bool passingLayersDisabled = false;
 
 	private bool currentJumpCuttable = false;
 	private bool jumpCutInput = false;
@@ -71,9 +74,11 @@ public class PlayerMovement : MonoBehaviour
 		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
+		passingCheck = transform.Find("Passing Check").GetComponent<Collider2D>();
 
 		playerLayer = LayerMask.NameToLayer("Player");
 		playerInvulnerableLayer = LayerMask.NameToLayer("Player Invulnerable");
+		currentGroundLayers = data.run.groundLayers;
 
 		isFacingRight = true;
 
@@ -86,7 +91,6 @@ public class PlayerMovement : MonoBehaviour
 		lastDashInputTime = float.PositiveInfinity;
 		lastDashTime = float.PositiveInfinity;
 		lastPassInputTime = float.PositiveInfinity;
-		lastPassTime = float.PositiveInfinity;
 	}
 
 	// handle inputs, platform passing, dashing, and jumping
@@ -137,7 +141,6 @@ public class PlayerMovement : MonoBehaviour
 		lastDashInputTime += Time.deltaTime;
 		lastDashTime += Time.deltaTime;
 		lastPassInputTime += Time.deltaTime;
-		lastPassTime += Time.deltaTime;
 
 		hurtCooldown -= Time.deltaTime;
 		jumpCooldown -= Time.deltaTime;
@@ -186,8 +189,9 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void updateCollisions()
     {
-		isGrounded = groundCheck.IsTouchingLayers(data.run.groundLayers);
+		isGrounded = groundCheck.IsTouchingLayers(currentGroundLayers);
 		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
+		isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
 		canWallJump = rigidBody.IsTouchingLayers(data.wall.canJumpLayer);
 		canGroundDrop = groundCheck.IsTouchingLayers(data.groundDropping.canDropLayer);
 
@@ -454,24 +458,35 @@ public class PlayerMovement : MonoBehaviour
 	{
 		return lastPassInputTime <= data.platformPassing.inputBufferTime && isGrounded && !isDistressed;
 	}
+	private void setPassable(bool val)
+	{
+		passingLayersDisabled = val;
+		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
+
+		if (!passingLayersDisabled)
+		{
+			mask |= data.platformPassing.layers;
+			currentGroundLayers |= (data.run.groundLayers & data.platformPassing.layers);
+		}
+		else
+		{
+			mask &= ~data.platformPassing.layers;
+			currentGroundLayers &= ~data.platformPassing.layers;
+		}
+
+		Physics2D.SetLayerCollisionMask(playerLayer, mask);
+	}
 	private void updatePass()
 	{
 		if (canPass())
 		{
-			lastPassTime = 0;
 			isGrounded = false;
+
+			setPassable(true);
 		}
 
-		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
-		int new_mask = mask;
-
-		if (lastPassTime >= data.platformPassing.time)
-			new_mask |= data.platformPassing.layers;
-		else
-			new_mask &= ~data.platformPassing.layers;
-
-		if (mask != new_mask)
-			Physics2D.SetLayerCollisionMask(playerLayer, new_mask);
+		if (passingLayersDisabled && !isPassing)
+			setPassable(false);
 	}
 
 	private bool canTriggerGroundDrop()
