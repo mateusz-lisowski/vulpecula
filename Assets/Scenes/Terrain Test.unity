@@ -15180,8 +15180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e9f868efe6c66b45b985b11f86b046c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shakeTime: 0.5
-  respawnTime: 3
+  data: {fileID: 11400000, guid: 586ade171a175344da65a73a39d727a0, type: 2}
   droppableTilemaps:
   - {fileID: 1639310168}
   - {fileID: 363064184}

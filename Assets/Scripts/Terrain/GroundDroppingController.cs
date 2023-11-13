@@ -6,14 +6,11 @@ using UnityEngine.Tilemaps;
 
 public class GroundDroppingController : MonoBehaviour
 {
-	[Tooltip("Time before droppable platform breaks")]
-	public float shakeTime;
-	[Tooltip("Time needed for platform to respawn")]
-	public float respawnTime;
-
+	public TerrainData data;
 	public Tilemap[] droppableTilemaps;
 
 	Tilemap tilemap;
+	TilemapCollider2D tilemapCollider;
 
 
 	private List<Vector3Int> findTriggeredWithinBounds(Bounds bounds)
@@ -105,15 +102,43 @@ public class GroundDroppingController : MonoBehaviour
 	private void Awake()
 	{
 		tilemap = transform.GetComponent<Tilemap>();
+		tilemapCollider = transform.GetComponent<TilemapCollider2D>();
 	}
 
 
+	private bool canRespawn(List<Effects.Tiles.Data> tiles)
+	{
+		bool canRespawn = true;
+
+		foreach (Effects.Tiles.Data removedTile in tiles)
+			if (removedTile.parent == tilemap)
+			{
+				Vector2 center = tilemap.CellToWorld(removedTile.coord);
+				Vector2 halfSize = tilemap.cellSize / 2;
+
+				if (Physics2D.OverlapArea(
+					center - halfSize, center + halfSize, data.groundDropping.collidingLayers))
+				{
+					canRespawn = false;
+					break;
+				}
+			}
+
+
+		if (canRespawn)
+		{
+			foreach (Effects.Tiles.Data removedTile in tiles)
+				removedTile.parent.SetTile(removedTile.coord, removedTile.tile);
+		}
+
+		return canRespawn;
+	}
 	private IEnumerator dropTiles(List<Effects.Tiles.Data> tiles)
 	{
 		var instance = Effects.Tiles.instantiate(
 			tiles.Where(tile => tile.parent != tilemap), transform.parent.GetComponent<Grid>());
 
-		yield return new WaitForSeconds(shakeTime);
+		yield return new WaitForSeconds(data.groundDropping.shakeTime);
 
 		foreach (Effects.Tiles.Data removedTile in tiles)
 		{
@@ -122,15 +147,17 @@ public class GroundDroppingController : MonoBehaviour
 
 		StartCoroutine(Effects.instance.fade.run(instance.gameObject, instance.tilemaps));
 
-		yield return new WaitForSeconds(respawnTime - Effects.instance.fade.time);
+		yield return new WaitForSeconds(data.groundDropping.respawnTime - Effects.instance.fade.time);
 
 		yield return Effects.instance.fade.run(instance.gameObject, instance.tilemaps, revert: true);
+
+		while (!canRespawn(tiles))
+			yield return null;
+
 		Destroy(instance.gameObject);
 
 		foreach (Effects.Tiles.Data removedTile in tiles)
-		{
 			removedTile.parent.SetTile(removedTile.coord, removedTile.tile);
-		}
 	}
 
 }
