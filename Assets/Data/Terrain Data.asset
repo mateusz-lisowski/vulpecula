@@ -15,6 +15,11 @@ MonoBehaviour:
   groundDropping:
     collidingLayers:
       serializedVersion: 2
-      m_Bits: 12288
+      m_Bits: 208896
     shakeTime: 0.5
+    respawnTime: 3
+  groundBreaking:
+    collidingLayers:
+      serializedVersion: 2
+      m_Bits: 208896
     respawnTime: 3

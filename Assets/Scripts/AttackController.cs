@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class AttackController : MonoBehaviour
 {
-	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isVertical { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public Bounds hitboxBounds { get; private set; }
 
 	private Collider2D hitbox;
 
@@ -54,6 +55,8 @@ public class AttackController : MonoBehaviour
 
 	public void resolve()
 	{
+		hitboxBounds = hitbox.bounds;
+
 		ContactFilter2D filter = new ContactFilter2D().NoFilter();
 		filter.SetLayerMask(hitLayers);
 		filter.useLayerMask = true;

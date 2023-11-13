@@ -48,33 +48,39 @@ public class Effects : ScriptableObject
 		[Tooltip("Frequency of fade updates")]
 		public float updateFrequency;
 
-		public IEnumerator run(GameObject target, IList<Tilemap> tilemaps, bool revert = false)
+		public IEnumerator run(GameObject target, IList<Tilemap> tilemaps, 
+							   Func<bool> stop = null, bool revert = false, bool move = true)
 		{
 			int times = (int)Mathf.Round(time * updateFrequency);
 			float waitTime = 1f / updateFrequency;
 
-			float updateDistance = distance / times;
-			float updateColor = 1f / times;
+			float updateDistance = (!revert ? distance : -distance) / times;
+			float updateColor = (!revert ? 1f : -1f) / times;
 
-			if (revert)
-			{
-				updateDistance = -updateDistance;
-				updateColor = -updateColor;
-			}
+			bool stopping;
 
-			for (int i = 0; i < times; i++)
+			for (int i = 0; i < times; i = stopping ? i - 1 : i + 1)
 			{
 				yield return new WaitForSeconds(waitTime);
+				stopping = stop != null && stop();
+				
+				if (stopping && i == 0)
+				{
+					yield return new WaitWhile(stop);
+					stopping = false;
+				}
 
-				Vector3 position = target.transform.position;
-				position.y -= updateDistance;
-
-				target.transform.position = position;
+				if (move)
+				{
+					Vector3 position = target.transform.position;
+					position.y -= !stopping ? updateDistance : -updateDistance;
+					target.transform.position = position;
+				}
 
 				foreach (Tilemap tilemap in tilemaps)
 				{
 					Color color = tilemap.color;
-					color.a = color.a - updateColor;
+					color.a = color.a - (!stopping ? updateColor : -updateColor);
 					tilemap.color = color;
 				}
 			}
@@ -84,12 +90,6 @@ public class Effects : ScriptableObject
 	
 	public struct Tiles
 	{
-		public struct Data
-		{
-			public Tilemap parent;
-			public Vector3Int coord;
-			public TileBase tile;
-		}
 		public struct Instance
 		{
 			public Instance(GameObject instance)
@@ -130,14 +130,14 @@ public class Effects : ScriptableObject
 
 			return newTilemap;
 		}
-		public static Instance instantiate(IEnumerable<Data> tiles, Grid grid)
+		public static Instance instantiate(IEnumerable<TilemapHelper.TileData> tiles, Grid grid)
 		{
 			GameObject instance = new GameObject("TileEffect");
 			instance.transform.parent = grid.transform;
 
 			Dictionary<Tilemap, Tilemap> dict = new Dictionary<Tilemap, Tilemap>();
 			
-			foreach (Data tile in tiles)
+			foreach (TilemapHelper.TileData tile in tiles)
 			{
 				if (!dict.ContainsKey(tile.parent))
 					dict.Add(tile.parent, copyTilemap(instance, tile.parent));

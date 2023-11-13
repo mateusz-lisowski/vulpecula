@@ -202,8 +202,8 @@ public class PlayerMovement : MonoBehaviour
 		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
 		isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
 		canWallJump = rigidBody.IsTouchingLayers(data.wall.canJumpLayer);
-		canGroundDrop = groundCheck.IsTouchingLayers(data.groundDropping.canDropLayer);
-		canTakeGroundDamage = groundCheck.IsTouchingLayers(data.groundDamaging.canDamageLayer);
+		canGroundDrop = groundCheck.IsTouchingLayers(data.detection.canDropLayer);
+		canTakeGroundDamage = groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -521,7 +521,7 @@ public class PlayerMovement : MonoBehaviour
 	private void triggerGroundBreak()
 	{
 		ContactFilter2D filter = new ContactFilter2D().NoFilter();
-		filter.SetLayerMask(data.groundDropping.canDropLayer);
+		filter.SetLayerMask(data.detection.canDropLayer);
 		filter.useLayerMask = true;
 
 		List<Collider2D> contacts = new List<Collider2D>();

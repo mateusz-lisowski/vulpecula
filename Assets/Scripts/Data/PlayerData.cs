@@ -176,15 +176,12 @@ public class PlayerData : ScriptableObject
 		[Tooltip("Time within which too early pass will still be performed")]
 		[Range(0.01f, 0.5f)] public float inputBufferTime;
 	}
-	[System.Serializable] public struct GroundDropping
+	[System.Serializable] public struct Detection
 	{
-		[Tooltip("Layer detecting whether can ground drop")]
-		public LayerMask canDropLayer;
-	}
-	[System.Serializable] public struct GroundDamaging
-	{
-		[Tooltip("Layer detecting whether can take ground damage")]
+		[Tooltip("Layer detecting whether the ground can damage")]
 		public LayerMask canDamageLayer;
+		[Tooltip("Layer detecting whether the ground can drop")]
+		public LayerMask canDropLayer;
 	}
 
 	public Gravity gravity;
@@ -195,8 +192,7 @@ public class PlayerData : ScriptableObject
 	public Wall wall;
 	public Dash dash;
 	public PlatformPassing platformPassing;
-	public GroundDropping groundDropping;
-	public GroundDamaging groundDamaging;
+	public Detection detection;
 
 	private void OnValidate()
 	{
