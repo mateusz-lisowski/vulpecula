@@ -181,6 +181,12 @@ public class PlayerData : ScriptableObject
 		[Tooltip("Layer detecting whether can ground drop")]
 		public LayerMask canDropLayer;
 	}
+	[System.Serializable]
+	public struct GroundDamaging
+	{
+		[Tooltip("Layer detecting whether can take ground damage")]
+		public LayerMask canDamageLayer;
+	}
 
 	public Gravity gravity;
 	public Hurt hurt;
@@ -191,6 +197,7 @@ public class PlayerData : ScriptableObject
 	public Dash dash;
 	public PlatformPassing platformPassing;
 	public GroundDropping groundDropping;
+	public GroundDamaging groundDamaging;
 
 	private void OnValidate()
 	{

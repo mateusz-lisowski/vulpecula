@@ -1,6 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+
+class HitData
+{
+	public bool isVertical;
+	public Vector3 right;
+}
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,12 +19,14 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isInvulnerable { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isPassing { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
 	[field: SerializeField, ReadOnly] public bool canGroundDrop { get; private set; }
+	[field: SerializeField, ReadOnly] public bool canTakeGroundDamage { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 	[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
@@ -53,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
 	private LayerMask playerInvulnerableLayer;
 	private LayerMask currentGroundLayers;
 
-	private AttackController hitContact = null;
+	private HitData hitContact = null;
 	private Vector2 moveInput;
 	private bool passingLayersDisabled = false;
 
@@ -185,7 +192,9 @@ public class PlayerMovement : MonoBehaviour
 	
 	public void hit(AttackController contact)
 	{
-		hitContact = contact;
+		hitContact = new HitData();
+		hitContact.isVertical = contact.isVertical;
+		hitContact.right = contact.transform.right;
 	}
 	private void updateCollisions()
     {
@@ -194,6 +203,7 @@ public class PlayerMovement : MonoBehaviour
 		isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
 		canWallJump = rigidBody.IsTouchingLayers(data.wall.canJumpLayer);
 		canGroundDrop = groundCheck.IsTouchingLayers(data.groundDropping.canDropLayer);
+		canTakeGroundDamage = groundCheck.IsTouchingLayers(data.groundDamaging.canDamageLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -214,6 +224,16 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	private bool canTriggerGroundDamage()
+	{
+		return canTakeGroundDamage && isGrounded && !isInvulnerable;
+	}
+	private void takeGroundDamage()
+	{
+		hitContact = new HitData();
+		hitContact.isVertical = true;
+		hitContact.right = transform.right;
+	}
 	private bool canHurt()
 	{
 		return hitContact != null && hurtCooldown <= 0;
@@ -224,11 +244,13 @@ public class PlayerMovement : MonoBehaviour
 			return;
 
 		// if attack faces the same direction
-		if (Vector2.Dot(transform.right, hitContact.transform.right) > 0)
+		if (Vector2.Dot(transform.right, hitContact.right) > 0)
 			Flip();
 	}
 	private void setInvulnerability(bool val)
 	{
+		isInvulnerable = val;
+
 		int layer = val ? playerInvulnerableLayer : playerLayer;
 
 		foreach (Transform child in hitbox)
@@ -258,6 +280,9 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void updateHurt()
 	{
+		if (canTriggerGroundDamage())
+			takeGroundDamage();
+
 		if (canHurt())
 			hurt();
 		hitContact = null;

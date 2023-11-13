@@ -88,3 +88,7 @@ MonoBehaviour:
     canDropLayer:
       serializedVersion: 2
       m_Bits: 4194304
+  groundDamaging:
+    canDamageLayer:
+      serializedVersion: 2
+      m_Bits: 8388608
