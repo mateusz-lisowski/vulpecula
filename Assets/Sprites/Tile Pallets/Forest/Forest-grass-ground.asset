@@ -218,10 +218,11 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0100000005000000
+    m_Neighbors: 010000000500000001000000
     m_NeighborPositions:
     - {x: 0, y: 1, z: 0}
     - {x: -1, y: 1, z: 0}
+    - {x: 1, y: 0, z: 0}
     m_RuleTransform: 0
   - m_Id: 13
     m_Sprites:
@@ -233,10 +234,11 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0100000005000000
+    m_Neighbors: 010000000500000001000000
     m_NeighborPositions:
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 1, z: 0}
+    - {x: -1, y: 0, z: 0}
     m_RuleTransform: 0
   - m_Id: 2
     m_Sprites:
@@ -248,9 +250,10 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 05000000
+    m_Neighbors: 0500000001000000
     m_NeighborPositions:
     - {x: 1, y: -1, z: 0}
+    - {x: -1, y: 0, z: 0}
     m_RuleTransform: 0
   - m_Id: 15
     m_Sprites:
@@ -262,9 +265,10 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 05000000
+    m_Neighbors: 0500000001000000
     m_NeighborPositions:
     - {x: -1, y: -1, z: 0}
+    - {x: 1, y: 0, z: 0}
     m_RuleTransform: 0
   - m_Id: 8
     m_Sprites:
@@ -292,3 +296,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a016cf4fd1d8e6146a5838ebde1222da, type: 2}
   - {fileID: 11400000, guid: 0517d8ac35f17ac4d8b108c26d57f50b, type: 2}
   - {fileID: 11400000, guid: 0692d7e81da213c4b883d40886f6dc11, type: 2}
+  - {fileID: 11400000, guid: e9277899305d8e94b9631c9b2e77847e, type: 2}
+  - {fileID: 11400000, guid: 86b8e5a17cc1b974d94c3f612bdf3774, type: 2}
+  - {fileID: 11400000, guid: d36758785990fd24e9d28f067834a178, type: 2}
