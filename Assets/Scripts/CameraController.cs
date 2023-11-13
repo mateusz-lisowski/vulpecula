@@ -23,7 +23,8 @@ public class CameraController : MonoBehaviour
 	private void Update()
 	{
 		trackPlayer();
-		keepWithinBoundary();
+		if (boundary != null)
+			keepWithinBoundary();
 	}
 
 	private bool checkXMargin()
