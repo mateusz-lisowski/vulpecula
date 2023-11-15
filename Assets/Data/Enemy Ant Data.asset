@@ -12,29 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c827d9ac5ff1be547b87ca562e021ff4, type: 3}
   m_Name: Enemy Ant Data
   m_EditorClassIdentifier: 
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 4096
-  attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
-  gravityStrength: 0
-  gravityScale: 1
-  hurtInvulTime: 0.5
-  hurtDistressTime: 0.2
-  hurtKnockbackMaxSpeed: 2
-  hurtKnockbackHeightScale: 0.9
-  hurtKnockbackForce: 3.3333335
-  attackCooldown: 0.8
-  runEnabled: 1
-  runMaxSpeed: 3
-  runAcceleration: 2.5
-  runDecceleration: 2
-  runAccelAmount: 41.666668
-  runDeccelAmount: 33.333332
-  jumpEnabled: 0
-  jumpHeight: 0
-  jumpTimeToApex: 0
-  jumpCooldown: 0
-  jumpForce: 0
+  gravity:
+    strength: -30
+    scale: 1
+  hurt:
+    invulnerabilityTime: 0.5
+    distressTime: 0.2
+    knockbackMaxSpeed: 2
+    knockbackHeightScale: 0.9
+    knockbackForce: 3.3333335
+  attack:
+    provokeLayers:
+      serializedVersion: 2
+      m_Bits: 4096
+    hitLayers:
+      serializedVersion: 2
+      m_Bits: 4096
+    attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
+    cooldown: 0.8
+  run:
+    groundLayers:
+      serializedVersion: 2
+      m_Bits: 768
+    maxSpeed: 3
+    acceleration: 2.5
+    deceleration: 2
+    accelerationForce: 41.666668
+    decelerationForce: 33.333332

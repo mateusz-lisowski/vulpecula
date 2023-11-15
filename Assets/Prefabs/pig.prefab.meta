@@ -1,14 +1,7 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Sprites/Enemies/Frog/fall/Frog-Fall-Animation.anim.meta
 guid: 4a01b6b3c8eb1c74cbfa32f4c873b85c
-NativeFormatImporter:
-  externalObjects: {}
-  mainObjectFileID: 7400000
-========
-guid: b8b25ab79b0fb0247b3b383a2d673554
 PrefabImporter:
   externalObjects: {}
->>>>>>>> 59dd09a (Add pig enemy):Assets/Prefabs/pig.prefab.meta
   userData: 
   assetBundleName: 
   assetBundleVariant: 

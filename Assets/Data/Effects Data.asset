@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feabb6b081f1d8b49b6ccc1c4b9e12b5, type: 3}
   m_Name: Effects Data
   m_EditorClassIdentifier: 
-  flashingFrequency: 4
-  flashingAlpha: 0.5
+  flashing:
+    frequency: 4
+    alpha: 0.5
+  fade:
+    distance: 0.7
+    time: 0.3
+    updateFrequency: 50

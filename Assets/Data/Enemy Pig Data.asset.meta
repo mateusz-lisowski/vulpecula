@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Sprites/Enemies/Ant/run/Ant-Run-Animation.anim.meta
 guid: cd2f1c540896fef4691730cd39d058a1
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 7400000
-========
-guid: cb5be2547f409e14c84d11e83e02095b
-NativeFormatImporter:
-  externalObjects: {}
-  mainObjectFileID: 11400000
->>>>>>>> 59dd09a (Add pig enemy):Assets/Data/Pig Data.asset.meta
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

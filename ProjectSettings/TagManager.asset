@@ -14,7 +14,7 @@ TagManager:
   - 
   - 
   - Ground
-  - 
+  - Platform Passable
   - 
   - 
   - Player
@@ -26,10 +26,10 @@ TagManager:
   - 
   - 
   - Detection
-  - 
-  - 
-  - 
-  - 
+  - Ground-Damaging
+  - Wall-Jumpable
+  - Ground-Droppable
+  - Ground-Breakable
   - 
   - 
   - 
@@ -44,17 +44,8 @@ TagManager:
   - name: Background
     uniqueID: 2274104453
     locked: 0
-  - name: Props Background
+  - name: Environment
     uniqueID: 4255069353
-    locked: 0
-  - name: Tilemap
-    uniqueID: 776997345
-    locked: 0
-  - name: Props
-    uniqueID: 4026928817
-    locked: 0
-  - name: Platforms
-    uniqueID: 2059121161
     locked: 0
   - name: Items
     uniqueID: 2666157029

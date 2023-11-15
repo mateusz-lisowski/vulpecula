@@ -1,4 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
+
+class HitData
+{
+	public bool isVertical;
+	public Vector3 right;
+}
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,8 +19,14 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isInvulnerable { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isPassing { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
+	[field: SerializeField, ReadOnly] public bool canGroundDrop { get; private set; }
+	[field: SerializeField, ReadOnly] public bool canTakeGroundDamage { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 	[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
@@ -26,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastWallJumpTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastDashInputTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastDashTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float lastPassInputTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float hurtCooldown { get; private set; }
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
@@ -34,17 +48,21 @@ public class PlayerMovement : MonoBehaviour
 
 	private Rigidbody2D rigidBody;
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
 
 	private Transform hitbox;
     private TrailRenderer trail;
     private Collider2D groundCheck;
     private Collider2D wallCheck;
+    private Collider2D passingCheck;
 
 	private LayerMask playerLayer;
 	private LayerMask playerInvulnerableLayer;
+	private LayerMask currentGroundLayers;
 
-	private AttackController hitContact = null;
+	private HitData hitContact = null;
 	private Vector2 moveInput;
+	private bool passingLayersDisabled = false;
 
 	private bool currentJumpCuttable = false;
 	private bool jumpCutInput = false;
@@ -57,14 +75,17 @@ public class PlayerMovement : MonoBehaviour
 	{
 		rigidBody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
 
 		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
 		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
+		passingCheck = transform.Find("Passing Check").GetComponent<Collider2D>();
 
 		playerLayer = LayerMask.NameToLayer("Player");
 		playerInvulnerableLayer = LayerMask.NameToLayer("Player Invulnerable");
+		currentGroundLayers = data.run.groundLayers;
 
 		isFacingRight = true;
 
@@ -76,9 +97,10 @@ public class PlayerMovement : MonoBehaviour
 		lastWallJumpTime = float.PositiveInfinity;
 		lastDashInputTime = float.PositiveInfinity;
 		lastDashTime = float.PositiveInfinity;
+		lastPassInputTime = float.PositiveInfinity;
 	}
 
-	// handle inputs, dashing, and jumping
+	// handle inputs, platform passing, dashing, and jumping
 	void Update()
 	{
 		updateTimers();
@@ -91,6 +113,9 @@ public class PlayerMovement : MonoBehaviour
 
 		updateDash();
 		updateJump();
+
+		updatePass();
+		updateGroundBreak();
 
 		animator.SetBool("isGrounded", isGrounded);
 		animator.SetBool("isDistressed", isDistressed);
@@ -122,6 +147,7 @@ public class PlayerMovement : MonoBehaviour
 		lastWallJumpTime += Time.deltaTime;
 		lastDashInputTime += Time.deltaTime;
 		lastDashTime += Time.deltaTime;
+		lastPassInputTime += Time.deltaTime;
 
 		hurtCooldown -= Time.deltaTime;
 		jumpCooldown -= Time.deltaTime;
@@ -159,16 +185,25 @@ public class PlayerMovement : MonoBehaviour
 			lastDashInputTime = 0;
 
 		dashCutInput = !Input.GetKey(KeyCode.C);
+
+		if (Input.GetKeyDown(KeyCode.DownArrow))
+			lastPassInputTime = 0;
 	}
 	
 	public void hit(AttackController contact)
 	{
-		hitContact = contact;
+		hitContact = new HitData();
+		hitContact.isVertical = contact.isVertical;
+		hitContact.right = contact.transform.right;
 	}
 	private void updateCollisions()
     {
-		isGrounded = groundCheck.IsTouchingLayers(data.groundLayer);
-		isFacingWall = wallCheck.IsTouchingLayers(data.groundLayer);
+		isGrounded = groundCheck.IsTouchingLayers(currentGroundLayers);
+		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
+		isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
+		canWallJump = rigidBody.IsTouchingLayers(data.wall.canJumpLayer);
+		canGroundDrop = groundCheck.IsTouchingLayers(data.detection.canDropLayer);
+		canTakeGroundDamage = groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
@@ -177,7 +212,7 @@ public class PlayerMovement : MonoBehaviour
 			isFacingWall = false;
 		}
 
-		if (isJumping && !isFalling)
+		if ((isJumping && !isFalling) || (isFalling && rigidBody.velocity.y < -0.01f))
 		{
 			isGrounded = false;
 		}
@@ -189,6 +224,16 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	private bool canTriggerGroundDamage()
+	{
+		return canTakeGroundDamage && isGrounded && !isInvulnerable;
+	}
+	private void takeGroundDamage()
+	{
+		hitContact = new HitData();
+		hitContact.isVertical = true;
+		hitContact.right = transform.right;
+	}
 	private bool canHurt()
 	{
 		return hitContact != null && hurtCooldown <= 0;
@@ -199,11 +244,13 @@ public class PlayerMovement : MonoBehaviour
 			return;
 
 		// if attack faces the same direction
-		if (Vector2.Dot(transform.right, hitContact.transform.right) > 0)
+		if (Vector2.Dot(transform.right, hitContact.right) > 0)
 			Flip();
 	}
 	private void setInvulnerability(bool val)
 	{
+		isInvulnerable = val;
+
 		int layer = val ? playerInvulnerableLayer : playerLayer;
 
 		foreach (Transform child in hitbox)
@@ -215,13 +262,14 @@ public class PlayerMovement : MonoBehaviour
 	{
 		isDistressed = true;
 		lastHurtTime = 0;
-		hurtCooldown = data.hurtInvulTime;
+		hurtCooldown = data.hurt.invulnerabilityTime;
 
 		setDistressDirection();
 		setInvulnerability(true);
-		StartCoroutine(Effects.instance.Flashing(gameObject, data.hurtInvulTime));
+		StartCoroutine(Effects.instance.flashing.run(
+			spriteRenderer, data.hurt.invulnerabilityTime));
 
-		float force = data.hurtKnockbackForce;
+		float force = data.hurt.knockbackForce;
 		if (force > rigidBody.velocity.y)
 		{
 			force -= rigidBody.velocity.y;
@@ -232,6 +280,9 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void updateHurt()
 	{
+		if (canTriggerGroundDamage())
+			takeGroundDamage();
+
 		if (canHurt())
 			hurt();
 		hitContact = null;
@@ -239,7 +290,7 @@ public class PlayerMovement : MonoBehaviour
 		if (hurtCooldown <= 0)
 			setInvulnerability(false);
 
-		if (isDistressed && lastHurtTime >= data.hurtDistressTime)
+		if (isDistressed && lastHurtTime >= data.hurt.distressTime)
 		{
 			Flip();
 			isDistressed = false;
@@ -261,7 +312,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void updateWallFacing()
 	{
-		if (!isGrounded && !isDistressed && isFacingWall && data.wallSlideEnabled)
+		if (!isGrounded && !isDistressed && isFacingWall && canWallJump)
 			lastWallHoldingTime = 0;
 
 		if (isFacingWall)
@@ -270,7 +321,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool canDash()
 	{
-		return dashCooldown <= 0 && lastDashInputTime <= data.dashInputBufferTime && dashesLeft > 0
+		return dashCooldown <= 0 && lastDashInputTime <= data.dash.inputBufferTime && dashesLeft > 0
 			&& !isDistressed;
 	}
 	private void dash()
@@ -278,13 +329,13 @@ public class PlayerMovement : MonoBehaviour
 		isDashing = true;
 		lastDashTime = 0;
 		lastDashInputTime = float.PositiveInfinity;
-		dashCooldown = data.dashTime + data.dashCooldown;
+		dashCooldown = data.dash.time + data.dash.cooldown;
 
 		dashesLeft--;
 
 		float forceDirection = isFacingRight ? 1.0f : -1.0f;
 
-		float force = data.dashForce;
+		float force = data.dash.force;
 		if (Mathf.Sign(forceDirection) == Mathf.Sign(rigidBody.velocity.x))
 			force -= Mathf.Abs(rigidBody.velocity.x);
 
@@ -303,7 +354,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		if (isDashing)
-			if (dashCutInput || lastDashTime >= data.dashTime
+			if (dashCutInput || lastDashTime >= data.dash.time
 				|| isFacingWall || Mathf.Abs(rigidBody.velocity.y) > 0.01f)
 			{
 				isDashing = false;
@@ -319,14 +370,14 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isGrounded || lastWallHoldingTime == 0)
 		{
-			dashesLeft = data.dashesCount;
+			dashesLeft = data.dash.dashesCount;
 		}
 	}
 	
 	private bool canJump()
 	{
-		return jumpCooldown <= 0 && lastJumpInputTime <= data.jumpInputBufferTime 
-			&& jumpsLeft > 0 && lastWallJumpTime >= data.wallJumpTime
+		return jumpCooldown <= 0 && lastJumpInputTime <= data.jump.inputBufferTime 
+			&& jumpsLeft > 0 && lastWallJumpTime >= data.wall.jumpTime
 			&& !isDistressed;
 	}
 	private bool canJumpCut()
@@ -339,18 +390,18 @@ public class PlayerMovement : MonoBehaviour
 		isFalling = false;
 		isGrounded = false;
 		lastJumpInputTime = float.PositiveInfinity;
-		jumpCooldown = data.jumpCooldown;
+		jumpCooldown = data.jump.cooldown;
 
 		currentJumpCuttable = !registeredDownHitJump;
 
-		float force = !registeredDownHitJump ? data.jumpForce : data.attackDownBounceForce;
+		float force = !registeredDownHitJump ? data.jump.force : data.attack.attackDownBounceForce;
 		if (force > rigidBody.velocity.y)
 		{
 			force -= rigidBody.velocity.y;
 			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
 		}
 
-		if (lastWallHoldingTime < data.wallJumpCoyoteTime)
+		if (lastWallHoldingTime < data.wall.jumpCoyoteTime)
 		{
 			lastWallHoldingTime = float.PositiveInfinity;
 			lastWallJumpTime = 0;
@@ -360,7 +411,7 @@ public class PlayerMovement : MonoBehaviour
 
 			float forceDirection = isFacingRight ? 1.0f : -1.0f;
 
-			float wallJumpForce = data.wallJumpForce;
+			float wallJumpForce = data.wall.jumpForce;
 			rigidBody.AddForce(wallJumpForce * forceDirection * Vector2.right, ForceMode2D.Impulse);
 		}
 	}
@@ -376,18 +427,18 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else if (isJumping && canJumpCut())
 		{
-			rigidBody.gravityScale = data.gravityScale * data.jumpCutGravityMult;
+			rigidBody.gravityScale = data.gravity.scale * data.jump.jumpCutGravityMultiplier;
 		}
-		else if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jumpHangVelocityThreshold)
+		else if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
 		{
-			rigidBody.gravityScale = data.gravityScale * data.jumpHangGravityMult;
+			rigidBody.gravityScale = data.gravity.scale * data.jump.hangingGravityMultiplier;
 		}
 		else if (isFalling)
 		{
-			rigidBody.gravityScale = data.gravityScale * data.fallGravityMult;
+			rigidBody.gravityScale = data.gravity.scale * data.gravity.fallMultiplier;
 		}
 		else
-			rigidBody.gravityScale = data.gravityScale;
+			rigidBody.gravityScale = data.gravity.scale;
 	}
 	private void updateJump()
 	{
@@ -395,8 +446,8 @@ public class PlayerMovement : MonoBehaviour
 		{
 			isFalling = true;
 		}
-		if (isFalling && !isJumping && jumpsLeft == data.jumpsCount 
-			&& lastGroundedTime >= data.coyoteTime)
+		if (isFalling && !isJumping && jumpsLeft == data.jump.jumpsCount 
+			&& lastGroundedTime >= data.jump.coyoteTime)
 		{
 			jumpsLeft--;
 		}
@@ -411,43 +462,107 @@ public class PlayerMovement : MonoBehaviour
 
 		updateGravityScale();
 
-		if ((isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wallJumpMinTime)
+		if ((isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wall.jumpMinTime)
 		{
-			jumpsLeft = data.jumpsCount;
+			jumpsLeft = data.jump.jumpsCount;
 			isJumping = false;
 			isFalling = false;
 			lastGroundedTime = 0;
 			lastWallJumpTime = float.PositiveInfinity;
 		}
 
-		if (rigidBody.velocity.y < -data.maxFallSpeed)
+		if (rigidBody.velocity.y < -data.gravity.maxFallSpeed)
 		{
 			rigidBody.AddForce(
-				(data.maxFallSpeed + rigidBody.velocity.y) * Vector2.down, 
+				(data.gravity.maxFallSpeed + rigidBody.velocity.y) * Vector2.down, 
 				ForceMode2D.Impulse);
+		}
+	}
+
+	private bool canPass()
+	{
+		return lastPassInputTime <= data.platformPassing.inputBufferTime && isGrounded && !isDistressed;
+	}
+	private void setPassable(bool val)
+	{
+		passingLayersDisabled = val;
+		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
+
+		if (!passingLayersDisabled)
+		{
+			mask |= data.platformPassing.layers;
+			currentGroundLayers |= (data.run.groundLayers & data.platformPassing.layers);
+		}
+		else
+		{
+			mask &= ~data.platformPassing.layers;
+			currentGroundLayers &= ~data.platformPassing.layers;
+		}
+
+		Physics2D.SetLayerCollisionMask(playerLayer, mask);
+	}
+	private void updatePass()
+	{
+		if (canPass())
+		{
+			isGrounded = false;
+
+			setPassable(true);
+		}
+
+		if (passingLayersDisabled && !isPassing)
+			setPassable(false);
+	}
+
+	private bool canTriggerGroundDrop()
+	{
+		return canGroundDrop && isGrounded;
+	}
+	private void triggerGroundBreak()
+	{
+		ContactFilter2D filter = new ContactFilter2D().NoFilter();
+		filter.SetLayerMask(data.detection.canDropLayer);
+		filter.useLayerMask = true;
+
+		List<Collider2D> contacts = new List<Collider2D>();
+		if (rigidBody.OverlapCollider(filter, contacts) == 0)
+			return;
+
+		foreach (Collider2D contact in contacts)
+		{
+			GroundDroppingController controller = contact.GetComponent<GroundDroppingController>();
+
+			controller.triggerDrop(groundCheck.bounds);
+		}
+	}
+	private void updateGroundBreak()
+	{
+		if (canTriggerGroundDrop())
+		{
+			triggerGroundBreak();
 		}
 	}
 
 	private void updateRun()
 	{
-		float targetSpeed = moveInput.x * data.runMaxSpeed;
+		float targetSpeed = moveInput.x * data.run.maxSpeed;
 
-		if (lastWallJumpTime < data.wallJumpTime)
+		if (lastWallJumpTime < data.wall.jumpTime)
 		{
-			targetSpeed = Mathf.Lerp(targetSpeed, rigidBody.velocity.x, data.wallJumpInputReduction);
+			targetSpeed = Mathf.Lerp(targetSpeed, rigidBody.velocity.x, data.wall.jumpInputReduction);
 		}
 
 		if (isDistressed)
 		{
-			targetSpeed = moveInput.x * data.hurtKnockbackMaxSpeed;
+			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
 		}
 
-		float accelRate = targetSpeed == 0 ? data.runDeccelAmount : data.runAccelAmount;
+		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
 
-		if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jumpHangVelocityThreshold)
+		if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
 		{
-			targetSpeed *= data.jumpHangSpeedMult;
-			accelRate *= data.jumpHangSpeedMult;
+			targetSpeed *= data.jump.hangingSpeedMultiplier;
+			accelRate *= data.jump.hangingSpeedMultiplier;
 		}
 
 		float speedDif = targetSpeed - rigidBody.velocity.x;
@@ -458,8 +573,9 @@ public class PlayerMovement : MonoBehaviour
 
 	private void updateWallSlide()
 	{
-		float targetSpeed = Mathf.Min(moveInput.y, 0f) * data.wallSlideMaxSpeed;
-		float accelRate = targetSpeed == 0 ? data.wallSlideDeccelAmount : data.wallSlideAccelAmount;
+		float targetSpeed = Mathf.Min(moveInput.y, 0f) * data.wall.slideMaxSpeed;
+		float accelRate = targetSpeed == 0 ? data.wall.slideDecelerationForce 
+			: data.wall.slideAccelerationForce;
 
 		float speedDif = targetSpeed - rigidBody.velocity.y;
 		float movement = speedDif * accelRate;
