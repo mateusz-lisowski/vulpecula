@@ -91,11 +91,11 @@ public class PlayerAttack : MonoBehaviour
 
 		currentAttackData.setAttack(data);
 		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
-
-		currentAttackData.resolve();
 	}
 	private void attackForward()
 	{
+		movement.isAttacking = true;
+
 		lastAttackTime = 0;
 		attackCooldown = data.attack.cooldown;
 	}
@@ -118,11 +118,11 @@ public class PlayerAttack : MonoBehaviour
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();
-
-		currentAttackData.resolve();
 	}
 	private void attackDown()
 	{
+		movement.isAttacking = true;
+
 		lastAttackTime = 0;
 		lastAttackDownTime = 0;
 		attackCooldown = data.attack.cooldown;
@@ -140,8 +140,6 @@ public class PlayerAttack : MonoBehaviour
 
 		if (canAttack())
 		{
-			movement.isAttacking = true;
-
 			if (isAttackDownInput)
 				attackDown();
 			else

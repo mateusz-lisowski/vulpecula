@@ -6,6 +6,7 @@ public class EnemyMovement : MonoBehaviour
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isAttacking { get; set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
@@ -255,9 +256,10 @@ public class EnemyMovement : MonoBehaviour
 		float targetSpeed = moveInput.x * data.run.maxSpeed;
 
 		if (isDistressed)
-		{
 			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
-		}
+
+		if (isAttacking)
+			targetSpeed = 0;
 
 		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
 

@@ -599,14 +599,13 @@ public class PlayerMovement : MonoBehaviour
 		float targetSpeed = moveInput.x * data.run.maxSpeed;
 
 		if (lastWallJumpTime < data.wall.jumpTime)
-		{
 			targetSpeed = Mathf.Lerp(targetSpeed, rigidBody.velocity.x, data.wall.jumpInputReduction);
-		}
 
 		if (isDistressed)
-		{
 			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
-		}
+
+		if (isAttacking && isGrounded)
+			targetSpeed = 0;
 
 		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
 
