@@ -489,7 +489,8 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool canPass()
 	{
-		return lastPassInputTime <= data.platformPassing.inputBufferTime && isGrounded && !isDistressed;
+		return lastPassInputTime <= data.platformPassing.inputBufferTime && isPassing 
+			&& isGrounded && !isDistressed;
 	}
 	private void setPassable(bool val)
 	{
