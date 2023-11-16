@@ -17571,22 +17571,10 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1748184339}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetVolume
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
+      m_Calls: []
 --- !u!1001 &823909793
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27160,6 +27148,7 @@ MonoBehaviour:
   - {fileID: 1680752809}
   - {fileID: 159090556}
   - {fileID: 1686732095}
+  volumeSlider: {fileID: 805928358}
   score: 0
   lives: 3
 --- !u!4 &1748184340

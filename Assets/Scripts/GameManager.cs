@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public Image[] keysTab;
     public Image[] livesTab;
 
+    public Slider volumeSlider;
 
     private float timer = 0.0f;
 
@@ -216,7 +217,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        volumeSlider.onValueChanged.AddListener(SetVolume);
     }
 
     // Update is called once per frame
@@ -231,8 +232,8 @@ public class GameManager : MonoBehaviour
             PauseMenu();
         }
 
-		// Increase timer
-		timer += Time.deltaTime;
+        // Increase timer
+        timer += Time.deltaTime;
         int minutes = (int)(timer / 60);
         int seconds = (int)(timer % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
