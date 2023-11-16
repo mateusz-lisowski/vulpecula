@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isOnSlope { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isSlopeGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isPassing { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
@@ -56,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
 	private Transform hitbox;
     private TrailRenderer trail;
     private Collider2D groundCheck;
+    private Collider2D slopeCheck;
     private Collider2D wallCheck;
     private Collider2D passingCheck;
     private Collider2D withinCheck;
@@ -67,6 +69,10 @@ public class PlayerMovement : MonoBehaviour
 	private HitData hitContact = null;
 	private Vector2 moveInput;
 	private bool passingLayersDisabled = false;
+
+	private int currentFrame = 0;
+	private int lastJumpFrame = -1;
+	private int lastTurnFrame = -1;
 
 	private bool currentJumpCuttable = false;
 	private bool jumpCutInput = false;
@@ -84,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
 		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
 		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
+		slopeCheck = transform.Find("Slope Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
 		passingCheck = transform.Find("Passing Check").GetComponent<Collider2D>();
 		withinCheck = transform.Find("Within Check").GetComponent<Collider2D>();
@@ -132,6 +139,8 @@ public class PlayerMovement : MonoBehaviour
 	// handle run
 	void FixedUpdate()
 	{
+		currentFrame++;
+
 		if (!isDashing)
 		{
 			updateRun();
@@ -162,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
 	private void Flip()
 	{
 		lastTurnTime = 0;
+		lastTurnFrame = currentFrame;
 
 		isFacingRight = !isFacingRight;
 		transform.Rotate(0, 180, 0);
@@ -203,12 +213,27 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private bool isGroundedFalsePositive()
 	{
+		// just jumped
 		if (isJumping && !isFalling)
-			return true;
+		{
+			// wait for hitbox position update
+			if (!isOnSlope || lastJumpFrame >= currentFrame - 1)
+				return true;
 
+			// is not running up a slope after jumping
+			if (!rigidBody.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers))
+				return true;
+		}
+
+		// is within passing platform
 		if (!passingLayersDisabled && isPassing)
 		{
-			if (!isOnSlope && rigidBody.velocity.y < -minVerticalMovementVelocity)
+			// was wall holding last frame
+			if (lastWallHoldingTime == Time.deltaTime)
+				return false;
+
+			// is falling
+			if (rigidBody.velocity.y <= -minVerticalMovementVelocity && isJumping && !isSlopeGrounded)
 				return true;
 		}
 
@@ -217,7 +242,8 @@ public class PlayerMovement : MonoBehaviour
 	private void updateCollisions()
     {
 		isGrounded = groundCheck.IsTouchingLayers(currentGroundLayers);
-		isOnSlope = groundCheck.IsTouchingLayers(data.run.slopeLayer);
+		isSlopeGrounded = slopeCheck.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers);
+		isOnSlope = slopeCheck.IsTouchingLayers(data.run.slopeLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
 		isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
 		canWallJump = withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
@@ -226,13 +252,14 @@ public class PlayerMovement : MonoBehaviour
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
-		if (lastTurnTime < 0.1f)
-		{
+		if (lastTurnFrame >= currentFrame - 1)
 			isFacingWall = false;
-		}
 
-		if (isGrounded && isGroundedFalsePositive())
+		if ((isGrounded || isSlopeGrounded) && isGroundedFalsePositive())
+		{
 			isGrounded = false;
+			isSlopeGrounded = false;
+		}
 
 		if (isFacingWall)
 		{
@@ -410,6 +437,7 @@ public class PlayerMovement : MonoBehaviour
 		jumpCooldown = data.jump.cooldown;
 
 		currentJumpCuttable = !registeredDownHitJump;
+		lastJumpFrame = currentFrame;
 
 		float force = !registeredDownHitJump ? data.jump.force : data.attack.attackDownBounceForce;
 		if (force > rigidBody.velocity.y)
@@ -450,7 +478,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			rigidBody.gravityScale = data.gravity.scale * data.jump.hangingGravityMultiplier;
 		}
-		else if (isGrounded && isOnSlope)
+		else if (isOnSlope && isSlopeGrounded)
 		{
 			rigidBody.gravityScale = 0;
 		}
@@ -464,7 +492,7 @@ public class PlayerMovement : MonoBehaviour
 	private void updateJump()
 	{
 		if (!isGrounded && lastWallHoldingTime != 0 
-			&& rigidBody.velocity.y <= minVerticalMovementVelocity)
+			&& (rigidBody.velocity.y <= -minVerticalMovementVelocity || isSlopeGrounded))
 		{
 			isFalling = true;
 		}
