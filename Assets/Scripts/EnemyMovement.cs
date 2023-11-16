@@ -118,7 +118,7 @@ public class EnemyMovement : MonoBehaviour
 	private void updateCollisions()
 	{
 		isGrounded = groundCheck.IsTouchingLayers(data.run.groundLayers);
-		isFacingWall = wallCheck.IsTouchingLayers(data.run.groundLayers);
+		isFacingWall = wallCheck.IsTouchingLayers(data.run.wallLayers);
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.run.groundLayers);
 		isProvoked = attackCheck.IsTouchingLayers(data.attack.provokeLayers);
 

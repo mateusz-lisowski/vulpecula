@@ -34,6 +34,9 @@ MonoBehaviour:
     groundLayers:
       serializedVersion: 2
       m_Bits: 768
+    wallLayers:
+      serializedVersion: 2
+      m_Bits: 256
     maxSpeed: 3
     acceleration: 2.5
     deceleration: 2

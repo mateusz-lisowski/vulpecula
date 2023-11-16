@@ -47,6 +47,8 @@ public class EnemyData : ScriptableObject
 	{
 		[Tooltip("Layers that can be run on")]
 		public LayerMask groundLayers;
+		[Tooltip("Layers that trigger flip")]
+		public LayerMask wallLayers;
 		[Tooltip("Maximum running speed")]
 		public float maxSpeed;
 		[Tooltip("Acceleration rate (0 = none, maxSpeed = instant)")]
