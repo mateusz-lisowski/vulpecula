@@ -46,8 +46,12 @@ public class PlayerData : ScriptableObject
 		public GameObject attackDownPrefab;
 		
 		[Space(5)]
-		[Tooltip("Minimum time between two consecutive attacks")]
-		public float cooldown; 
+		[Tooltip("Maximum time between consecutive forward attacks in a combo")]
+		public float comboResetTime;
+		[Tooltip("Minimum time between two consecutive forward attacks")]
+		public float forwardCooldown;
+		[Tooltip("Minimum time between two consecutive down attacks")]
+		public float downCooldown; 
 
 		[Space(10)]
 		[Tooltip("Maximum reachable height of a down hit bounce")]

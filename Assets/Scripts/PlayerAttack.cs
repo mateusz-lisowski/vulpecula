@@ -10,7 +10,11 @@ public class PlayerAttack : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastAttackTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastAttackDownTime { get; private set; }
 	[field: Space(5)]
-	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
+	[field: SerializeField, ReadOnly] public float attackAnyCooldown { get; private set; }
+	[field: SerializeField, ReadOnly] public float attackForwardCooldown { get; private set; }
+	[field: SerializeField, ReadOnly] public float attackDownCooldown { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public int attackForwardCombo { get; private set; }
 
 
 	private PlayerMovement movement;
@@ -56,8 +60,12 @@ public class PlayerAttack : MonoBehaviour
 		if (lastAttackTime == 0)
 			if (lastAttackDownTime == 0)
 				animator.SetTrigger("isAttackingDown");
+			else if (attackForwardCombo == 1)
+				animator.SetTrigger("isAttacking1");
+			else if (attackForwardCombo == 2)
+				animator.SetTrigger("isAttacking2");
 			else
-				animator.SetTrigger("isAttacking");
+				animator.SetTrigger("isAttacking3");
 	}
 
 
@@ -67,7 +75,9 @@ public class PlayerAttack : MonoBehaviour
 		lastAttackTime += Time.deltaTime;
 		lastAttackDownTime += Time.deltaTime;
 
-		attackCooldown -= Time.deltaTime;
+		attackAnyCooldown -= Time.deltaTime;
+		attackForwardCooldown -= Time.deltaTime;
+		attackDownCooldown -= Time.deltaTime;
 	}
 
 	private void updateInputs()
@@ -84,6 +94,11 @@ public class PlayerAttack : MonoBehaviour
 			+ rigidBody.velocity * data.attack.hitboxOffsetScale;
 	}
 
+	public void attackForwardReset()
+	{
+		attackAnyCooldown = 0;
+		attackForwardCooldown = 0;
+	}
 	public void attackForwardInstantiate()
 	{
 		movement.isAttacking = false;
@@ -102,7 +117,10 @@ public class PlayerAttack : MonoBehaviour
 		movement.lastAttackDown = false;
 
 		lastAttackTime = 0;
-		attackCooldown = data.attack.cooldown;
+		lastAttackInputTime = float.PositiveInfinity;
+		attackAnyCooldown = attackForwardCooldown = data.attack.forwardCooldown;
+
+		attackForwardCombo++;
 	}
 	
 	private void attackDownHitCallback(AttackController attackData)
@@ -133,13 +151,22 @@ public class PlayerAttack : MonoBehaviour
 
 		lastAttackTime = 0;
 		lastAttackDownTime = 0;
-		attackCooldown = data.attack.cooldown;
+		lastAttackInputTime = float.PositiveInfinity;
+		attackAnyCooldown = attackDownCooldown = data.attack.downCooldown;
 	}
 
-	private bool canAttack()
+	private bool canAttackAny()
 	{
-		return attackCooldown <= 0 && lastAttackInputTime <= data.attack.inputBufferTime
+		return attackAnyCooldown <= 0 && lastAttackInputTime <= data.attack.inputBufferTime
 			&& !movement.isDistressed && !movement.isAttacking;
+	}
+	private bool canAttackDown()
+	{
+		return attackDownCooldown <= 0;
+	}
+	private bool canAttackForward()
+	{
+		return attackForwardCooldown <= 0;
 	}
 	private void updateAttack()
 	{
@@ -150,12 +177,21 @@ public class PlayerAttack : MonoBehaviour
 				currentAttackData.halt();
 		}
 
-		if (canAttack())
+		if (movement.isDistressed || lastAttackTime > data.attack.comboResetTime)
+			attackForwardCombo = 0;
+
+		if (canAttackAny())
 		{
 			if (isAttackDownInput)
-				attackDown();
+			{
+				if (canAttackDown())
+					attackDown();
+			}
 			else
-				attackForward();
+			{
+				if (canAttackForward())
+					attackForward();
+			}
 		}
 	}
 }
