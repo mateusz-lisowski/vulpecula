@@ -37,6 +37,9 @@ public class EnemyMovement : MonoBehaviour
 	private AttackController hitContact = null;
 	private Vector2 moveInput;
 
+	private int currentFrame = 0;
+	private int lastTurnFrame = -1;
+
 
 	private void Awake()
 	{
@@ -86,6 +89,8 @@ public class EnemyMovement : MonoBehaviour
 	// handle run
 	void FixedUpdate()
     {
+		currentFrame++;
+
 		updateRun();
 	}
 
@@ -123,27 +128,24 @@ public class EnemyMovement : MonoBehaviour
 		isProvoked = attackCheck.IsTouchingLayers(data.attack.provokeLayers);
 
 		if (isFacingWall && isFacingSlope())
-		{
 			isFacingWall = false;
-		}
 
 		// disable registering wall/fall collision immediately after turning because wallCheck and
 		// fallCheck hitboxes need time to get updated
-		if (lastTurnTime < 0.1f)
+		if (lastTurnFrame >= currentFrame - 1)
 		{
 			isFacingWall = false;
 			isNoGroundAhead = false;
 		}
 
 		if (isFacingWall)
-		{
 			isMoving = false;
-		}
 	}
 
 	private void Flip()
 	{
 		lastTurnTime = 0;
+		lastTurnFrame = currentFrame;
 
 		isFacingRight = !isFacingRight;
 		transform.Rotate(0, 180, 0);
