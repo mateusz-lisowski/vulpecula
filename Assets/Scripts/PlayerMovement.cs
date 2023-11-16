@@ -55,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
     private Collider2D groundCheck;
     private Collider2D wallCheck;
     private Collider2D passingCheck;
+    private Collider2D withinCheck;
 
 	private LayerMask playerLayer;
 	private LayerMask playerInvulnerableLayer;
@@ -82,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
 		passingCheck = transform.Find("Passing Check").GetComponent<Collider2D>();
+		withinCheck = transform.Find("Within Check").GetComponent<Collider2D>();
 
 		playerLayer = LayerMask.NameToLayer("Player");
 		playerInvulnerableLayer = LayerMask.NameToLayer("Player Invulnerable");
@@ -201,8 +203,8 @@ public class PlayerMovement : MonoBehaviour
 		isGrounded = groundCheck.IsTouchingLayers(currentGroundLayers);
 		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
 		isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
-		canWallJump = rigidBody.IsTouchingLayers(data.wall.canJumpLayer);
-		canGroundDrop = groundCheck.IsTouchingLayers(data.detection.canDropLayer);
+		canWallJump = withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
+		canGroundDrop = withinCheck.IsTouchingLayers(data.detection.canDropLayer);
 		canTakeGroundDamage = groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
