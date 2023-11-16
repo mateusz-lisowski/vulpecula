@@ -27,9 +27,9 @@ public class TilemapHelper
 					triggeredCoords.Add(coord);
 			}
 
-		if (triggeredCoords.Count == 0)
-			Debug.LogWarning("No tiles to trigger found within bounds: "
-				+ bounds.min + " to " + bounds.max);
+		//if (triggeredCoords.Count == 0)
+		//	Debug.LogWarning("No tiles to trigger found within bounds: "
+		//		+ bounds.min + " to " + bounds.max);
 
 		return triggeredCoords;
 	}
