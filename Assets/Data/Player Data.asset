@@ -44,6 +44,7 @@ MonoBehaviour:
     maxSpeed: 7
     acceleration: 2
     deceleration: 4
+    groundStickiness: 10
     accelerationForce: 14.285714
     decelerationForce: 28.571428
   jump:

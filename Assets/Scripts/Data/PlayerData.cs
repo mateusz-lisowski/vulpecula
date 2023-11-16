@@ -71,6 +71,8 @@ public class PlayerData : ScriptableObject
 		public float acceleration;
 		[Tooltip("Deceleration rate (0 = none, maxSpeed = instant)")]
 		public float deceleration;
+		[Tooltip("Stickiness towards ground (to prevent bouncing on slopes)")]
+		public float groundStickiness;
 
 		[Space(5)]
 

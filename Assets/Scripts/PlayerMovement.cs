@@ -9,6 +9,8 @@ class HitData
 
 public class PlayerMovement : MonoBehaviour
 {
+	const float minVerticalMovementVelocity = 0.01f;
+
 	public PlayerData data;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
@@ -122,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
 
 		animator.SetBool("isGrounded", isGrounded);
 		animator.SetBool("isDistressed", isDistressed);
-		animator.SetBool("isFalling", rigidBody.velocity.y < 0);
+		animator.SetBool("isFalling", isFalling);
 		animator.SetBool("isMoving", isMoving);
 		animator.SetBool("isWallHolding", lastWallHoldingTime == 0);
 	}
@@ -199,10 +201,23 @@ public class PlayerMovement : MonoBehaviour
 		hitContact.isVertical = contact.isVertical;
 		hitContact.right = contact.transform.right;
 	}
+	private bool isGroundedFalsePositive()
+	{
+		if (isJumping && !isFalling)
+			return true;
+
+		if (!passingLayersDisabled && isPassing)
+		{
+			if (!isOnSlope && rigidBody.velocity.y < -minVerticalMovementVelocity)
+				return true;
+		}
+
+		return false;
+	}
 	private void updateCollisions()
     {
 		isGrounded = groundCheck.IsTouchingLayers(currentGroundLayers);
-		isOnSlope = groundCheck.IsTouchingLayers(data.run.slopeLayer) && isGrounded;
+		isOnSlope = groundCheck.IsTouchingLayers(data.run.slopeLayer);
 		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
 		isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
 		canWallJump = withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
@@ -216,10 +231,8 @@ public class PlayerMovement : MonoBehaviour
 			isFacingWall = false;
 		}
 
-		if ((isJumping && !isFalling) || (isFalling && rigidBody.velocity.y < -0.01f))
-		{
+		if (isGrounded && isGroundedFalsePositive())
 			isGrounded = false;
-		}
 
 		if (isFacingWall)
 		{
@@ -359,7 +372,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isDashing)
 			if (dashCutInput || lastDashTime >= data.dash.time
-				|| isFacingWall || Mathf.Abs(rigidBody.velocity.y) > 0.01f)
+				|| isFacingWall || Mathf.Abs(rigidBody.velocity.y) > minVerticalMovementVelocity)
 			{
 				isDashing = false;
 			}
@@ -437,7 +450,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			rigidBody.gravityScale = data.gravity.scale * data.jump.hangingGravityMultiplier;
 		}
-		else if (isOnSlope && rigidBody.velocity.y < 0.01f)
+		else if (isGrounded && isOnSlope)
 		{
 			rigidBody.gravityScale = 0;
 		}
@@ -450,7 +463,8 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void updateJump()
 	{
-		if (!isGrounded && lastWallHoldingTime != 0 && rigidBody.velocity.y <= 0)
+		if (!isGrounded && lastWallHoldingTime != 0 
+			&& rigidBody.velocity.y <= minVerticalMovementVelocity)
 		{
 			isFalling = true;
 		}
@@ -576,6 +590,10 @@ public class PlayerMovement : MonoBehaviour
 
 		float speedDif = targetSpeed - rigidBody.velocity.x;
 		float movement = speedDif * accelRate;
+
+		if (isGrounded && rigidBody.velocity.y > 0)
+			rigidBody.AddForce(data.run.groundStickiness * rigidBody.velocity.y * Vector2.down, 
+				ForceMode2D.Force);
 
 		rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
 	}
