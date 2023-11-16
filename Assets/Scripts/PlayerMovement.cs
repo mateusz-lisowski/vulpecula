@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isInvulnerable { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isLastFacedWallRight { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isOnSlope { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isPassing { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
@@ -201,6 +202,7 @@ public class PlayerMovement : MonoBehaviour
 	private void updateCollisions()
     {
 		isGrounded = groundCheck.IsTouchingLayers(currentGroundLayers);
+		isOnSlope = groundCheck.IsTouchingLayers(data.run.slopeLayer) && isGrounded;
 		isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
 		isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
 		canWallJump = withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
@@ -434,6 +436,10 @@ public class PlayerMovement : MonoBehaviour
 		else if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
 		{
 			rigidBody.gravityScale = data.gravity.scale * data.jump.hangingGravityMultiplier;
+		}
+		else if (isOnSlope && rigidBody.velocity.y < 0.01f)
+		{
+			rigidBody.gravityScale = 0;
 		}
 		else if (isFalling)
 		{

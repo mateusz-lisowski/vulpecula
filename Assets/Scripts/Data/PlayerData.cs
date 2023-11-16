@@ -63,6 +63,8 @@ public class PlayerData : ScriptableObject
 	{
 		[Tooltip("Layers that can be run on")]
 		public LayerMask groundLayers;
+		[Tooltip("Layer detecting whether ground is a slope")]
+		public LayerMask slopeLayer;
 		[Tooltip("Maximum running speed")]
 		public float maxSpeed;
 		[Tooltip("Acceleration rate (0 = none, maxSpeed = instant)")]
