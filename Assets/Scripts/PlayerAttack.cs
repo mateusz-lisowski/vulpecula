@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -21,6 +22,8 @@ public class PlayerAttack : MonoBehaviour
 	private Transform attackTransform;
 	private Transform attackForwardTransform;
 	private Transform attackDownTransform;
+
+	private AttackController currentAttackData = null;
 
 
 	private void Awake()
@@ -87,7 +90,8 @@ public class PlayerAttack : MonoBehaviour
 
 		GameObject currentAttack = Instantiate(data.attack.attackForwardPrefab, 
 			attackForwardTransform.position, attackForwardTransform.rotation);
-		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
+		
+		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
 		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
@@ -95,6 +99,7 @@ public class PlayerAttack : MonoBehaviour
 	private void attackForward()
 	{
 		movement.isAttacking = true;
+		movement.lastAttackDown = false;
 
 		lastAttackTime = 0;
 		attackCooldown = data.attack.cooldown;
@@ -112,16 +117,19 @@ public class PlayerAttack : MonoBehaviour
 		GameObject currentAttack = Instantiate(data.attack.attackDownPrefab, 
 			attackDownTransform.position, attackDownTransform.rotation);
 
-		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
+		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();
+
+		currentAttack.transform.parent = transform;
 	}
 	private void attackDown()
 	{
 		movement.isAttacking = true;
+		movement.lastAttackDown = true;
 
 		lastAttackTime = 0;
 		lastAttackDownTime = 0;
@@ -136,7 +144,11 @@ public class PlayerAttack : MonoBehaviour
 	private void updateAttack()
 	{
 		if (movement.isDistressed)
+		{
 			movement.isAttacking = false;
+			if (currentAttackData != null)
+				currentAttackData.halt();
+		}
 
 		if (canAttack())
 		{

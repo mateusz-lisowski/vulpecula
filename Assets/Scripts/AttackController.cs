@@ -21,12 +21,10 @@ public class AttackController : MonoBehaviour
 		else if (data is EnemyData)
 			hitLayers = ((EnemyData)data).attack.hitLayers;
 	}
-
 	public void setVertical(bool val = true)
 	{
 		isVertical = val;
 	}
-
 	public void setHitboxSize(Vector2 size)
 	{
 		hitbox.transform.localScale = size;
@@ -41,7 +39,6 @@ public class AttackController : MonoBehaviour
 				capsuleHitbox.direction = CapsuleDirection2D.Vertical;
 		}
 	}
-
 	public void setHitCallback(Action<AttackController> callback)
 	{
 		hitCallback = callback;
@@ -53,8 +50,14 @@ public class AttackController : MonoBehaviour
 		hitbox = transform.Find("Hitbox").GetComponent<Collider2D>();
 	}
 
+	void Update()
+	{
+		//transform.position += new Vector3(velocity.x * Time.deltaTime, 0, 0);	
+	}
+
 	public void resolve()
 	{
+		transform.parent = null;
 		hitboxBounds = hitbox.bounds;
 
 		ContactFilter2D filter = new ContactFilter2D().NoFilter();
@@ -70,5 +73,10 @@ public class AttackController : MonoBehaviour
 
 		foreach (Collider2D contact in contacts)
 			contact.SendMessageUpwards("hit", this);
+	}
+
+	public void halt()
+	{
+		Destroy(gameObject);
 	}
 }

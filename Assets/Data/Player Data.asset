@@ -15,14 +15,14 @@ MonoBehaviour:
   gravity:
     fallMultiplier: 1.2
     maxFallSpeed: 20
-    strength: -33.333332
-    scale: 1.111111
+    strength: -22.71605
+    scale: 0.7572016
   hurt:
     invulnerabilityTime: 1.2
     distressTime: 0.5
     knockbackMaxSpeed: 5
     knockbackHeightScale: 0.7
-    knockbackForce: 11.904761
+    knockbackForce: 8.112875
   attack:
     hitLayers:
       serializedVersion: 2
@@ -31,7 +31,7 @@ MonoBehaviour:
     attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
     cooldown: 0.5
     attackDownBounceHeight: 2.5
-    attackDownBounceForce: 12.909945
+    attackDownBounceForce: 10.657403
     hitboxOffsetScale: 0
     inputBufferTime: 0.05
   run:
@@ -48,11 +48,11 @@ MonoBehaviour:
     accelerationForce: 14.285714
     decelerationForce: 28.571428
   jump:
-    maxHeight: 1.5
-    timeToApex: 0.3
+    maxHeight: 2.3
+    timeToApex: 0.45
     cooldown: 0.1
     jumpsCount: 2
-    force: 10
+    force: 10.222222
     jumpCutGravityMultiplier: 2
     hangingVelocityThreshold: 1
     hangingGravityMultiplier: 0.8

@@ -78,7 +78,8 @@ public class PlayerMovement : MonoBehaviour
 	private bool jumpCutInput = false;
 	private bool dashCutInput = false;
 
-	[HideInInspector] public bool registeredDownHitJump;
+	[HideInInspector] public bool registeredDownHitJump = false;
+	[HideInInspector] public bool lastAttackDown = false;
 
 
 	private void Awake()
@@ -144,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
 		if (!isDashing)
 		{
 			updateRun();
+			updateFall();
 
 			if (lastWallHoldingTime == 0)
 				updateWallSlide();
@@ -604,7 +606,7 @@ public class PlayerMovement : MonoBehaviour
 		if (isDistressed)
 			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
 
-		if (isAttacking && isGrounded)
+		if (isAttacking && isGrounded && !isDashing)
 			targetSpeed = 0;
 
 		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
@@ -617,12 +619,20 @@ public class PlayerMovement : MonoBehaviour
 
 		float speedDif = targetSpeed - rigidBody.velocity.x;
 		float movement = speedDif * accelRate;
+		
+		rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
+	}
 
+	private void updateFall()
+	{
 		if (isGrounded && rigidBody.velocity.y > 0)
-			rigidBody.AddForce(data.run.groundStickiness * rigidBody.velocity.y * Vector2.down, 
+			rigidBody.AddForce(data.run.groundStickiness * -rigidBody.velocity.y * Vector2.up,
 				ForceMode2D.Force);
 
-		rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
+		if (isFalling && isAttacking && lastAttackDown)
+			rigidBody.AddForce(30f * -rigidBody.velocity.y * Vector2.up,
+					ForceMode2D.Force);
+
 	}
 
 	private void updateWallSlide()
