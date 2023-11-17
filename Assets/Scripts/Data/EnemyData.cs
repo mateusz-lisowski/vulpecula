@@ -25,6 +25,8 @@ public class EnemyData : ScriptableObject
 
 		[Space(5)]
 
+		[Tooltip("Calculated maximum reachable height of a knockback")]
+		[field: SerializeField, ReadOnly] public float knockbackHeight;
 		[Tooltip("Calculated hit knockback force")]
 		[field: SerializeField, ReadOnly] public float knockbackForce;
 	}
@@ -74,6 +76,7 @@ public class EnemyData : ScriptableObject
 		gravity.strength = Physics2D.gravity.y;
 
 		hurt.knockbackForce = -gravity.strength * hurt.distressTime / (2 * hurt.knockbackHeightScale);
+		hurt.knockbackHeight = (hurt.knockbackForce * hurt.knockbackForce) / (2 * -gravity.strength);
 
 		gravity.scale = gravity.strength / Physics2D.gravity.y;
 
