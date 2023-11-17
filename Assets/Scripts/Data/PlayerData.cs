@@ -44,15 +44,17 @@ public class PlayerData : ScriptableObject
 		public GameObject attackForward1Prefab;
 		[Tooltip("Object to instantiate on a forward attack 2")]
 		public GameObject attackForward2Prefab;
-		[Tooltip("Object to instantiate on a forward attack 3")]
+		[Tooltip("Object to instantiate on a forward attack 3 (Strong attack)")]
 		public GameObject attackForward3Prefab;
+		[Tooltip("Object to instantiate on a forward attack while in the air")]
+		public GameObject attackForwardAirPrefab;
 		[Tooltip("Object to instantiate on a down attack")]
 		public GameObject attackDownPrefab;
 		
 		[Space(5)]
 		[Tooltip("Maximum time between consecutive forward attacks in a combo")]
 		public float comboResetTime;
-		[Tooltip("Minimum time between two consecutive forward attacks")]
+		[Tooltip("Minimum time between two consecutive forward attacks (non-reset)")]
 		public float forwardCooldown;
 		[Tooltip("Minimum time between two consecutive down attacks")]
 		public float downCooldown;
@@ -72,8 +74,6 @@ public class PlayerData : ScriptableObject
 		[field: SerializeField, ReadOnly] public float attackDownBounceForce;
 
 		[Space(10)]
-		[Tooltip("Offset of attack hitboxes based on the current velocity")]
-		public float hitboxOffsetScale;
 		[Tooltip("Time within which too early attack will still be performed")]
 		[Range(0f, 0.5f)] public float inputBufferTime; 
 	}

@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Attack-3-Animation
+  m_Name: attack-1-Animation
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: d69352ad98910ab458da783152d85d07, type: 3}
+      value: {fileID: 21300000, guid: 109cc25909601de49857aab1f4174ae1, type: 3}
     - time: 0.083333336
-      value: {fileID: 21300000, guid: dbb3616d525304a429cb44d12a20456a, type: 3}
+      value: {fileID: 21300000, guid: ec88d086b7192a6488c82778cb62ee61, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: a550a098222888245b8c4cfa8763384e, type: 3}
+      value: {fileID: 21300000, guid: 59abcc8b0c4fc4b4bbed33be0ee2a885, type: 3}
     - time: 0.25
-      value: {fileID: 21300000, guid: 78429c972a5ce8345a57875108f3e56c, type: 3}
+      value: {fileID: 21300000, guid: 6dab5d00e52518248b7cb25234faf592, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,10 +50,10 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: d69352ad98910ab458da783152d85d07, type: 3}
-    - {fileID: 21300000, guid: dbb3616d525304a429cb44d12a20456a, type: 3}
-    - {fileID: 21300000, guid: a550a098222888245b8c4cfa8763384e, type: 3}
-    - {fileID: 21300000, guid: 78429c972a5ce8345a57875108f3e56c, type: 3}
+    - {fileID: 21300000, guid: 109cc25909601de49857aab1f4174ae1, type: 3}
+    - {fileID: 21300000, guid: ec88d086b7192a6488c82778cb62ee61, type: 3}
+    - {fileID: 21300000, guid: 59abcc8b0c4fc4b4bbed33be0ee2a885, type: 3}
+    - {fileID: 21300000, guid: 6dab5d00e52518248b7cb25234faf592, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -86,8 +86,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.33333334
-    functionName: attackFinish
+  - time: 0.25
+    functionName: attackForwardReset
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

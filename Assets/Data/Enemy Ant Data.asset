@@ -16,10 +16,11 @@ MonoBehaviour:
     strength: -30
     scale: 1
   hurt:
-    invulnerabilityTime: 0.5
+    invulnerabilityTime: 0
     distressTime: 0.2
     knockbackMaxSpeed: 2
     knockbackHeightScale: 0.9
+    knockbackHeight: 0.18518521
     knockbackForce: 3.3333335
   attack:
     provokeLayers:

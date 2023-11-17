@@ -618,7 +618,7 @@ public class PlayerMovement : MonoBehaviour
 			accelRate *= data.jump.hangingSpeedMultiplier;
 		}
 
-		if (isAttacking && isGrounded && !isDashing)
+		if (isAttacking && !lastAttackDown && isGrounded && !isDashing)
 		{
 			targetSpeed = data.attack.forwardSpeed * (isFacingRight ? 1 : -1);
 			accelRate = data.attack.forwardAcceleration;
