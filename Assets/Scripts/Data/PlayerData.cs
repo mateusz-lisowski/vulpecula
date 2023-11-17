@@ -40,8 +40,12 @@ public class PlayerData : ScriptableObject
 	{
 		[Tooltip("Layers that can be hit by an attack")]
 		public LayerMask hitLayers;
-		[Tooltip("Object to instantiate on a forward attack")]
-		public GameObject attackForwardPrefab;
+		[Tooltip("Object to instantiate on a forward attack 1")]
+		public GameObject attackForward1Prefab;
+		[Tooltip("Object to instantiate on a forward attack 2")]
+		public GameObject attackForward2Prefab;
+		[Tooltip("Object to instantiate on a forward attack 3")]
+		public GameObject attackForward3Prefab;
 		[Tooltip("Object to instantiate on a down attack")]
 		public GameObject attackDownPrefab;
 		

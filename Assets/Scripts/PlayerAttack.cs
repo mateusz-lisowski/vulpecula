@@ -25,6 +25,7 @@ public class PlayerAttack : MonoBehaviour
 
 	private Transform attackTransform;
 	private Transform attackForwardTransform;
+	private Transform attackForwardStrongTransform;
 	private Transform attackDownTransform;
 
 	private AttackController currentAttackData = null;
@@ -40,6 +41,7 @@ public class PlayerAttack : MonoBehaviour
 
 		attackTransform = transform.Find("Attack");
 		attackForwardTransform = attackTransform.Find("Forward");
+		attackForwardStrongTransform = attackTransform.Find("Forward Strong");
 		attackDownTransform = attackTransform.Find("Down");
 
 		lastAttackInputTime = float.PositiveInfinity;
@@ -108,14 +110,20 @@ public class PlayerAttack : MonoBehaviour
 	}
 	public void attackForwardInstantiate()
 	{
-		GameObject currentAttack = Instantiate(data.attack.attackForwardPrefab, 
-			attackForwardTransform.position, attackForwardTransform.rotation);
+		bool isStrong = attackForwardCombo >= 3;
+		Transform attackTransform = isStrong ? attackForwardStrongTransform : attackForwardTransform;
+
+		GameObject currentAttack = Instantiate(
+			isStrong ? data.attack.attackForward3Prefab 
+			: attackForwardCombo == 2 ? data.attack.attackForward2Prefab
+			: data.attack.attackForward1Prefab,
+			attackTransform.position, attackTransform.rotation);
 		
 		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
 		currentAttackData.setVelocity(new Vector2(rigidBody.velocity.x, 0));
-		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
+		currentAttackData.setHitboxSize(attackTransform.localScale);
 
 		currentAttack.transform.parent = transform;
 	}
