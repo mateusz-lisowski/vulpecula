@@ -540,19 +540,23 @@ public class PlayerMovement : MonoBehaviour
 	{
 		passingLayersDisabled = val;
 		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
+		int maskInv = Physics2D.GetLayerCollisionMask(playerInvulnerableLayer);
 
 		if (!passingLayersDisabled)
 		{
 			mask |= data.platformPassing.layers;
+			maskInv |= data.platformPassing.layers;
 			currentGroundLayers |= (data.run.groundLayers & data.platformPassing.layers);
 		}
 		else
 		{
 			mask &= ~data.platformPassing.layers;
+			maskInv &= ~data.platformPassing.layers;
 			currentGroundLayers &= ~data.platformPassing.layers;
 		}
 
 		Physics2D.SetLayerCollisionMask(playerLayer, mask);
+		Physics2D.SetLayerCollisionMask(playerInvulnerableLayer, maskInv);
 	}
 	private void updatePass()
 	{
