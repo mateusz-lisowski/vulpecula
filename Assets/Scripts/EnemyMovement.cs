@@ -199,7 +199,7 @@ public class EnemyMovement : MonoBehaviour
 		setDistressDirection();
 		setInvulnerability(true);
 		StartCoroutine(Effects.instance.flashing.run(
-			spriteRenderer, data.hurt.invulnerabilityTime));
+			spriteRenderer, data.hurt.invulnerabilityTime, burst: true));
 
 		float force = data.hurt.knockbackForce;
 		if (force > rigidBody.velocity.y)

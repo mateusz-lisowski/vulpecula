@@ -22,6 +22,7 @@ MonoBehaviour:
     distressTime: 0.5
     knockbackMaxSpeed: 5
     knockbackHeightScale: 0.7
+    knockbackHeight: 1.4487277
     knockbackForce: 8.112875
   attack:
     hitLayers:
@@ -31,7 +32,10 @@ MonoBehaviour:
     attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
     comboResetTime: 0.5
     forwardCooldown: 0.8
-    downCooldown: 1
+    downCooldown: 0.8
+    forwardSpeed: 3
+    forwardAcceleration: 6
+    attackDownSlowdown: 10
     attackDownBounceHeight: 2.5
     attackDownBounceForce: 10.657403
     hitboxOffsetScale: 0

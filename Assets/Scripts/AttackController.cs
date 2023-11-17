@@ -13,6 +13,8 @@ public class AttackController : MonoBehaviour
 	private Action<AttackController> hitCallback;
 	private LayerMask hitLayers;
 
+	private Vector2 velocity;
+
 
 	public void setAttack(ScriptableObject data)
 	{
@@ -20,6 +22,10 @@ public class AttackController : MonoBehaviour
 			hitLayers = ((PlayerData)data).attack.hitLayers;
 		else if (data is EnemyData)
 			hitLayers = ((EnemyData)data).attack.hitLayers;
+	}
+	public void setVelocity(Vector2 vel)
+	{
+		velocity = vel;
 	}
 	public void setVertical(bool val = true)
 	{
@@ -50,15 +56,13 @@ public class AttackController : MonoBehaviour
 		hitbox = transform.Find("Hitbox").GetComponent<Collider2D>();
 	}
 
-	void Update()
-	{
-		//transform.position += new Vector3(velocity.x * Time.deltaTime, 0, 0);	
-	}
-
 	public void resolve()
 	{
 		transform.parent = null;
 		hitboxBounds = hitbox.bounds;
+
+		if (velocity != Vector2.zero)
+			StartCoroutine(Effects.instance.frameMove.run(transform, velocity, 2f));
 
 		ContactFilter2D filter = new ContactFilter2D().NoFilter();
 		filter.SetLayerMask(hitLayers);

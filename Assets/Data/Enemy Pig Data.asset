@@ -16,7 +16,7 @@ MonoBehaviour:
     strength: -30
     scale: 1
   hurt:
-    invulnerabilityTime: 0.3
+    invulnerabilityTime: 0
     distressTime: 0.3
     knockbackMaxSpeed: 4
     knockbackHeightScale: 0.9

@@ -94,22 +94,30 @@ public class PlayerAttack : MonoBehaviour
 			+ rigidBody.velocity * data.attack.hitboxOffsetScale;
 	}
 
+	public void attackFinish()
+	{
+		movement.isAttacking = false;
+	}
+
 	public void attackForwardReset()
 	{
+		attackFinish();
+		
 		attackAnyCooldown = 0;
 		attackForwardCooldown = 0;
 	}
 	public void attackForwardInstantiate()
 	{
-		movement.isAttacking = false;
-
 		GameObject currentAttack = Instantiate(data.attack.attackForwardPrefab, 
 			attackForwardTransform.position, attackForwardTransform.rotation);
 		
 		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
+		currentAttackData.setVelocity(new Vector2(rigidBody.velocity.x, 0));
 		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
+
+		currentAttack.transform.parent = transform;
 	}
 	private void attackForward()
 	{
@@ -130,8 +138,6 @@ public class PlayerAttack : MonoBehaviour
 	}
 	public void attackDownInstantiate()
 	{
-		movement.isAttacking = false;
-
 		GameObject currentAttack = Instantiate(data.attack.attackDownPrefab, 
 			attackDownTransform.position, attackDownTransform.rotation);
 

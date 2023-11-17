@@ -51,9 +51,17 @@ public class PlayerData : ScriptableObject
 		[Tooltip("Minimum time between two consecutive forward attacks")]
 		public float forwardCooldown;
 		[Tooltip("Minimum time between two consecutive down attacks")]
-		public float downCooldown; 
+		public float downCooldown;
 
 		[Space(10)]
+		[Tooltip("Maximum moving speed while forward attacking")]
+		public float forwardSpeed;
+		[Tooltip("Acceleration rate of forward attack (0 = none, forwardSpeed = instant)")]
+		public float forwardAcceleration;
+
+		[Space(10)]
+		[Tooltip("Vertical slowdown while down attacking")]
+		public float attackDownSlowdown;
 		[Tooltip("Maximum reachable height of a down hit bounce")]
 		public float attackDownBounceHeight;
 		[Tooltip("Calculated down hit bounce force")]

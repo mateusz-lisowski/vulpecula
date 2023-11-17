@@ -313,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
 		setDistressDirection();
 		setInvulnerability(true);
 		StartCoroutine(Effects.instance.flashing.run(
-			spriteRenderer, data.hurt.invulnerabilityTime));
+			spriteRenderer, data.hurt.invulnerabilityTime, burst: true));
 
 		float force = data.hurt.knockbackForce;
 		if (force > rigidBody.velocity.y)
@@ -606,15 +606,18 @@ public class PlayerMovement : MonoBehaviour
 		if (isDistressed)
 			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
 
-		if (isAttacking && isGrounded && !isDashing)
-			targetSpeed = 0;
-
 		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
 
 		if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
 		{
 			targetSpeed *= data.jump.hangingSpeedMultiplier;
 			accelRate *= data.jump.hangingSpeedMultiplier;
+		}
+
+		if (isAttacking && isGrounded && !isDashing)
+		{
+			targetSpeed = data.attack.forwardSpeed * (isFacingRight ? 1 : -1);
+			accelRate = data.attack.forwardAcceleration;
 		}
 
 		float speedDif = targetSpeed - rigidBody.velocity.x;
@@ -630,7 +633,7 @@ public class PlayerMovement : MonoBehaviour
 				ForceMode2D.Force);
 
 		if (isFalling && isAttacking && lastAttackDown)
-			rigidBody.AddForce(30f * -rigidBody.velocity.y * Vector2.up,
+			rigidBody.AddForce(data.attack.attackDownSlowdown * -rigidBody.velocity.y * Vector2.up,
 					ForceMode2D.Force);
 
 	}

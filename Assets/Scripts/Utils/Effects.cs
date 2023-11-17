@@ -11,6 +11,7 @@ public class Effects : ScriptableObject
 	public static Effects instance;
 	
 	public Flashing flashing;
+	public FrameMove frameMove;
 	public Fade fade;
 
 
@@ -20,21 +21,58 @@ public class Effects : ScriptableObject
 		public float frequency;
 		[Tooltip("Alpha of an object when flasing")]
 		[Range(0f, 1f)] public float alpha;
+		[Tooltip("Material of an object on initial flash")]
+		public Material burstMaterial;
+		[Tooltip("Color of an object on initial flash")]
+		public Color burstColor;
 
-		public IEnumerator run(SpriteRenderer target, float time)
+		public IEnumerator run(SpriteRenderer target, float time, bool burst = false)
 		{
 			Color color = target.color;
 
 			int times = (int)Mathf.Round(time * frequency);
 			float waitTime = 0.5f / frequency;
 
+			if (burst && times == 0)
+				times = 1;
+
 			for (int i = 0; i < times; i++)
 			{
-				target.color = new Color(color.r, color.g, color.b, alpha);
-				yield return new WaitForSeconds(waitTime);
+				if (i == 0 && burst)
+				{
+					Material material = target.material;
+					target.material = burstMaterial;
+					target.color = burstColor;
+					yield return new WaitForSeconds(waitTime);
+					target.material = material;
+				}
+				else
+				{
+					target.color = new Color(color.r, color.g, color.b, alpha);
+					yield return new WaitForSeconds(waitTime);
+				}
 
 				target.color = color;
 				yield return new WaitForSeconds(waitTime);
+			}
+		}
+	}
+
+	[Serializable] public struct FrameMove
+	{
+		[Tooltip("Number of frames per second")]
+		public float frameRate;
+
+		public IEnumerator run(Transform target, Vector3 speed, float time)
+		{
+			int times = (int)Mathf.Round(time * frameRate);
+			float waitTime = 1f / frameRate;
+			Vector3 frameSpeed = speed / frameRate;
+
+			for (int i = 0; i < times; i++)
+			{
+				yield return new WaitForSeconds(waitTime);
+				target.position += frameSpeed;
 			}
 		}
 	}
