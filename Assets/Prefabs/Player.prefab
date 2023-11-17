@@ -745,6 +745,7 @@ MonoBehaviour:
   <jumpCooldown>k__BackingField: 0
   <dashCooldown>k__BackingField: 0
   registeredDownHitJump: 0
+  lastAttackDown: 0
 --- !u!114 &7745948289286802684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,7 +762,10 @@ MonoBehaviour:
   <lastAttackInputTime>k__BackingField: 0
   <lastAttackTime>k__BackingField: 0
   <lastAttackDownTime>k__BackingField: 0
-  <attackCooldown>k__BackingField: 0
+  <attackAnyCooldown>k__BackingField: 0
+  <attackForwardCooldown>k__BackingField: 0
+  <attackDownCooldown>k__BackingField: 0
+  <attackForwardCombo>k__BackingField: 0
 --- !u!95 &5553025889998909665
 Animator:
   serializedVersion: 5
