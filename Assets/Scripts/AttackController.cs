@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AttackController : MonoBehaviour
 {
 	[field: SerializeField, ReadOnly] public bool isVertical { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public bool hitBouncy { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public Bounds hitboxBounds { get; private set; }
 
@@ -71,6 +74,8 @@ public class AttackController : MonoBehaviour
 		List<Collider2D> contacts = new List<Collider2D>();
 		if (hitbox.OverlapCollider(filter, contacts) == 0)
 			return;
+
+		hitBouncy = contacts.Any(c => c.tag == "BreakBounce");
 
 		if (hitCallback != null)
 			hitCallback(this);

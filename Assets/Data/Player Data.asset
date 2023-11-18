@@ -40,7 +40,9 @@ MonoBehaviour:
     forwardAcceleration: 20
     attackDownSlowdown: 10
     attackDownBounceHeight: 2.5
+    attackDownHighBounceHeight: 4
     attackDownBounceForce: 10.657403
+    attackDownHighBounceForce: 13.480667
     inputBufferTime: 0.1
   run:
     groundLayers:

@@ -159,6 +159,9 @@ public class PlayerAttack : MonoBehaviour
 
 	private void attackDownHitCallback(AttackController attackData)
 	{
+		if (attackData.hitBouncy)
+			movement.registeredDownHitHighJump = true;
+
 		movement.registeredDownHitJump = true;
 		attackData.setHitCallback(null);
 	}

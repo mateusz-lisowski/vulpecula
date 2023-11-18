@@ -79,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
 	private bool dashCutInput = false;
 
 	[HideInInspector] public bool registeredDownHitJump = false;
+	[HideInInspector] public bool registeredDownHitHighJump = false;
 	[HideInInspector] public bool lastAttackDown = false;
 
 
@@ -441,7 +442,13 @@ public class PlayerMovement : MonoBehaviour
 		currentJumpCuttable = !registeredDownHitJump;
 		lastJumpFrame = currentFrame;
 
-		float force = !registeredDownHitJump ? data.jump.force : data.attack.attackDownBounceForce;
+		float force = data.jump.force;
+		if (registeredDownHitJump)
+			if (registeredDownHitHighJump)
+				force = data.attack.attackDownHighBounceForce;
+			else
+				force = data.attack.attackDownBounceForce;
+
 		if (force > rigidBody.velocity.y)
 		{
 			force -= rigidBody.velocity.y;
@@ -509,6 +516,7 @@ public class PlayerMovement : MonoBehaviour
 			jump();
 			if (!registeredDownHitJump)
 				jumpsLeft--;
+			registeredDownHitHighJump = false;
 			registeredDownHitJump = false;
 		}
 

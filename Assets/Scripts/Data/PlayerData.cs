@@ -70,8 +70,12 @@ public class PlayerData : ScriptableObject
 		public float attackDownSlowdown;
 		[Tooltip("Maximum reachable height of a down hit bounce")]
 		public float attackDownBounceHeight;
+		[Tooltip("Maximum reachable height of a down hit high bounce")]
+		public float attackDownHighBounceHeight;
 		[Tooltip("Calculated down hit bounce force")]
 		[field: SerializeField, ReadOnly] public float attackDownBounceForce;
+		[Tooltip("Calculated down hit high bounce force")]
+		[field: SerializeField, ReadOnly] public float attackDownHighBounceForce;
 
 		[Space(10)]
 		[Tooltip("Time within which too early attack will still be performed")]
@@ -220,7 +224,9 @@ public class PlayerData : ScriptableObject
 	{
 		gravity.strength = -(2 * jump.maxHeight) / (jump.timeToApex * jump.timeToApex);
 		jump.force = -gravity.strength * jump.timeToApex;
+		
 		attack.attackDownBounceForce = Mathf.Sqrt(2 * -gravity.strength * attack.attackDownBounceHeight);
+		attack.attackDownHighBounceForce = Mathf.Sqrt(2 * -gravity.strength * attack.attackDownHighBounceHeight);
 
 		hurt.knockbackForce = -gravity.strength * hurt.distressTime / (2 * hurt.knockbackHeightScale);
 		hurt.knockbackHeight = (hurt.knockbackForce * hurt.knockbackForce) / (2 * -gravity.strength);
