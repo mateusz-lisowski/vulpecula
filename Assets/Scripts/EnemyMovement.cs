@@ -10,7 +10,6 @@ public class EnemyMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isProvoked { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isNoGroundAhead { get; private set; }
 	[field: Space(10)]
@@ -27,7 +26,6 @@ public class EnemyMovement : MonoBehaviour
 	private Transform center;
 
 	private Transform hitbox;
-	private Collider2D attackCheck;
 	private Collider2D groundCheck;
 	private Collider2D wallCheck;
 	private Collider2D fallCheck;
@@ -50,7 +48,6 @@ public class EnemyMovement : MonoBehaviour
 		center = transform.Find("Center").GetComponent<Transform>();
 
 		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
-		attackCheck = transform.Find("Attack").GetComponent<Collider2D>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
 		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
@@ -126,7 +123,6 @@ public class EnemyMovement : MonoBehaviour
 		isGrounded = groundCheck.IsTouchingLayers(data.run.groundLayers);
 		isFacingWall = wallCheck.IsTouchingLayers(data.run.wallLayers);
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.run.groundLayers);
-		isProvoked = attackCheck.IsTouchingLayers(data.attack.provokeLayers);
 
 		if (isFacingWall && isFacingSlope())
 			isFacingWall = false;
