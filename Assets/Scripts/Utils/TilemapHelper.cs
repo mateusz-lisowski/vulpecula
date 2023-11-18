@@ -16,7 +16,7 @@ public class TilemapHelper
 		List<Vector3Int> triggeredCoords = new List<Vector3Int>();
 
 		Vector3Int min = tilemap.WorldToCell(bounds.min);
-		Vector3Int max = tilemap.WorldToCell(bounds.max);
+		Vector3Int max = tilemap.WorldToCell(bounds.max) + (Vector3Int)Vector2Int.one;
 
 		for (int i = min.x; i <= max.x; i++)
 			for (int j = min.y; j < max.y; j++)
