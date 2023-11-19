@@ -23,8 +23,8 @@ public class AttackController : MonoBehaviour
 	{
 		if (data is PlayerData)
 			hitLayers = ((PlayerData)data).attack.hitLayers;
-		else if (data is EnemyData)
-			hitLayers = ((EnemyData)data).attack.hitLayers;
+		else if (data is MeleeAtackBehaviorData)
+			hitLayers = ((MeleeAtackBehaviorData)data).hitLayers;
 	}
 	public void setVelocity(Vector2 vel)
 	{
@@ -81,7 +81,7 @@ public class AttackController : MonoBehaviour
 			hitCallback(this);
 
 		foreach (Collider2D contact in contacts)
-			contact.SendMessageUpwards("hit", this);
+			contact.SendMessageUpwards("onMessage", new EntityMessage("hit", this));
 	}
 
 	public void halt()

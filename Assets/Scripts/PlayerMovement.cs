@@ -208,8 +208,13 @@ public class PlayerMovement : MonoBehaviour
 			lastPassInputTime = 0;
 	}
 	
-	public void hit(AttackController contact)
+	public void onMessage(EntityMessage msg)
 	{
+		if (msg.name != "hit")
+			return;
+
+		AttackController contact = msg.data as AttackController;
+
 		hitContact = new HitData();
 		hitContact.isVertical = contact.isVertical;
 		hitContact.right = contact.transform.right;

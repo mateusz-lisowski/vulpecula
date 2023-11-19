@@ -13,8 +13,13 @@ public class GroundBreakingController : MonoBehaviour
 	Tilemap tilemap;
 
 
-	public void hit(AttackController contact)
+	public void onMessage(EntityMessage msg)
 	{
+		if (msg.name != "hit")
+			return;
+
+		AttackController contact = msg.data as AttackController;
+
 		List<Vector3Int> triggeredCoords = TilemapHelper.getTriggeredTiles(tilemap, contact.hitboxBounds);
 		if (triggeredCoords.Count == 0)
 			return;
