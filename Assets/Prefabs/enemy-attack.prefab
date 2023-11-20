@@ -134,7 +134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8848779873147501475}
-  - component: {fileID: 3118199568389470475}
+  - component: {fileID: 7106438096912716168}
   - component: {fileID: 234013075986561072}
   m_Layer: 20
   m_Name: Hitbox
@@ -158,8 +158,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3177704467584714419}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &3118199568389470475
-CapsuleCollider2D:
+--- !u!61 &7106438096912716168
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -191,8 +191,18 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
   m_Size: {x: 1, y: 1}
-  m_Direction: 0
+  m_EdgeRadius: 0
 --- !u!114 &234013075986561072
 MonoBehaviour:
   m_ObjectHideFlags: 0

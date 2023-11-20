@@ -82,8 +82,6 @@ public class MeleeAtackBehavior : EntityBehavior
 
 		currentAttackData.setAttack(data);
 		currentAttackData.setHitboxSize(attackTransform.localScale);
-
-		currentAttackData.resolve();
 	}
 	private void attack()
 	{
