@@ -4,6 +4,8 @@ using UnityEngine;
 public class MeleeAtackBehaviorData : ScriptableObject
 {
 	public string attackInstantiateEventName = "attack";
+	public string provokeDetectionName = "Attack";
+	public string animatorEventName = "isAttacking";
 
 	[Space(5)]
 

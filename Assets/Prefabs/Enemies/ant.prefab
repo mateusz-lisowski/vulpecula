@@ -566,7 +566,7 @@ MonoBehaviour:
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
   <lastGroundedTime>k__BackingField: 0
-  isStopping: 0
+  currentFrameStopping: 0
 --- !u!114 &4255831889263061473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,6 +581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 0c2bcb2cfac634a43a5513e5cdc900b9, type: 2}
   <isProvoked>k__BackingField: 0
+  <isAttacking>k__BackingField: 0
   <lastAttackTime>k__BackingField: 0
   <attackCooldown>k__BackingField: 0
 --- !u!1 &8757982442341642416

@@ -12,7 +12,7 @@ public class RunBehavior : EntityBehavior
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool isStopping;
+	[field: SerializeField, ReadOnly] public bool currentFrameStopping;
 
 	private FlipBehavior direction;
 	private HurtBehavior hurt;
@@ -66,8 +66,9 @@ public class RunBehavior : EntityBehavior
 		if (hurt != null && hurt.isDistressed)
 			targetSpeed = moveInput.x * data.knockbackMaxSpeed;
 
-		if (isStopping)
+		if (currentFrameStopping)
 			targetSpeed = 0;
+		currentFrameStopping = false;
 
 		float accelRate = targetSpeed == 0 ? data.decelerationForce : data.accelerationForce;
 

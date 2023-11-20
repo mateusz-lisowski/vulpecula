@@ -335,7 +335,7 @@ MonoBehaviour:
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
   <lastGroundedTime>k__BackingField: 0
-  isStopping: 0
+  currentFrameStopping: 0
 --- !u!1 &8173101486877777392
 GameObject:
   m_ObjectHideFlags: 0

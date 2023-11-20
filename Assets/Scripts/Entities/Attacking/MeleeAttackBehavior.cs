@@ -5,6 +5,7 @@ public class MeleeAtackBehavior : EntityBehavior
 	public MeleeAtackBehaviorData data;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isProvoked { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isAttacking { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastAttackTime { get; private set; }
 	[field: Space(5)]
@@ -24,7 +25,7 @@ public class MeleeAtackBehavior : EntityBehavior
 		hurt = controller.getBehavior<HurtBehavior>();
 		run = controller.getBehavior<RunBehavior>();
 
-		attackTransform = controller.transform.Find("Attack");
+		attackTransform = controller.transform.Find(data.provokeDetectionName);
 		attackCheck = attackTransform.GetComponent<Collider2D>();
 
 		lastAttackTime = float.PositiveInfinity;
@@ -34,6 +35,8 @@ public class MeleeAtackBehavior : EntityBehavior
 	{
 		if (eventName == data.attackInstantiateEventName)
 			attackInstantiate();
+		else if (eventName == data.attackInstantiateEventName + "Exit")
+			isAttacking = false;
 	}
 
 	public override void onUpdate()
@@ -46,10 +49,10 @@ public class MeleeAtackBehavior : EntityBehavior
 		updateAttack();
 
 		foreach (var param in controller.animator.parameters)
-			if (param.name == "isAttacking")
+			if (param.name == data.animatorEventName)
 			{
 				if (lastAttackTime == 0)
-					controller.animator.SetTrigger("isAttacking");
+					controller.animator.SetTrigger(data.animatorEventName);
 			}
 	}
 
@@ -70,7 +73,7 @@ public class MeleeAtackBehavior : EntityBehavior
 	private void attackInstantiate()
 	{
 		if (run != null)
-			run.isStopping = false;
+			isAttacking = false;
 
 		GameObject currentAttack = Object.Instantiate(data.attackPrefab,
 			attackTransform.position, attackTransform.rotation);
@@ -85,19 +88,19 @@ public class MeleeAtackBehavior : EntityBehavior
 	private void attack()
 	{
 		if (run != null)
-			run.isStopping = true;
+			isAttacking = true;
 
 		lastAttackTime = 0;
 		attackCooldown = data.cooldown;
 	}
 	private void updateAttack()
 	{
-		if (hurt != null && hurt.isDistressed && run != null)
-			run.isStopping = false;
-
 		if (canAttack())
 		{
 			attack();
 		}
+
+		if (isAttacking)
+			run.currentFrameStopping = true;
 	}
 }
