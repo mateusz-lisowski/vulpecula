@@ -19,11 +19,11 @@ MonoBehaviour:
   wallLayers:
     serializedVersion: 2
     m_Bits: 256
-  maxSpeed: 3
+  maxSpeed: 2
   acceleration: 2
   deceleration: 1
-  accelerationForce: 33.333332
-  decelerationForce: 16.666666
+  accelerationForce: 50
+  decelerationForce: 25
   knockbackMaxSpeed: 0
   knockbackHeightScale: 0.9
   knockbackHeight: 0.046296302
