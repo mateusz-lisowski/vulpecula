@@ -92,7 +92,7 @@ MonoBehaviour:
     cooldown: 0.1
     dashesCount: 1
     force: 13.333333
-    inputBufferTime: 0.05
+    inputBufferTime: 0.2
   platformPassing:
     layers:
       serializedVersion: 2

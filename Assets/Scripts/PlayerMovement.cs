@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public bool isJumping { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDashing { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isAttacking { get; set; }
+	[field: SerializeField, ReadOnly] public bool isInCombo { get; set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
@@ -190,7 +191,7 @@ public class PlayerMovement : MonoBehaviour
 
 		isMoving = moveInput.x != 0;
 
-		if (!isDashing && !isDistressed && !isAttacking)
+		if (!isDashing && !isDistressed && !isAttacking && !isInCombo)
 			if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
 				Flip();
 
@@ -374,7 +375,7 @@ public class PlayerMovement : MonoBehaviour
 	private bool canDash()
 	{
 		return dashCooldown <= 0 && lastDashInputTime <= data.dash.inputBufferTime && dashesLeft > 0
-			&& !isDistressed;
+			&& !isDistressed && !isAttacking;
 	}
 	private void dash()
 	{
