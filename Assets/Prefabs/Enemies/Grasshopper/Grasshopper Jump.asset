@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28c721f3086aa224bbcb701aabadad35, type: 3}
-  m_Name: Ant Run
+  m_Script: {fileID: 11500000, guid: 3148fde2dc9bc6e40b2ff4cf677bad3d, type: 3}
+  m_Name: Grasshopper Jump
   m_EditorClassIdentifier: 
-  maxSpeed: 3
-  accelerationCoefficient: 0.8
+  maxHeight: 3
+  cooldown: 4
+  force: 13.416408

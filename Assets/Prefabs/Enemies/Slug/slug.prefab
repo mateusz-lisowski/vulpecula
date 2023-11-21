@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 164482286500472992}
   - component: {fileID: 1724348815531372944}
   - component: {fileID: 994205708102867722}
+  - component: {fileID: 3673337748574421983}
   - component: {fileID: 5803961606106945468}
   m_Layer: 17
   m_Name: slug
@@ -277,16 +278,16 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a0db26f4c034cda40a107330a5fa74af, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_Interpolate: 1
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &1724348815531372944
 MonoBehaviour:
@@ -315,7 +316,23 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
   <isFacingRight>k__BackingField: 0
   <lastTurnTime>k__BackingField: 0
-  <lastTurnFrame>k__BackingField: 0
+  lastTurnFixedUpdate: -1
+--- !u!114 &3673337748574421983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6757914255632279468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dee6bfadc4df45847b176fef929fc638, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 55c19d8868dd843468afa08b9e2f76fd, type: 2}
+  <isGrounded>k__BackingField: 0
+  <isFalling>k__BackingField: 0
+  lastDisabledUpdate: -1
 --- !u!114 &5803961606106945468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,11 +348,8 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: ca8e01ae28ff7ac4fab2a8ce1db01bfd, type: 2}
   <isMoving>k__BackingField: 0
   <isFalling>k__BackingField: 0
-  <isGrounded>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
-  <lastGroundedTime>k__BackingField: 0
-  currentFrameStopping: 0
 --- !u!1 &8173101486877777392
 GameObject:
   m_ObjectHideFlags: 0

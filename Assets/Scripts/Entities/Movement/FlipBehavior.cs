@@ -8,7 +8,8 @@ public class FlipBehavior : EntityBehavior
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastTurnTime { get; private set; }
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public int lastTurnFixedUpdate { get; private set; }
+	[field: SerializeField, ReadOnly] private int lastTurnFixedUpdate = -1;
+
 
 	public void flip()
 	{
@@ -18,14 +19,16 @@ public class FlipBehavior : EntityBehavior
 		isFacingRight = !isFacingRight;
 		controller.transform.Rotate(0, 180, 0);
 	}
+	public bool isPhysicsNotUpdatedAfterFlip()
+	{
+		return lastTurnFixedUpdate >= controller.currentFixedUpdate - 1;
+	}
 
 	public override void onAwake()
 	{
 		isFacingRight = controller.transform.right.x > 0;
 
 		lastTurnTime = float.PositiveInfinity;
-
-		lastTurnFixedUpdate = -1;
 	}
 
 	public override void onUpdate()

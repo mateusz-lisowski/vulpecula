@@ -46,6 +46,7 @@ public abstract class EntityBehavior : MonoBehaviour
 	private int lastFixedUpdateDisabled = -1;
 }
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class EntityBehaviorController : MonoBehaviour
 {
 	private List<EntityBehavior> behaviors;

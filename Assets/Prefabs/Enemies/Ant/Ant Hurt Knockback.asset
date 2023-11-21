@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ant Hurt Knockback
   m_EditorClassIdentifier: 
   associatedHurtData: {fileID: 11400000, guid: 51fef5153267cb343b8ca7816ace60c0, type: 2}
-  knockbackSpeed: 0
-  knockbackHeightScale: 0.5
-  knockbackHeight: 0.6
-  knockbackForce: 6
+  knockbackSpeed: 3
+  knockbackHeightScale: 0.9
+  knockbackHeight: 0.18518521
+  knockbackForce: 3.3333335

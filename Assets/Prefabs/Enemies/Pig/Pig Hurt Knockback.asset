@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5972d6507e2d04c4f9be68fcce156c9f, type: 3}
   m_Name: Pig Hurt Knockback
   m_EditorClassIdentifier: 
-  associatedHurtData: {fileID: 0}
+  associatedHurtData: {fileID: 11400000, guid: c4aefa1a168628641aa473169b477c7d, type: 2}
   knockbackSpeed: 3
   knockbackHeightScale: 0.9
-  knockbackHeight: 0
-  knockbackForce: 0
+  knockbackHeight: 0.41666675
+  knockbackForce: 5.0000005

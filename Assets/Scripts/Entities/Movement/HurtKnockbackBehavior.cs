@@ -6,11 +6,13 @@ public class HurtKnockbackBehavior : EntityBehavior
 	public HurtKnockbackBehaviorData data;
 
 	private HurtBehavior hurt;
+	private GroundedBehavior ground;
 
 
 	public override void onAwake()
 	{
 		hurt = controller.GetComponent<HurtBehavior>();
+		ground = controller.GetComponent<GroundedBehavior>();
 	}
 
 	public override void onUpdate()
@@ -24,6 +26,10 @@ public class HurtKnockbackBehavior : EntityBehavior
 				controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
 			}
 		}
+
+		if (ground != null && hurt.isDistressed)
+			ground.disableCurrentFixedUpdate();
+
 	}
 
 	public override bool onFixedUpdate()
