@@ -105,9 +105,9 @@ GameObject:
   - component: {fileID: 3719971410987988227}
   - component: {fileID: 917948276432053012}
   - component: {fileID: 8270314753679273213}
-  - component: {fileID: 9203199264713230724}
   - component: {fileID: 4846482311299018571}
   - component: {fileID: 4615439821049667569}
+  - component: {fileID: 9203199264713230724}
   m_Layer: 16
   m_Name: bear
   m_TagString: Untagged
@@ -191,7 +191,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
   <isFacingRight>k__BackingField: 0
   <lastTurnTime>k__BackingField: 0
-  <lastTurnFrame>k__BackingField: 0
+  <lastTurnFixedUpdate>k__BackingField: 0
 --- !u!114 &8270314753679273213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,26 +208,6 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <lastHurtTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
---- !u!114 &9203199264713230724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2508622768693607819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 834a63a583264b2498f9777fc1d5f8d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: c0dc3556fc1b74644aaeb582bba5bc2a, type: 2}
-  <isMoving>k__BackingField: 0
-  <isFalling>k__BackingField: 0
-  <isGrounded>k__BackingField: 0
-  <isFacingWall>k__BackingField: 0
-  <isNoGroundAhead>k__BackingField: 0
-  <lastGroundedTime>k__BackingField: 0
-  currentFrameStopping: 0
 --- !u!114 &4846482311299018571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,6 +242,25 @@ MonoBehaviour:
   <isAttacking>k__BackingField: 0
   <lastAttackTime>k__BackingField: 0
   <attackCooldown>k__BackingField: 0
+--- !u!114 &9203199264713230724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2508622768693607819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 834a63a583264b2498f9777fc1d5f8d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: c0dc3556fc1b74644aaeb582bba5bc2a, type: 2}
+  <isMoving>k__BackingField: 0
+  <isFalling>k__BackingField: 0
+  <isGrounded>k__BackingField: 0
+  <isFacingWall>k__BackingField: 0
+  <isNoGroundAhead>k__BackingField: 0
+  <lastGroundedTime>k__BackingField: 0
 --- !u!1 &3007405715674439372
 GameObject:
   m_ObjectHideFlags: 0

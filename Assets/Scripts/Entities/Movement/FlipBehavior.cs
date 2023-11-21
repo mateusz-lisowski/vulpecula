@@ -8,12 +8,12 @@ public class FlipBehavior : EntityBehavior
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastTurnTime { get; private set; }
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public int lastTurnFrame { get; private set; }
+	[field: SerializeField, ReadOnly] public int lastTurnFixedUpdate { get; private set; }
 
 	public void flip()
 	{
 		lastTurnTime = 0;
-		lastTurnFrame = controller.currentFrame;
+		lastTurnFixedUpdate = controller.currentFixedUpdate;
 
 		isFacingRight = !isFacingRight;
 		controller.transform.Rotate(0, 180, 0);
@@ -25,19 +25,11 @@ public class FlipBehavior : EntityBehavior
 
 		lastTurnTime = float.PositiveInfinity;
 
-		lastTurnFrame = -1;
-	}
-
-	public override void onEvent(string eventName, object eventData)
-	{
+		lastTurnFixedUpdate = -1;
 	}
 
 	public override void onUpdate()
 	{
 		lastTurnTime += Time.deltaTime;
-	}
-
-	public override void onFixedUpdate()
-	{
 	}
 }

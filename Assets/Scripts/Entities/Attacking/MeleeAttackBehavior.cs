@@ -12,7 +12,6 @@ public class MeleeAtackBehavior : EntityBehavior
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
 	private HurtBehavior hurt;
-	private RunBehavior run;
 
 	private Transform attackTransform;
 	private Collider2D attackCheck;
@@ -23,7 +22,6 @@ public class MeleeAtackBehavior : EntityBehavior
 	public override void onAwake()
 	{
 		hurt = controller.getBehavior<HurtBehavior>();
-		run = controller.getBehavior<RunBehavior>();
 
 		attackTransform = controller.transform.Find(data.provokeDetectionName);
 		attackCheck = attackTransform.GetComponent<Collider2D>();
@@ -56,8 +54,14 @@ public class MeleeAtackBehavior : EntityBehavior
 			}
 	}
 
-	public override void onFixedUpdate()
+	public override bool onFixedUpdate()
 	{
+		if (!isAttacking)
+			return false;
+
+		addSmoothForce(data.attackRunSpeed, data.accelerationCoefficient, transform.right);
+
+		return true;
 	}
 
 
@@ -72,8 +76,7 @@ public class MeleeAtackBehavior : EntityBehavior
 	}
 	private void attackInstantiate()
 	{
-		if (run != null)
-			isAttacking = false;
+		isAttacking = false;
 
 		GameObject currentAttack = Object.Instantiate(data.attackPrefab,
 			attackTransform.position, attackTransform.rotation);
@@ -85,8 +88,7 @@ public class MeleeAtackBehavior : EntityBehavior
 	}
 	private void attack()
 	{
-		if (run != null)
-			isAttacking = true;
+		isAttacking = true;
 
 		lastAttackTime = 0;
 		attackCooldown = data.cooldown;
@@ -97,8 +99,5 @@ public class MeleeAtackBehavior : EntityBehavior
 		{
 			attack();
 		}
-
-		if (isAttacking)
-			run.currentFrameStopping = true;
 	}
 }

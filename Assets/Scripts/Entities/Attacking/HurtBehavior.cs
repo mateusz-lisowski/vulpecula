@@ -59,10 +59,6 @@ public class HurtBehavior : EntityBehavior
 				controller.animator.SetBool("isDistressed", isDistressed);
 	}
 
-	public override void onFixedUpdate()
-	{
-	}
-
 
 	private bool canHurt()
 	{
@@ -77,7 +73,7 @@ public class HurtBehavior : EntityBehavior
 			return;
 
 		// if attack faces the same direction
-		if (Vector2.Dot(controller.transform.right, hitContact.transform.right) > 0)
+		if (Vector2.Dot(transform.right, hitContact.transform.right) > 0)
 			direction.flip();
 	}
 	private void setInvulnerability(bool val)

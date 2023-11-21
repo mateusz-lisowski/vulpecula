@@ -7,7 +7,7 @@ public class MeleeAtackBehaviorData : ScriptableObject
 	public string provokeDetectionName = "Attack";
 	public string animatorEventName = "isAttacking";
 
-	[Space(5)]
+	[Space(10)]
 
 	[Tooltip("Layers that can provoke an attack")]
 	public LayerMask provokeLayers;
@@ -19,5 +19,12 @@ public class MeleeAtackBehaviorData : ScriptableObject
 	[Space(5)]
 
 	[Tooltip("Minimum time between two consecutive attacks")]
-	public float cooldown;
+	public float cooldown = 0.3f;
+
+	[Space(10)]
+
+	[Tooltip("Running speed while attacking")]
+	public float attackRunSpeed = 0.0f;
+	[Tooltip("Lerp between current velocity (0) and attackRunSpeed (1)")]
+	[Range(0.0f, 1.0f)] public float accelerationCoefficient = 0.8f;
 }

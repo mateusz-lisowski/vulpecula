@@ -6,28 +6,24 @@ public class RunBehavior : EntityBehavior
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isGrounded { get; set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isNoGroundAhead { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float lastGroundedTime { get; private set; }
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool currentFrameStopping;
 
 	private FlipBehavior direction;
-	private HurtBehavior hurt;
 
 	private Collider2D groundCheck;
 	private Collider2D wallCheck;
 	private Collider2D fallCheck;
 
-	private Vector2 moveInput;
+	private float moveInput = 0.0f;
 
 
 	public override void onAwake()
 	{
 		direction = controller.getBehavior<FlipBehavior>();
-		hurt = controller.getBehavior<HurtBehavior>();
 
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
@@ -47,7 +43,6 @@ public class RunBehavior : EntityBehavior
 		updateCollisions();
 		updateInputs();
 
-		updateHurt();
 		updateFalling();
 
 		foreach (var param in controller.animator.parameters)
@@ -59,23 +54,11 @@ public class RunBehavior : EntityBehavior
 				controller.animator.SetBool("isMoving", isMoving);
 	}
 
-	public override void onFixedUpdate()
+	public override bool onFixedUpdate()
 	{
-		float targetSpeed = moveInput.x * data.maxSpeed;
+		addSmoothForce(moveInput * data.maxSpeed, data.accelerationCoefficient, Vector2.right);
 
-		if (hurt != null && hurt.isDistressed)
-			targetSpeed = moveInput.x * data.knockbackMaxSpeed;
-
-		if (currentFrameStopping)
-			targetSpeed = 0;
-		currentFrameStopping = false;
-
-		float accelRate = targetSpeed == 0 ? data.decelerationForce : data.accelerationForce;
-
-		float speedDif = targetSpeed - controller.rigidBody.velocity.x;
-		float movement = speedDif * accelRate;
-
-		controller.rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
+		return true;
 	}
 
 
@@ -102,7 +85,7 @@ public class RunBehavior : EntityBehavior
 
 		// disable registering wall/fall collision immediately after turning because wallCheck and
 		// fallCheck hitboxes need time to get updated
-		if (direction.lastTurnFrame >= controller.currentFrame - 1)
+		if (direction.lastTurnFixedUpdate >= controller.currentFixedUpdate - 1)
 		{
 			isFacingWall = false;
 			isNoGroundAhead = false;
@@ -114,42 +97,17 @@ public class RunBehavior : EntityBehavior
 
 	private void updateInputs()
 	{
-		moveInput = new Vector2();
-
 		if (isFacingWall || (isNoGroundAhead && isGrounded))
 			direction.flip();
 
 		if (direction.isFacingRight)
-			moveInput.x += 1;
+			moveInput = 1;
 		else
-			moveInput.x += -1;
+			moveInput = -1;
 
-		isMoving = moveInput.x != 0;
+		isMoving = moveInput != 0;
 	}
 
-	private void updateHurt()
-	{
-		if (hurt == null)
-			return;
-
-		if (hurt.lastHurtTime == 0) 
-		{
-			float force = data.knockbackForce;
-			if (force > controller.rigidBody.velocity.y)
-			{
-				force -= controller.rigidBody.velocity.y;
-				controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
-			}
-		}
-
-		if (hurt.isDistressed)
-		{
-			isGrounded = false;
-
-			moveInput.y = 0;
-			moveInput.x = direction.isFacingRight ? -1 : 1;
-		}
-	}
 	private void updateFalling()
 	{
 		if (!isGrounded && controller.rigidBody.velocity.y <= 0)

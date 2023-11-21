@@ -446,8 +446,9 @@ GameObject:
   - component: {fileID: 5030657850188554627}
   - component: {fileID: 2762993218868523}
   - component: {fileID: 5663872807992000401}
-  - component: {fileID: 2732491925933866820}
+  - component: {fileID: 579549540333403349}
   - component: {fileID: 4255831889263061473}
+  - component: {fileID: 2732491925933866820}
   m_Layer: 16
   m_Name: ant
   m_TagString: Untagged
@@ -527,10 +528,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2b546c74e47184dbb9850d3c580d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
   <isFacingRight>k__BackingField: 0
   <lastTurnTime>k__BackingField: 0
-  <lastTurnFrame>k__BackingField: 0
+  <lastTurnFixedUpdate>k__BackingField: 0
 --- !u!114 &5663872807992000401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,6 +548,36 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <lastHurtTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
+--- !u!114 &579549540333403349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664657130570261996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e216ac7aa86172f4ebc72e0919a3ea6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: e216028a8336c234bae6db991af76e10, type: 2}
+--- !u!114 &4255831889263061473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664657130570261996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4444e3ff1e567a04db6a8c9622ae4d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 0c2bcb2cfac634a43a5513e5cdc900b9, type: 2}
+  <isProvoked>k__BackingField: 0
+  <isAttacking>k__BackingField: 0
+  <lastAttackTime>k__BackingField: 0
+  <attackCooldown>k__BackingField: 0
 --- !u!114 &2732491925933866820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566,24 +597,6 @@ MonoBehaviour:
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
   <lastGroundedTime>k__BackingField: 0
-  currentFrameStopping: 0
---- !u!114 &4255831889263061473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8664657130570261996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4444e3ff1e567a04db6a8c9622ae4d8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 0c2bcb2cfac634a43a5513e5cdc900b9, type: 2}
-  <isProvoked>k__BackingField: 0
-  <isAttacking>k__BackingField: 0
-  <lastAttackTime>k__BackingField: 0
-  <attackCooldown>k__BackingField: 0
 --- !u!1 &8757982442341642416
 GameObject:
   m_ObjectHideFlags: 0

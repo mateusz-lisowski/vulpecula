@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
 
 public struct EntityMessage
 {
@@ -21,16 +16,34 @@ public struct EntityMessage
 
 public abstract class EntityBehavior : MonoBehaviour
 {
-	public abstract void onAwake();
-	public abstract void onEvent(string eventName, object eventData);
-	public abstract void onUpdate();
-	public abstract void onFixedUpdate();
+	public void addSmoothForce(float targetSpeed, float accelerationCoefficient, Vector2 direction)
+	{
+		float speedDif = targetSpeed - Vector2.Dot(controller.rigidBody.velocity, direction);
+		float movement = speedDif * accelerationCoefficient / Time.fixedDeltaTime;
+
+		controller.rigidBody.AddForce(movement * direction, ForceMode2D.Force);
+	}
+
+	public virtual void onAwake() { }
+	public virtual void onEvent(string eventName, object eventData) { }
+	public virtual void onUpdate() { }
+	public virtual bool onFixedUpdate() { return false; }
 
 	public void setController(EntityBehaviorController parent)
 	{
 		controller = parent;
 	}
 	protected EntityBehaviorController controller { get; private set; }
+
+	public void disableCurrentFixedUpdate()
+	{
+		lastFixedUpdateDisabled = controller.currentFixedUpdate;
+	}
+	public bool currentFixedUpdateDisabled()
+	{
+		return lastFixedUpdateDisabled == controller.currentFixedUpdate;
+	}
+	private int lastFixedUpdateDisabled = -1;
 }
 
 public class EntityBehaviorController : MonoBehaviour
@@ -42,7 +55,8 @@ public class EntityBehaviorController : MonoBehaviour
 	public SpriteRenderer spriteRenderer { get; private set; }
 	public Transform hitbox { get; private set; }
 
-	public int currentFrame { get; private set; }
+	public int currentUpdate { get; private set; }
+	public int currentFixedUpdate { get; private set; }
 
 
 	public B getBehavior<B>() where B : EntityBehavior
@@ -61,7 +75,8 @@ public class EntityBehaviorController : MonoBehaviour
 		spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
 		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
 
-		currentFrame = 0;
+		currentUpdate = 0;
+		currentFixedUpdate = 0;
 
 		behaviors = new List<EntityBehavior>();
 
@@ -77,15 +92,19 @@ public class EntityBehaviorController : MonoBehaviour
 	}
 	private void Update()
 	{
+		currentUpdate++;
+
 		foreach (var behavior in behaviors)
 			behavior.onUpdate();
 	}
 	private void FixedUpdate()
 	{
-		currentFrame++;
+		currentFixedUpdate++;
 
 		foreach (var behavior in behaviors)
-			behavior.onFixedUpdate();
+			if (!behavior.currentFixedUpdateDisabled())
+				if (behavior.onFixedUpdate())
+					break;
 	}
 
 	public void onEvent(string eventName, object eventData)

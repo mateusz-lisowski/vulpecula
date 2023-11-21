@@ -9,16 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28c721f3086aa224bbcb701aabadad35, type: 3}
-  m_Name: Ant Run
+  m_Script: {fileID: 11500000, guid: 5972d6507e2d04c4f9be68fcce156c9f, type: 3}
+  m_Name: Ant Hurt Knockback
   m_EditorClassIdentifier: 
   associatedHurtData: {fileID: 11400000, guid: 51fef5153267cb343b8ca7816ace60c0, type: 2}
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 768
-  wallLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  maxSpeed: 3
-  accelerationCoefficient: 0.7
-  accelerationTime: 0.076499574
+  knockbackSpeed: 0
+  knockbackHeightScale: 0.5
+  knockbackHeight: 0.6
+  knockbackForce: 6
