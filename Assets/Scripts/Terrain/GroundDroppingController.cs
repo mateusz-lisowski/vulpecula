@@ -60,7 +60,7 @@ public class GroundDroppingController : MonoBehaviour
 		Destroy(instance.gameObject);
 
 		foreach (TilemapHelper.TileData tile in tiles)
-			tile.parent.SetTile(tile.coord, tile.tile);
+			TilemapHelper.setTile(tile.parent, tile);
 	}
 
 }

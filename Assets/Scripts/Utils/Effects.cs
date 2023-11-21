@@ -182,7 +182,7 @@ public class Effects : ScriptableObject
 
 				Tilemap tilemap = dict[tile.parent];
 
-				tilemap.SetTile(tilemap.WorldToCell(tile.parent.CellToWorld(tile.coord)), tile.tile);
+				TilemapHelper.setTile(tilemap, tile);
 			}
 
 			return new Instance(instance);

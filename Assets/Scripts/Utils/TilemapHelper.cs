@@ -9,6 +9,8 @@ public class TilemapHelper
 		public Tilemap parent;
 		public Vector3Int coord;
 		public TileBase tile;
+		public Color color;
+		public Matrix4x4 transform;
 	}
 
 	private static List<Vector3Int> findTriggeredWithinBounds(Tilemap tilemap, Bounds bounds)
@@ -26,10 +28,6 @@ public class TilemapHelper
 				if (tilemap.GetTile(coord) != null)
 					triggeredCoords.Add(coord);
 			}
-
-		//if (triggeredCoords.Count == 0)
-		//	Debug.LogWarning("No tiles to trigger found within bounds: "
-		//		+ bounds.min + " to " + bounds.max);
 
 		return triggeredCoords;
 	}
@@ -77,6 +75,8 @@ public class TilemapHelper
 				tileData.parent = tilemap;
 				tileData.coord = triggeredCoord;
 				tileData.tile = droppedTile;
+				tileData.color = tilemap.GetColor(triggeredCoord);
+				tileData.transform = tilemap.GetTransformMatrix(triggeredCoord);
 
 				tiles.Add(tileData);
 			}
@@ -98,4 +98,16 @@ public class TilemapHelper
 		return false;
 	}
 
+	public static void setTile(Tilemap tilemap, TileData tile)
+	{
+		TileChangeData copiedTile = new TileChangeData
+		{
+			position = tilemap.WorldToCell(tile.parent.CellToWorld(tile.coord)),
+			tile = tile.tile,
+			color = tile.color,
+			transform = tile.transform
+		};
+
+		tilemap.SetTile(copiedTile, true);
+	}
 }
