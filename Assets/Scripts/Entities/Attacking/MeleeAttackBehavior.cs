@@ -6,8 +6,6 @@ public class MeleeAtackBehavior : EntityBehavior
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isProvoked { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isAttacking { get; private set; }
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public float lastAttackTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
@@ -16,6 +14,7 @@ public class MeleeAtackBehavior : EntityBehavior
 	private Transform attackTransform;
 	private Collider2D attackCheck;
 
+	private bool justAttacked = false;
 	private AttackController currentAttackData = null;
 
 
@@ -25,8 +24,6 @@ public class MeleeAtackBehavior : EntityBehavior
 
 		attackTransform = controller.transform.Find(data.provokeDetectionName);
 		attackCheck = attackTransform.GetComponent<Collider2D>();
-
-		lastAttackTime = float.PositiveInfinity;
 	}
 
 	public override void onEvent(string eventName, object eventData)
@@ -39,7 +36,6 @@ public class MeleeAtackBehavior : EntityBehavior
 
 	public override void onUpdate()
 	{
-		lastAttackTime += Time.deltaTime;
 		attackCooldown -= Time.deltaTime;
 
 		updateCollisions();
@@ -49,7 +45,7 @@ public class MeleeAtackBehavior : EntityBehavior
 		foreach (var param in controller.animator.parameters)
 			if (param.name == data.animatorEventName)
 			{
-				if (lastAttackTime == 0)
+				if (justAttacked)
 					controller.animator.SetTrigger(data.animatorEventName);
 			}
 	}
@@ -90,11 +86,13 @@ public class MeleeAtackBehavior : EntityBehavior
 	{
 		isAttacking = true;
 
-		lastAttackTime = 0;
+		justAttacked = true;
 		attackCooldown = data.cooldown;
 	}
 	private void updateAttack()
 	{
+		justAttacked = false;
+
 		if (canAttack())
 		{
 			attack();

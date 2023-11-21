@@ -12,9 +12,13 @@ public class GroundedBehavior : EntityBehavior
 	private Collider2D groundCheck;
 
 
-	public void disableCurrentFrame()
+	public void disableGroundedThisFrame()
 	{
 		lastDisabledUpdate = controller.currentUpdate;
+	}
+	public void disableGroundedNextFrame()
+	{
+		lastDisabledUpdate = controller.currentUpdate + 1;
 	}
 
 	public override void onAwake()
@@ -24,7 +28,7 @@ public class GroundedBehavior : EntityBehavior
 
 	public override void onUpdate()
 	{
-		isGrounded = lastDisabledUpdate != controller.currentUpdate 
+		isGrounded = lastDisabledUpdate < controller.currentUpdate
 			&& groundCheck.IsTouchingLayers(data.groundLayers);
 
 		isFalling = !isGrounded && controller.rigidBody.velocity.y <= 0;

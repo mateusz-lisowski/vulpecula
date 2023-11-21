@@ -287,6 +287,7 @@ GameObject:
   - component: {fileID: 8914906949458509632}
   - component: {fileID: 7778317074328622714}
   - component: {fileID: 2959200598623240211}
+  - component: {fileID: -6539713555012566582}
   - component: {fileID: -8327117584992023542}
   - component: {fileID: 966967818323690364}
   m_Layer: 16
@@ -385,6 +386,19 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <lastHurtTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
+--- !u!114 &-6539713555012566582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4727050334669896525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e216ac7aa86172f4ebc72e0919a3ea6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 8af8772bc40cbe342918eb70626cf78d, type: 2}
 --- !u!114 &-8327117584992023542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,3 +429,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 22202c8ccde98664e8efdb5a1bdbbb1a, type: 2}
   <isJumping>k__BackingField: 0
+  <jumpCooldown>k__BackingField: 0

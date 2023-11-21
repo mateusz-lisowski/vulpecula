@@ -6,8 +6,6 @@ public class RunBehavior : EntityBehavior
 {
 	public RunBehaviorData data;
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isNoGroundAhead { get; private set; }
 
@@ -16,8 +14,6 @@ public class RunBehavior : EntityBehavior
 
 	private Collider2D wallCheck;
 	private Collider2D fallCheck;
-
-	private float moveInput = 0.0f;
 
 
 	public override void onAwake()
@@ -29,23 +25,15 @@ public class RunBehavior : EntityBehavior
 		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
 	}
 
-	public override void onEvent(string eventName, object eventData)
-	{
-	}
-
 	public override void onUpdate()
 	{
 		updateCollisions();
 		updateInputs();
-
-		foreach (var param in controller.animator.parameters)
-			if (param.name == "isMoving")
-				controller.animator.SetBool("isMoving", isMoving);
 	}
 
 	public override bool onFixedUpdate()
 	{
-		addSmoothForce(moveInput * data.maxSpeed, data.accelerationCoefficient, Vector2.right);
+		addSmoothForce(data.maxSpeed, data.accelerationCoefficient, transform.right);
 
 		return true;
 	}
@@ -76,21 +64,11 @@ public class RunBehavior : EntityBehavior
 			isFacingWall = false;
 			isNoGroundAhead = false;
 		}
-
-		if (isFacingWall)
-			isMoving = false;
 	}
 
 	private void updateInputs()
 	{
 		if (isFacingWall || (isNoGroundAhead && ground.isGrounded))
 			direction.flip();
-
-		if (direction.isFacingRight)
-			moveInput = 1;
-		else
-			moveInput = -1;
-
-		isMoving = moveInput != 0;
 	}
 }

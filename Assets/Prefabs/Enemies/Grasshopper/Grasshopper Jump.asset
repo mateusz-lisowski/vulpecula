@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3148fde2dc9bc6e40b2ff4cf677bad3d, type: 3}
   m_Name: Grasshopper Jump
   m_EditorClassIdentifier: 
+  jumpSpeed: 3
   maxHeight: 3
-  cooldown: 4
+  cooldown: 2.5
   force: 13.416408

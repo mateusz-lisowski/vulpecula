@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Behavior/Jump")]
 public class JumpBehaviorData : ScriptableObject
 {
+	[Tooltip("Jump speed")]
+	public float jumpSpeed = 3.0f;
 	[Tooltip("Maximum reachable height of a jump")]
 	public float maxHeight;
 	[Tooltip("Minimum time between two consecutive jumps")]

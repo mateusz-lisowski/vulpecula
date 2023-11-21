@@ -28,7 +28,7 @@ public class HurtKnockbackBehavior : EntityBehavior
 		}
 
 		if (ground != null && hurt.isDistressed)
-			ground.disableCurrentFixedUpdate();
+			ground.disableGroundedThisFrame();
 
 	}
 
