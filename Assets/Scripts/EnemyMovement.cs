@@ -6,10 +6,10 @@ public class EnemyMovement : MonoBehaviour
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isAttacking { get; set; }
 	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDistressed { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isProvoked { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isFacingWall { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isNoGroundAhead { get; private set; }
 	[field: Space(10)]
@@ -26,7 +26,6 @@ public class EnemyMovement : MonoBehaviour
 	private Transform center;
 
 	private Transform hitbox;
-	private Collider2D attackCheck;
 	private Collider2D groundCheck;
 	private Collider2D wallCheck;
 	private Collider2D fallCheck;
@@ -37,6 +36,9 @@ public class EnemyMovement : MonoBehaviour
 	private AttackController hitContact = null;
 	private Vector2 moveInput;
 
+	private int currentFrame = 0;
+	private int lastTurnFrame = -1;
+
 
 	private void Awake()
 	{
@@ -46,7 +48,6 @@ public class EnemyMovement : MonoBehaviour
 		center = transform.Find("Center").GetComponent<Transform>();
 
 		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
-		attackCheck = transform.Find("Attack").GetComponent<Collider2D>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
 		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
@@ -86,6 +87,8 @@ public class EnemyMovement : MonoBehaviour
 	// handle run
 	void FixedUpdate()
     {
+		currentFrame++;
+
 		updateRun();
 	}
 
@@ -118,32 +121,28 @@ public class EnemyMovement : MonoBehaviour
 	private void updateCollisions()
 	{
 		isGrounded = groundCheck.IsTouchingLayers(data.run.groundLayers);
-		isFacingWall = wallCheck.IsTouchingLayers(data.run.groundLayers);
+		isFacingWall = wallCheck.IsTouchingLayers(data.run.wallLayers);
 		isNoGroundAhead = !fallCheck.IsTouchingLayers(data.run.groundLayers);
-		isProvoked = attackCheck.IsTouchingLayers(data.attack.provokeLayers);
 
 		if (isFacingWall && isFacingSlope())
-		{
 			isFacingWall = false;
-		}
 
 		// disable registering wall/fall collision immediately after turning because wallCheck and
 		// fallCheck hitboxes need time to get updated
-		if (lastTurnTime < 0.1f)
+		if (lastTurnFrame >= currentFrame - 1)
 		{
 			isFacingWall = false;
 			isNoGroundAhead = false;
 		}
 
 		if (isFacingWall)
-		{
 			isMoving = false;
-		}
 	}
 
 	private void Flip()
 	{
 		lastTurnTime = 0;
+		lastTurnFrame = currentFrame;
 
 		isFacingRight = !isFacingRight;
 		transform.Rotate(0, 180, 0);
@@ -196,7 +195,7 @@ public class EnemyMovement : MonoBehaviour
 		setDistressDirection();
 		setInvulnerability(true);
 		StartCoroutine(Effects.instance.flashing.run(
-			spriteRenderer, data.hurt.invulnerabilityTime));
+			spriteRenderer, data.hurt.invulnerabilityTime, burst: true));
 
 		float force = data.hurt.knockbackForce;
 		if (force > rigidBody.velocity.y)
@@ -253,9 +252,10 @@ public class EnemyMovement : MonoBehaviour
 		float targetSpeed = moveInput.x * data.run.maxSpeed;
 
 		if (isDistressed)
-		{
 			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
-		}
+
+		if (isAttacking)
+			targetSpeed = 0;
 
 		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
 

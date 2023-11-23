@@ -31,6 +31,8 @@ public class PlayerData : ScriptableObject
 
 		[Space(5)]
 
+		[Tooltip("Calculated maximum reachable height of a knockback")]
+		[field: SerializeField, ReadOnly] public float knockbackHeight;
 		[Tooltip("Calculated hit knockback force")]
 		[field: SerializeField, ReadOnly] public float knockbackForce;
 	}
@@ -38,24 +40,44 @@ public class PlayerData : ScriptableObject
 	{
 		[Tooltip("Layers that can be hit by an attack")]
 		public LayerMask hitLayers;
-		[Tooltip("Object to instantiate on a forward attack")]
-		public GameObject attackForwardPrefab;
+		[Tooltip("Object to instantiate on a forward attack 1")]
+		public GameObject attackForward1Prefab;
+		[Tooltip("Object to instantiate on a forward attack 2")]
+		public GameObject attackForward2Prefab;
+		[Tooltip("Object to instantiate on a forward attack 3 (Strong attack)")]
+		public GameObject attackForward3Prefab;
+		[Tooltip("Object to instantiate on a forward attack while in the air")]
+		public GameObject attackForwardAirPrefab;
 		[Tooltip("Object to instantiate on a down attack")]
 		public GameObject attackDownPrefab;
 		
 		[Space(5)]
-		[Tooltip("Minimum time between two consecutive attacks")]
-		public float cooldown; 
+		[Tooltip("Maximum time between consecutive forward attacks in a combo")]
+		public float comboResetTime;
+		[Tooltip("Minimum time between two consecutive forward attacks (non-reset)")]
+		public float forwardCooldown;
+		[Tooltip("Minimum time between two consecutive down attacks")]
+		public float downCooldown;
 
 		[Space(10)]
+		[Tooltip("Maximum moving speed while forward attacking")]
+		public float forwardSpeed;
+		[Tooltip("Acceleration rate of forward attack (0 = none, forwardSpeed = instant)")]
+		public float forwardAcceleration;
+
+		[Space(10)]
+		[Tooltip("Vertical slowdown while down attacking")]
+		public float attackDownSlowdown;
 		[Tooltip("Maximum reachable height of a down hit bounce")]
 		public float attackDownBounceHeight;
+		[Tooltip("Maximum reachable height of a down hit high bounce")]
+		public float attackDownHighBounceHeight;
 		[Tooltip("Calculated down hit bounce force")]
 		[field: SerializeField, ReadOnly] public float attackDownBounceForce;
+		[Tooltip("Calculated down hit high bounce force")]
+		[field: SerializeField, ReadOnly] public float attackDownHighBounceForce;
 
 		[Space(10)]
-		[Tooltip("Offset of attack hitboxes based on the current velocity")]
-		public float hitboxOffsetScale;
 		[Tooltip("Time within which too early attack will still be performed")]
 		[Range(0f, 0.5f)] public float inputBufferTime; 
 	}
@@ -63,12 +85,16 @@ public class PlayerData : ScriptableObject
 	{
 		[Tooltip("Layers that can be run on")]
 		public LayerMask groundLayers;
+		[Tooltip("Layer detecting whether ground is a slope")]
+		public LayerMask slopeLayer;
 		[Tooltip("Maximum running speed")]
 		public float maxSpeed;
 		[Tooltip("Acceleration rate (0 = none, maxSpeed = instant)")]
 		public float acceleration;
 		[Tooltip("Deceleration rate (0 = none, maxSpeed = instant)")]
 		public float deceleration;
+		[Tooltip("Stickiness towards ground (to prevent bouncing on slopes)")]
+		public float groundStickiness;
 
 		[Space(5)]
 
@@ -198,9 +224,12 @@ public class PlayerData : ScriptableObject
 	{
 		gravity.strength = -(2 * jump.maxHeight) / (jump.timeToApex * jump.timeToApex);
 		jump.force = -gravity.strength * jump.timeToApex;
+		
 		attack.attackDownBounceForce = Mathf.Sqrt(2 * -gravity.strength * attack.attackDownBounceHeight);
+		attack.attackDownHighBounceForce = Mathf.Sqrt(2 * -gravity.strength * attack.attackDownHighBounceHeight);
 
 		hurt.knockbackForce = -gravity.strength * hurt.distressTime / (2 * hurt.knockbackHeightScale);
+		hurt.knockbackHeight = (hurt.knockbackForce * hurt.knockbackForce) / (2 * -gravity.strength);
 
 		gravity.scale = gravity.strength / Physics2D.gravity.y;
 

@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AttackController : MonoBehaviour
 {
 	[field: SerializeField, ReadOnly] public bool isVertical { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public bool hitBouncy { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public Bounds hitboxBounds { get; private set; }
 
@@ -12,6 +15,8 @@ public class AttackController : MonoBehaviour
 
 	private Action<AttackController> hitCallback;
 	private LayerMask hitLayers;
+
+	private Vector2 velocity;
 
 
 	public void setAttack(ScriptableObject data)
@@ -21,12 +26,14 @@ public class AttackController : MonoBehaviour
 		else if (data is EnemyData)
 			hitLayers = ((EnemyData)data).attack.hitLayers;
 	}
-
+	public void setVelocity(Vector2 vel)
+	{
+		velocity = vel;
+	}
 	public void setVertical(bool val = true)
 	{
 		isVertical = val;
 	}
-
 	public void setHitboxSize(Vector2 size)
 	{
 		hitbox.transform.localScale = size;
@@ -41,7 +48,6 @@ public class AttackController : MonoBehaviour
 				capsuleHitbox.direction = CapsuleDirection2D.Vertical;
 		}
 	}
-
 	public void setHitCallback(Action<AttackController> callback)
 	{
 		hitCallback = callback;
@@ -55,7 +61,11 @@ public class AttackController : MonoBehaviour
 
 	public void resolve()
 	{
+		transform.parent = null;
 		hitboxBounds = hitbox.bounds;
+
+		if (velocity != Vector2.zero)
+			StartCoroutine(Effects.instance.frameMove.run(transform, velocity, 2f));
 
 		ContactFilter2D filter = new ContactFilter2D().NoFilter();
 		filter.SetLayerMask(hitLayers);
@@ -65,10 +75,17 @@ public class AttackController : MonoBehaviour
 		if (hitbox.OverlapCollider(filter, contacts) == 0)
 			return;
 
+		hitBouncy = contacts.Any(c => c.tag == "BreakBounce");
+
 		if (hitCallback != null)
 			hitCallback(this);
 
 		foreach (Collider2D contact in contacts)
 			contact.SendMessageUpwards("hit", this);
+	}
+
+	public void halt()
+	{
+		Destroy(gameObject);
 	}
 }

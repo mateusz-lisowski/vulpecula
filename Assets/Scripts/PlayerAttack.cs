@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -9,7 +10,11 @@ public class PlayerAttack : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float lastAttackTime { get; private set; }
 	[field: SerializeField, ReadOnly] public float lastAttackDownTime { get; private set; }
 	[field: Space(5)]
-	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
+	[field: SerializeField, ReadOnly] public float attackAnyCooldown { get; private set; }
+	[field: SerializeField, ReadOnly] public float attackForwardCooldown { get; private set; }
+	[field: SerializeField, ReadOnly] public float attackDownCooldown { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public int attackForwardCombo { get; private set; }
 
 
 	private PlayerMovement movement;
@@ -20,7 +25,11 @@ public class PlayerAttack : MonoBehaviour
 
 	private Transform attackTransform;
 	private Transform attackForwardTransform;
+	private Transform attackForwardStrongTransform;
+	private Transform attackForwardAirTransform;
 	private Transform attackDownTransform;
+
+	private AttackController currentAttackData = null;
 
 
 	private void Awake()
@@ -33,6 +42,8 @@ public class PlayerAttack : MonoBehaviour
 
 		attackTransform = transform.Find("Attack");
 		attackForwardTransform = attackTransform.Find("Forward");
+		attackForwardStrongTransform = attackTransform.Find("Forward Strong");
+		attackForwardAirTransform = attackTransform.Find("Forward Air");
 		attackDownTransform = attackTransform.Find("Down");
 
 		lastAttackInputTime = float.PositiveInfinity;
@@ -40,21 +51,13 @@ public class PlayerAttack : MonoBehaviour
 		lastAttackDownTime = float.PositiveInfinity;
 	}
 
-	// handle inputs
 	void Update()
 	{
 		updateTimers();
 
 		updateInputs();
 
-		updateAttackPosition();
 		updateAttack();
-
-		if (lastAttackTime == 0)
-			if (lastAttackDownTime == 0)
-				animator.SetTrigger("isAttackingDown");
-			else
-				animator.SetTrigger("isAttacking");
 	}
 
 
@@ -64,7 +67,9 @@ public class PlayerAttack : MonoBehaviour
 		lastAttackTime += Time.deltaTime;
 		lastAttackDownTime += Time.deltaTime;
 
-		attackCooldown -= Time.deltaTime;
+		attackAnyCooldown -= Time.deltaTime;
+		attackForwardCooldown -= Time.deltaTime;
+		attackDownCooldown -= Time.deltaTime;
 	}
 
 	private void updateInputs()
@@ -75,77 +80,162 @@ public class PlayerAttack : MonoBehaviour
 		isAttackDownInput = Input.GetKey(KeyCode.DownArrow);
 	}
 
-	private void updateAttackPosition()
-	{
-		attackTransform.position = (Vector2)transform.position 
-			+ rigidBody.velocity * data.attack.hitboxOffsetScale;
-	}
 
-	public void attackForwardInstantiate()
+	public void attackFinish()
 	{
 		movement.isAttacking = false;
+	}
 
-		GameObject currentAttack = Instantiate(data.attack.attackForwardPrefab, 
-			attackForwardTransform.position, attackForwardTransform.rotation);
-		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
+	public void attackForwardReset()
+	{
+		attackFinish();
+
+		attackAnyCooldown = 0;
+		attackForwardCooldown = 0;
+	}
+	public void attackForwardInstantiate()
+	{
+		bool isStrong = attackForwardCombo >= 3;
+		Transform currentAttackTransform = 
+			isStrong ? attackForwardStrongTransform : attackForwardTransform;
+
+		GameObject currentAttack = Instantiate(
+			isStrong ? data.attack.attackForward3Prefab 
+			: attackForwardCombo == 2 ? data.attack.attackForward2Prefab
+			: data.attack.attackForward1Prefab,
+			currentAttackTransform.position, currentAttackTransform.rotation);
+		
+		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
-		currentAttackData.setHitboxSize(attackForwardTransform.localScale);
+		currentAttackData.setVelocity(new Vector2(rigidBody.velocity.x, 0));
+		currentAttackData.setHitboxSize(currentAttackTransform.localScale);
 
-		currentAttackData.resolve();
+		currentAttack.transform.parent = transform;
 	}
 	private void attackForward()
 	{
+		movement.isAttacking = true;
+		movement.lastAttackDown = false;
+
 		lastAttackTime = 0;
-		attackCooldown = data.attack.cooldown;
+		lastAttackInputTime = float.PositiveInfinity;
+		attackAnyCooldown = attackForwardCooldown = data.attack.forwardCooldown;
+
+		attackForwardCombo++;
+
+		if (attackForwardCombo == 1)
+			animator.SetTrigger("isAttacking1");
+		else if (attackForwardCombo == 2)
+			animator.SetTrigger("isAttacking2");
+		else
+			animator.SetTrigger("isAttacking3");
 	}
-	
+
+	public void attackForwardAirInstantiate()
+	{
+		GameObject currentAttack = Instantiate(data.attack.attackForwardAirPrefab,
+			attackForwardAirTransform.position, attackForwardAirTransform.rotation);
+
+		currentAttackData = currentAttack.GetComponent<AttackController>();
+
+		currentAttackData.setAttack(data);
+		currentAttackData.setVelocity(new Vector2(rigidBody.velocity.x, 0));
+		currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
+
+		currentAttack.transform.parent = transform;
+	}
+	private void attackForwardAir()
+	{
+		movement.isAttacking = true;
+		movement.lastAttackDown = false;
+
+		lastAttackTime = 0;
+		lastAttackInputTime = float.PositiveInfinity;
+		attackAnyCooldown = attackForwardCooldown = data.attack.forwardCooldown;
+
+		animator.SetTrigger("isAttackingAir");
+	}
+
 	private void attackDownHitCallback(AttackController attackData)
 	{
+		if (attackData.hitBouncy)
+			movement.registeredDownHitHighJump = true;
+
 		movement.registeredDownHitJump = true;
 		attackData.setHitCallback(null);
 	}
 	public void attackDownInstantiate()
 	{
-		movement.isAttacking = false;
-
 		GameObject currentAttack = Instantiate(data.attack.attackDownPrefab, 
 			attackDownTransform.position, attackDownTransform.rotation);
 
-		AttackController currentAttackData = currentAttack.GetComponent<AttackController>();
+		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();
 
-		currentAttackData.resolve();
+		currentAttack.transform.parent = transform;
 	}
 	private void attackDown()
 	{
+		movement.isAttacking = true;
+		movement.lastAttackDown = true;
+
 		lastAttackTime = 0;
 		lastAttackDownTime = 0;
-		attackCooldown = data.attack.cooldown;
+		lastAttackInputTime = float.PositiveInfinity;
+		attackAnyCooldown = attackDownCooldown = data.attack.downCooldown;
+
+		animator.SetTrigger("isAttackingDown");
 	}
 
-	private bool canAttack()
+	private bool canAttackAny()
 	{
-		return attackCooldown <= 0 && lastAttackInputTime <= data.attack.inputBufferTime
+		return attackAnyCooldown <= 0 && lastAttackInputTime <= data.attack.inputBufferTime
 			&& !movement.isDistressed && !movement.isAttacking;
+	}
+	private bool canAttackDown()
+	{
+		return attackDownCooldown <= 0;
+	}
+	private bool canAttackForward()
+	{
+		return attackForwardCooldown <= 0;
+	}
+	private bool canAttackForwardAir()
+	{
+		return !movement.isGrounded;
 	}
 	private void updateAttack()
 	{
 		if (movement.isDistressed)
-			movement.isAttacking = false;
-
-		if (canAttack())
 		{
-			movement.isAttacking = true;
+			movement.isAttacking = false;
+			if (currentAttackData != null)
+				currentAttackData.halt();
+		}
 
+		if (movement.isDistressed || lastAttackTime > data.attack.comboResetTime)
+			attackForwardCombo = 0;
+
+		if (canAttackAny())
+		{
 			if (isAttackDownInput)
-				attackDown();
+			{
+				if (canAttackDown())
+					attackDown();
+			}
 			else
-				attackForward();
+			{
+				if (canAttackForward())
+					if (canAttackForwardAir())
+						attackForwardAir();
+					else
+						attackForward();
+			}
 		}
 	}
 }

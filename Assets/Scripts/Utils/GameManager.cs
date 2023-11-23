@@ -23,5 +23,8 @@ public class GameManager : MonoBehaviour
 			Time.timeScale = 0.2f;
 		else
 			Time.timeScale = 1f;
+
+		if (Input.GetKeyDown(KeyCode.U))
+			Debug.Break();
 	}
 }

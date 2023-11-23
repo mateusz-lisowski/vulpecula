@@ -16,11 +16,12 @@ MonoBehaviour:
     strength: -30
     scale: 1
   hurt:
-    invulnerabilityTime: 0.5
-    distressTime: 0.5
+    invulnerabilityTime: 0
+    distressTime: 0.3
     knockbackMaxSpeed: 4
     knockbackHeightScale: 0.9
-    knockbackForce: 8.333334
+    knockbackHeight: 0.41666675
+    knockbackForce: 5.0000005
   attack:
     provokeLayers:
       serializedVersion: 2
@@ -34,6 +35,9 @@ MonoBehaviour:
     groundLayers:
       serializedVersion: 2
       m_Bits: 768
+    wallLayers:
+      serializedVersion: 2
+      m_Bits: 256
     maxSpeed: 10
     acceleration: 2
     deceleration: 4

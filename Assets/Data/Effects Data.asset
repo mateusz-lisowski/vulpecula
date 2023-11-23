@@ -15,6 +15,10 @@ MonoBehaviour:
   flashing:
     frequency: 4
     alpha: 0.5
+    burstMaterial: {fileID: 2100000, guid: 51563e7200017244185e1fa7bc4ad19d, type: 2}
+    burstColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+  frameMove:
+    frameRate: 12
   fade:
     distance: 0.7
     time: 0.3
