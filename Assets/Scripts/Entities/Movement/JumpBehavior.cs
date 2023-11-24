@@ -3,6 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(GroundedBehavior))]
 public class JumpBehavior : EntityBehavior
 {
+	private const float deltaTime = 0.1f;
+
 	public JumpBehaviorData data;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isJumping { get; private set; }
@@ -11,6 +13,8 @@ public class JumpBehavior : EntityBehavior
 
 	private FlipBehavior direction;
 	private GroundedBehavior ground;
+
+	private float jumpSpeed = 0f;
 
 
 	public override void onAwake()
@@ -32,7 +36,10 @@ public class JumpBehavior : EntityBehavior
 
 	public override bool onFixedUpdate()
 	{
-		addSmoothForce(isJumping ? data.jumpSpeed : 0f, 1f, transform.right);
+		if (!isJumping)
+			ground.tryStopSlopeFixedUpdate();
+
+		addSmoothForce(isJumping ? jumpSpeed : 0f, 1f, transform.right);
 
 		return true;
 	}
@@ -44,16 +51,22 @@ public class JumpBehavior : EntityBehavior
 	}
 	private void jump()
 	{
-		isJumping = true;
 		jumpCooldown = data.cooldown;
 
-		float force = data.force;
-
-		if (force > controller.rigidBody.velocity.y)
+		float height;
+		if (findTarget(out height, out jumpSpeed))
 		{
-			force -= controller.rigidBody.velocity.y;
-			controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+			isJumping = true;
+			float force = Mathf.Sqrt(2 * -Physics2D.gravity.y * height);
+
+			if (force > controller.rigidBody.velocity.y)
+			{
+				force -= controller.rigidBody.velocity.y;
+				controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+			}
 		}
+		else
+			direction.flip();
 	}
 	private void updateJump()
 	{
@@ -71,4 +84,94 @@ public class JumpBehavior : EntityBehavior
 			ground.disableGroundedNextFrame();
 	}
 
+	private Bounds hitboxBounds()
+	{
+		Collider2D[] colliders = controller.hitbox.GetComponents<Collider2D>();
+
+		Bounds b = colliders[0].bounds;
+		foreach (Collider2D collider in colliders)
+			b.Encapsulate(collider.bounds);
+
+		b.min -= transform.position;
+		b.max -= transform.position;
+
+		return b;
+	}
+	private bool tryFindTarget(Vector2 position, Bounds bounds, float height, float speed)
+	{
+		Vector2 velocity = new Vector2(speed * transform.right.x, Mathf.Sqrt(2.0f * -Physics2D.gravity.y * height));
+		Vector2 acceleration = Physics2D.gravity;
+
+		Vector2 currentPosition = new Vector2(position.x, position.y);
+		Vector2 nextPosition;
+
+		float currentTime = deltaTime;
+		float riseTime = -velocity.y / acceleration.y;
+
+		RaycastHit2D hit;
+
+		while (true)
+		{
+			nextPosition = position + (velocity + 0.5f * acceleration * currentTime) * currentTime;
+
+			Vector2 dir = nextPosition - currentPosition;
+			bool isRising = currentTime - deltaTime <= riseTime;
+
+			Vector2 hitboxSize = bounds.size;
+			if (currentPosition != position)
+				hitboxSize.y += 0.5f;
+
+			hit = Physics2D.BoxCast(currentPosition, hitboxSize, 0f,
+				dir.normalized, dir.magnitude,
+				isRising ? ground.data.wallLayers : ground.data.groundLayers);
+			if (hit)
+				break;
+
+			currentPosition = nextPosition;
+			currentTime += deltaTime;
+
+			if (currentPosition.y < position.y - data.maxFall)
+				return false;
+		}
+
+		//drawParabola(position, velocity, acceleration, currentTime);
+
+		if (hit.normal.y > 0.4f)
+			return true;
+		else
+			return false;
+	}
+	private bool findTarget(out float height, out float speed)
+	{
+		Bounds bounds = hitboxBounds();
+
+		int times = Mathf.RoundToInt((data.longSpeed - data.shortSpeed) / 0.5f) + 1;
+
+		for (int i = 0; i < times; i++)
+		{
+			speed = Mathf.Lerp(data.longSpeed, data.shortSpeed, times > 1 ? i / (float)(times - 1) : 0);
+			height = Mathf.Lerp(data.longHeight, data.shortHeight, times > 1 ? i / (float)(times - 1) : 0);
+
+			if (tryFindTarget(transform.position, bounds, height, speed))
+				return true;
+		}
+
+		height = 0f;
+		speed = 0f;
+		return false;
+	}
+
+	private void drawParabola(Vector2 position, Vector2 velocity, Vector2 acceleration, float time)
+	{
+		Vector2 startPosition = position;
+
+		for (float t = deltaTime; t < time + deltaTime / 2; t += deltaTime)
+		{
+			Vector2 nextPosition = startPosition + (velocity + 0.5f * acceleration * t) * t;
+
+			Debug.DrawLine(position, nextPosition, Color.red, data.cooldown);
+
+			position = nextPosition;
+		}
+	}
 }

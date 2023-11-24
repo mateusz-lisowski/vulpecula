@@ -18,3 +18,9 @@ MonoBehaviour:
   wallLayers:
     serializedVersion: 2
     m_Bits: 256
+  passingLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  slopeLayer:
+    serializedVersion: 2
+    m_Bits: 1024
