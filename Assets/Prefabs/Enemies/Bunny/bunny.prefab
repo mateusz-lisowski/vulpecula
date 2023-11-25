@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 2695547768961158696}
   - component: {fileID: 3847650244503944259}
   - component: {fileID: 6326796817789660919}
+  - component: {fileID: 4570672024762158509}
   - component: {fileID: 2042868004939667613}
   - component: {fileID: 4986181646444518800}
   m_Layer: 16
@@ -342,6 +343,22 @@ MonoBehaviour:
   <isOnSlope>k__BackingField: 0
   <isSlopeGrounded>k__BackingField: 0
   lastDisabledUpdate: -1
+--- !u!114 &4570672024762158509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2302237619417856471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c8b284478474b44b93b144c051b3e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 6e31774dcaa88d54693eb752922b946b, type: 2}
+  <isChasing>k__BackingField: 0
+  <targetDistance>k__BackingField: 0
+  <targetDirection>k__BackingField: {x: 0, y: 0}
 --- !u!114 &2042868004939667613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,6 +390,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 2762ddaf2e83cde4aa2b624eddecb19b, type: 2}
   <isJumping>k__BackingField: 0
   <jumpCooldown>k__BackingField: 0
+  <jumpSpeed>k__BackingField: 0
 --- !u!1 &3015572557815253689
 GameObject:
   m_ObjectHideFlags: 0
