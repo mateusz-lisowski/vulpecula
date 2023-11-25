@@ -16,7 +16,7 @@ TagManager:
   - 
   - Ground
   - Platform Passable
-  - Slope
+  - Player Platform Passable
   - 
   - Player
   - Player Invulnerable
@@ -31,7 +31,7 @@ TagManager:
   - Wall-Jumpable
   - Ground-Droppable
   - Ground-Breakable
-  - 
+  - Slope
   - 
   - 
   - 

@@ -47,10 +47,10 @@ MonoBehaviour:
   run:
     groundLayers:
       serializedVersion: 2
-      m_Bits: 768
+      m_Bits: 1792
     slopeLayer:
       serializedVersion: 2
-      m_Bits: 1024
+      m_Bits: 33554432
     maxSpeed: 7
     acceleration: 2
     deceleration: 4
@@ -96,7 +96,7 @@ MonoBehaviour:
   platformPassing:
     layers:
       serializedVersion: 2
-      m_Bits: 512
+      m_Bits: 1536
     inputBufferTime: 0.05
   detection:
     canDamageLayer:
