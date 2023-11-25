@@ -39,8 +39,12 @@ public class MeleeAtackBehavior : EntityBehavior
 	{
 		if (eventName == data.attackInstantiateEventName + "Exit")
 			isAttacking = false;
-		else if (attackTransforms.ContainsKey(eventName)) 
+		else if (attackTransforms.ContainsKey(eventName))
+		{
 			attackInstantiate(attackTransforms[eventName]);
+			if (eventName == data.attackInstantiateEventName)
+				isAttacking = false;
+		}
 	}
 
 	public override void onUpdate()
@@ -81,8 +85,6 @@ public class MeleeAtackBehavior : EntityBehavior
 	}
 	private void attackInstantiate(Transform attackTransform)
 	{
-		isAttacking = false;
-
 		GameObject currentAttack = Instantiate(data.attackPrefab,
 			attackTransform.position, attackTransform.rotation);
 
