@@ -10,11 +10,11 @@ public class JumpBehavior : EntityBehavior
 	[field: SerializeField, ReadOnly] public bool isJumping { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float jumpCooldown { get; private set; }
+	[field: Space(10)]
+	[field: SerializeField, ReadOnly] public float jumpSpeed { get; private set; }
 
 	private FlipBehavior direction;
 	private GroundedBehavior ground;
-
-	private float jumpSpeed = 0f;
 
 
 	public override void onAwake()
@@ -53,10 +53,11 @@ public class JumpBehavior : EntityBehavior
 	{
 		jumpCooldown = data.cooldown;
 
-		float height;
-		if (findTarget(out height, out jumpSpeed))
+		float height, targetJumpSpeed;
+		if (findTarget(out height, out targetJumpSpeed))
 		{
 			isJumping = true;
+			jumpSpeed = targetJumpSpeed;
 			float force = Mathf.Sqrt(2 * -Physics2D.gravity.y * height);
 
 			if (force > controller.rigidBody.velocity.y)
