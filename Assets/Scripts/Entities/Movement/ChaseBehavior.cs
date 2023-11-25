@@ -31,8 +31,12 @@ public class ChaseBehavior : EntityBehavior
 			targetDistance = targetDir.magnitude;
 			targetDirection = targetDir.normalized;
 
-			if ((direction.isFacingRight && targetDirection.x < 0)
-				|| (!direction.isFacingRight && targetDirection.x > 0))
+			bool targetOtherDirection = (direction.isFacingRight && targetDirection.x < 0)
+				|| (!direction.isFacingRight && targetDirection.x > 0);
+
+			Debug.DrawLine(transform.position, targetPosition, Color.red);
+
+			if (targetOtherDirection && ground.isGrounded)
 				direction.flip();
 		}
 	}

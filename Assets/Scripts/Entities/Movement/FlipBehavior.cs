@@ -6,14 +6,17 @@ public class FlipBehavior : EntityBehavior
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public float lastTurnTime { get; private set; }
+	[field: SerializeField, ReadOnly] public float turnCooldown { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] private int lastTurnFixedUpdate = -1;
 
 
 	public void flip()
 	{
-		lastTurnTime = 0;
+		if (turnCooldown > 0)
+			return;
+
+		turnCooldown = data.cooldown;
 		lastTurnFixedUpdate = controller.currentFixedUpdate;
 
 		isFacingRight = !isFacingRight;
@@ -27,12 +30,10 @@ public class FlipBehavior : EntityBehavior
 	public override void onAwake()
 	{
 		isFacingRight = controller.transform.right.x > 0;
-
-		lastTurnTime = float.PositiveInfinity;
 	}
 
 	public override void onUpdate()
 	{
-		lastTurnTime += Time.deltaTime;
+		turnCooldown -= Time.deltaTime;
 	}
 }
