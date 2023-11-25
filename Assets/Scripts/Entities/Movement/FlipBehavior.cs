@@ -8,12 +8,18 @@ public class FlipBehavior : EntityBehavior
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public float turnCooldown { get; private set; }
 	[field: Space(10)]
+	[field: SerializeField, ReadOnly] private int lastDisabledUpdate = -1;
 	[field: SerializeField, ReadOnly] private int lastTurnFixedUpdate = -1;
 
 
+	public void disableFlipNextFrame()
+	{
+		lastDisabledUpdate = controller.currentUpdate + 1;
+	}
+
 	public void flip()
 	{
-		if (turnCooldown > 0)
+		if (turnCooldown > 0 || lastDisabledUpdate >= controller.currentUpdate)
 			return;
 
 		turnCooldown = data.cooldown;

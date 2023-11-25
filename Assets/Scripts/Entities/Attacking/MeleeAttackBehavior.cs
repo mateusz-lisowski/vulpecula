@@ -9,6 +9,7 @@ public class MeleeAtackBehavior : EntityBehavior
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
+	private FlipBehavior direction;
 	private HurtBehavior hurt;
 
 	private Transform attackTransform;
@@ -20,6 +21,7 @@ public class MeleeAtackBehavior : EntityBehavior
 
 	public override void onAwake()
 	{
+		direction = controller.getBehavior<FlipBehavior>();
 		hurt = controller.getBehavior<HurtBehavior>();
 
 		attackTransform = controller.transform.Find(data.provokeDetectionName);
@@ -97,5 +99,8 @@ public class MeleeAtackBehavior : EntityBehavior
 		{
 			attack();
 		}
+
+		if (isAttacking)
+			direction.disableFlipNextFrame();
 	}
 }
