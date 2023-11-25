@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeAtackBehavior : EntityBehavior
@@ -12,7 +13,7 @@ public class MeleeAtackBehavior : EntityBehavior
 	private FlipBehavior direction;
 	private HurtBehavior hurt;
 
-	private Transform attackTransform;
+	private Dictionary<string, Transform> attackTransforms;
 	private Collider2D attackCheck;
 
 	private bool justAttacked = false;
@@ -24,16 +25,22 @@ public class MeleeAtackBehavior : EntityBehavior
 		direction = controller.getBehavior<FlipBehavior>();
 		hurt = controller.getBehavior<HurtBehavior>();
 
-		attackTransform = controller.transform.Find(data.provokeDetectionName);
+		Transform attackTransform = controller.transform.Find(data.provokeDetectionName);
 		attackCheck = attackTransform.GetComponent<Collider2D>();
+
+		attackTransforms = new Dictionary<string, Transform>();
+
+		attackTransforms[data.attackInstantiateEventName] = attackTransform;
+		foreach (Transform childTransform in attackTransform)
+			attackTransforms[data.attackInstantiateEventName + ":" + childTransform.name] = childTransform;
 	}
 
 	public override void onEvent(string eventName, object eventData)
 	{
-		if (eventName == data.attackInstantiateEventName)
-			attackInstantiate();
-		else if (eventName == data.attackInstantiateEventName + "Exit")
+		if (eventName == data.attackInstantiateEventName + "Exit")
 			isAttacking = false;
+		else if (attackTransforms.ContainsKey(eventName)) 
+			attackInstantiate(attackTransforms[eventName]);
 	}
 
 	public override void onUpdate()
@@ -72,17 +79,17 @@ public class MeleeAtackBehavior : EntityBehavior
 	{
 		return attackCooldown <= 0 && isProvoked && !(hurt != null && hurt.isDistressed);
 	}
-	private void attackInstantiate()
+	private void attackInstantiate(Transform attackTransform)
 	{
 		isAttacking = false;
 
-		GameObject currentAttack = Object.Instantiate(data.attackPrefab,
+		GameObject currentAttack = Instantiate(data.attackPrefab,
 			attackTransform.position, attackTransform.rotation);
 
 		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
-		currentAttackData.setHitboxSize(attackTransform.localScale);
+		currentAttackData.setHitboxSize(attackTransform.lossyScale);
 	}
 	private void attack()
 	{
