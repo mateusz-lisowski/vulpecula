@@ -43,7 +43,7 @@ public class GroundDroppingController : MonoBehaviour
 	private IEnumerator dropTiles(List<TilemapHelper.TileData> tiles)
 	{
 		var instance = Effects.Tiles.instantiate(
-			tiles.Where(tile => tile.parent != tilemap), transform.parent.GetComponent<Grid>());
+			tiles.Where(tile => tile.parent != tilemap), tilemap.layoutGrid);
 
 		yield return new WaitForSeconds(data.groundDropping.shakeTime);
 

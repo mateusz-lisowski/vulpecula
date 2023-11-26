@@ -49,7 +49,7 @@ public class GroundBreakingController : MonoBehaviour
 	private IEnumerator breakTiles(List<TilemapHelper.TileData> tiles)
 	{
 		var instance = Effects.Tiles.instantiate(
-			tiles.Where(tile => tile.parent != tilemap), transform.parent.GetComponent<Grid>());
+			tiles.Where(tile => tile.parent != tilemap), tilemap.layoutGrid);
 
 		foreach (TilemapHelper.TileData tile in tiles)
 			tile.parent.SetTile(tile.coord, null);
