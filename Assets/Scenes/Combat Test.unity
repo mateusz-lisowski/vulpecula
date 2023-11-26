@@ -20955,7 +20955,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4229955583
+    m_Bits: 2082471935
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -20997,7 +20997,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hiddenLayers:
     serializedVersion: 2
-    m_Bits: 65011712
+    m_Bits: 2212495360
   target: {fileID: 668276602}
   boundary: {fileID: 0}
   xMargin: 1
@@ -21958,7 +21958,7 @@ GameObject:
   - component: {fileID: 663711746}
   - component: {fileID: 663711747}
   - component: {fileID: 663711748}
-  m_Layer: 16
+  m_Layer: 31
   m_Name: Enemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22236,7 +22236,7 @@ Tilemap:
     m_Data: {r: 4.3157e-41, g: 4.3157e-41, b: 4.3157e-41, a: 4.3157e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.3764706}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -33, y: -19, z: 0}
   m_Size: {x: 67, y: 62, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
