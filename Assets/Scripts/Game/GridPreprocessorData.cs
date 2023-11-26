@@ -48,6 +48,10 @@ public class GridPreprocessorData
 	{
 		public TilePrefabMapping[] mapping;
 	}
+	[System.Serializable] public struct Collectibles
+	{
+		public TilePrefabMapping[] mapping;
+	}
 
 	public TerrainData terrainData;
 
@@ -62,4 +66,5 @@ public class GridPreprocessorData
 	public Slopes slopes;
 	public BounceOnBreak bounceOnBreak;
 	public Enemies enemies;
+	public Collectibles collectibles;
 }

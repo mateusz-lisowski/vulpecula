@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026e257190f952a4886bc78e959fd11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventName: halt
+  eventName: destroy
 --- !u!1102 &2610840660023125677
 AnimatorState:
   serializedVersion: 6

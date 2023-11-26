@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public Effects effectsInstance;
 
 	public Transform runtimeEnemiesGroup;
+	public Transform runtimeCollectiblesGroup;
 	public Transform runtimeProjectilesGroup;
 
 
@@ -21,10 +22,12 @@ public class GameManager : MonoBehaviour
 
 
 		runtimeEnemiesGroup = new GameObject("Enemies").transform;
+		runtimeCollectiblesGroup = new GameObject("Collectibles").transform;
 		runtimeProjectilesGroup = new GameObject("Projectiles").transform;
 
 		Transform runtimeGroup = new GameObject("Runtime").transform;
 		runtimeEnemiesGroup.parent = runtimeGroup;
+		runtimeCollectiblesGroup.parent = runtimeGroup;
 		runtimeProjectilesGroup.parent = runtimeGroup;
 
 	}

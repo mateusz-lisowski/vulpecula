@@ -73,7 +73,7 @@ public class EntityBehaviorController : MonoBehaviour
 		rigidBody = transform.GetComponent<Rigidbody2D>();
 		animator = transform.Find("Sprite").GetComponent<Animator>();
 		spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
-		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
+		hitbox = transform.Find("Hitbox")?.GetComponent<Transform>();
 
 		currentUpdate = 0;
 		currentFixedUpdate = 0;
@@ -109,6 +109,12 @@ public class EntityBehaviorController : MonoBehaviour
 
 	public void onEvent(string eventName, object eventData)
 	{
+		if (eventName == "destroy")
+		{
+			Destroy(gameObject);
+			return;
+		}
+
 		foreach (var behavior in behaviors)
 			behavior.onEvent(eventName, eventData);
 	}

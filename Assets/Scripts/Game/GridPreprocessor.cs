@@ -35,6 +35,7 @@ public class GridPreprocessor : MonoBehaviour
 				tryAddBreakBounce(tile, coord);
 				
 				tryAddEnemy(tile, tilemap, coord);
+				tryAddCollectible(tile, tilemap, coord);
 			}
 	}
 
@@ -122,6 +123,25 @@ public class GridPreprocessor : MonoBehaviour
 				position -= offset;
 
 				Instantiate(mapping.prefab, position, rotation, GameManager.instance.runtimeEnemiesGroup);
+			}
+	}
+	private void tryAddCollectible(Tile tile, Tilemap tilemap, Vector3Int coord)
+	{
+		foreach (var mapping in data.collectibles.mapping)
+			if (tile == mapping.tile)
+			{
+				SpriteRenderer renderer = mapping.prefab.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+
+				Vector2 pivotOffset = (tile.sprite.pivot - tile.sprite.rect.size / 2) / tile.sprite.pixelsPerUnit;
+				Vector3 offset = renderer.transform.position;
+
+				Vector3 position = tilemap.CellToWorld(coord) + new Vector3(0.5f, 0.5f);
+				position -= (Vector3)pivotOffset;
+				position -= offset;
+				position += tilemap.GetTransformMatrix(coord).GetT();
+
+				Instantiate(mapping.prefab, position, Quaternion.identity, 
+					GameManager.instance.runtimeCollectiblesGroup);
 			}
 	}
 
