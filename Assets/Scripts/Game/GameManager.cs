@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 	public static GameManager instance { get; private set; }
     public Effects effectsInstance;
 
+	public Transform runtimeGroup;
+
 
 	private void Awake()
     {
@@ -15,6 +17,9 @@ public class GameManager : MonoBehaviour
 		// Initialize singletons here, because ScriptableObject that is not attached may not be
         // created and instance would not be set.
 		Effects.instance = effectsInstance;
+
+
+		runtimeGroup = new GameObject("Runtime").transform;
     }
 
 	void Update()

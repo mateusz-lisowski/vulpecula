@@ -33,6 +33,8 @@ public class GridPreprocessor : MonoBehaviour
 
 				tryAddSlope(tile, coord);
 				tryAddBreakBounce(tile, coord);
+				
+				tryAddEnemy(tile, tilemap, coord);
 			}
 	}
 
@@ -95,6 +97,31 @@ public class GridPreprocessor : MonoBehaviour
 			{
 				foreach (Vector3Int offset in tileData.offsetBounds.allPositionsWithin)
 					bounceOnBreakTilemap.SetTile(coord + offset, data.areaTile);
+			}
+	}
+	
+	private void tryAddEnemy(Tile tile, Tilemap tilemap, Vector3Int coord)
+	{
+		foreach (var mapping in data.enemies.mapping)
+			if (tile == mapping.tile)
+			{
+				SpriteRenderer renderer = mapping.prefab.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+				
+				Matrix4x4 tileTransform = tilemap.GetTransformMatrix(coord);
+				Quaternion tileRotation = tileTransform.GetR();
+				
+				Quaternion rotation = tileRotation;
+				if (renderer.flipX)
+					rotation *= Quaternion.Euler(0, 180, 0);
+				
+				Vector2 pivotOffset = (tile.sprite.pivot - tile.sprite.rect.size / 2) / tile.sprite.pixelsPerUnit;
+				Vector3 offset = renderer.transform.position;
+				
+				Vector3 position = tilemap.CellToWorld(coord) + new Vector3(0.5f, 0.5f);
+				position -= (Vector3)pivotOffset;
+				position -= offset;
+
+				Instantiate(mapping.prefab, position, rotation, GameManager.instance.runtimeGroup);
 			}
 	}
 

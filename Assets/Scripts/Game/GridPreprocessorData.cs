@@ -20,6 +20,11 @@ public class GridPreprocessorData
 		public Vector2Int offsetMin;
 		public Vector2Int offsetMax;
 	}
+	[System.Serializable] public struct TilePrefabMapping
+	{
+		public Tile tile;
+		public GameObject prefab;
+	}
 
 	[System.Serializable] public struct Slopes
 	{
@@ -39,6 +44,10 @@ public class GridPreprocessorData
 
 		public Tilemap[] breakableTilemaps;
 	}
+	[System.Serializable] public struct Enemies
+	{
+		public TilePrefabMapping[] mapping;
+	}
 
 	public TerrainData terrainData;
 
@@ -52,5 +61,5 @@ public class GridPreprocessorData
 
 	public Slopes slopes;
 	public BounceOnBreak bounceOnBreak;
-
+	public Enemies enemies;
 }
