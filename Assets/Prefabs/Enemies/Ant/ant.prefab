@@ -95,7 +95,7 @@ Transform:
   m_GameObject: {fileID: 2554975368192752818}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0.4, y: 0.51, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -531,7 +531,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
   <isFacingRight>k__BackingField: 0
-  <lastTurnTime>k__BackingField: 0
+  <turnCooldown>k__BackingField: 0
+  lastDisabledUpdate: -1
   lastTurnFixedUpdate: -1
 --- !u!114 &5663872807992000401
 MonoBehaviour:
@@ -577,6 +578,8 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 55c19d8868dd843468afa08b9e2f76fd, type: 2}
   <isGrounded>k__BackingField: 0
   <isFalling>k__BackingField: 0
+  <isOnSlope>k__BackingField: 0
+  <isSlopeGrounded>k__BackingField: 0
   lastDisabledUpdate: -1
 --- !u!114 &4255831889263061473
 MonoBehaviour:
@@ -593,7 +596,6 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 0c2bcb2cfac634a43a5513e5cdc900b9, type: 2}
   <isProvoked>k__BackingField: 0
   <isAttacking>k__BackingField: 0
-  <lastAttackTime>k__BackingField: 0
   <attackCooldown>k__BackingField: 0
 --- !u!114 &2732491925933866820
 MonoBehaviour:
@@ -608,8 +610,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 601a7bc76e54cd14e8317c6093170b15, type: 2}
-  <isMoving>k__BackingField: 0
-  <isFalling>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
 --- !u!1 &8757982442341642416
