@@ -1,12 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class HitData
-{
-	public bool isVertical;
-	public Vector3 right;
-}
-
 public class PlayerMovement : EntityBehavior
 {
 	const float minVerticalMovementVelocity = 0.01f;
@@ -62,7 +56,7 @@ public class PlayerMovement : EntityBehavior
 	private LayerMask playerInvulnerableLayer;
 	private LayerMask currentGroundLayers;
 
-	private HitData hitContact = null;
+	private HitData hitData = null;
 	private Vector2 moveInput;
 	private bool passingLayersDisabled = false;
 
@@ -106,14 +100,12 @@ public class PlayerMovement : EntityBehavior
 
 	public override void onEvent(string eventName, object eventData)
 	{
-		if (eventName != "hit")
-			return;
-
-		AttackController contact = eventData as AttackController;
-
-		hitContact = new HitData();
-		hitContact.isVertical = contact.isVertical;
-		hitContact.right = contact.transform.right;
+		switch (eventName)
+		{
+			case "hit":
+				hitData = eventData as HitData;
+				break;
+		}
 	}
 
 	public override void onUpdate()
@@ -271,21 +263,21 @@ public class PlayerMovement : EntityBehavior
 	}
 	private void takeGroundDamage()
 	{
-		hitContact = new HitData();
-		hitContact.isVertical = true;
-		hitContact.right = transform.right;
+		hitData = new HitData();
+		hitData.isVertical = true;
+		hitData.right = transform.right;
 	}
 	private bool canHurt()
 	{
-		return hitContact != null && hurtCooldown <= 0;
+		return hitData != null && hurtCooldown <= 0;
 	}
 	private void setDistressDirection()
 	{
-		if (hitContact.isVertical)
+		if (hitData.isVertical)
 			return;
 
 		// if attack faces the same direction
-		if (Vector2.Dot(transform.right, hitContact.right) > 0)
+		if (Vector2.Dot(transform.right, hitData.right) > 0)
 			flip();
 	}
 	private void setInvulnerability(bool val)
@@ -326,7 +318,7 @@ public class PlayerMovement : EntityBehavior
 
 		if (canHurt())
 			hurt();
-		hitContact = null;
+		hitData = null;
 
 		if (hurtCooldown <= 0)
 			setInvulnerability(false);

@@ -3,29 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AttackController : MonoBehaviour
+public class HitData
 {
-	[field: SerializeField, ReadOnly] public bool isVertical { get; private set; }
-	[field: Space(5)]
-	[field: SerializeField, ReadOnly] public bool hitBouncy { get; private set; }
-	[field: Space(5)]
-	[field: SerializeField, ReadOnly] public Bounds hitboxBounds { get; private set; }
+	public Vector3 right;
+	public Bounds bounds;
+	public bool isVertical;
+	public bool bounce;
+}
 
+public class ProjectileBehavior : EntityBehavior
+{
 	private Collider2D hitbox;
 
-	private Action<AttackController> hitCallback;
+	private Action<HitData> hitCallback;
 	private LayerMask hitLayers;
 
 	private Vector2 velocity;
+	private bool isVertical;
 
 
-	public void setAttack(ScriptableObject data)
+	public void initialize(ScriptableObject data)
 	{
 		if (data is PlayerData)
 			hitLayers = ((PlayerData)data).attack.hitLayers;
 		else if (data is MeleeAtackBehaviorData)
 			hitLayers = ((MeleeAtackBehaviorData)data).hitLayers;
 	}
+
 	public void setVelocity(Vector2 vel)
 	{
 		velocity = vel;
@@ -48,21 +52,31 @@ public class AttackController : MonoBehaviour
 				capsuleHitbox.direction = CapsuleDirection2D.Vertical;
 		}
 	}
-	public void setHitCallback(Action<AttackController> callback)
+	public void setHitCallback(Action<HitData> callback)
 	{
 		hitCallback = callback;
 	}
 
 
-	private void Awake()
+
+	public override void onAwake()
 	{
-		hitbox = transform.Find("Hitbox").GetComponent<Collider2D>();
+		hitbox = controller.hitbox.GetComponent<Collider2D>();
 	}
 
-	public void resolve()
+	public override void onEvent(string eventName, object eventData)
+	{
+		switch (eventName)
+		{
+			case "resolve": resolve(); break;
+			case "halt": halt(); break;
+		}
+	}
+
+
+	private void resolve()
 	{
 		transform.parent = GameManager.instance.runtimeProjectilesGroup;
-		hitboxBounds = hitbox.bounds;
 
 		if (velocity != Vector2.zero)
 			StartCoroutine(Effects.instance.frameMove.run(transform, velocity, 2f));
@@ -75,17 +89,22 @@ public class AttackController : MonoBehaviour
 		if (hitbox.OverlapCollider(filter, contacts) == 0)
 			return;
 
-		hitBouncy = contacts.Any(c => c.tag == "BreakBounce");
+		HitData hit = new HitData();
+		hit.right = transform.right;
+		hit.bounds = hitbox.bounds;
+		hit.isVertical = isVertical;
+		hit.bounce = contacts.Any(c => c.tag == "BreakBounce");
 
 		if (hitCallback != null)
-			hitCallback(this);
+			hitCallback(hit);
 
 		foreach (Collider2D contact in contacts)
-			contact.SendMessageUpwards("onMessage", new EntityMessage("hit", this));
+			contact.SendMessageUpwards("onMessage", new EntityMessage("hit", hit));
 	}
 
 	public void halt()
 	{
 		Destroy(gameObject);
 	}
+
 }

@@ -17,7 +17,7 @@ public class MeleeAtackBehavior : EntityBehavior
 	private Collider2D attackCheck;
 
 	private bool justAttacked = false;
-	private AttackController currentAttackData = null;
+	private ProjectileBehavior currentAttackData = null;
 
 
 	public override void onAwake()
@@ -88,9 +88,9 @@ public class MeleeAtackBehavior : EntityBehavior
 		GameObject currentAttack = Instantiate(data.attackPrefab,
 			attackTransform.position, attackTransform.rotation, transform);
 
-		currentAttackData = currentAttack.GetComponent<AttackController>();
+		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-		currentAttackData.setAttack(data);
+		currentAttackData.initialize(data);
 		currentAttackData.setHitboxSize(attackTransform.lossyScale);
 	}
 	private void attack()

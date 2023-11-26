@@ -18,9 +18,9 @@ public class GroundBreakingController : MonoBehaviour
 		if (msg.name != "hit")
 			return;
 
-		AttackController contact = msg.data as AttackController;
+		HitData contact = msg.data as HitData;
 
-		List<Vector3Int> triggeredCoords = TilemapHelper.getTriggeredTiles(tilemap, contact.hitboxBounds);
+		List<Vector3Int> triggeredCoords = TilemapHelper.getTriggeredTiles(tilemap, contact.bounds);
 		if (triggeredCoords.Count == 0)
 			return;
 

@@ -25,7 +25,7 @@ public class PlayerAttack : EntityBehavior
 	private Transform attackForwardAirTransform;
 	private Transform attackDownTransform;
 
-	private AttackController currentAttackData = null;
+	private ProjectileBehavior currentAttackData = null;
 
 
 	public override void onAwake()
@@ -110,9 +110,9 @@ public class PlayerAttack : EntityBehavior
 			: data.attack.attackForward1Prefab,
 			currentAttackTransform.position, currentAttackTransform.rotation, transform);
 		
-		currentAttackData = currentAttack.GetComponent<AttackController>();
+		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-		currentAttackData.setAttack(data);
+		currentAttackData.initialize(data);
 		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 		currentAttackData.setHitboxSize(currentAttackTransform.localScale);
 	}
@@ -140,9 +140,9 @@ public class PlayerAttack : EntityBehavior
 		GameObject currentAttack = Instantiate(data.attack.attackForwardAirPrefab,
 			attackForwardAirTransform.position, attackForwardAirTransform.rotation, transform);
 
-		currentAttackData = currentAttack.GetComponent<AttackController>();
+		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-		currentAttackData.setAttack(data);
+		currentAttackData.initialize(data);
 		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 		currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
 	}
@@ -158,22 +158,22 @@ public class PlayerAttack : EntityBehavior
 		controller.animator.SetTrigger("isAttackingAir");
 	}
 
-	private void attackDownHitCallback(AttackController attackData)
+	private void attackDownHitCallback(HitData hitData)
 	{
-		if (attackData.hitBouncy)
+		if (hitData.bounce)
 			movement.registeredDownHitHighJump = true;
 
 		movement.registeredDownHitJump = true;
-		attackData.setHitCallback(null);
+		currentAttackData.setHitCallback(null);
 	}
 	private void attackDownInstantiate()
 	{
 		GameObject currentAttack = Instantiate(data.attack.attackDownPrefab, 
 			attackDownTransform.position, attackDownTransform.rotation, transform);
 
-		currentAttackData = currentAttack.GetComponent<AttackController>();
+		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-		currentAttackData.setAttack(data);
+		currentAttackData.initialize(data);
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();

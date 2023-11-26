@@ -14,7 +14,7 @@ public class HurtBehavior : EntityBehavior
 	private LayerMask enemyLayer;
 	private LayerMask enemyInvulnerableLayer;
 
-	private AttackController hitContact = null;
+	private HitData hitData = null;
 
 
 	public override void onAwake()
@@ -32,7 +32,7 @@ public class HurtBehavior : EntityBehavior
 		switch (eventName)
 		{
 			case "hit":
-				hitContact = (AttackController)eventData;
+				hitData = eventData as HitData;
 				break;
 		}
 	}
@@ -44,7 +44,7 @@ public class HurtBehavior : EntityBehavior
 
 		if (canHurt())
 			hurt();
-		hitContact = null;
+		hitData = null;
 
 		if (hurtCooldown <= 0)
 			setInvulnerability(false);
@@ -62,18 +62,18 @@ public class HurtBehavior : EntityBehavior
 
 	private bool canHurt()
 	{
-		return hitContact != null && hurtCooldown <= 0;
+		return hitData != null && hurtCooldown <= 0;
 	}
 	private void setDistressDirection()
 	{
 		if (direction == null)
 			return;
 
-		if (hitContact.isVertical)
+		if (hitData.isVertical)
 			return;
 
 		// if attack faces the same direction
-		if (Vector2.Dot(transform.right, hitContact.transform.right) > 0)
+		if (Vector2.Dot(transform.right, hitData.right) > 0)
 			direction.flip();
 	}
 	private void setInvulnerability(bool val)
