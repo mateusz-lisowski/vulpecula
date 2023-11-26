@@ -7,7 +7,7 @@ class HitData
 	public Vector3 right;
 }
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : EntityBehavior
 {
 	const float minVerticalMovementVelocity = 0.01f;
 
@@ -51,11 +51,6 @@ public class PlayerMovement : MonoBehaviour
 	[field: SerializeField, ReadOnly] public float dashCooldown { get; private set; }
 
 
-	private Rigidbody2D rigidBody;
-    private Animator animator;
-    private SpriteRenderer spriteRenderer;
-
-	private Transform hitbox;
     private TrailRenderer trail;
     private Collider2D groundCheck;
     private Collider2D slopeCheck;
@@ -71,7 +66,6 @@ public class PlayerMovement : MonoBehaviour
 	private Vector2 moveInput;
 	private bool passingLayersDisabled = false;
 
-	private int currentFrame = 0;
 	private int lastJumpFrame = -1;
 	private int lastTurnFrame = -1;
 
@@ -84,13 +78,8 @@ public class PlayerMovement : MonoBehaviour
 	[HideInInspector] public bool lastAttackDown = false;
 
 
-	private void Awake()
+	public override void onAwake()
 	{
-		rigidBody = GetComponent<Rigidbody2D>();
-		animator = GetComponent<Animator>();
-		spriteRenderer = GetComponent<SpriteRenderer>();
-
-		hitbox = transform.Find("Hitbox").GetComponent<Transform>();
 		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		slopeCheck = transform.Find("Slope Check").GetComponent<Collider2D>();
@@ -115,8 +104,19 @@ public class PlayerMovement : MonoBehaviour
 		lastPassInputTime = float.PositiveInfinity;
 	}
 
-	// handle inputs, platform passing, dashing, and jumping
-	void Update()
+	public override void onEvent(string eventName, object eventData)
+	{
+		if (eventName != "hit")
+			return;
+
+		AttackController contact = eventData as AttackController;
+
+		hitContact = new HitData();
+		hitContact.isVertical = contact.isVertical;
+		hitContact.right = contact.transform.right;
+	}
+
+	public override void onUpdate()
 	{
 		updateTimers();
 
@@ -132,18 +132,15 @@ public class PlayerMovement : MonoBehaviour
 		updatePass();
 		updateGroundBreak();
 
-		animator.SetBool("isGrounded", isGrounded);
-		animator.SetBool("isDistressed", isDistressed);
-		animator.SetBool("isFalling", isFalling);
-		animator.SetBool("isMoving", isMoving);
-		animator.SetBool("isWallHolding", lastWallHoldingTime == 0);
+		controller.animator.SetBool("isGrounded", isGrounded);
+		controller.animator.SetBool("isDistressed", isDistressed);
+		controller.animator.SetBool("isFalling", isFalling);
+		controller.animator.SetBool("isMoving", isMoving);
+		controller.animator.SetBool("isWallHolding", lastWallHoldingTime == 0);
 	}
 
-	// handle run
-	void FixedUpdate()
+	public override bool onFixedUpdate()
 	{
-		currentFrame++;
-
 		if (!isDashing)
 		{
 			updateRun();
@@ -152,6 +149,8 @@ public class PlayerMovement : MonoBehaviour
 			if (lastWallHoldingTime == 0)
 				updateWallSlide();
 		}
+
+		return true;
 	}
 
 
@@ -172,10 +171,10 @@ public class PlayerMovement : MonoBehaviour
 		dashCooldown -= Time.deltaTime;
 	}
 
-	private void Flip()
+	private void flip()
 	{
 		lastTurnTime = 0;
-		lastTurnFrame = currentFrame;
+		lastTurnFrame = controller.currentFixedUpdate;
 
 		isFacingRight = !isFacingRight;
 		transform.Rotate(0, 180, 0);
@@ -193,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (!isDashing && !isDistressed && !isAttacking && !isInCombo)
 			if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
-				Flip();
+				flip();
 
 		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Z))
 			lastJumpInputTime = 0;
@@ -209,28 +208,17 @@ public class PlayerMovement : MonoBehaviour
 			lastPassInputTime = 0;
 	}
 	
-	public void onMessage(EntityMessage msg)
-	{
-		if (msg.name != "hit")
-			return;
-
-		AttackController contact = msg.data as AttackController;
-
-		hitContact = new HitData();
-		hitContact.isVertical = contact.isVertical;
-		hitContact.right = contact.transform.right;
-	}
 	private bool isGroundedFalsePositive()
 	{
 		// just jumped
 		if (isJumping && !isFalling)
 		{
 			// wait for hitbox position update
-			if (!isOnSlope || lastJumpFrame >= currentFrame - 1)
+			if (!isOnSlope || lastJumpFrame >= controller.currentFixedUpdate - 1)
 				return true;
 
 			// is not running up a slope after jumping
-			if (!rigidBody.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers))
+			if (!controller.rigidBody.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers))
 				return true;
 		}
 
@@ -242,7 +230,7 @@ public class PlayerMovement : MonoBehaviour
 				return false;
 
 			// is falling
-			if (rigidBody.velocity.y <= -minVerticalMovementVelocity && isJumping && !isSlopeGrounded)
+			if (controller.rigidBody.velocity.y <= -minVerticalMovementVelocity && isJumping && !isSlopeGrounded)
 				return true;
 		}
 
@@ -261,7 +249,7 @@ public class PlayerMovement : MonoBehaviour
 
 		// disable registering wall collision immediately after turning because wallCheck's hitbox
 		// needs time to get updated
-		if (lastTurnFrame >= currentFrame - 1)
+		if (lastTurnFrame >= controller.currentFixedUpdate - 1)
 			isFacingWall = false;
 
 		if ((isGrounded || isSlopeGrounded) && isGroundedFalsePositive())
@@ -298,7 +286,7 @@ public class PlayerMovement : MonoBehaviour
 
 		// if attack faces the same direction
 		if (Vector2.Dot(transform.right, hitContact.right) > 0)
-			Flip();
+			flip();
 	}
 	private void setInvulnerability(bool val)
 	{
@@ -306,10 +294,10 @@ public class PlayerMovement : MonoBehaviour
 
 		int layer = val ? playerInvulnerableLayer : playerLayer;
 
-		foreach (Transform child in hitbox)
+		foreach (Transform child in controller.hitbox)
 			child.gameObject.layer = layer;
 
-		hitbox.gameObject.layer = layer;
+		controller.hitbox.gameObject.layer = layer;
 	}
 	private void hurt()
 	{
@@ -320,16 +308,16 @@ public class PlayerMovement : MonoBehaviour
 		setDistressDirection();
 		setInvulnerability(true);
 		StartCoroutine(Effects.instance.flashing.run(
-			spriteRenderer, data.hurt.invulnerabilityTime, burst: true));
+			controller.spriteRenderer, data.hurt.invulnerabilityTime, burst: true));
 
 		float force = data.hurt.knockbackForce;
-		if (force > rigidBody.velocity.y)
+		if (force > controller.rigidBody.velocity.y)
 		{
-			force -= rigidBody.velocity.y;
-			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+			force -= controller.rigidBody.velocity.y;
+			controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
 		}
 
-		Flip();
+		flip();
 	}
 	private void updateHurt()
 	{
@@ -345,7 +333,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isDistressed && lastHurtTime >= data.hurt.distressTime)
 		{
-			Flip();
+			flip();
 			isDistressed = false;
 		}
 
@@ -356,7 +344,7 @@ public class PlayerMovement : MonoBehaviour
 			isGrounded = false;
 
 			if (isFacingWall)
-				Flip();
+				flip();
 
 			moveInput.y = 0;
 			moveInput.x = isFacingRight ? 1 : -1;
@@ -389,15 +377,15 @@ public class PlayerMovement : MonoBehaviour
 		float forceDirection = isFacingRight ? 1.0f : -1.0f;
 
 		float force = data.dash.force;
-		if (Mathf.Sign(forceDirection) == Mathf.Sign(rigidBody.velocity.x))
-			force -= Mathf.Abs(rigidBody.velocity.x);
+		if (Mathf.Sign(forceDirection) == Mathf.Sign(controller.rigidBody.velocity.x))
+			force -= Mathf.Abs(controller.rigidBody.velocity.x);
 
 		if (force > 0)
 		{
-			rigidBody.AddForce(force * forceDirection * Vector2.right, ForceMode2D.Impulse);
+			controller.rigidBody.AddForce(force * forceDirection * Vector2.right, ForceMode2D.Impulse);
 		}
 
-		rigidBody.AddForce(-rigidBody.velocity.y * Vector2.up, ForceMode2D.Impulse);
+		controller.rigidBody.AddForce(-controller.rigidBody.velocity.y * Vector2.up, ForceMode2D.Impulse);
 	}
 	private void updateDash()
 	{
@@ -408,7 +396,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (isDashing)
 			if (dashCutInput || lastDashTime >= data.dash.time
-				|| isFacingWall || Mathf.Abs(rigidBody.velocity.y) > minVerticalMovementVelocity)
+				|| isFacingWall || Mathf.Abs(controller.rigidBody.velocity.y) > minVerticalMovementVelocity)
 			{
 				isDashing = false;
 			}
@@ -446,7 +434,7 @@ public class PlayerMovement : MonoBehaviour
 		jumpCooldown = data.jump.cooldown;
 
 		currentJumpCuttable = !registeredDownHitJump;
-		lastJumpFrame = currentFrame;
+		lastJumpFrame = controller.currentFixedUpdate;
 
 		float force = data.jump.force;
 		if (registeredDownHitJump)
@@ -455,10 +443,10 @@ public class PlayerMovement : MonoBehaviour
 			else
 				force = data.attack.attackDownBounceForce;
 
-		if (force > rigidBody.velocity.y)
+		if (force > controller.rigidBody.velocity.y)
 		{
-			force -= rigidBody.velocity.y;
-			rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+			force -= controller.rigidBody.velocity.y;
+			controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
 		}
 
 		if (lastWallHoldingTime < data.wall.jumpCoyoteTime)
@@ -467,47 +455,47 @@ public class PlayerMovement : MonoBehaviour
 			lastWallJumpTime = 0;
 
 			if (isLastFacedWallRight == isFacingRight)
-				Flip();
+				flip();
 
 			float forceDirection = isFacingRight ? 1.0f : -1.0f;
 
 			float wallJumpForce = data.wall.jumpForce;
-			rigidBody.AddForce(wallJumpForce * forceDirection * Vector2.right, ForceMode2D.Impulse);
+			controller.rigidBody.AddForce(wallJumpForce * forceDirection * Vector2.right, ForceMode2D.Impulse);
 		}
 	}
 	private void updateGravityScale()
 	{
 		if (isDashing)
 		{
-			rigidBody.gravityScale = 0;
+			controller.rigidBody.gravityScale = 0;
 		}
 		else if (lastWallHoldingTime == 0)
 		{
-			rigidBody.gravityScale = 0;
+			controller.rigidBody.gravityScale = 0;
 		}
 		else if (isJumping && canJumpCut())
 		{
-			rigidBody.gravityScale = data.gravity.scale * data.jump.jumpCutGravityMultiplier;
+			controller.rigidBody.gravityScale = data.gravity.scale * data.jump.jumpCutGravityMultiplier;
 		}
-		else if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
+		else if (isJumping && Mathf.Abs(controller.rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
 		{
-			rigidBody.gravityScale = data.gravity.scale * data.jump.hangingGravityMultiplier;
+			controller.rigidBody.gravityScale = data.gravity.scale * data.jump.hangingGravityMultiplier;
 		}
 		else if (isOnSlope && isSlopeGrounded)
 		{
-			rigidBody.gravityScale = 0;
+			controller.rigidBody.gravityScale = 0;
 		}
 		else if (isFalling)
 		{
-			rigidBody.gravityScale = data.gravity.scale * data.gravity.fallMultiplier;
+			controller.rigidBody.gravityScale = data.gravity.scale * data.gravity.fallMultiplier;
 		}
 		else
-			rigidBody.gravityScale = data.gravity.scale;
+			controller.rigidBody.gravityScale = data.gravity.scale;
 	}
 	private void updateJump()
 	{
 		if (!isGrounded && lastWallHoldingTime != 0 
-			&& (rigidBody.velocity.y <= -minVerticalMovementVelocity || isSlopeGrounded))
+			&& (controller.rigidBody.velocity.y <= -minVerticalMovementVelocity || isSlopeGrounded))
 		{
 			isFalling = true;
 		}
@@ -537,10 +525,10 @@ public class PlayerMovement : MonoBehaviour
 			lastWallJumpTime = float.PositiveInfinity;
 		}
 
-		if (rigidBody.velocity.y < -data.gravity.maxFallSpeed)
+		if (controller.rigidBody.velocity.y < -data.gravity.maxFallSpeed)
 		{
-			rigidBody.AddForce(
-				(data.gravity.maxFallSpeed + rigidBody.velocity.y) * Vector2.down, 
+			controller.rigidBody.AddForce(
+				(data.gravity.maxFallSpeed + controller.rigidBody.velocity.y) * Vector2.down, 
 				ForceMode2D.Impulse);
 		}
 	}
@@ -596,7 +584,7 @@ public class PlayerMovement : MonoBehaviour
 		filter.useLayerMask = true;
 
 		List<Collider2D> contacts = new List<Collider2D>();
-		if (rigidBody.OverlapCollider(filter, contacts) == 0)
+		if (controller.rigidBody.OverlapCollider(filter, contacts) == 0)
 			return;
 
 		foreach (Collider2D contact in contacts)
@@ -619,14 +607,14 @@ public class PlayerMovement : MonoBehaviour
 		float targetSpeed = moveInput.x * data.run.maxSpeed;
 
 		if (lastWallJumpTime < data.wall.jumpTime)
-			targetSpeed = Mathf.Lerp(targetSpeed, rigidBody.velocity.x, data.wall.jumpInputReduction);
+			targetSpeed = Mathf.Lerp(targetSpeed, controller.rigidBody.velocity.x, data.wall.jumpInputReduction);
 
 		if (isDistressed)
 			targetSpeed = moveInput.x * data.hurt.knockbackMaxSpeed;
 
 		float accelRate = targetSpeed == 0 ? data.run.decelerationForce : data.run.accelerationForce;
 
-		if (isJumping && Mathf.Abs(rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
+		if (isJumping && Mathf.Abs(controller.rigidBody.velocity.y) < data.jump.hangingVelocityThreshold)
 		{
 			targetSpeed *= data.jump.hangingSpeedMultiplier;
 			accelRate *= data.jump.hangingSpeedMultiplier;
@@ -638,21 +626,23 @@ public class PlayerMovement : MonoBehaviour
 			accelRate = data.attack.forwardAcceleration;
 		}
 
-		float speedDif = targetSpeed - rigidBody.velocity.x;
+		float speedDif = targetSpeed - controller.rigidBody.velocity.x;
 		float movement = speedDif * accelRate;
-		
-		rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
+
+		controller.rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
 	}
 
 	private void updateFall()
 	{
-		if (isGrounded && rigidBody.velocity.y > 0)
-			rigidBody.AddForce(data.run.groundStickiness * -rigidBody.velocity.y * Vector2.up,
+		if (isGrounded && controller.rigidBody.velocity.y > 0)
+			controller.rigidBody.AddForce(
+				data.run.groundStickiness * -controller.rigidBody.velocity.y * Vector2.up,
 				ForceMode2D.Force);
 
 		if (isFalling && isAttacking && lastAttackDown)
-			rigidBody.AddForce(data.attack.attackDownSlowdown * -rigidBody.velocity.y * Vector2.up,
-					ForceMode2D.Force);
+			controller.rigidBody.AddForce(
+				data.attack.attackDownSlowdown * -controller.rigidBody.velocity.y * Vector2.up,
+				ForceMode2D.Force);
 
 	}
 
@@ -662,9 +652,9 @@ public class PlayerMovement : MonoBehaviour
 		float accelRate = targetSpeed == 0 ? data.wall.slideDecelerationForce 
 			: data.wall.slideAccelerationForce;
 
-		float speedDif = targetSpeed - rigidBody.velocity.y;
+		float speedDif = targetSpeed - controller.rigidBody.velocity.y;
 		float movement = speedDif * accelRate;
 
-		rigidBody.AddForce(movement * Vector2.up, ForceMode2D.Force);
+		controller.rigidBody.AddForce(movement * Vector2.up, ForceMode2D.Force);
 	}
 }

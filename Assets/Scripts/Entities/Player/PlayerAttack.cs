@@ -1,7 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerAttack : EntityBehavior
 {
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isAttackDownInput { get; private set; }
@@ -20,9 +19,6 @@ public class PlayerAttack : MonoBehaviour
 	private PlayerMovement movement;
 	private PlayerData data;
 
-	private Rigidbody2D rigidBody;
-	private Animator animator;
-
 	private Transform attackTransform;
 	private Transform attackForwardTransform;
 	private Transform attackForwardStrongTransform;
@@ -32,13 +28,10 @@ public class PlayerAttack : MonoBehaviour
 	private AttackController currentAttackData = null;
 
 
-	private void Awake()
+	public override void onAwake()
 	{
-		movement = transform.GetComponent<PlayerMovement>();
+		movement = controller.getBehavior<PlayerMovement>();
 		data = movement.data;
-
-		rigidBody = transform.GetComponent<Rigidbody2D>();
-		animator = transform.GetComponent<Animator>();
 
 		attackTransform = transform.Find("Attack");
 		attackForwardTransform = attackTransform.Find("Forward");
@@ -51,7 +44,19 @@ public class PlayerAttack : MonoBehaviour
 		lastAttackDownTime = float.PositiveInfinity;
 	}
 
-	void Update()
+	public override void onEvent(string eventName, object eventData)
+	{
+		switch (eventName)
+		{
+			case "attackForward": attackForwardInstantiate(); break;
+			case "attackForwardReset": attackForwardReset(); break;
+			case "attackForwardAir": attackForwardAirInstantiate(); break;
+			case "attackDown": attackDownInstantiate(); break;
+			case "attackExit": attackFinish(); break;
+		}
+	}
+
+	public override void onUpdate()
 	{
 		updateTimers();
 
@@ -81,19 +86,19 @@ public class PlayerAttack : MonoBehaviour
 	}
 
 
-	public void attackFinish()
+	private void attackFinish()
 	{
 		movement.isAttacking = false;
 	}
 
-	public void attackForwardReset()
+	private void attackForwardReset()
 	{
 		attackFinish();
 
 		attackAnyCooldown = 0;
 		attackForwardCooldown = 0;
 	}
-	public void attackForwardInstantiate()
+	private void attackForwardInstantiate()
 	{
 		bool isStrong = attackForwardCombo >= 3;
 		Transform currentAttackTransform = 
@@ -108,7 +113,7 @@ public class PlayerAttack : MonoBehaviour
 		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
-		currentAttackData.setVelocity(new Vector2(rigidBody.velocity.x, 0));
+		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 		currentAttackData.setHitboxSize(currentAttackTransform.localScale);
 
 		currentAttack.transform.parent = transform;
@@ -125,14 +130,14 @@ public class PlayerAttack : MonoBehaviour
 		attackForwardCombo++;
 
 		if (attackForwardCombo == 1)
-			animator.SetTrigger("isAttacking1");
+			controller.animator.SetTrigger("isAttacking1");
 		else if (attackForwardCombo == 2)
-			animator.SetTrigger("isAttacking2");
+			controller.animator.SetTrigger("isAttacking2");
 		else
-			animator.SetTrigger("isAttacking3");
+			controller.animator.SetTrigger("isAttacking3");
 	}
 
-	public void attackForwardAirInstantiate()
+	private void attackForwardAirInstantiate()
 	{
 		GameObject currentAttack = Instantiate(data.attack.attackForwardAirPrefab,
 			attackForwardAirTransform.position, attackForwardAirTransform.rotation);
@@ -140,7 +145,7 @@ public class PlayerAttack : MonoBehaviour
 		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
-		currentAttackData.setVelocity(new Vector2(rigidBody.velocity.x, 0));
+		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 		currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
 
 		currentAttack.transform.parent = transform;
@@ -154,7 +159,7 @@ public class PlayerAttack : MonoBehaviour
 		lastAttackInputTime = float.PositiveInfinity;
 		attackAnyCooldown = attackForwardCooldown = data.attack.forwardCooldown;
 
-		animator.SetTrigger("isAttackingAir");
+		controller.animator.SetTrigger("isAttackingAir");
 	}
 
 	private void attackDownHitCallback(AttackController attackData)
@@ -165,7 +170,7 @@ public class PlayerAttack : MonoBehaviour
 		movement.registeredDownHitJump = true;
 		attackData.setHitCallback(null);
 	}
-	public void attackDownInstantiate()
+	private void attackDownInstantiate()
 	{
 		GameObject currentAttack = Instantiate(data.attack.attackDownPrefab, 
 			attackDownTransform.position, attackDownTransform.rotation);
@@ -189,7 +194,7 @@ public class PlayerAttack : MonoBehaviour
 		lastAttackInputTime = float.PositiveInfinity;
 		attackAnyCooldown = attackDownCooldown = data.attack.downCooldown;
 
-		animator.SetTrigger("isAttackingDown");
+		controller.animator.SetTrigger("isAttackingDown");
 	}
 
 	private bool canAttackAny()
