@@ -121,7 +121,7 @@ public class GridPreprocessor : MonoBehaviour
 				position -= (Vector3)pivotOffset;
 				position -= offset;
 
-				Instantiate(mapping.prefab, position, rotation, GameManager.instance.runtimeGroup);
+				Instantiate(mapping.prefab, position, rotation, GameManager.instance.runtimeEnemiesGroup);
 			}
 	}
 

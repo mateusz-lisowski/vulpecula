@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 	public static GameManager instance { get; private set; }
     public Effects effectsInstance;
 
-	public Transform runtimeGroup;
+	public Transform runtimeEnemiesGroup;
+	public Transform runtimeProjectilesGroup;
 
 
 	private void Awake()
@@ -19,8 +20,14 @@ public class GameManager : MonoBehaviour
 		Effects.instance = effectsInstance;
 
 
-		runtimeGroup = new GameObject("Runtime").transform;
-    }
+		runtimeEnemiesGroup = new GameObject("Enemies").transform;
+		runtimeProjectilesGroup = new GameObject("Projectiles").transform;
+
+		Transform runtimeGroup = new GameObject("Runtime").transform;
+		runtimeEnemiesGroup.parent = runtimeGroup;
+		runtimeProjectilesGroup.parent = runtimeGroup;
+
+	}
 
 	void Update()
 	{

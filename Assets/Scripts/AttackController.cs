@@ -61,7 +61,7 @@ public class AttackController : MonoBehaviour
 
 	public void resolve()
 	{
-		transform.parent = null;
+		transform.parent = GameManager.instance.runtimeProjectilesGroup;
 		hitboxBounds = hitbox.bounds;
 
 		if (velocity != Vector2.zero)

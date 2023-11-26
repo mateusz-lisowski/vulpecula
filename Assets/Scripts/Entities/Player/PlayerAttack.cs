@@ -108,15 +108,13 @@ public class PlayerAttack : EntityBehavior
 			isStrong ? data.attack.attackForward3Prefab 
 			: attackForwardCombo == 2 ? data.attack.attackForward2Prefab
 			: data.attack.attackForward1Prefab,
-			currentAttackTransform.position, currentAttackTransform.rotation);
+			currentAttackTransform.position, currentAttackTransform.rotation, transform);
 		
 		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
 		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 		currentAttackData.setHitboxSize(currentAttackTransform.localScale);
-
-		currentAttack.transform.parent = transform;
 	}
 	private void attackForward()
 	{
@@ -140,15 +138,13 @@ public class PlayerAttack : EntityBehavior
 	private void attackForwardAirInstantiate()
 	{
 		GameObject currentAttack = Instantiate(data.attack.attackForwardAirPrefab,
-			attackForwardAirTransform.position, attackForwardAirTransform.rotation);
+			attackForwardAirTransform.position, attackForwardAirTransform.rotation, transform);
 
 		currentAttackData = currentAttack.GetComponent<AttackController>();
 
 		currentAttackData.setAttack(data);
 		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 		currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
-
-		currentAttack.transform.parent = transform;
 	}
 	private void attackForwardAir()
 	{
@@ -173,7 +169,7 @@ public class PlayerAttack : EntityBehavior
 	private void attackDownInstantiate()
 	{
 		GameObject currentAttack = Instantiate(data.attack.attackDownPrefab, 
-			attackDownTransform.position, attackDownTransform.rotation);
+			attackDownTransform.position, attackDownTransform.rotation, transform);
 
 		currentAttackData = currentAttack.GetComponent<AttackController>();
 
@@ -181,8 +177,6 @@ public class PlayerAttack : EntityBehavior
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();
-
-		currentAttack.transform.parent = transform;
 	}
 	private void attackDown()
 	{

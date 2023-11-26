@@ -171,7 +171,7 @@ public class Effects : ScriptableObject
 		public static Instance instantiate(IEnumerable<TilemapHelper.TileData> tiles, Grid grid)
 		{
 			GameObject instance = new GameObject("TileEffect");
-			instance.transform.parent = grid.transform;
+			instance.transform.parent = grid.transform.Find("Runtime");
 
 			Dictionary<Tilemap, Tilemap> dict = new Dictionary<Tilemap, Tilemap>();
 			
