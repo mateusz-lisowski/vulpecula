@@ -3,9 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Behavior/MeleeAtack")]
 public class MeleeAtackBehaviorData : ScriptableObject
 {
+	[Tooltip("Name of the event instantiating the attack")]
 	public string attackInstantiateEventName = "attack";
+	[Tooltip("Name of the child object detecting provokation")]
 	public string provokeDetectionName = "Attack";
-	public string animatorEventName = "isAttacking";
+	[Tooltip("Name of the animator trigger event")]
+	public string animatorEventName = "onAttack";
 
 	[Space(10)]
 

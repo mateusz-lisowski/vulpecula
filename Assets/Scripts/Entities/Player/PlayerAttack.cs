@@ -128,11 +128,11 @@ public class PlayerAttack : EntityBehavior
 		attackForwardCombo++;
 
 		if (attackForwardCombo == 1)
-			controller.animator.SetTrigger("isAttacking1");
+			controller.animator.SetTrigger("onAttack1");
 		else if (attackForwardCombo == 2)
-			controller.animator.SetTrigger("isAttacking2");
+			controller.animator.SetTrigger("onAttack2");
 		else
-			controller.animator.SetTrigger("isAttacking3");
+			controller.animator.SetTrigger("onAttack3");
 	}
 
 	private void attackForwardAirInstantiate()
@@ -155,7 +155,7 @@ public class PlayerAttack : EntityBehavior
 		lastAttackInputTime = float.PositiveInfinity;
 		attackAnyCooldown = attackForwardCooldown = data.attack.forwardCooldown;
 
-		controller.animator.SetTrigger("isAttackingAir");
+		controller.animator.SetTrigger("onAttackAir");
 	}
 
 	private void attackDownHitCallback(HitData hitData)
@@ -188,7 +188,7 @@ public class PlayerAttack : EntityBehavior
 		lastAttackInputTime = float.PositiveInfinity;
 		attackAnyCooldown = attackDownCooldown = data.attack.downCooldown;
 
-		controller.animator.SetTrigger("isAttackingDown");
+		controller.animator.SetTrigger("onAttackDown");
 	}
 
 	private bool canAttackAny()

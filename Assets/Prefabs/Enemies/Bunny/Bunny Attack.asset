@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackInstantiateEventName: attack
   provokeDetectionName: Attack
-  animatorEventName: isAttacking
+  animatorEventName: onAttack
   provokeLayers:
     serializedVersion: 2
     m_Bits: 4096

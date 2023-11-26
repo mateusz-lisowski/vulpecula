@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackInstantiateEventName: attack
   provokeDetectionName: Attack
-  animatorEventName: isAttacking
+  animatorEventName: onAttack
   provokeLayers:
     serializedVersion: 2
     m_Bits: 4096
@@ -23,3 +23,5 @@ MonoBehaviour:
     m_Bits: 4096
   attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
   cooldown: 0.8
+  attackRunSpeed: 0
+  accelerationCoefficient: 0.8
