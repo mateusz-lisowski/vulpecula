@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CollectData
 {
+	public int id;
 }
 
 public class CollectBehavior : EntityBehavior
@@ -48,6 +49,7 @@ public class CollectBehavior : EntityBehavior
 			return;
 
 		CollectData collect = new CollectData();
+		collect.id = gameObject.GetInstanceID();
 
 		foreach (Collider2D contact in contacts)
 			contact.SendMessageUpwards("onMessage", new EntityMessage("collect", collect));

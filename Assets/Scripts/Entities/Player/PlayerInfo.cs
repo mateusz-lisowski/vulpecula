@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInfo : EntityBehavior
@@ -8,6 +9,8 @@ public class PlayerInfo : EntityBehavior
 
 	private PlayerMovement movement;
 	private PlayerData data;
+
+	private List<int> justCollected = new List<int>();
 
 
 	public override void onAwake()
@@ -24,9 +27,18 @@ public class PlayerInfo : EntityBehavior
 		}
 	}
 
-	
+	public override void onUpdate()
+	{
+		justCollected.Clear();
+	}
+
+
 	private void collect(CollectData collect)
 	{
+		if (justCollected.Contains(collect.id))
+			return;
+
+		justCollected.Add(collect.id);
 		score++;
 	}
 
