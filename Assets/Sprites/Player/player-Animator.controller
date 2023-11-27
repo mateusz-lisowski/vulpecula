@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026e257190f952a4886bc78e959fd11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   eventName: attackExit
 --- !u!114 &-7615478704947060145
 MonoBehaviour:
@@ -101,6 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026e257190f952a4886bc78e959fd11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   eventName: attackExit
 --- !u!1101 &-7416241062246810673
 AnimatorStateTransition:
@@ -508,6 +510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026e257190f952a4886bc78e959fd11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   eventName: attackExit
 --- !u!1101 &-1886575048160022901
 AnimatorStateTransition:
@@ -571,6 +574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026e257190f952a4886bc78e959fd11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   eventName: attackExit
 --- !u!1102 &-331374181224079295
 AnimatorState:
@@ -614,61 +618,61 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isGrounded
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isFalling
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isWallHolding
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isDistressed
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: onAttack1
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: onAttack2
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: onAttack3
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: onAttackAir
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: onAttackDown
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -907,6 +911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026e257190f952a4886bc78e959fd11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   eventName: attackExit
 --- !u!1101 &4832559233879098961
 AnimatorStateTransition:

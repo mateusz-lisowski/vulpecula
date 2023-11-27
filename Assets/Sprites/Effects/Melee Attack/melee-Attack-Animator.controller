@@ -71,8 +71,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4403986411530056794}
-  m_StateMachineBehaviours:
-  - {fileID: 6785415191866025943}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -98,7 +97,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 5310625314718811167}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -147,7 +147,7 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!114 &6785415191866025943
+--- !u!114 &5310625314718811167
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,4 +159,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026e257190f952a4886bc78e959fd11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   eventName: destroy
