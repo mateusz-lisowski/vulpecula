@@ -20792,9 +20792,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1761216041}
   - {fileID: 1996260196}
   - {fileID: 723973361}
+  - {fileID: 1761216041}
   - {fileID: 1927143025}
   m_Father: {fileID: 1704089138}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20828,9 +20828,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectsInstance: {fileID: 11400000, guid: a84de9c7366551148bea97a7f6350a9a, type: 2}
-  runtimeEnemiesGroup: {fileID: 0}
-  runtimeCollectiblesGroup: {fileID: 0}
-  runtimeProjectilesGroup: {fileID: 0}
 --- !u!4 &387430723
 Transform:
   m_ObjectHideFlags: 0
@@ -26938,7 +26935,7 @@ MonoBehaviour:
   - {fileID: 1329508628}
   - {fileID: 1488821799}
   - {fileID: 534236781}
-  - {fileID: 1488695193}
+  - {fileID: 777884402}
 --- !u!1 &1837218496
 GameObject:
   m_ObjectHideFlags: 0
