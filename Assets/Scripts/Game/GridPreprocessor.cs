@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Grid))]
@@ -11,6 +14,11 @@ public class GridPreprocessor : MonoBehaviour
 
 	private Tilemap slopesTilemap;
 	private Tilemap bounceOnBreakTilemap;
+	private GameObject groundDroppingGroup;
+	private GameObject groundBreakingGroup;
+
+	public List<TilemapHelper.Region> groundDroppingRegions { get; private set; }
+	public List<TilemapHelper.Region> groundBreakingRegions { get; private set; }
 
 
 	private void Awake()
@@ -37,6 +45,9 @@ public class GridPreprocessor : MonoBehaviour
 				tryAddEnemy(tile, tilemap, coord);
 				tryAddCollectible(tile, tilemap, coord);
 			}
+
+		createGroundDroppableRegions();
+		createGroundBreakableRegions();
 	}
 
 
@@ -73,6 +84,7 @@ public class GridPreprocessor : MonoBehaviour
 		controller.data = data.terrainData;
 		controller.breakableTilemaps = data.bounceOnBreak.breakableTilemaps;
 	}
+	
 	private void initializeRuntimeTilemaps()
 	{
 		GameObject runtimeTilemapsParent = new GameObject("Runtime");
@@ -80,7 +92,14 @@ public class GridPreprocessor : MonoBehaviour
 
 		createSlopeTilemap(runtimeTilemapsParent);
 		createBounceOnBreakTilemap(runtimeTilemapsParent);
+
+		groundDroppingGroup = new GameObject("Ground Dropping");
+		groundDroppingGroup.transform.parent = runtimeTilemapsParent.transform;
+
+		groundBreakingGroup = new GameObject("Ground Breaking");
+		groundBreakingGroup.transform.parent = runtimeTilemapsParent.transform;
 	}
+
 
 	private void tryAddSlope(Tile tile, Vector3Int coord)
 	{
@@ -144,6 +163,78 @@ public class GridPreprocessor : MonoBehaviour
 				Instantiate(mapping.prefab, position, Quaternion.identity,
 					GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Collectibles]);
 			}
+	}
+
+
+	private TilemapHelper.Region createTilemapRegion(
+		Tilemap triggerTilemap, Vector3Int triggerCoord, Tilemap[] tilemaps, Transform parent)
+	{
+		List<Vector3Int> triggeredCoords = TilemapHelper.getTriggeredTiles(
+			triggerTilemap, new List<Vector3Int> { triggerCoord });
+
+		List<TilemapHelper.TileData> tiles = TilemapHelper.getAllTiles(
+			tilemaps, triggeredCoords);
+
+		var region = new TilemapHelper.Region(tiles, triggeredCoords, parent);
+
+		region.gameObject.SetActive(false);
+
+		return region;
+	}
+
+	private void createGroundDroppableRegions()
+	{
+		groundDroppingRegions = new List<TilemapHelper.Region>();
+		List<Vector3Int> ignore = new List<Vector3Int>();
+
+		foreach (var groundDropping in transform.GetComponentsInChildren<GroundDroppingController>())
+		{
+			Tilemap triggerTilemap = groundDropping.GetComponent<Tilemap>();
+			Tilemap[] tilemaps = groundDropping.droppableTilemaps;
+
+			foreach (Vector3Int coord in triggerTilemap.cellBounds.allPositionsWithin)
+			{
+				if (ignore.Contains(coord))
+					continue;
+
+				TileBase tileBase = triggerTilemap.GetTile(coord);
+				if (tileBase == null)
+					continue;
+
+				TilemapHelper.Region region = createTilemapRegion(
+					triggerTilemap, coord, tilemaps, groundDroppingGroup.transform);
+
+				ignore.AddRange(region.coords);
+				groundDroppingRegions.Add(region);
+			}
+		}
+	}
+	private void createGroundBreakableRegions()
+	{
+		groundBreakingRegions = new List<TilemapHelper.Region>();
+		List<Vector3Int> ignore = new List<Vector3Int>();
+
+		foreach (var groundBreaking in transform.GetComponentsInChildren<GroundBreakingController>())
+		{
+			Tilemap triggerTilemap = groundBreaking.GetComponent<Tilemap>();
+			Tilemap[] tilemaps = groundBreaking.breakableTilemaps;
+
+			foreach (Vector3Int coord in triggerTilemap.cellBounds.allPositionsWithin)
+			{
+				if (ignore.Contains(coord))
+					continue;
+
+				TileBase tileBase = triggerTilemap.GetTile(coord);
+				if (tileBase == null)
+					continue;
+
+				TilemapHelper.Region region = createTilemapRegion(
+					triggerTilemap, coord, tilemaps, groundBreakingGroup.transform);
+
+				ignore.AddRange(region.coords);
+				groundBreakingRegions.Add(region);
+			}
+		}
 	}
 
 }

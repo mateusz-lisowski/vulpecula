@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public Effects effectsInstance;
 
 	public enum RuntimeGroup { Effects, Enemies, Collectibles, Projectiles }
-	public Dictionary<RuntimeGroup, Transform> runtimeGroup;
+	public Dictionary<RuntimeGroup, Transform> runtimeGroup { get; private set; }
 
 
 	private void Awake()
