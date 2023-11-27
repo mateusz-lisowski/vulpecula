@@ -91,6 +91,7 @@ public class MeleeAtackBehavior : EntityBehavior
 		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
 		currentAttackData.initialize(data);
+		currentAttackData.setStrength(data.strength);
 		currentAttackData.setHitboxSize(attackTransform.lossyScale);
 	}
 	private void attack()

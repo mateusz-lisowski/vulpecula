@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 164482286500472992}
   - component: {fileID: 1724348815531372944}
   - component: {fileID: 994205708102867722}
+  - component: {fileID: -2336596898302992064}
   - component: {fileID: 3673337748574421983}
   - component: {fileID: 5803961606106945468}
   m_Layer: 17
@@ -315,8 +316,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
   <isFacingRight>k__BackingField: 0
-  <lastTurnTime>k__BackingField: 0
+  <turnCooldown>k__BackingField: 0
+  lastDisabledUpdate: -1
   lastTurnFixedUpdate: -1
+--- !u!114 &-2336596898302992064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6757914255632279468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa6dc96d5f211064dbfdd17e0a641f92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 6e0305f5029caa047a4c425c347f63c8, type: 2}
+  <isDistressed>k__BackingField: 0
+  <lastHurtTime>k__BackingField: 0
+  <hurtCooldown>k__BackingField: 0
+  <health>k__BackingField: 0
 --- !u!114 &3673337748574421983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,6 +351,8 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 55c19d8868dd843468afa08b9e2f76fd, type: 2}
   <isGrounded>k__BackingField: 0
   <isFalling>k__BackingField: 0
+  <isOnSlope>k__BackingField: 0
+  <isSlopeGrounded>k__BackingField: 0
   lastDisabledUpdate: -1
 --- !u!114 &5803961606106945468
 MonoBehaviour:
@@ -346,8 +367,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: ca8e01ae28ff7ac4fab2a8ce1db01bfd, type: 2}
-  <isMoving>k__BackingField: 0
-  <isFalling>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
 --- !u!1 &8173101486877777392

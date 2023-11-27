@@ -7,6 +7,7 @@ public class HitData
 {
 	public Vector3 right;
 	public Bounds bounds;
+	public int strength;
 	public bool isVertical;
 	public bool bounce;
 }
@@ -20,6 +21,7 @@ public class ProjectileBehavior : EntityBehavior
 
 	private Vector2 velocity;
 	private bool isVertical;
+	private int strength = 1;
 
 
 	public void initialize(ScriptableObject data)
@@ -37,6 +39,10 @@ public class ProjectileBehavior : EntityBehavior
 	public void setVertical(bool val = true)
 	{
 		isVertical = val;
+	}
+	public void setStrength(int val)
+	{
+		strength = val;
 	}
 	public void setHitboxSize(Vector2 size)
 	{
@@ -92,6 +98,7 @@ public class ProjectileBehavior : EntityBehavior
 		HitData hit = new HitData();
 		hit.right = transform.right;
 		hit.bounds = hitbox.bounds;
+		hit.strength = strength;
 		hit.isVertical = isVertical;
 		hit.bounce = contacts.Any(c => c.tag == "BreakBounce");
 

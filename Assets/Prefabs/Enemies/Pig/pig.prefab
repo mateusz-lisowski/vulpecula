@@ -165,7 +165,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
   <isFacingRight>k__BackingField: 0
-  <lastTurnTime>k__BackingField: 0
+  <turnCooldown>k__BackingField: 0
+  lastDisabledUpdate: -1
   lastTurnFixedUpdate: -1
 --- !u!114 &8299796650713389186
 MonoBehaviour:
@@ -183,6 +184,7 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <lastHurtTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
+  <health>k__BackingField: 0
 --- !u!114 &-3890088564130984873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,6 +213,8 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 55c19d8868dd843468afa08b9e2f76fd, type: 2}
   <isGrounded>k__BackingField: 0
   <isFalling>k__BackingField: 0
+  <isOnSlope>k__BackingField: 0
+  <isSlopeGrounded>k__BackingField: 0
   lastDisabledUpdate: -1
 --- !u!114 &4166851228994670503
 MonoBehaviour:
@@ -227,7 +231,6 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 40c4b8fa6320feb4ab808c04ce07da97, type: 2}
   <isProvoked>k__BackingField: 0
   <isAttacking>k__BackingField: 0
-  <lastAttackTime>k__BackingField: 0
   <attackCooldown>k__BackingField: 0
 --- !u!114 &6314607325405711325
 MonoBehaviour:
@@ -242,8 +245,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: db58a6e9ff80fc6488845fccd451d8fc, type: 2}
-  <isMoving>k__BackingField: 0
-  <isFalling>k__BackingField: 0
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
 --- !u!1 &3048383545192120252

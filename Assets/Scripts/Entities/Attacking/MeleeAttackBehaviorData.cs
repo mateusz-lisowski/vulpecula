@@ -24,6 +24,11 @@ public class MeleeAtackBehaviorData : ScriptableObject
 	[Tooltip("Minimum time between two consecutive attacks")]
 	public float cooldown = 0.3f;
 
+	[Space(5)]
+
+	[Tooltip("Strength of an attack")]
+	public int strength = 1;
+
 	[Space(10)]
 
 	[Tooltip("Running speed while attacking")]

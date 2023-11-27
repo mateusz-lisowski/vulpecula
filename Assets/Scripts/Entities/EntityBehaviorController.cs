@@ -110,14 +110,11 @@ public class EntityBehaviorController : MonoBehaviour
 
 	public void onEvent(string eventName, object eventData)
 	{
-		if (eventName == "destroy")
-		{
-			Destroy(gameObject);
-			return;
-		}
-
 		foreach (var behavior in behaviors)
 			behavior.onEvent(eventName, eventData);
+
+		if (eventName == "destroy")
+			Destroy(gameObject);
 	}
 	public void onMessage(EntityMessage msg)
 	{

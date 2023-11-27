@@ -115,6 +115,8 @@ public class PlayerAttack : EntityBehavior
 
 		currentAttackData.initialize(data);
 		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
+		currentAttackData.setStrength(isStrong ? data.attack.forwardStrongStrength 
+			: data.attack.forwardStrength);
 		currentAttackData.setHitboxSize(currentAttackTransform.localScale);
 	}
 	private void attackForward()
@@ -145,6 +147,7 @@ public class PlayerAttack : EntityBehavior
 
 		currentAttackData.initialize(data);
 		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
+		currentAttackData.setStrength(data.attack.forwardAirStrength);
 		currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
 	}
 	private void attackForwardAir()
@@ -175,6 +178,7 @@ public class PlayerAttack : EntityBehavior
 		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
 		currentAttackData.initialize(data);
+		currentAttackData.setStrength(data.attack.downStrength);
 		currentAttackData.setHitboxSize(attackDownTransform.localScale);
 		currentAttackData.setHitCallback(attackDownHitCallback);
 		currentAttackData.setVertical();

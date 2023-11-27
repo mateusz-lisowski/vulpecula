@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class HurtBehavior : EntityBehavior
@@ -9,6 +10,8 @@ public class HurtBehavior : EntityBehavior
 	[field: SerializeField, ReadOnly] public float lastHurtTime { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float hurtCooldown { get; private set; }
+	[field: Space(10)]
+	[field: SerializeField, ReadOnly] public int health { get; private set; }
 
 	private FlipBehavior direction;
 	private LayerMask enemyLayer;
@@ -25,6 +28,8 @@ public class HurtBehavior : EntityBehavior
 		enemyInvulnerableLayer = LayerMask.NameToLayer("Enemy Invulnerable");
 
 		lastHurtTime = float.PositiveInfinity;
+
+		health = data.health;
 	}
 
 	public override void onEvent(string eventName, object eventData)
@@ -43,7 +48,17 @@ public class HurtBehavior : EntityBehavior
 		hurtCooldown -= Time.deltaTime;
 
 		if (canHurt())
-			hurt();
+			if (hitData.strength > data.maxBlock)
+			{
+				health = Math.Max(health - hitData.strength, 0);
+
+				if (health != 0)
+					hurt();
+				else
+					die();
+			}
+			else
+				block();
 		hitData = null;
 
 		if (hurtCooldown <= 0)
@@ -57,6 +72,18 @@ public class HurtBehavior : EntityBehavior
 		foreach (var param in controller.animator.parameters)
 			if (param.name == "isDistressed")
 				controller.animator.SetBool("isDistressed", isDistressed);
+			else if (param.name == "health")
+				controller.animator.SetInteger("health", health);
+	}
+
+	public override bool onFixedUpdate()
+	{
+		if (health != 0)
+			return false;
+
+		addSmoothForce(0, 0.8f, transform.right);
+
+		return true;
 	}
 
 
@@ -93,7 +120,22 @@ public class HurtBehavior : EntityBehavior
 
 		setDistressDirection();
 		setInvulnerability(true);
+
 		controller.StartCoroutine(Effects.instance.flashing.run(
 			controller.spriteRenderer, data.invulnerabilityTime, burst: true));
+	}
+
+	private void die()
+	{
+		setDistressDirection();
+
+		controller.StartCoroutine(Effects.instance.flashing.run(
+			controller.spriteRenderer, 0, burst: true));
+	}
+
+	private void block()
+	{
+		controller.StartCoroutine(Effects.instance.flashing.run(
+				controller.spriteRenderer, 0, burst: true));
 	}
 }

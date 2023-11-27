@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c999a51b1c68c5541bb667963be18f7e, type: 3}
-  m_Name: Pig Hurt
+  m_Name: Slug Hurt
   m_EditorClassIdentifier: 
   invulnerabilityTime: 0
-  distressTime: 0.3
-  health: 3
-  maxBlock: 0
+  distressTime: 0
+  health: 1
+  maxBlock: 5
