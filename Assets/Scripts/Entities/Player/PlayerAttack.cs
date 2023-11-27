@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerMovement))]
 public class PlayerAttack : EntityBehavior
 {
 	[field: Space(10)]

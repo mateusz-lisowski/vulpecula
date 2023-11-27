@@ -1,5 +1,7 @@
 using UnityEngine;
 
+[RequireComponent(typeof(FlipBehavior))]
+[RequireComponent(typeof(GroundedBehavior))]
 public class ChaseBehavior : EntityBehavior
 {
 	public ChaseBehaviorData data;

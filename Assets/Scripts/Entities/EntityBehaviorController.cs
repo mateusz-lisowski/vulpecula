@@ -14,6 +14,7 @@ public struct EntityMessage
 	public object data;
 }
 
+[RequireComponent(typeof(EntityBehaviorController))]
 public abstract class EntityBehavior : MonoBehaviour
 {
 	public void addSmoothForce(float targetSpeed, float accelerationCoefficient, Vector2 direction)

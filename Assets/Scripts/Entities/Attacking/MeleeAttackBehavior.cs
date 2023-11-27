@@ -109,7 +109,7 @@ public class MeleeAtackBehavior : EntityBehavior
 			attack();
 		}
 
-		if (isAttacking)
+		if (isAttacking && direction != null)
 			direction.disableFlipNextFrame();
 	}
 }

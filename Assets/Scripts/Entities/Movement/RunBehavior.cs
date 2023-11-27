@@ -1,6 +1,6 @@
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 
+[RequireComponent(typeof(FlipBehavior))]
 [RequireComponent(typeof(GroundedBehavior))]
 public class RunBehavior : EntityBehavior
 {
