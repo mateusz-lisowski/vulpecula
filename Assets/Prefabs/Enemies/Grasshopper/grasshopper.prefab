@@ -383,6 +383,7 @@ GameObject:
   - component: {fileID: -8327117584992023542}
   - component: {fileID: -5512098875398612276}
   - component: {fileID: 966967818323690364}
+  - component: {fileID: 4734562290702959645}
   m_Layer: 16
   m_Name: grasshopper
   m_TagString: Untagged
@@ -462,7 +463,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
   <isFacingRight>k__BackingField: 0
-  <lastTurnTime>k__BackingField: 0
+  <turnCooldown>k__BackingField: 0
+  lastDisabledUpdate: -1
   lastTurnFixedUpdate: -1
 --- !u!114 &2959200598623240211
 MonoBehaviour:
@@ -480,6 +482,7 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <lastHurtTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
+  <health>k__BackingField: 0
 --- !u!114 &-6539713555012566582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -542,3 +545,17 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 22202c8ccde98664e8efdb5a1bdbbb1a, type: 2}
   <isJumping>k__BackingField: 0
   <jumpCooldown>k__BackingField: 0
+  <jumpSpeed>k__BackingField: 0
+--- !u!114 &4734562290702959645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4727050334669896525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 937b58d3cc3702e47880c935c7022a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: bffc156a01a736e458d279afd3894ae2, type: 2}

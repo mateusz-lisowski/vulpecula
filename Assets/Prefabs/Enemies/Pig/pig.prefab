@@ -84,6 +84,7 @@ GameObject:
   - component: {fileID: 6117020772506448074}
   - component: {fileID: 4166851228994670503}
   - component: {fileID: 6314607325405711325}
+  - component: {fileID: 6424397698373959958}
   m_Layer: 16
   m_Name: pig
   m_TagString: Untagged
@@ -247,6 +248,19 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: db58a6e9ff80fc6488845fccd451d8fc, type: 2}
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
+--- !u!114 &6424397698373959958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258747344204474044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 937b58d3cc3702e47880c935c7022a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: bffc156a01a736e458d279afd3894ae2, type: 2}
 --- !u!1 &3048383545192120252
 GameObject:
   m_ObjectHideFlags: 0

@@ -215,6 +215,7 @@ GameObject:
   - component: {fileID: 4570672024762158509}
   - component: {fileID: 2042868004939667613}
   - component: {fileID: 4986181646444518800}
+  - component: {fileID: 9071210106127735413}
   m_Layer: 16
   m_Name: bunny
   m_TagString: Untagged
@@ -295,6 +296,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
   <isFacingRight>k__BackingField: 0
   <turnCooldown>k__BackingField: 0
+  lastDisabledUpdate: -1
   lastTurnFixedUpdate: -1
 --- !u!114 &2695547768961158696
 MonoBehaviour:
@@ -312,6 +314,7 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <lastHurtTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
+  <health>k__BackingField: 0
 --- !u!114 &3847650244503944259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,6 +394,19 @@ MonoBehaviour:
   <isJumping>k__BackingField: 0
   <jumpCooldown>k__BackingField: 0
   <jumpSpeed>k__BackingField: 0
+--- !u!114 &9071210106127735413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2302237619417856471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 937b58d3cc3702e47880c935c7022a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: bffc156a01a736e458d279afd3894ae2, type: 2}
 --- !u!1 &3015572557815253689
 GameObject:
   m_ObjectHideFlags: 0

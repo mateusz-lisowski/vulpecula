@@ -122,7 +122,8 @@ public class GridPreprocessor : MonoBehaviour
 				position -= (Vector3)pivotOffset;
 				position -= offset;
 
-				Instantiate(mapping.prefab, position, rotation, GameManager.instance.runtimeEnemiesGroup);
+				Instantiate(mapping.prefab, position, rotation, 
+					GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Enemies]);
 			}
 	}
 	private void tryAddCollectible(Tile tile, Tilemap tilemap, Vector3Int coord)
@@ -140,8 +141,8 @@ public class GridPreprocessor : MonoBehaviour
 				position -= offset;
 				position += tilemap.GetTransformMatrix(coord).GetT();
 
-				Instantiate(mapping.prefab, position, Quaternion.identity, 
-					GameManager.instance.runtimeCollectiblesGroup);
+				Instantiate(mapping.prefab, position, Quaternion.identity,
+					GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Collectibles]);
 			}
 	}
 

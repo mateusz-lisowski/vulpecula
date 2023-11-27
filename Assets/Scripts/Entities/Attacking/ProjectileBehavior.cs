@@ -82,7 +82,7 @@ public class ProjectileBehavior : EntityBehavior
 
 	private void resolve()
 	{
-		transform.parent = GameManager.instance.runtimeProjectilesGroup;
+		transform.parent = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Projectiles];
 
 		if (velocity != Vector2.zero)
 			StartCoroutine(Effects.instance.frameMove.run(transform, velocity, 2f));

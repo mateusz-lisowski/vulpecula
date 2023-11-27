@@ -450,6 +450,7 @@ GameObject:
   - component: {fileID: 7564281115730133021}
   - component: {fileID: 4255831889263061473}
   - component: {fileID: 2732491925933866820}
+  - component: {fileID: 5464686996778237402}
   m_Layer: 16
   m_Name: ant
   m_TagString: Untagged
@@ -550,6 +551,7 @@ MonoBehaviour:
   <isDistressed>k__BackingField: 0
   <lastHurtTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
+  <health>k__BackingField: 0
 --- !u!114 &579549540333403349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,6 +614,19 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 601a7bc76e54cd14e8317c6093170b15, type: 2}
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
+--- !u!114 &5464686996778237402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664657130570261996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 937b58d3cc3702e47880c935c7022a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: bffc156a01a736e458d279afd3894ae2, type: 2}
 --- !u!1 &8757982442341642416
 GameObject:
   m_ObjectHideFlags: 0
