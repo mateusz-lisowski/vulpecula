@@ -64,7 +64,7 @@ public class GroundBreakingController : MonoBehaviour
 		region.gameObject.SetActive(false);
 
 		foreach (var tile in region.tiles.Concat(tiles))
-			tile.parent.SetTile(tile.coord, tile.tile);
+			TilemapHelper.setTile(tile.parent, tile);
 	}
 
 }
