@@ -383,7 +383,6 @@ GameObject:
   - component: {fileID: -8327117584992023542}
   - component: {fileID: -5512098875398612276}
   - component: {fileID: 966967818323690364}
-  - component: {fileID: 4734562290702959645}
   m_Layer: 16
   m_Name: grasshopper
   m_TagString: Untagged
@@ -546,16 +545,3 @@ MonoBehaviour:
   <isJumping>k__BackingField: 0
   <jumpCooldown>k__BackingField: 0
   <jumpSpeed>k__BackingField: 0
---- !u!114 &4734562290702959645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4727050334669896525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 937b58d3cc3702e47880c935c7022a54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: bffc156a01a736e458d279afd3894ae2, type: 2}

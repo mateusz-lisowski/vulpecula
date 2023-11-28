@@ -110,7 +110,6 @@ GameObject:
   - component: {fileID: 4846482311299018571}
   - component: {fileID: 4615439821049667569}
   - component: {fileID: 9203199264713230724}
-  - component: {fileID: 4729765607026602939}
   m_Layer: 16
   m_Name: bear
   m_TagString: Untagged
@@ -294,19 +293,6 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: c0dc3556fc1b74644aaeb582bba5bc2a, type: 2}
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
---- !u!114 &4729765607026602939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2508622768693607819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 937b58d3cc3702e47880c935c7022a54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: bffc156a01a736e458d279afd3894ae2, type: 2}
 --- !u!1 &3007405715674439372
 GameObject:
   m_ObjectHideFlags: 0
