@@ -9,57 +9,59 @@ public class GroundDroppingController : MonoBehaviour
 	public TerrainData data;
 	public Tilemap[] droppableTilemaps;
 
-	Tilemap tilemap;
+	private Tilemap tilemap;
+	private GridPreprocessor preprocessor;
 
 
 	public void triggerDrop(Bounds bounds)
     {
-		List<Vector3Int> triggeredCoords = TilemapHelper.getTriggeredTiles(tilemap, bounds);
+		List<Vector3Int> triggeredCoords = TilemapHelper.findTriggeredWithinBounds(tilemap, bounds);
 		if (triggeredCoords.Count == 0)
 			return;
 
-		List<TilemapHelper.TileData> tiles = TilemapHelper.getAllTiles(
-			droppableTilemaps.Concat(new Tilemap[] { tilemap }), triggeredCoords);
+		var region = preprocessor.groundDroppingRegions.Find(r => r.contains(triggeredCoords));
 
-		foreach (Vector3Int triggeredCoord in triggeredCoords)
-			tilemap.SetTile(triggeredCoord, null);
+		var tiles = TilemapHelper.getAllTiles(new Tilemap[] { tilemap }, region.coords);
 
-		StartCoroutine(dropTiles(tiles));
+		StartCoroutine(dropTiles(region, tiles));
 	}
+
 
 	private void Awake()
 	{
 		tilemap = transform.GetComponent<Tilemap>();
+		preprocessor = tilemap.layoutGrid.transform.GetComponent<GridPreprocessor>();
 	}
-
 
 	private bool canRespawn(List<TilemapHelper.TileData> tiles)
 	{
 		bool canRespawn = !TilemapHelper.isOverlappingLayers(
-			tiles.Where(t => t.parent == tilemap), data.groundDropping.collidingLayers);
+			tiles, data.groundDropping.collidingLayers);
 
 		return canRespawn;
 	}
-	private IEnumerator dropTiles(List<TilemapHelper.TileData> tiles)
+	private IEnumerator dropTiles(TilemapHelper.Region region, List<TilemapHelper.TileData> tiles)
 	{
-		var instance = Effects.Tiles.instantiate(
-			tiles.Where(tile => tile.parent != tilemap), transform.parent.GetComponent<Grid>());
+		region.gameObject.SetActive(true);
+
+		foreach (var tile in tiles)
+			tile.parent.SetTile(tile.coord, null);
 
 		yield return new WaitForSeconds(data.groundDropping.shakeTime);
 
-		foreach (TilemapHelper.TileData tile in tiles)
+		foreach (var tile in region.tiles)
 			tile.parent.SetTile(tile.coord, null);
 
-		StartCoroutine(Effects.instance.fade.run(instance.gameObject, instance.tilemaps));
+		StartCoroutine(Effects.instance.fade.run(region.gameObject, region.tilemaps));
 
 		yield return new WaitForSeconds(data.groundDropping.respawnTime - Effects.instance.fade.time);
 
-		yield return Effects.instance.fade.run(instance.gameObject, instance.tilemaps,
+		yield return Effects.instance.fade.run(region.gameObject, region.tilemaps,
 			stop: () => !canRespawn(tiles), revert: true);
 
-		Destroy(instance.gameObject);
+		region.gameObject.SetActive(false);
 
-		foreach (TilemapHelper.TileData tile in tiles)
+		foreach (var tile in region.tiles.Concat(tiles))
 			TilemapHelper.setTile(tile.parent, tile);
 	}
 

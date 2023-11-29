@@ -13,7 +13,7 @@ public class TilemapHelper
 		public Matrix4x4 transform;
 	}
 
-	private static List<Vector3Int> findTriggeredWithinBounds(Tilemap tilemap, Bounds bounds)
+	public static List<Vector3Int> findTriggeredWithinBounds(Tilemap tilemap, Bounds bounds)
 	{
 		List<Vector3Int> triggeredCoords = new List<Vector3Int>();
 
@@ -33,8 +33,11 @@ public class TilemapHelper
 	}
 	public static List<Vector3Int> getTriggeredTiles(Tilemap tilemap, Bounds triggerBounds)
 	{
-		List<Vector3Int> triggeredCoords = findTriggeredWithinBounds(tilemap, triggerBounds);
-
+		return getTriggeredTiles(tilemap, findTriggeredWithinBounds(tilemap, triggerBounds));
+	}
+	
+	public static List<Vector3Int> getTriggeredTiles(Tilemap tilemap, List<Vector3Int> triggeredCoords)
+	{
 		for (int i = 0; i < triggeredCoords.Count; i++)
 		{
 			Vector3Int triggeredCoord = triggeredCoords[i];
@@ -109,5 +112,77 @@ public class TilemapHelper
 		};
 
 		tilemap.SetTile(copiedTile, true);
+	}
+
+
+	public struct Region
+	{
+		public GameObject gameObject;
+		public Tilemap[] tilemaps;
+		public TilemapRenderer[] tilemapRenderers;
+
+		public List<TileData> tiles;
+		public List<Vector3Int> coords;
+
+		public Region(IEnumerable<TileData> tilesE, List<Vector3Int> triggeredCoords, Transform parent)
+		{
+			gameObject = new GameObject("TileRegion");
+			gameObject.transform.parent = parent;
+			tiles = new List<TileData>();
+			coords = triggeredCoords;
+
+			Dictionary<Tilemap, Tilemap> dict = new Dictionary<Tilemap, Tilemap>();
+
+			foreach (TileData tile in tilesE)
+			{
+				if (!dict.ContainsKey(tile.parent))
+					dict.Add(tile.parent, copyTilemap(gameObject, tile.parent));
+
+				Tilemap tilemap = dict[tile.parent];
+
+				tiles.Add(tile);
+				TilemapHelper.setTile(tilemap, tile);
+			}
+
+
+			tilemaps = new Tilemap[gameObject.transform.childCount];
+			tilemapRenderers = new TilemapRenderer[gameObject.transform.childCount];
+
+			int i = 0;
+			foreach (Transform child in gameObject.transform)
+			{
+				tilemaps[i] = child.GetComponent<Tilemap>();
+				tilemapRenderers[i] = child.GetComponent<TilemapRenderer>();
+				i++;
+			}
+		}
+
+		public bool contains(List<Vector3Int> triggeredCoords)
+		{
+			if (triggeredCoords.Count == 0)
+				return false;
+
+			return coords.Contains(triggeredCoords[0]);
+		}
+
+		private static Tilemap copyTilemap(GameObject instance, Tilemap parent)
+		{
+			GameObject child = new GameObject("Tilemap");
+			
+			child.transform.parent = instance.transform;
+			child.layer = parent.gameObject.layer;
+
+			Tilemap newTilemap = child.AddComponent<Tilemap>();
+			
+			newTilemap.color = parent.color;
+
+			TilemapRenderer newTilemapRenderer = child.AddComponent<TilemapRenderer>();
+			TilemapRenderer oldTilemapRenderer = parent.gameObject.GetComponent<TilemapRenderer>();
+
+			newTilemapRenderer.sortingLayerID = oldTilemapRenderer.sortingLayerID;
+			newTilemapRenderer.sortingOrder = oldTilemapRenderer.sortingOrder;
+
+			return newTilemap;
+		}
 	}
 }
