@@ -41,6 +41,8 @@ public class PlayerInfo : EntityBehavior
 
 		justCollected.Add(collect.id);
 		score++;
+
+		Debug.Log("Collected " + score + " collectible at: " + Time.timeSinceLevelLoad);
 	}
 
 }
