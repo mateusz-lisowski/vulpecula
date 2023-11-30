@@ -15,6 +15,7 @@ MonoBehaviour:
   m_DefaultSprite: {fileID: 0}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
+  m_ConnectableTiles: []
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
@@ -23,6 +24,7 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
@@ -40,6 +42,7 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
@@ -57,15 +60,16 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 01000000010000000500000002000000
+    m_Neighbors: 01000000010000000200000003000000
     m_NeighborPositions:
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 0, z: 0}
-    - {x: 0, y: -1, z: 0}
     - {x: -1, y: 0, z: 0}
+    - {x: 0, y: -1, z: 0}
     m_RuleTransform: 0
   - m_Id: 8
     m_Sprites:
@@ -74,15 +78,16 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 05000000010000000100000002000000
+    m_Neighbors: 01000000010000000200000003000000
     m_NeighborPositions:
-    - {x: 0, y: -1, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: -1, y: 0, z: 0}
     - {x: 1, y: 0, z: 0}
+    - {x: 0, y: -1, z: 0}
     m_RuleTransform: 0
   - m_Id: 1
     m_Sprites:
@@ -91,6 +96,7 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
@@ -105,6 +111,7 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
@@ -120,6 +127,7 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
@@ -135,14 +143,15 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 050000000100000001000000
+    m_Neighbors: 010000000100000003000000
     m_NeighborPositions:
-    - {x: 0, y: -1, z: 0}
     - {x: 1, y: 0, z: 0}
     - {x: -1, y: 0, z: 0}
+    - {x: 0, y: -1, z: 0}
     m_RuleTransform: 0
   - m_Id: 4
     m_Sprites:
@@ -151,6 +160,7 @@ MonoBehaviour:
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
+    m_Weights: 00000000
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
@@ -165,5 +175,3 @@ MonoBehaviour:
     - {x: 0, y: -1, z: 0}
     - {x: 1, y: -1, z: 0}
     m_RuleTransform: 0
-  alwaysConnect: 0
-  tilesToConnect: []
