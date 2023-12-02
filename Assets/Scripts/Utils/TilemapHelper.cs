@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,6 +12,8 @@ public class TilemapHelper
 		public TileBase tile;
 		public Color color;
 		public Matrix4x4 transform;
+		public Sprite sprite;
+		public Vector2 offset;
 	}
 
 	public static List<Vector3Int> findTriggeredWithinBounds(Tilemap tilemap, Bounds bounds)
@@ -80,6 +83,8 @@ public class TilemapHelper
 				tileData.tile = droppedTile;
 				tileData.color = tilemap.GetColor(triggeredCoord);
 				tileData.transform = tilemap.GetTransformMatrix(triggeredCoord);
+				tileData.sprite = tilemap.GetSprite(triggeredCoord);
+				tileData.offset = tileData.transform.GetT();
 
 				tiles.Add(tileData);
 			}
@@ -115,46 +120,74 @@ public class TilemapHelper
 	}
 
 
+	public struct RegionLayer
+	{
+		public GameObject gameObject;
+		public Tilemap tilemap;
+		private TilemapRenderer tilemapRenderer;
+
+		public List<TileData> tiles;
+
+		public RegionLayer(GameObject region, Tilemap parent)
+		{
+			gameObject = new GameObject(parent.name);
+
+			gameObject.transform.parent = region.transform;
+			gameObject.layer = parent.gameObject.layer;
+
+			tilemap = gameObject.AddComponent<Tilemap>();
+
+			tilemap.color = parent.color;
+
+			tilemapRenderer = gameObject.AddComponent<TilemapRenderer>();
+			TilemapRenderer oldTilemapRenderer = parent.gameObject.GetComponent<TilemapRenderer>();
+			
+			tilemapRenderer.sortingLayerID = oldTilemapRenderer.sortingLayerID;
+			tilemapRenderer.sortingOrder = oldTilemapRenderer.sortingOrder;
+
+			tiles = new List<TileData>();
+		}
+
+		public void finalize()
+		{
+			tilemap.CompressBounds();
+		}
+	}
+
 	public struct Region
 	{
 		public GameObject gameObject;
-		public Tilemap[] tilemaps;
-		public TilemapRenderer[] tilemapRenderers;
-
-		public List<TileData> tiles;
+		public List<RegionLayer> layers;
 		public List<Vector3Int> coords;
 
 		public Region(IEnumerable<TileData> tilesE, List<Vector3Int> triggeredCoords, Transform parent)
 		{
-			gameObject = new GameObject("TileRegion");
+			gameObject = new GameObject("Region");
 			gameObject.transform.parent = parent;
-			tiles = new List<TileData>();
 			coords = triggeredCoords;
 
-			Dictionary<Tilemap, Tilemap> dict = new Dictionary<Tilemap, Tilemap>();
+			Dictionary<Tilemap, RegionLayer> dict = new Dictionary<Tilemap, RegionLayer>();
+			layers = new List<RegionLayer>();
 
 			foreach (TileData tile in tilesE)
 			{
+				RegionLayer layer;
+
 				if (!dict.ContainsKey(tile.parent))
-					dict.Add(tile.parent, copyTilemap(gameObject, tile.parent));
+				{
+					layer = new RegionLayer(gameObject, tile.parent);
+					layers.Add(layer);
+					dict.Add(tile.parent, layer);
+				}
+				else
+					layer = dict[tile.parent];
 
-				Tilemap tilemap = dict[tile.parent];
-
-				tiles.Add(tile);
-				TilemapHelper.setTile(tilemap, tile);
+				layer.tiles.Add(tile);
+				TilemapHelper.setTile(layer.tilemap, tile);
 			}
 
-
-			tilemaps = new Tilemap[gameObject.transform.childCount];
-			tilemapRenderers = new TilemapRenderer[gameObject.transform.childCount];
-
-			int i = 0;
-			foreach (Transform child in gameObject.transform)
-			{
-				tilemaps[i] = child.GetComponent<Tilemap>();
-				tilemapRenderers[i] = child.GetComponent<TilemapRenderer>();
-				i++;
-			}
+			foreach (var layer in layers)
+				layer.finalize();
 		}
 
 		public bool contains(List<Vector3Int> triggeredCoords)
@@ -164,25 +197,37 @@ public class TilemapHelper
 
 			return coords.Contains(triggeredCoords[0]);
 		}
-
-		private static Tilemap copyTilemap(GameObject instance, Tilemap parent)
+	
+	
+		public void emit(ParticleSystem source, float count)
 		{
-			GameObject child = new GameObject("Tilemap");
-			
-			child.transform.parent = instance.transform;
-			child.layer = parent.gameObject.layer;
+			foreach (var layer in layers)
+				foreach (var tile in layer.tiles)
+				{
+					Rect textureRect = tile.sprite.textureRect;
+					Vector2 scale = textureRect.size / tile.sprite.pixelsPerUnit;
 
-			Tilemap newTilemap = child.AddComponent<Tilemap>();
-			
-			newTilemap.color = parent.color;
+					for (float p = count * scale.x * scale.y; p >= Random.Range(0f, 1f); p -= 1)
+					{
+						Vector2 randPos = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f));
 
-			TilemapRenderer newTilemapRenderer = child.AddComponent<TilemapRenderer>();
-			TilemapRenderer oldTilemapRenderer = parent.gameObject.GetComponent<TilemapRenderer>();
+						Vector2 randOffset = randPos * scale;
+						randOffset += tile.sprite.textureRectOffset / tile.sprite.pixelsPerUnit;
+						randOffset += 0.5f * Vector2.one;
+						randOffset -= tile.sprite.pivot / tile.sprite.pixelsPerUnit;
+						randOffset += tile.offset;
 
-			newTilemapRenderer.sortingLayerID = oldTilemapRenderer.sortingLayerID;
-			newTilemapRenderer.sortingOrder = oldTilemapRenderer.sortingOrder;
+						ParticleSystem.EmitParams ep = new ParticleSystem.EmitParams
+						{
+							position = (Vector2)tile.parent.CellToWorld(tile.coord) + randOffset,
+							startColor = tile.sprite.texture.GetPixel(
+								Mathf.RoundToInt(textureRect.x + randPos.x * textureRect.width),
+								Mathf.RoundToInt(textureRect.y + randPos.y * textureRect.height))
+						};
 
-			return newTilemap;
+						source.Emit(ep, 1);
+					}
+				}
 		}
 	}
 }

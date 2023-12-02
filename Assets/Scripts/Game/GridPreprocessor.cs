@@ -32,6 +32,9 @@ public class GridPreprocessor : MonoBehaviour
 		initializeRuntimeTilemaps();
 
 		foreach (Tilemap tilemap in tilemaps)
+		{
+			tilemap.CompressBounds();
+
 			foreach (Vector3Int coord in tilemap.cellBounds.allPositionsWithin)
 			{
 				TileBase tileBase = tilemap.GetTile(coord);
@@ -42,10 +45,11 @@ public class GridPreprocessor : MonoBehaviour
 
 				tryAddSlope(tile, coord);
 				tryAddBreakBounce(tile, coord);
-				
+
 				tryAddEnemy(tile, tilemap, coord);
 				tryAddCollectible(tile, tilemap, coord);
 			}
+		}
 
 		createGroundDroppableRegions();
 		createGroundBreakableRegions();
@@ -55,6 +59,7 @@ public class GridPreprocessor : MonoBehaviour
 	private Tilemap createTilemap(string name, Color color)
 	{
 		GameObject tilemapObject = new GameObject(name);
+		tilemapObject.SetActive(false);
 
 		Tilemap tilemap = tilemapObject.AddComponent<Tilemap>();
 		tilemap.color = color;
@@ -73,10 +78,12 @@ public class GridPreprocessor : MonoBehaviour
 		slopesTilemap = createTilemap("Slope", data.slopes.color);
 		slopesTilemap.transform.parent = parent.transform;
 		slopesTilemap.gameObject.layer = LayerMask.NameToLayer("Slope");
+
+		slopesTilemap.gameObject.SetActive(true);
 	}
 	private void createBounceOnBreakTilemap(GameObject parent)
 	{
-		bounceOnBreakTilemap = createTilemap("BounceOnBreak", data.bounceOnBreak.color);
+		bounceOnBreakTilemap = createTilemap("Bounce On Break", data.bounceOnBreak.color);
 		bounceOnBreakTilemap.transform.parent = parent.transform;
 		bounceOnBreakTilemap.gameObject.layer = LayerMask.NameToLayer("Ground-Breakable");
 		bounceOnBreakTilemap.tag = "BreakBounce";
@@ -84,6 +91,8 @@ public class GridPreprocessor : MonoBehaviour
 		GroundBreakingController controller = bounceOnBreakTilemap.AddComponent<GroundBreakingController>();
 		controller.data = data.terrainData;
 		controller.breakableTilemaps = data.bounceOnBreak.breakableTilemaps;
+
+		bounceOnBreakTilemap.gameObject.SetActive(true);
 	}
 	
 	private void initializeRuntimeTilemaps()

@@ -86,7 +86,7 @@ public class Effects : ScriptableObject
 		[Tooltip("Frequency of fade updates")]
 		public float updateFrequency;
 
-		public IEnumerator run(GameObject target, IList<Tilemap> tilemaps, 
+		public IEnumerator run(GameObject target, IList<TilemapHelper.RegionLayer> tilemaps, 
 							   Func<bool> stop = null, bool revert = false, bool move = true)
 		{
 			int times = (int)Mathf.Round(time * updateFrequency);
@@ -115,11 +115,11 @@ public class Effects : ScriptableObject
 					target.transform.position = position;
 				}
 
-				foreach (Tilemap tilemap in tilemaps)
+				foreach (TilemapHelper.RegionLayer layer in tilemaps)
 				{
-					Color color = tilemap.color;
+					Color color = layer.tilemap.color;
 					color.a = color.a - (!stopping ? updateColor : -updateColor);
-					tilemap.color = color;
+					layer.tilemap.color = color;
 				}
 			}
 		}

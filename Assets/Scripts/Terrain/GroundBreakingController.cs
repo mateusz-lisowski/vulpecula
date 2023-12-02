@@ -14,6 +14,8 @@ public class GroundBreakingController : MonoBehaviour
 	private Tilemap tilemap;
 	private GridPreprocessor preprocessor;
 
+	private ParticleSystem particlesBreak;
+
 
 	public void onMessage(EntityMessage msg)
 	{
@@ -38,6 +40,11 @@ public class GroundBreakingController : MonoBehaviour
 	{
 		tilemap = transform.GetComponent<Tilemap>();
 		preprocessor = tilemap.layoutGrid.transform.GetComponent<GridPreprocessor>();
+
+		var breakEffect = Instantiate(data.groundBreaking.breakEffectPrefab, transform);
+		breakEffect.name = data.groundBreaking.breakEffectPrefab.name;
+
+		particlesBreak = breakEffect.GetComponent<ParticleSystem>();
 	}
 
 	private bool canRespawn(List<TilemapHelper.TileData> tiles)
@@ -51,19 +58,21 @@ public class GroundBreakingController : MonoBehaviour
 	{
 		region.gameObject.SetActive(true);
 
-		foreach (var tile in region.tiles.Concat(tiles))
+		foreach (var tile in region.layers.SelectMany(l => l.tiles).Concat(tiles))
 			tile.parent.SetTile(tile.coord, null);
 
-		StartCoroutine(Effects.instance.fade.run(region.gameObject, region.tilemaps, move: false));
+		region.emit(particlesBreak, particlesBreak.emission.GetBurst(0).count.constant);
+
+		StartCoroutine(Effects.instance.fade.run(region.gameObject, region.layers, move: false));
 
 		yield return new WaitForSeconds(data.groundBreaking.respawnTime - Effects.instance.fade.time);
 
-		yield return Effects.instance.fade.run(region.gameObject, region.tilemaps, move: false, 
+		yield return Effects.instance.fade.run(region.gameObject, region.layers, move: false, 
 			stop: () => !canRespawn(tiles), revert: true);
 
 		region.gameObject.SetActive(false);
 
-		foreach (var tile in region.tiles.Concat(tiles))
+		foreach (var tile in region.layers.SelectMany(l => l.tiles).Concat(tiles))
 			TilemapHelper.setTile(tile.parent, tile);
 	}
 

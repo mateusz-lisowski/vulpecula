@@ -18,8 +18,12 @@ MonoBehaviour:
       m_Bits: 208896
     shakeTime: 0.5
     respawnTime: 3
+    idleEffectPrefab: {fileID: 8936189067721242303, guid: b1398976c0122bc4394afb7e59b307d9, type: 3}
+    shakeEffectPrefab: {fileID: 2695810944054436799, guid: 5ea3ee41d687a31418746dbfdcc521fb, type: 3}
+    breakEffectPrefab: {fileID: 2695810944054436799, guid: 1cd418e073bafb1409d7d734adfec5da, type: 3}
   groundBreaking:
     collidingLayers:
       serializedVersion: 2
       m_Bits: 208896
     respawnTime: 3
+    breakEffectPrefab: {fileID: 2695810944054436799, guid: 1cd418e073bafb1409d7d734adfec5da, type: 3}

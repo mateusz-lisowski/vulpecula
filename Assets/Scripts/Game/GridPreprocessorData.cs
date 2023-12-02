@@ -37,7 +37,7 @@ public class GridPreprocessorData
 	{
 		[Tooltip("Tiles that are breakable ground that can be bounced off")]
 		public BoundedTile[] tiles;
-		[Tooltip("The color of BounceOnBreak tilemap")]
+		[Tooltip("The color of Bounce On Break tilemap")]
 		public Color color;
 
 		[Space(5)]

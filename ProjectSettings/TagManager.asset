@@ -39,11 +39,11 @@ TagManager:
   - Scene Load
   - Editor
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Background
     uniqueID: 2274104453
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0
   - name: Environment
     uniqueID: 4255069353
