@@ -1,19 +1,23 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
+using Unity.VisualScripting.FullSerializer.Internal;
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerInfo : EntityBehavior
 {
-	[SerializeField]
-	public class RuntimeData : RuntimeDataManager.Data
+	[Serializable]
+	private class RuntimeData : RuntimeDataManager.Data
 	{
-		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public int score = 0;
 	}
 
+	[field: SerializeField, Flatten] private RuntimeData runtimeData;
+
 	private PlayerMovement movement;
 	private PlayerData data;
-	private RuntimeData runtimeData;
 
 	private List<int> justCollected = new List<int>();
 

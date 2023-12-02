@@ -1,3 +1,4 @@
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -32,5 +33,20 @@ public class ReadOnlyDrawer : PropertyDrawer
 		}
 
 		EditorGUI.LabelField(position, label.text, valueStr);
+	}
+}
+
+public class FlattenAttribute : PropertyAttribute
+{
+}
+
+[CustomPropertyDrawer(typeof(FlattenAttribute))]
+public class FlattenDrawer : PropertyDrawer
+{
+	public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
+	{
+		foreach (SerializedProperty property in prop)
+			EditorGUILayout.PropertyField(property);
+
 	}
 }
