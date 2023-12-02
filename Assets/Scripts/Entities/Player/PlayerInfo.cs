@@ -4,12 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerInfo : EntityBehavior
 {
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public int score { get; private set; }
-
+	[SerializeField]
+	public class RuntimeData : RuntimeDataManager.Data
+	{
+		[field: Space(10)]
+		[field: SerializeField, ReadOnly] public int score = 0;
+	}
 
 	private PlayerMovement movement;
 	private PlayerData data;
+	private RuntimeData runtimeData;
 
 	private List<int> justCollected = new List<int>();
 
@@ -18,6 +22,10 @@ public class PlayerInfo : EntityBehavior
 	{
 		movement = controller.getBehavior<PlayerMovement>();
 		data = movement.data;
+	}
+	public override void onStart()
+	{
+		runtimeData = RuntimeDataManager.get<RuntimeData>("Player");
 	}
 
 	public override void onEvent(string eventName, object eventData)
@@ -40,9 +48,9 @@ public class PlayerInfo : EntityBehavior
 			return;
 
 		justCollected.Add(collect.id);
-		score++;
+		runtimeData.score++;
 
-		Debug.Log("Collected " + score + " collectible at: " + Time.timeSinceLevelLoad);
+		Debug.Log("Collected " + runtimeData.score + " collectible at: " + Time.timeSinceLevelLoad);
 	}
 
 }

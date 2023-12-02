@@ -26,6 +26,7 @@ public abstract class EntityBehavior : MonoBehaviour
 	}
 
 	public virtual void onAwake() { }
+	public virtual void onStart() { }
 	public virtual void onEvent(string eventName, object eventData) { }
 	public virtual void onUpdate() { }
 	public virtual bool onFixedUpdate() { return false; }
@@ -90,6 +91,11 @@ public class EntityBehaviorController : MonoBehaviour
 
 		foreach (var behavior in behaviors)
 			behavior.onAwake();
+	}
+	private void Start()
+	{
+		foreach (var behavior in behaviors)
+			behavior.onStart();
 	}
 	private void Update()
 	{

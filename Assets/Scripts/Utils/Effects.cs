@@ -8,7 +8,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "Data/Effects")]
 public class Effects : ScriptableObject
 {
-	public static Effects instance;
+	public static Effects instance { get => GameManager.instance.effectsInstance; }
 	
 	public Flashing flashing;
 	public FrameMove frameMove;

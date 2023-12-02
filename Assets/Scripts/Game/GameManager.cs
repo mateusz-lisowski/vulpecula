@@ -1,24 +1,29 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
 	public static GameManager instance { get; private set; }
+	public RuntimeDataManager runtimeDataInstance = null;
     public Effects effectsInstance;
 
 	public enum RuntimeGroup { Effects, Enemies, Collectibles, Projectiles }
 	public Dictionary<RuntimeGroup, Transform> runtimeGroup { get; private set; }
 
-
+	
 	private void Awake()
     {
         instance = this;
 
-		// Initialize singletons here, because ScriptableObject that is not attached may not be
-        // created and instance would not be set.
-		Effects.instance = effectsInstance;
-
+		var runtimeDataObject = GameObject.Find("Runtime Data");
+		if (runtimeDataObject == null)
+		{
+			runtimeDataObject = new GameObject("Runtime Data");
+			runtimeDataObject.AddComponent<RuntimeDataManager>();
+		}
+		runtimeDataInstance = runtimeDataObject.GetComponent<RuntimeDataManager>();
 
 		runtimeGroup = new Dictionary<RuntimeGroup, Transform>
 		{
