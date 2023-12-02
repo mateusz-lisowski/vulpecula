@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Terrain Test.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Combat Test.unity
+    guid: 1ddbf23eb3abf08409456f90c5f0e39d
+  - enabled: 1
+    path: Assets/Scenes/Cave Test.unity
+    guid: cf964a2309a82d54593974a31715ffe4
   m_configObjects: {}

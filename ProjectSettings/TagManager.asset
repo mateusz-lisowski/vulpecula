@@ -36,7 +36,7 @@ TagManager:
   - 
   - Collectible
   - 
-  - 
+  - Scene Load
   - Editor
   m_SortingLayers:
   - name: Default
