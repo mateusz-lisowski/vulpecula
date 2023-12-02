@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
@@ -141,8 +142,10 @@ public class GridPreprocessor : MonoBehaviour
 				position -= (Vector3)pivotOffset;
 				position -= offset;
 
-				Instantiate(mapping.prefab, position, rotation, 
+				var newEnemy = Instantiate(mapping.prefab, position, rotation,
 					GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Enemies]);
+
+				RuntimeDataManager.setUniqueName(ref newEnemy, mapping.prefab, tilemap, coord);
 			}
 	}
 	private void tryAddCollectible(Tile tile, Tilemap tilemap, Vector3Int coord)
@@ -160,8 +163,10 @@ public class GridPreprocessor : MonoBehaviour
 				position -= offset;
 				position += tilemap.GetTransformMatrix(coord).GetT();
 
-				Instantiate(mapping.prefab, position, Quaternion.identity,
+				var newCollectible = Instantiate(mapping.prefab, position, Quaternion.identity,
 					GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Collectibles]);
+
+				RuntimeDataManager.setUniqueName(ref newCollectible, mapping.prefab, tilemap, coord);
 			}
 	}
 

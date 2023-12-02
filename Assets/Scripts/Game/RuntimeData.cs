@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class RuntimeDataManager : MonoBehaviour
 {
@@ -20,6 +21,12 @@ public class RuntimeDataManager : MonoBehaviour
 		}
 	}
 
+	public static void setUniqueName(ref GameObject gameObject, GameObject prefab, Tilemap source, Vector3Int coord)
+	{
+		gameObject.name = string.Format("{0} ({1}, {2}): \"{3}\" ({4})",
+			prefab == null ? gameObject.name : prefab.name, 
+			coord.x, coord.y, source.name, source.gameObject.scene.name);
+	}
 
 	private void Awake()
 	{

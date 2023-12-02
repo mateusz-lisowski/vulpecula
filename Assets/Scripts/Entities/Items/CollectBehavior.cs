@@ -8,10 +8,13 @@ public class CollectData
 
 public class CollectBehavior : EntityBehavior
 {
-	public CollectBehaviorData data;
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool isCollected { get; private set; }
+	public class RuntimeData : RuntimeDataManager.Data
+	{
+		public bool isCollected = false;
+	}
 
+	public CollectBehaviorData data;
+	private RuntimeData runtimeData;
 
 	private Collider2D collectCheck;
 
@@ -20,15 +23,22 @@ public class CollectBehavior : EntityBehavior
 	{
 		collectCheck = transform.Find("CollectCheck").GetComponent<Collider2D>();
 	}
+	public override void onStart()
+	{
+		runtimeData = RuntimeDataManager.get<RuntimeData>(name);
+
+		if (runtimeData.isCollected)
+			Destroy(gameObject);
+	}
 
 	public override void onUpdate()
 	{
-		if (isCollected)
+		if (runtimeData.isCollected)
 			return;
 
 		if (collectCheck.IsTouchingLayers(data.collectingLayers))
 		{
-			isCollected = true;
+			runtimeData.isCollected = true;
 			triggerCollect();
 
 			foreach (var param in controller.animator.parameters)
