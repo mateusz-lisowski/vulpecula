@@ -12,6 +12,8 @@ public class PlayerInfo : EntityBehavior
 	private class RuntimeData : RuntimeDataManager.Data
 	{
 		[field: SerializeField, ReadOnly] public int score = 0;
+		[field: Space(5)]
+		[field: SerializeField, ReadOnly] public float playtime = 0;
 	}
 
 	[field: SerializeField, Flatten] private RuntimeData runtimeData;
@@ -42,6 +44,8 @@ public class PlayerInfo : EntityBehavior
 
 	public override void onUpdate()
 	{
+		runtimeData.playtime += Time.deltaTime;
+
 		justCollected.Clear();
 	}
 
@@ -54,7 +58,7 @@ public class PlayerInfo : EntityBehavior
 		justCollected.Add(collect.id);
 		runtimeData.score++;
 
-		Debug.Log("Collected " + runtimeData.score + " collectible at: " + Time.timeSinceLevelLoad);
+		Debug.Log("Collected " + runtimeData.score + " collectible at: " + runtimeData.playtime);
 	}
 
 }
