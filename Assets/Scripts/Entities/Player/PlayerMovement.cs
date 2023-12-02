@@ -395,7 +395,6 @@ public class PlayerMovement : EntityBehavior
 
 		if (isDashing)
 		{
-			isJumping = false;
 			isFalling = false;
 			isGrounded = false;
 		}
