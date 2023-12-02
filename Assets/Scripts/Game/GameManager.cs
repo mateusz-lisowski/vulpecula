@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviour
 			Debug.Break();
 
 		if (Input.GetKeyDown(KeyCode.R))
+		{
+			runtimeDataInstance.transform.parent = transform;
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		}
 	}
 }
