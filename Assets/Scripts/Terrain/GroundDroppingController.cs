@@ -38,20 +38,20 @@ public class GroundDroppingController : GroundController
 		tilemap = transform.GetComponent<Tilemap>();
 		preprocessor = tilemap.layoutGrid.transform.GetComponent<GridPreprocessor>();
 
-		var idleEffect = Instantiate(data.groundDropping.idleEffectPrefab, transform);
+		var idleEffect = QolUtility.Instantiate(data.groundDropping.idleEffectPrefab, transform);
 		idleEffect.name = data.groundDropping.idleEffectPrefab.name;
 		particlesIdle = idleEffect.GetComponent<ParticleSystem>();
 
 		if (data.groundDropping.shakeEffectPrefab != null)
 		{
-			var shakeEffect = Instantiate(data.groundDropping.shakeEffectPrefab, transform);
+			var shakeEffect = QolUtility.Instantiate(data.groundDropping.shakeEffectPrefab, transform);
 			shakeEffect.name = data.groundDropping.shakeEffectPrefab.name;
 			particlesShake = shakeEffect.GetComponent<ParticleSystem>();
 		}
 
 		if (data.groundDropping.breakEffectPrefab != null)
 		{
-			var breakEffect = Instantiate(data.groundDropping.breakEffectPrefab, transform);
+			var breakEffect = QolUtility.Instantiate(data.groundDropping.breakEffectPrefab, transform);
 			breakEffect.name = data.groundDropping.breakEffectPrefab.name;
 			particlesBreak = breakEffect.GetComponent<ParticleSystem>();
 		}

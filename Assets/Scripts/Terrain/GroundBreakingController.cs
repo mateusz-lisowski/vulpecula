@@ -45,7 +45,7 @@ public class GroundBreakingController : GroundController
 
 		if (data.groundBreaking.breakEffectPrefab != null)
 		{
-			var breakEffect = Instantiate(data.groundBreaking.breakEffectPrefab, transform);
+			var breakEffect = QolUtility.Instantiate(data.groundBreaking.breakEffectPrefab, transform);
 			breakEffect.name = data.groundBreaking.breakEffectPrefab.name;
 			particlesBreak = breakEffect.GetComponent<ParticleSystem>();
 		}

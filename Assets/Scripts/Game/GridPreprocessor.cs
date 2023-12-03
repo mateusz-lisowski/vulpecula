@@ -96,7 +96,7 @@ public class GridPreprocessor : MonoBehaviour
 
 		if (target == null)
 		{
-			target = Instantiate(prefab, parent).transform;
+			target = QolUtility.Instantiate(prefab, parent).transform;
 			target.name = name;
 			target.parent = parent;
 			return true;
