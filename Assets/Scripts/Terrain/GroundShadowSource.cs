@@ -1,38 +1,48 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [ExecuteInEditMode]
+[RequireComponent(typeof(CompositeCollider2D))]
 public class GroundShadowSource : MonoBehaviour
 {
-	private CompositeCollider2D _lightCollider;
-	public CompositeCollider2D lightCollider
-	{
-		get
-		{
-			if (_lightCollider == null)
-				_lightCollider = GetComponent<CompositeCollider2D>();
-			return _lightCollider;
-		}
-	}
-
-	private bool initialized = false;
+	private CompositeCollider2D lightCollider;
 	private uint currentHash;
-	public bool shouldReinitialize
-	{
-		get
-		{
-			uint hash = lightCollider.GetShapeHash();
-
-			if (initialized && currentHash == hash)
-				return false;
-
-			initialized = false;
-			currentHash = hash;
-			return true;
-		}
-	}
 
 	private void Awake()
 	{
-		_lightCollider = GetComponent<CompositeCollider2D>();
+		lightCollider = GetComponent<CompositeCollider2D>();
+	}
+	private void Update()
+	{
+		uint hash = lightCollider.GetShapeHash();
+		if (hash == currentHash && transform.childCount >= lightCollider.pointCount)
+			return;
+		currentHash = hash;
+
+		HashSet<GameObject> shadowCasters = new HashSet<GameObject>();
+
+		foreach (var shadowCaster in transform.GetComponentsInChildren<GroundShadowCaster>())
+			shadowCasters.Add(shadowCaster.gameObject);
+
+		for (int i = 0; i < lightCollider.pathCount; i++)
+		{
+			List<Vector2> points = new List<Vector2>();
+			lightCollider.GetPath(i, points);
+
+			Transform newShadowCaster;
+			if (!QolUtility.createIfNotExist(out newShadowCaster, transform,
+				RuntimeDataManager.getUniqueName(gameObject, TilemapHelper.hash(points))))
+			{
+				shadowCasters.Remove(newShadowCaster.gameObject);
+				continue;
+			}
+
+			GroundShadowCaster caster = newShadowCaster.AddComponent<GroundShadowCaster>();
+			caster.setShape(this, points);
+		}
+
+		foreach (var shadowCaster in shadowCasters)
+			QolUtility.DestroyExecutableInEditMode(shadowCaster);
 	}
 }
