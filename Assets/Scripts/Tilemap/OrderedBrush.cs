@@ -29,6 +29,7 @@ namespace UnityEditor
 				var targetsRest = targets.Where(t => !targetsOrdered.Contains(t)).ToList();
 				targetsOrdered = targetsOrdered.Concat(targetsRest).ToList();
 
+				targetsOrdered.RemoveAll(t => isTargetAutogen(t));
 				targets = targetsOrdered.ToArray();
 
 				return targets;
@@ -52,6 +53,11 @@ namespace UnityEditor
 		private bool isTargetEntity(GameObject tilemap)
 		{
 			return tilemap.transform.parent.name == "Grid";
+		}
+
+		private bool isTargetAutogen(GameObject tilemap)
+		{
+			return tilemap.transform.parent.name == "Autogen";
 		}
 	}
 }
