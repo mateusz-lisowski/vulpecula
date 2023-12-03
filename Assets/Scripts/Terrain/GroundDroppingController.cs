@@ -15,8 +15,8 @@ public class GroundDroppingController : GroundController
 	private GridPreprocessor preprocessor;
 
 	private ParticleSystem particlesIdle;
-	private ParticleSystem particlesShake;
-	private ParticleSystem particlesBreak;
+	private ParticleSystem particlesShake = null;
+	private ParticleSystem particlesBreak = null;
 
 
 	public void triggerDrop(Bounds bounds)
@@ -33,23 +33,28 @@ public class GroundDroppingController : GroundController
 	}
 
 
-	private void Awake()
+	private void Start()
 	{
 		tilemap = transform.GetComponent<Tilemap>();
 		preprocessor = tilemap.layoutGrid.transform.GetComponent<GridPreprocessor>();
 
 		var idleEffect = Instantiate(data.groundDropping.idleEffectPrefab, transform);
 		idleEffect.name = data.groundDropping.idleEffectPrefab.name;
-
-		var shakeEffect = Instantiate(data.groundDropping.shakeEffectPrefab, transform);
-		shakeEffect.name = data.groundDropping.shakeEffectPrefab.name;
-
-		var breakEffect = Instantiate(data.groundDropping.breakEffectPrefab, transform);
-		breakEffect.name = data.groundDropping.breakEffectPrefab.name;
-
 		particlesIdle = idleEffect.GetComponent<ParticleSystem>();
-		particlesShake = shakeEffect.GetComponent<ParticleSystem>();
-		particlesBreak = breakEffect.GetComponent<ParticleSystem>();
+
+		if (data.groundDropping.shakeEffectPrefab != null)
+		{
+			var shakeEffect = Instantiate(data.groundDropping.shakeEffectPrefab, transform);
+			shakeEffect.name = data.groundDropping.shakeEffectPrefab.name;
+			particlesShake = shakeEffect.GetComponent<ParticleSystem>();
+		}
+
+		if (data.groundDropping.breakEffectPrefab != null)
+		{
+			var breakEffect = Instantiate(data.groundDropping.breakEffectPrefab, transform);
+			breakEffect.name = data.groundDropping.breakEffectPrefab.name;
+			particlesBreak = breakEffect.GetComponent<ParticleSystem>();
+		}
 	}
 
 	private void Update()
@@ -75,14 +80,16 @@ public class GroundDroppingController : GroundController
 		foreach (var tile in tiles)
 			tile.parent.SetTile(tile.coord, null);
 
-		region.emit(particlesShake, particlesShake.emission.GetBurst(0).count.constant);
+		if (particlesShake != null)
+			region.emit(particlesShake, particlesShake.emission.GetBurst(0).count.constant);
 		
 		yield return new WaitForSeconds(data.groundDropping.shakeTime);
 
-		region.emit(particlesBreak, particlesBreak.emission.GetBurst(0).count.constant);
-
 		foreach (var tile in region.layers.SelectMany(l => l.tiles))
 			tile.parent.SetTile(tile.coord, null);
+
+		if (particlesBreak != null)
+			region.emit(particlesBreak, particlesBreak.emission.GetBurst(0).count.constant);
 
 		StartCoroutine(Effects.instance.fade.run(region.gameObject, region.layers));
 

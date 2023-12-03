@@ -16,7 +16,7 @@ public class GroundBreakingController : GroundController
 	private Tilemap tilemap;
 	private GridPreprocessor preprocessor;
 
-	private ParticleSystem particlesBreak;
+	private ParticleSystem particlesBreak = null;
 
 
 	public void onMessage(EntityMessage msg)
@@ -38,15 +38,17 @@ public class GroundBreakingController : GroundController
 	}
 
 
-	private void Awake()
+	private void Start()
 	{
 		tilemap = transform.GetComponent<Tilemap>();
 		preprocessor = tilemap.layoutGrid.transform.GetComponent<GridPreprocessor>();
 
-		var breakEffect = Instantiate(data.groundBreaking.breakEffectPrefab, transform);
-		breakEffect.name = data.groundBreaking.breakEffectPrefab.name;
-
-		particlesBreak = breakEffect.GetComponent<ParticleSystem>();
+		if (data.groundBreaking.breakEffectPrefab != null)
+		{
+			var breakEffect = Instantiate(data.groundBreaking.breakEffectPrefab, transform);
+			breakEffect.name = data.groundBreaking.breakEffectPrefab.name;
+			particlesBreak = breakEffect.GetComponent<ParticleSystem>();
+		}
 	}
 
 	private bool canRespawn(List<TilemapHelper.TileData> tiles)
@@ -63,7 +65,8 @@ public class GroundBreakingController : GroundController
 		foreach (var tile in region.layers.SelectMany(l => l.tiles).Concat(tiles))
 			tile.parent.SetTile(tile.coord, null);
 
-		region.emit(particlesBreak, particlesBreak.emission.GetBurst(0).count.constant);
+		if (particlesBreak != null)
+			region.emit(particlesBreak, particlesBreak.emission.GetBurst(0).count.constant);
 
 		StartCoroutine(Effects.instance.fade.run(region.gameObject, region.layers, move: false));
 

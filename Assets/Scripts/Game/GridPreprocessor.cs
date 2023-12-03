@@ -31,7 +31,7 @@ public class GridPreprocessor : MonoBehaviour
 	public List<TilemapHelper.Region> groundBreakingRegions;
 
 
-	private void Start()
+	private void Awake()
 	{
 		regenerate();
 	}
