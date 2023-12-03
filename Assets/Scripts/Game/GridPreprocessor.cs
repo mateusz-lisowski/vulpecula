@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -18,28 +20,68 @@ public class GridPreprocessor : MonoBehaviour
 	public GridPreprocessorData data;
 
 	private Tilemap[] tilemaps;
+	private Dictionary<Vector3Int, List<GameObject>> invalidationCoords;
+	private HashSet<GameObject> invalidObjects;
+	private HashSet<GameObject> invalidableObjects;
 
 	private Transform autogenGroup;
 	private Tilemap slopesTilemap;
 	private Tilemap bounceOnBreakTilemap;
 	private Transform groundDroppingGroup;
 	private Transform groundBreakingGroup;
+	private Transform groundShadowCastingGroup;
 	private Transform enemiesGroup;
 	private Transform collectiblesGroup;
 
 	public List<TilemapHelper.Region> groundDroppingRegions;
 	public List<TilemapHelper.Region> groundBreakingRegions;
+	public List<GroundShadowCaster> groundShadowCasters;
 
 
 	private void Awake()
 	{
+		if (!Application.isPlaying)
+			Tilemap.tilemapTileChanged += onTilemapChange;
+
 		regenerate();
 	}
+	private void OnDestroy()
+	{
+		Tilemap.tilemapTileChanged -= onTilemapChange;
+	}
+	
 	public void regenerate()
 	{
-		createIfNotExist(out autogenGroup, transform, "Autogen");
+		if (invalidableObjects != null)
+			foreach (GameObject child in invalidableObjects)
+				invalidObjects.Add(child);
 
+		generate();
+	}
+	public void clear()
+	{
+		if (autogenGroup != null)
+		{
+			QolUtility.DestroyExecutableInEditMode(autogenGroup.gameObject);
+			autogenGroup = null;
+			groundDroppingRegions = null;
+			groundBreakingRegions = null;
+		}
+	}
+	
+	private void generate()
+	{
+		invalidationCoords = new Dictionary<Vector3Int, List<GameObject>>();
+		if (invalidObjects == null)
+			invalidObjects = new HashSet<GameObject>();
+		if (invalidableObjects == null)
+			invalidableObjects = new HashSet<GameObject>();
+
+		QolUtility.createIfNotExist(out autogenGroup, transform, "Autogen");
+
+		autogenGroup.gameObject.SetActive(false);
 		tilemaps = transform.GetComponentsInChildren<Tilemap>();
+		autogenGroup.gameObject.SetActive(true);
 
 		initializeRuntimeTilemaps();
 
@@ -63,52 +105,35 @@ public class GridPreprocessor : MonoBehaviour
 			}
 		}
 
-		createRegion(ref groundDroppingRegions, groundDroppingGroup, transform.GetComponentsInChildren<GroundDroppingController>());
-		createRegion(ref groundBreakingRegions, groundBreakingGroup, transform.GetComponentsInChildren<GroundBreakingController>());
-	}
-	public void clear()
-	{
-		if (autogenGroup != null)
-		{
-			DestroyImmediate(autogenGroup.gameObject);
-			autogenGroup = null;
-			groundDroppingRegions = null;
-			groundBreakingRegions = null;
-		}
-	}
+		createRegions(ref groundDroppingRegions, groundDroppingGroup, transform.GetComponentsInChildren<GroundDroppingController>());
+		createRegions(ref groundBreakingRegions, groundBreakingGroup, transform.GetComponentsInChildren<GroundBreakingController>());
+		createShadowCasters();
 
-	private static bool createIfNotExist(out Transform target, Transform parent, string name)
-	{
-		target = parent.Find(name);
-
-		if (target == null)
-		{
-			target = new GameObject(name).transform;
-			target.parent = parent;
-			return true;
-		}
-		else
-			return false;
+		foreach (var invalidObject in invalidObjects)
+			if (invalidObject != null)
+				QolUtility.DestroyExecutableInEditMode(invalidObject);
+		invalidObjects.Clear();
 	}
-	private static bool createIfNotExist(out Transform target, Transform parent, string name, GameObject prefab)
+	private void onTilemapChange(Tilemap tilemap, Tilemap.SyncTile[] tiles)
 	{
-		target = parent.Find(name);
+		if (!tilemaps.Contains(tilemap))
+			return;
 
-		if (target == null)
-		{
-			target = QolUtility.Instantiate(prefab, parent).transform;
-			target.name = name;
-			target.parent = parent;
-			return true;
-		}
-		else
-			return false;
+		//foreach (var tile in tiles)
+		//{
+		//	Debug.Log("Change at: " + tile.position);
+		//	if (invalidationCoords.ContainsKey(tile.position))
+		//		foreach (var invalidObject in invalidationCoords[tile.position])
+		//			invalidObjects.Add(invalidObject);
+		//}
+		//
+		regenerate();
 	}
 
 	private bool createTilemap(out Tilemap target, Transform parent, string name, Color color)
 	{
 		Transform tilemapTransform;
-		if (!createIfNotExist(out tilemapTransform, parent, name))
+		if (!QolUtility.createIfNotExist(out tilemapTransform, parent, name))
 		{
 			target = tilemapTransform.GetComponent<Tilemap>();
 			return false;
@@ -156,10 +181,39 @@ public class GridPreprocessor : MonoBehaviour
 		createSlopeTilemap();
 		createBounceOnBreakTilemap();
 
-		createIfNotExist(out groundDroppingGroup, autogenGroup, "Ground Dropping");
-		createIfNotExist(out groundBreakingGroup, autogenGroup, "Ground Breaking");
-		createIfNotExist(out enemiesGroup, autogenGroup, "Enemies");
-		createIfNotExist(out collectiblesGroup, autogenGroup, "Collectibles");
+		QolUtility.createIfNotExist(out groundDroppingGroup, autogenGroup, "Ground Dropping");
+		QolUtility.createIfNotExist(out groundBreakingGroup, autogenGroup, "Ground Breaking");
+		QolUtility.createIfNotExist(out groundShadowCastingGroup, autogenGroup, "Ground Shadow Casting");
+		QolUtility.createIfNotExist(out enemiesGroup, autogenGroup, "Enemies");
+		QolUtility.createIfNotExist(out collectiblesGroup, autogenGroup, "Collectibles");
+	}
+
+	private void addInvalidation(GameObject gameObject, Vector3Int coord)
+	{
+		invalidableObjects.Add(gameObject);
+		invalidObjects.Remove(gameObject);
+
+		List<GameObject> newInvalidObjects;
+
+		if (!invalidationCoords.ContainsKey(coord))
+		{
+			newInvalidObjects = new List<GameObject>();
+			invalidationCoords.Add(coord, newInvalidObjects);
+		}
+		else
+			newInvalidObjects = invalidationCoords[coord];
+
+		if (newInvalidObjects == null)
+			newInvalidObjects = new List<GameObject>();
+
+		newInvalidObjects.Add(gameObject);
+	}
+	private void addInvalidation(GameObject gameObject, TilemapHelper.Region region)
+	{
+		var coords = TilemapHelper.extendToAdjacent(region.coords);
+
+		foreach (var coord in coords)
+			addInvalidation(gameObject, coord);
 	}
 
 	private void tryAddTiles(Tile tile, Vector3Int coord, Tilemap parent, BoundedTile[] tiles)
@@ -177,8 +231,12 @@ public class GridPreprocessor : MonoBehaviour
 			if (tile == mapping.tile)
 			{
 				Transform newEntity;
-				if (!createIfNotExist(out newEntity, parent,
-					RuntimeDataManager.getUniqueName(mapping.prefab, tilemap, coord), mapping.prefab))
+				bool alreadyExists = !QolUtility.createIfNotExist(out newEntity, parent,
+					RuntimeDataManager.getUniqueName(mapping.prefab, tilemap, coord), mapping.prefab);
+
+				addInvalidation(newEntity.gameObject, coord);
+
+				if (alreadyExists)
 					continue;
 
 				SpriteRenderer renderer = mapping.prefab.transform.Find("Sprite").GetComponent<SpriteRenderer>();
@@ -201,7 +259,7 @@ public class GridPreprocessor : MonoBehaviour
 				newEntity.rotation = rotation;
 			}
 	}
-	private void createRegion(ref List<TilemapHelper.Region> regions, Transform parent, GroundController[] groundControllers)
+	private void createRegions(ref List<TilemapHelper.Region> regions, Transform parent, GroundController[] groundControllers)
 	{
 		var newRegions = new List<TilemapHelper.Region>();
 		List<Vector3Int> ignore = new List<Vector3Int>();
@@ -225,7 +283,8 @@ public class GridPreprocessor : MonoBehaviour
 
 				TilemapHelper.Region region = null;
 				Transform regionTransform;
-				if (!createIfNotExist(out regionTransform, parent, RuntimeDataManager.getUniqueName(triggerTilemap, triggeredCoords)))
+				if (!QolUtility.createIfNotExist(out regionTransform, parent, 
+					RuntimeDataManager.getUniqueName(triggerTilemap.gameObject, TilemapHelper.hash(triggeredCoords))))
 					if (region != null)
 						region = regions.Find(r => r.gameObject == regionTransform.gameObject);
 
@@ -237,6 +296,8 @@ public class GridPreprocessor : MonoBehaviour
 					regionTransform.gameObject.SetActive(false);
 				}
 
+				addInvalidation(region.gameObject, region);
+
 				ignore.AddRange(region.coords);
 				newRegions.Add(region);
 			}
@@ -245,6 +306,35 @@ public class GridPreprocessor : MonoBehaviour
 		regions = newRegions;
 	}
 	
+	public void createShadowCasters()
+	{
+		var newCasters = new List<GroundShadowCaster>();
+
+		foreach (var groundShadowSource in transform.GetComponentsInChildren<GroundShadowSource>())
+		{
+			if (!groundShadowSource.shouldReinitialize)
+				continue;
+
+			var collider = groundShadowSource.lightCollider;
+
+			for (int i = 0; i < groundShadowSource.lightCollider.pathCount; i++)
+			{
+				List<Vector2> points = new List<Vector2>();
+				collider.GetPath(i, points);
+
+				Transform newShadowCaster;
+				if (!QolUtility.createIfNotExist(out newShadowCaster, groundShadowCastingGroup,
+					RuntimeDataManager.getUniqueName(groundShadowSource.gameObject, TilemapHelper.hash(points))))
+					continue;
+
+				GroundShadowCaster caster = newShadowCaster.AddComponent<GroundShadowCaster>();
+
+				caster.setShape(groundShadowSource, points);
+			}
+		}
+
+		groundShadowCasters = newCasters;
+	}
 }
 
 [CustomEditor(typeof(GridPreprocessor))]

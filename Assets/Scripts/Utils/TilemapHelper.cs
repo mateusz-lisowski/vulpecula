@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -14,6 +15,17 @@ public class TilemapHelper
 		public Matrix4x4 transform;
 		public Sprite sprite;
 		public Vector2 offset;
+
+		public TileData(Tilemap tilemap, Vector3Int triggeredCoord, TileBase tileBase = null)
+		{
+			parent = tilemap;
+			coord = triggeredCoord;
+			tile = tileBase != null ? tileBase : tilemap.GetTile(triggeredCoord);
+			color = tilemap.GetColor(triggeredCoord);
+			transform = tilemap.GetTransformMatrix(triggeredCoord);
+			sprite = tilemap.GetSprite(triggeredCoord);
+			offset = transform.GetT();
+		}
 	}
 
 	public static List<Vector3Int> findTriggeredWithinBounds(Tilemap tilemap, Bounds bounds)
@@ -64,6 +76,26 @@ public class TilemapHelper
 
 		return triggeredCoords;
 	}
+	public static List<Vector3Int> extendToAdjacent(List<Vector3Int> coords)
+	{
+		List<Vector3Int> newCoords = new List<Vector3Int>(coords);
+
+		foreach (var coord in coords)
+			foreach (Vector3Int adjacentCoord in new Vector3Int[]{
+				coord + Vector3Int.up,
+				coord + Vector3Int.down,
+				coord + Vector3Int.left,
+				coord + Vector3Int.right,
+			})
+			{
+				if (newCoords.Contains(adjacentCoord))
+					continue;
+
+				newCoords.Add(adjacentCoord);
+			}
+
+		return newCoords;
+	}
 
 	public static List<TileData> getAllTiles(IEnumerable<Tilemap> tilemaps, List<Vector3Int> triggeredCoords)
 	{
@@ -72,21 +104,12 @@ public class TilemapHelper
 		foreach (Tilemap tilemap in tilemaps)
 			foreach (Vector3Int triggeredCoord in triggeredCoords)
 			{
-				TileBase droppedTile = tilemap.GetTile(triggeredCoord);
+				TileBase tileBase = tilemap.GetTile(triggeredCoord);
 
-				if (droppedTile == null)
+				if (tileBase == null)
 					continue;
 
-				TileData tileData = new TileData();
-				tileData.parent = tilemap;
-				tileData.coord = triggeredCoord;
-				tileData.tile = droppedTile;
-				tileData.color = tilemap.GetColor(triggeredCoord);
-				tileData.transform = tilemap.GetTransformMatrix(triggeredCoord);
-				tileData.sprite = tilemap.GetSprite(triggeredCoord);
-				tileData.offset = tileData.transform.GetT();
-
-				tiles.Add(tileData);
+				tiles.Add(new TileData(tilemap, triggeredCoord, tileBase));
 			}
 
 		return tiles;
@@ -117,6 +140,15 @@ public class TilemapHelper
 		};
 
 		tilemap.SetTile(copiedTile, true);
+	}
+
+	public static int hash(List<Vector3Int> coords)
+	{
+		return coords.Aggregate(487, (a, b) => a * 31 + b.GetHashCode());
+	}
+	public static int hash(List<Vector2> path)
+	{
+		return path.Aggregate(487, (a, b) => a * 31 + b.GetHashCode());
 	}
 
 
