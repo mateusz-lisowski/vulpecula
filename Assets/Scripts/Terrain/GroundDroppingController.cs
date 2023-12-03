@@ -4,9 +4,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class GroundDroppingController : MonoBehaviour
+public class GroundDroppingController : GroundController
 {
 	public TerrainData data;
+	public override Tilemap[] tilemaps { get => droppableTilemaps; }
+
 	public Tilemap[] droppableTilemaps;
 
 	private Tilemap tilemap;

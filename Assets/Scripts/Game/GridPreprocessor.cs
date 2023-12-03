@@ -1,11 +1,17 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Resources;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.Tilemaps;
+using BoundedTile = GridPreprocessorData.BoundedTile;
+using TilePrefabMapping = GridPreprocessorData.TilePrefabMapping;
 
+public abstract class GroundController : MonoBehaviour
+{
+	public abstract Tilemap[] tilemaps { get; }
+}
+
+[ExecuteInEditMode]
 [RequireComponent(typeof(Grid))]
 public class GridPreprocessor : MonoBehaviour
 {
@@ -13,22 +19,28 @@ public class GridPreprocessor : MonoBehaviour
 
 	private Tilemap[] tilemaps;
 
+	private Transform autogenGroup;
 	private Tilemap slopesTilemap;
 	private Tilemap bounceOnBreakTilemap;
-	private GameObject groundDroppingGroup;
-	private GameObject groundBreakingGroup;
+	private Transform groundDroppingGroup;
+	private Transform groundBreakingGroup;
+	private Transform enemiesGroup;
+	private Transform collectiblesGroup;
 
-	public List<TilemapHelper.Region> groundDroppingRegions { get; private set; }
-	public List<TilemapHelper.Region> groundBreakingRegions { get; private set; }
+	public List<TilemapHelper.Region> groundDroppingRegions;
+	public List<TilemapHelper.Region> groundBreakingRegions;
 
-
-	private void Awake()
-	{
-		tilemaps = transform.GetComponentsInChildren<Tilemap>();
-	}
 
 	private void Start()
 	{
+		regenerate();
+	}
+	public void regenerate()
+	{
+		createIfNotExist(out autogenGroup, transform, "Autogen");
+
+		tilemaps = transform.GetComponentsInChildren<Tilemap>();
+
 		initializeRuntimeTilemaps();
 
 		foreach (Tilemap tilemap in tilemaps)
@@ -43,168 +55,161 @@ public class GridPreprocessor : MonoBehaviour
 
 				Tile tile = tileBase as Tile;
 
-				tryAddSlope(tile, coord);
-				tryAddBreakBounce(tile, coord);
-
-				tryAddEnemy(tile, tilemap, coord);
-				tryAddCollectible(tile, tilemap, coord);
+				tryAddTiles(tile, coord, slopesTilemap, data.slopes.tiles);
+				tryAddTiles(tile, coord, bounceOnBreakTilemap, data.bounceOnBreak.tiles);
+				
+				tryAddEntity(tile, tilemap, coord, enemiesGroup, data.enemies.mapping);
+				tryAddEntity(tile, tilemap, coord, collectiblesGroup, data.collectibles.mapping);
 			}
 		}
 
-		createGroundDroppableRegions();
-		createGroundBreakableRegions();
+		createRegion(ref groundDroppingRegions, groundDroppingGroup, transform.GetComponentsInChildren<GroundDroppingController>());
+		createRegion(ref groundBreakingRegions, groundBreakingGroup, transform.GetComponentsInChildren<GroundBreakingController>());
+	}
+	public void clear()
+	{
+		if (autogenGroup != null)
+		{
+			DestroyImmediate(autogenGroup.gameObject);
+			autogenGroup = null;
+			groundDroppingRegions = null;
+			groundBreakingRegions = null;
+		}
 	}
 
-
-	private Tilemap createTilemap(string name, Color color)
+	private static bool createIfNotExist(out Transform target, Transform parent, string name)
 	{
-		GameObject tilemapObject = new GameObject(name);
-		tilemapObject.SetActive(false);
+		target = parent.Find(name);
 
-		Tilemap tilemap = tilemapObject.AddComponent<Tilemap>();
-		tilemap.color = color;
+		if (target == null)
+		{
+			target = new GameObject(name).transform;
+			target.parent = parent;
+			return true;
+		}
+		else
+			return false;
+	}
+	private static bool createIfNotExist(out Transform target, Transform parent, string name, GameObject prefab)
+	{
+		target = parent.Find(name);
 
-		TilemapRenderer tilemapRenderer = tilemapObject.AddComponent<TilemapRenderer>();
+		if (target == null)
+		{
+			target = Instantiate(prefab, parent).transform;
+			target.name = name;
+			target.parent = parent;
+			return true;
+		}
+		else
+			return false;
+	}
+
+	private bool createTilemap(out Tilemap target, Transform parent, string name, Color color)
+	{
+		Transform tilemapTransform;
+		if (!createIfNotExist(out tilemapTransform, parent, name))
+		{
+			target = tilemapTransform.GetComponent<Tilemap>();
+			return false;
+		}
+
+		tilemapTransform.gameObject.SetActive(false);
+
+		target = tilemapTransform.AddComponent<Tilemap>();
+		target.color = color;
+
+		TilemapRenderer tilemapRenderer = tilemapTransform.AddComponent<TilemapRenderer>();
 		tilemapRenderer.sortingLayerName = data.sortingLayer;
 		tilemapRenderer.sortingOrder = data.sortingOrder;
 
-		TilemapCollider2D tilemapCollider = tilemapObject.AddComponent<TilemapCollider2D>();
+		TilemapCollider2D tilemapCollider = tilemapTransform.AddComponent<TilemapCollider2D>();
 		tilemapCollider.isTrigger = true;
 
-		return tilemap;
+		return true;
 	}
-	private void createSlopeTilemap(GameObject parent)
+	private void createSlopeTilemap()
 	{
-		slopesTilemap = createTilemap("Slope", data.slopes.color);
-		slopesTilemap.transform.parent = parent.transform;
-		slopesTilemap.gameObject.layer = LayerMask.NameToLayer("Slope");
+		if (createTilemap(out slopesTilemap, autogenGroup, "Slope", data.slopes.color))
+		{
+			slopesTilemap.gameObject.layer = LayerMask.NameToLayer("Slope");
 
-		slopesTilemap.gameObject.SetActive(true);
+			slopesTilemap.gameObject.SetActive(true);
+		}
 	}
-	private void createBounceOnBreakTilemap(GameObject parent)
+	private void createBounceOnBreakTilemap()
 	{
-		bounceOnBreakTilemap = createTilemap("Bounce On Break", data.bounceOnBreak.color);
-		bounceOnBreakTilemap.transform.parent = parent.transform;
-		bounceOnBreakTilemap.gameObject.layer = LayerMask.NameToLayer("Ground-Breakable");
-		bounceOnBreakTilemap.tag = "BreakBounce";
+		if (createTilemap(out bounceOnBreakTilemap, autogenGroup, "Bounce On Break", data.bounceOnBreak.color))
+		{
+			bounceOnBreakTilemap.gameObject.layer = LayerMask.NameToLayer("Ground-Breakable");
+			bounceOnBreakTilemap.tag = "BreakBounce";
 
-		GroundBreakingController controller = bounceOnBreakTilemap.AddComponent<GroundBreakingController>();
-		controller.data = data.terrainData;
-		controller.breakableTilemaps = data.bounceOnBreak.breakableTilemaps;
+			GroundBreakingController controller = bounceOnBreakTilemap.AddComponent<GroundBreakingController>();
+			controller.data = data.terrainData;
+			controller.breakableTilemaps = data.bounceOnBreak.breakableTilemaps;
 
-		bounceOnBreakTilemap.gameObject.SetActive(true);
+			bounceOnBreakTilemap.gameObject.SetActive(true);
+		}
 	}
-	
 	private void initializeRuntimeTilemaps()
 	{
-		GameObject runtimeTilemapsParent = new GameObject("Runtime");
-		runtimeTilemapsParent.transform.parent = transform;
+		createSlopeTilemap();
+		createBounceOnBreakTilemap();
 
-		createSlopeTilemap(runtimeTilemapsParent);
-		createBounceOnBreakTilemap(runtimeTilemapsParent);
-
-		groundDroppingGroup = new GameObject("Ground Dropping");
-		groundDroppingGroup.transform.parent = runtimeTilemapsParent.transform;
-
-		groundBreakingGroup = new GameObject("Ground Breaking");
-		groundBreakingGroup.transform.parent = runtimeTilemapsParent.transform;
+		createIfNotExist(out groundDroppingGroup, autogenGroup, "Ground Dropping");
+		createIfNotExist(out groundBreakingGroup, autogenGroup, "Ground Breaking");
+		createIfNotExist(out enemiesGroup, autogenGroup, "Enemies");
+		createIfNotExist(out collectiblesGroup, autogenGroup, "Collectibles");
 	}
 
-
-	private void tryAddSlope(Tile tile, Vector3Int coord)
+	private void tryAddTiles(Tile tile, Vector3Int coord, Tilemap parent, BoundedTile[] tiles)
 	{
-		foreach (var tileData in data.slopes.tiles)
+		foreach (var tileData in tiles)
 			if (tile == tileData.tile)
 			{
 				foreach (Vector3Int offset in tileData.offsetBounds.allPositionsWithin)
-					slopesTilemap.SetTile(coord + offset, data.areaTile);
+					parent.SetTile(coord + offset, data.areaTile);
 			}
 	}
-	private void tryAddBreakBounce(Tile tile, Vector3Int coord)
+	private void tryAddEntity(Tile tile, Tilemap tilemap, Vector3Int coord, Transform parent, TilePrefabMapping[] mappings)
 	{
-		foreach (var tileData in data.bounceOnBreak.tiles)
-			if (tile == tileData.tile)
-			{
-				foreach (Vector3Int offset in tileData.offsetBounds.allPositionsWithin)
-					bounceOnBreakTilemap.SetTile(coord + offset, data.areaTile);
-			}
-	}
-	
-	private void tryAddEnemy(Tile tile, Tilemap tilemap, Vector3Int coord)
-	{
-		foreach (var mapping in data.enemies.mapping)
+		foreach (var mapping in mappings)
 			if (tile == mapping.tile)
 			{
+				Transform newEntity;
+				if (!createIfNotExist(out newEntity, parent,
+					RuntimeDataManager.getUniqueName(mapping.prefab, tilemap, coord), mapping.prefab))
+					continue;
+
 				SpriteRenderer renderer = mapping.prefab.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-				
+
 				Matrix4x4 tileTransform = tilemap.GetTransformMatrix(coord);
 				Quaternion tileRotation = tileTransform.GetR();
-				
+
 				Quaternion rotation = tileRotation;
 				if (renderer.flipX)
 					rotation *= Quaternion.Euler(0, 180, 0);
-				
-				Vector2 pivotOffset = (tile.sprite.pivot - tile.sprite.rect.size / 2) / tile.sprite.pixelsPerUnit;
-				Vector3 offset = renderer.transform.position;
-				
-				Vector3 position = tilemap.CellToWorld(coord) + new Vector3(0.5f, 0.5f);
-				position -= (Vector3)pivotOffset;
-				position -= offset;
-
-				var newEnemy = Instantiate(mapping.prefab, position, rotation,
-					GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Enemies]);
-
-				RuntimeDataManager.setUniqueName(ref newEnemy, mapping.prefab, tilemap, coord);
-			}
-	}
-	private void tryAddCollectible(Tile tile, Tilemap tilemap, Vector3Int coord)
-	{
-		foreach (var mapping in data.collectibles.mapping)
-			if (tile == mapping.tile)
-			{
-				SpriteRenderer renderer = mapping.prefab.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-
 				Vector2 pivotOffset = (tile.sprite.pivot - tile.sprite.rect.size / 2) / tile.sprite.pixelsPerUnit;
 				Vector3 offset = renderer.transform.position;
 
 				Vector3 position = tilemap.CellToWorld(coord) + new Vector3(0.5f, 0.5f);
 				position -= (Vector3)pivotOffset;
 				position -= offset;
-				position += tilemap.GetTransformMatrix(coord).GetT();
+				position += tileTransform.GetT();
 
-				var newCollectible = Instantiate(mapping.prefab, position, Quaternion.identity,
-					GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Collectibles]);
-
-				RuntimeDataManager.setUniqueName(ref newCollectible, mapping.prefab, tilemap, coord);
+				newEntity.position = position;
+				newEntity.rotation = rotation;
 			}
 	}
-
-
-	private TilemapHelper.Region createTilemapRegion(
-		Tilemap triggerTilemap, Vector3Int triggerCoord, Tilemap[] tilemaps, Transform parent)
+	private void createRegion(ref List<TilemapHelper.Region> regions, Transform parent, GroundController[] groundControllers)
 	{
-		List<Vector3Int> triggeredCoords = TilemapHelper.getTriggeredTiles(
-			triggerTilemap, new List<Vector3Int> { triggerCoord });
-
-		List<TilemapHelper.TileData> tiles = TilemapHelper.getAllTiles(
-			tilemaps, triggeredCoords);
-
-		var region = new TilemapHelper.Region(tiles, triggeredCoords, parent);
-
-		region.gameObject.SetActive(false);
-
-		return region;
-	}
-
-	private void createGroundDroppableRegions()
-	{
-		groundDroppingRegions = new List<TilemapHelper.Region>();
+		var newRegions = new List<TilemapHelper.Region>();
 		List<Vector3Int> ignore = new List<Vector3Int>();
 
-		foreach (var groundDropping in transform.GetComponentsInChildren<GroundDroppingController>())
+		foreach (var groundController in groundControllers)
 		{
-			Tilemap triggerTilemap = groundDropping.GetComponent<Tilemap>();
-			Tilemap[] tilemaps = groundDropping.droppableTilemaps;
+			Tilemap triggerTilemap = groundController.GetComponent<Tilemap>();
+			Tilemap[] tilemaps = groundController.tilemaps;
 
 			foreach (Vector3Int coord in triggerTilemap.cellBounds.allPositionsWithin)
 			{
@@ -215,40 +220,45 @@ public class GridPreprocessor : MonoBehaviour
 				if (tileBase == null)
 					continue;
 
-				TilemapHelper.Region region = createTilemapRegion(
-					triggerTilemap, coord, tilemaps, groundDroppingGroup.transform);
+				List<Vector3Int> triggeredCoords = TilemapHelper.getTriggeredTiles(
+					triggerTilemap, new List<Vector3Int> { coord });
+
+				TilemapHelper.Region region = null;
+				Transform regionTransform;
+				if (!createIfNotExist(out regionTransform, parent, RuntimeDataManager.getUniqueName(triggerTilemap, triggeredCoords)))
+					if (region != null)
+						region = regions.Find(r => r.gameObject == regionTransform.gameObject);
+
+				if (region == null)
+				{ 
+					List<TilemapHelper.TileData> tiles = TilemapHelper.getAllTiles(tilemaps, triggeredCoords);
+
+					region = new TilemapHelper.Region(regionTransform.gameObject, tiles, triggeredCoords);
+					regionTransform.gameObject.SetActive(false);
+				}
 
 				ignore.AddRange(region.coords);
-				groundDroppingRegions.Add(region);
+				newRegions.Add(region);
 			}
 		}
+
+		regions = newRegions;
 	}
-	private void createGroundBreakableRegions()
+	
+}
+
+[CustomEditor(typeof(GridPreprocessor))]
+public class GridPreprocessorEditor : Editor
+{
+	public override void OnInspectorGUI()
 	{
-		groundBreakingRegions = new List<TilemapHelper.Region>();
-		List<Vector3Int> ignore = new List<Vector3Int>();
+		GridPreprocessor gridPreprocessor = target as GridPreprocessor;
 
-		foreach (var groundBreaking in transform.GetComponentsInChildren<GroundBreakingController>())
-		{
-			Tilemap triggerTilemap = groundBreaking.GetComponent<Tilemap>();
-			Tilemap[] tilemaps = groundBreaking.breakableTilemaps;
+		if (GUILayout.Button("Regenerate"))
+			gridPreprocessor.regenerate();
+		if (GUILayout.Button("Clear"))
+			gridPreprocessor.clear();
 
-			foreach (Vector3Int coord in triggerTilemap.cellBounds.allPositionsWithin)
-			{
-				if (ignore.Contains(coord))
-					continue;
-
-				TileBase tileBase = triggerTilemap.GetTile(coord);
-				if (tileBase == null)
-					continue;
-
-				TilemapHelper.Region region = createTilemapRegion(
-					triggerTilemap, coord, tilemaps, groundBreakingGroup.transform);
-
-				ignore.AddRange(region.coords);
-				groundBreakingRegions.Add(region);
-			}
-		}
+		base.OnInspectorGUI();
 	}
-
 }

@@ -6,9 +6,11 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.WSA;
 
-public class GroundBreakingController : MonoBehaviour
+public class GroundBreakingController : GroundController
 {
 	public TerrainData data;
+	public override Tilemap[] tilemaps { get => breakableTilemaps; }
+
 	public Tilemap[] breakableTilemaps;
 
 	private Tilemap tilemap;

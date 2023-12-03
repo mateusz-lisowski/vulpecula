@@ -124,12 +124,23 @@ public class TilemapHelper
 	{
 		public GameObject gameObject;
 		public Tilemap tilemap;
-		private TilemapRenderer tilemapRenderer;
-
 		public List<TileData> tiles;
+		public bool alreadyExists;
 
 		public RegionLayer(GameObject region, Tilemap parent)
 		{
+			tiles = new List<TileData>();
+			
+			Transform transform = region.transform.Find(parent.name);
+			alreadyExists = transform != null;
+
+			if (alreadyExists)
+			{
+				gameObject = transform.gameObject;
+				tilemap = gameObject.GetComponent<Tilemap>();
+				return;
+			}
+
 			gameObject = new GameObject(parent.name);
 
 			gameObject.transform.parent = region.transform;
@@ -139,13 +150,11 @@ public class TilemapHelper
 
 			tilemap.color = parent.color;
 
-			tilemapRenderer = gameObject.AddComponent<TilemapRenderer>();
+			TilemapRenderer tilemapRenderer = gameObject.AddComponent<TilemapRenderer>();
 			TilemapRenderer oldTilemapRenderer = parent.gameObject.GetComponent<TilemapRenderer>();
 			
 			tilemapRenderer.sortingLayerID = oldTilemapRenderer.sortingLayerID;
 			tilemapRenderer.sortingOrder = oldTilemapRenderer.sortingOrder;
-
-			tiles = new List<TileData>();
 		}
 
 		public void finalize()
@@ -154,16 +163,15 @@ public class TilemapHelper
 		}
 	}
 
-	public struct Region
+	public class Region
 	{
 		public GameObject gameObject;
 		public List<RegionLayer> layers;
 		public List<Vector3Int> coords;
 
-		public Region(IEnumerable<TileData> tilesE, List<Vector3Int> triggeredCoords, Transform parent)
+		public Region(GameObject baseObject, IEnumerable<TileData> tilesE, List<Vector3Int> triggeredCoords)
 		{
-			gameObject = new GameObject("Region");
-			gameObject.transform.parent = parent;
+			gameObject = baseObject;
 			coords = triggeredCoords;
 
 			Dictionary<Tilemap, RegionLayer> dict = new Dictionary<Tilemap, RegionLayer>();
@@ -183,7 +191,9 @@ public class TilemapHelper
 					layer = dict[tile.parent];
 
 				layer.tiles.Add(tile);
-				TilemapHelper.setTile(layer.tilemap, tile);
+
+				if (!layer.alreadyExists)
+					TilemapHelper.setTile(layer.tilemap, tile);
 			}
 
 			foreach (var layer in layers)
