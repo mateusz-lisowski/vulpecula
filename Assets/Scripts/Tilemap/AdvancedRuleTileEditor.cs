@@ -92,6 +92,9 @@ namespace UnityEditor
 			public static readonly GUIContent defaultCollider = EditorGUIUtility.TrTextContent("Default Collider"
 				, "The default Collider Type set when creating a new Rule.");
 
+			public static readonly GUIContent connectableTiles = EditorGUIUtility.TrTextContent("Connectable Tiles"
+				, "Tiles that this Rule can connect with.");
+
 			public static readonly GUIContent emptyRuleTileInfo =
 				EditorGUIUtility.TrTextContent(
 					"Drag Sprite or Sprite Texture assets \n" +
@@ -203,6 +206,7 @@ namespace UnityEditor
 		public const float k_LabelWidth = 80f;
 
 		private SerializedProperty m_TilingRules;
+		private SerializedProperty m_ConnectableTiles;
 
 		private MethodInfo m_ClearCacheMethod;
 
@@ -230,6 +234,7 @@ namespace UnityEditor
 			}
 
 			m_TilingRules = serializedObject.FindProperty("m_TilingRules");
+			m_ConnectableTiles = serializedObject.FindProperty("m_ConnectableTiles");
 		}
 
 		/// <summary>
@@ -499,6 +504,9 @@ namespace UnityEditor
 			tile.m_DefaultSprite = EditorGUILayout.ObjectField(Styles.defaultSprite, tile.m_DefaultSprite, typeof(Sprite), false) as Sprite;
 			tile.m_DefaultGameObject = EditorGUILayout.ObjectField(Styles.defaultGameObject, tile.m_DefaultGameObject, typeof(GameObject), false) as GameObject;
 			tile.m_DefaultColliderType = (Tile.ColliderType)EditorGUILayout.EnumPopup(Styles.defaultCollider, tile.m_DefaultColliderType);
+
+			EditorGUILayout.PropertyField(m_ConnectableTiles, Styles.connectableTiles);
+			serializedObject.ApplyModifiedProperties();
 
 			DrawCustomFields(false);
 

@@ -38,13 +38,11 @@ namespace UnityEditor
 
 		private bool isTargetGround(GameObject tilemap)
 		{
-			return tilemap.transform.parent.name == "Environment"
-				&& tilemap.GetComponent<TilemapCollider2D>() != null;
+			return tilemap.transform.parent.name == "Ground";
 		}
 		private bool isTargetDecoration(GameObject tilemap)
 		{
-			return tilemap.transform.parent.name == "Environment" 
-				&& tilemap.GetComponent<TilemapCollider2D>() == null;
+			return tilemap.transform.parent.name == "Environment";
 		}
 		private bool isTargetField(GameObject tilemap)
 		{

@@ -15,7 +15,29 @@ MonoBehaviour:
   m_DefaultSprite: {fileID: 0}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
-  m_ConnectableTiles: []
+  m_ConnectableTiles:
+  - {fileID: 11400000, guid: c4142fe17c433fb45b87e2676824a079, type: 2}
+  - {fileID: 11400000, guid: 009753acf8751f8429bdeb275f2f0b07, type: 2}
+  - {fileID: 11400000, guid: c51a244da0005e2479f878482398085b, type: 2}
+  - {fileID: 11400000, guid: 6cb5018e238d7414486250816175d232, type: 2}
+  - {fileID: 11400000, guid: d784517f987401e4d8ab09d0e786d86a, type: 2}
+  - {fileID: 11400000, guid: b1cf0f65c3e28944b86288a7bd112297, type: 2}
+  - {fileID: 11400000, guid: dca261754518ecf41b401988099cef7b, type: 2}
+  - {fileID: 11400000, guid: 6739059af90f73e4da51348030a1b193, type: 2}
+  - {fileID: 11400000, guid: 9f301c261bbc91f44bf5f63a49215fe5, type: 2}
+  - {fileID: 11400000, guid: fe74b8ac7b52caa4cbfd76ac9e95f70b, type: 2}
+  - {fileID: 11400000, guid: 1bd3cc7d2a42e0b4d81ab472c3bea8c0, type: 2}
+  - {fileID: 11400000, guid: 86b8e5a17cc1b974d94c3f612bdf3774, type: 2}
+  - {fileID: 11400000, guid: cf19ea2577b23114394d3a3ed614e802, type: 2}
+  - {fileID: 11400000, guid: 14f744e162ab00243bb78b1a48f3b3b1, type: 2}
+  - {fileID: 11400000, guid: 34fbad45523049a40988bf67990ce253, type: 2}
+  - {fileID: 11400000, guid: 171cef9984c26974f853cf5f9bbfddbd, type: 2}
+  - {fileID: 11400000, guid: e9277899305d8e94b9631c9b2e77847e, type: 2}
+  - {fileID: 11400000, guid: bc23308776a298f42b3858427b0d54c8, type: 2}
+  - {fileID: 11400000, guid: d586e0e1de7a4db439e28d9a0bdf8921, type: 2}
+  - {fileID: 11400000, guid: 3cad9ed4e08e99746a8332ae838d07d7, type: 2}
+  - {fileID: 11400000, guid: a016cf4fd1d8e6146a5838ebde1222da, type: 2}
+  - {fileID: 11400000, guid: 04508e5313151664cb6459390f396895, type: 2}
   m_TilingRules:
   - m_Id: 5
     m_Sprites:
