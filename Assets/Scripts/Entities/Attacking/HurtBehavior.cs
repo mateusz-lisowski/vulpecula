@@ -48,7 +48,7 @@ public class HurtBehavior : EntityBehavior
 		hurtCooldown -= Time.deltaTime;
 
 		if (canHurt())
-			if (hitData.strength > data.maxBlock)
+			if (hitData.strength >= data.maxBlock)
 			{
 				health = Math.Max(health - hitData.strength, 0);
 
