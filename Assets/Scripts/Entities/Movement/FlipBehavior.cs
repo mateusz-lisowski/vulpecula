@@ -33,7 +33,7 @@ public class FlipBehavior : EntityBehavior
 		return lastTurnFixedUpdate >= controller.currentFixedUpdate - 1;
 	}
 
-	public override void onAwake()
+	public override void onStart()
 	{
 		isFacingRight = controller.transform.right.x > 0;
 	}
