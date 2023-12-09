@@ -26,6 +26,7 @@ public class PlayerAttack : EntityBehavior
 	private Transform attackForwardAirTransform;
 	private Transform attackDownTransform;
 
+	private string currentAttackName = null;
 	private ProjectileBehavior currentAttackData = null;
 
 
@@ -47,13 +48,18 @@ public class PlayerAttack : EntityBehavior
 
 	public override void onEvent(string eventName, object eventData)
 	{
+		if (eventName == "attackExit:" + currentAttackName)
+		{
+			attackFinish();
+			return;
+		}
+
 		switch (eventName)
 		{
 			case "attackForward": attackForwardInstantiate(); break;
 			case "attackForwardReset": attackForwardReset(); break;
 			case "attackForwardAir": attackForwardAirInstantiate(); break;
 			case "attackDown": attackDownInstantiate(); break;
-			case "attackExit": attackFinish(); break;
 		}
 	}
 
@@ -131,11 +137,20 @@ public class PlayerAttack : EntityBehavior
 		attackForwardCombo++;
 
 		if (attackForwardCombo == 1)
+		{
+			currentAttackName = "attack1";
 			controller.animator.SetTrigger("onAttack1");
+		}
 		else if (attackForwardCombo == 2)
+		{
+			currentAttackName = "attack2";
 			controller.animator.SetTrigger("onAttack2");
+		}
 		else
+		{
+			currentAttackName = "attack3";
 			controller.animator.SetTrigger("onAttack3");
+		}
 	}
 
 	private void attackForwardAirInstantiate()
@@ -159,6 +174,7 @@ public class PlayerAttack : EntityBehavior
 		lastAttackInputTime = float.PositiveInfinity;
 		attackAnyCooldown = attackForwardCooldown = data.attack.forwardCooldown;
 
+		currentAttackName = "attackAir";
 		controller.animator.SetTrigger("onAttackAir");
 	}
 
@@ -193,6 +209,7 @@ public class PlayerAttack : EntityBehavior
 		lastAttackInputTime = float.PositiveInfinity;
 		attackAnyCooldown = attackDownCooldown = data.attack.downCooldown;
 
+		currentAttackName = "attackDown";
 		controller.animator.SetTrigger("onAttackDown");
 	}
 

@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  eventName: attackExit
+  eventName: attackExit:attackDown
 --- !u!114 &-7615478704947060145
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  eventName: attackExit
+  eventName: attackExit:attack3
 --- !u!1101 &-7416241062246810673
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -511,7 +511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  eventName: attackExit
+  eventName: attackExit:attack1
 --- !u!1101 &-1886575048160022901
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -575,7 +575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  eventName: attackExit
+  eventName: attackExit:attackAir
 --- !u!1102 &-331374181224079295
 AnimatorState:
   serializedVersion: 6
@@ -912,7 +912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  eventName: attackExit
+  eventName: attackExit:attack2
 --- !u!1101 &4832559233879098961
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
