@@ -322,9 +322,10 @@ namespace UnityEditor.Tilemaps
 			if (editors != null)
 			{
 				foreach (var editor in editors)
-				{
-					editor.ClearPreview();
-				}
+					if (editor != null)
+					{
+						editor.ClearPreview();
+					}
 			}
 		}
 	}
