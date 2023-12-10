@@ -9,6 +9,7 @@ public class FlyBehavior : EntityBehavior
 	[field: SerializeField, ReadOnly] public bool isDisturbed { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public Vector2 disturbVec { get; private set; }
+	[field: SerializeField, ReadOnly] public Vector2 targetVelocity { get; private set; }
 
 	private FlipBehavior direction;
 	private ChaseBehavior chase;
@@ -24,12 +25,14 @@ public class FlyBehavior : EntityBehavior
 
 	public override void onUpdate()
 	{
-		isDisturbed = calculateAverageDisturb();
+		isDisturbed = calculateDisturb();
+
+		direction.faceTowards((Vector2)transform.position + targetVelocity);
 	}
 
 	public override bool onFixedUpdate()
 	{
-		Vector2 targetVelocity = calculateTargetVelocity();
+		targetVelocity = calculateTargetVelocity();
 
 		if (targetVelocity == Vector2.zero)
 			return true;
@@ -73,7 +76,7 @@ public class FlyBehavior : EntityBehavior
 		return targetVelocity;
 	}
 
-	private bool calculateAverageDisturb()
+	private bool calculateDisturb()
 	{
 		float minDist = float.PositiveInfinity;
 

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class FlipBehavior : EntityBehavior
@@ -27,6 +28,13 @@ public class FlipBehavior : EntityBehavior
 
 		isFacingRight = !isFacingRight;
 		controller.transform.Rotate(0, 180, 0);
+	}
+	public void faceTowards(Vector2 point)
+	{
+		Vector2 dir = point - (Vector2)transform.position;
+
+		if ((isFacingRight && dir.x < 0) || (!isFacingRight && dir.x > 0))
+			flip();
 	}
 	public bool isPhysicsNotUpdatedAfterFlip()
 	{

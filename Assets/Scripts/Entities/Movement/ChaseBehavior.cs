@@ -38,15 +38,11 @@ public class ChaseBehavior : EntityBehavior
 			isChasingPastTarget = true;
 
 			lastTargetPosition = targetPosition;
-			Vector2 targetDir = targetPosition - (Vector2)transform.position;
-
-			bool targetOtherDirection = (direction.isFacingRight && targetDir.x < 0)
-				|| (!direction.isFacingRight && targetDir.x > 0);
 
 			Debug.DrawLine(transform.position, targetPosition, Color.red);
 
-			if (targetOtherDirection && (ground == null || ground.isGrounded))
-				direction.flip();
+			if (ground == null || ground.isGrounded)
+				direction.faceTowards(targetPosition);
 		}
 	}
 
