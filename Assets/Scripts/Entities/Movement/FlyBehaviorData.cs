@@ -22,7 +22,6 @@ public class FlyBehaviorData : ScriptableObject
 	[Tooltip("General flying speed")]
 	public float flySpeed = 3.0f;
 
-
 	[Space(5)]
 
 	[Tooltip("Lerp between current velocity (0) and maxSpeed (1)")]

@@ -27,7 +27,8 @@ public class FlyBehavior : EntityBehavior
 	{
 		isDisturbed = calculateDisturb();
 
-		direction.faceTowards((Vector2)transform.position + targetVelocity);
+		if (chase == null || !chase.isChasing)
+			direction.faceTowards((Vector2)transform.position + targetVelocity);
 	}
 
 	public override bool onFixedUpdate()
@@ -64,10 +65,7 @@ public class FlyBehavior : EntityBehavior
 		else if (isReturning)
 		{
 			Vector2 returnVelocity = (sleep.sleepPosition - (Vector2)transform.position).normalized * data.flySpeed;
-			targetVelocity = targetVelocity + returnVelocity;
-
-			if (targetVelocity.magnitude < returnVelocity.magnitude)
-				targetVelocity = targetVelocity.normalized * returnVelocity.magnitude;
+			targetVelocity = returnVelocity;
 		}
 
 		if ((isDisturbed || (!isChasing && !isReturning)) && targetVelocity.y >= 0f)
