@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c8b284478474b44b93b144c051b3e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 6e31774dcaa88d54693eb752922b946b, type: 2}
+  data: {fileID: 11400000, guid: fcf90161074affd42b84b20509393f6e, type: 2}
   <isChasing>k__BackingField: 0
   <targetDistance>k__BackingField: 0
   <targetDirection>k__BackingField: {x: 0, y: 0}
@@ -520,7 +520,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1400974387
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 05806b63f014ac3449ddae915b77a961, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
