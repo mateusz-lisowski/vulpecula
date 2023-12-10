@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(FlipBehavior))]
 public class FlyBehavior : EntityBehavior
@@ -7,7 +8,7 @@ public class FlyBehavior : EntityBehavior
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isDisturbed { get; private set; }
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public Vector2 netDisturb { get; private set; }
+	[field: SerializeField, ReadOnly] public Vector2 disturbVec { get; private set; }
 
 	private FlipBehavior direction;
 	private ChaseBehavior chase;
@@ -28,14 +29,22 @@ public class FlyBehavior : EntityBehavior
 		Vector2 targetVelocity = Vector2.zero;
 
 		isDisturbed = calculateAverageDisturb();
-
-		targetVelocity += Vector2.down * data.fallSpeed;
+		bool isChasing = chase != null && chase.isChasing;
 
 		if (isDisturbed)
-			targetVelocity -= netDisturb * data.avoidSpeed;
+			targetVelocity -= disturbVec * data.avoidSpeed;
 
-		if (chase != null && chase.isChasing)
-			targetVelocity += chase.targetDirection * data.flySpeed;
+		if (isChasing)
+		{
+			Vector2 chaseVelocity = (chase.lastTargetPosition - (Vector2)transform.position).normalized * data.flySpeed;
+			targetVelocity = targetVelocity + chaseVelocity;
+
+			if (targetVelocity.magnitude < chaseVelocity.magnitude)
+				targetVelocity = targetVelocity.normalized * chaseVelocity.magnitude;
+		}
+
+		if ((isDisturbed || !isChasing) && targetVelocity.y >= 0f)
+			targetVelocity += Vector2.down * data.fallSpeed;
 
 		if (targetVelocity == Vector2.zero)
 			return true;
@@ -48,42 +57,40 @@ public class FlyBehavior : EntityBehavior
 
 	private bool calculateAverageDisturb()
 	{
-		netDisturb = Vector2.zero;
+		float minDist = float.PositiveInfinity;
+
 		int rotationCount = 30;
-
-		Vector2 center = transform.position;
-		center.y -= data.fallSpeed / data.avoidSpeed * data.safeSpaceSmall / 2;
-
 		for (int i = 0; i < rotationCount; i++)
 		{
 			float delta = 2 * i * Mathf.PI  / rotationCount;
-			Vector2 dir = new Vector2(Mathf.Cos(delta), Mathf.Sin(delta));
+			Vector2 dir = new Vector2(-Mathf.Sin(delta), Mathf.Cos(delta));
 
-			var hit = Physics2D.Raycast(center, dir, data.safeSpaceBig, data.avoidLayers);
+			var hit = Physics2D.Raycast(transform.position, dir, data.safeSpaceBig, data.avoidLayers);
 
 			if (!hit)
 				continue;
 
-			Vector2 vec = hit.point - center;
-			float vecMag = vec.magnitude;
+			Vector2 vec = hit.point - (Vector2)transform.position;
+			float dist = vec.magnitude;
 
-			Vector2 contribution;
-			if (vecMag == 0)
-				contribution = Vector2.down;
-			else if (vecMag <= data.safeSpaceSmall)
-				contribution = vec.normalized;
-			else
-				contribution = vec.normalized * ((data.safeSpaceBig - vec.magnitude) 
-					/ (data.safeSpaceBig - data.safeSpaceSmall));
+			if (dist == 0)
+				continue;
 
-			netDisturb += contribution;
+			if (dist < minDist)
+			{
+				minDist = dist;
+				disturbVec = vec;
+			}
 		}
 
-		if (netDisturb == Vector2.zero)
+		if (minDist == float.PositiveInfinity)
 			return false;
 
-		if (netDisturb.magnitude > 1)
-			netDisturb = netDisturb.normalized;
+		if (minDist <= data.safeSpaceSmall)
+			disturbVec = disturbVec.normalized;
+		else
+			disturbVec = disturbVec.normalized * (data.safeSpaceBig - minDist) 
+				/ (data.safeSpaceBig - data.safeSpaceSmall);
 
 		return true;
 	}

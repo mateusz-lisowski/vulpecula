@@ -22,8 +22,11 @@ public class FlyBehaviorData : ScriptableObject
 	[Tooltip("General flying speed")]
 	public float flySpeed = 3.0f;
 
+
 	[Space(5)]
 
 	[Tooltip("Lerp between current velocity (0) and maxSpeed (1)")]
 	[Range(0.0f, 1.0f)] public float accelerationCoefficient = 0.8f;
+	[Tooltip("Constant to counteract fall force")]
+	[Range(0.0f, 1.0f)] public float fallRate = 0.3f;
 }

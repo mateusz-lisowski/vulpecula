@@ -24,8 +24,8 @@ TagManager:
   - 
   - Enemy
   - Enemy Invulnerable
-  - 
-  - 
+  - Enemy Flying
+  - Enemy Flying Invulnerable
   - Detection
   - Ground-Damaging
   - Wall-Jumpable

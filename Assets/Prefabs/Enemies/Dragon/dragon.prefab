@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2787628816381798416}
   - component: {fileID: 4669360722883422849}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 964799965640087778}
   - component: {fileID: 2307098623284714275}
   - component: {fileID: 3788567222075516214}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,7 +371,7 @@ GameObject:
   - component: {fileID: 5663872807992000401}
   - component: {fileID: -1536801149954234200}
   - component: {fileID: -6215608061113549384}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: dragon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,8 +484,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2aef89c85a65e4e47b32995d4e6fc6cc, type: 2}
   <isChasing>k__BackingField: 0
-  <targetDistance>k__BackingField: 0
-  <targetDirection>k__BackingField: {x: 0, y: 0}
+  <isChasingPastTarget>k__BackingField: 0
+  <lastTargetPosition>k__BackingField: {x: 0, y: 0}
 --- !u!114 &-6215608061113549384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,4 +500,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 1384c5c692aa6e641ab7ff0cacac76fb, type: 2}
   <isDisturbed>k__BackingField: 0
-  <netDisturb>k__BackingField: {x: 0, y: 0}
+  <disturbVec>k__BackingField: {x: 0, y: 0}

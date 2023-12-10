@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avoidLayers:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 256
   safeSpaceSmall: 2
   safeSpaceBig: 3.5
   avoidSpeed: 5
   fallSpeed: 3
   flySpeed: 8
   accelerationCoefficient: 0.3
+  fallRate: 0.28

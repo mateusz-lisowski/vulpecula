@@ -6,9 +6,9 @@ public class ChaseBehavior : EntityBehavior
 	public ChaseBehaviorData data;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isChasing { get; private set; }
+	[field: SerializeField, ReadOnly] public bool isChasingPastTarget { get; private set; }
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public float targetDistance { get; private set; }
-	[field: SerializeField, ReadOnly] public Vector2 targetDirection { get; private set; }
+	[field: SerializeField, ReadOnly] public Vector2 lastTargetPosition { get; private set; }
 
 	private FlipBehavior direction;
 	private GroundedBehavior ground;
@@ -25,15 +25,23 @@ public class ChaseBehavior : EntityBehavior
 		Vector2 targetPosition;
 		isChasing = tryFindTarget(out targetPosition);
 
+		if (!isChasing && isChasingPastTarget)
+		{
+			if ((lastTargetPosition - (Vector2)transform.position).magnitude <= data.minDistance)
+				isChasingPastTarget = false;
+			else
+				isChasing = true;
+		}
+
 		if (isChasing)
 		{
+			isChasingPastTarget = true;
+
+			lastTargetPosition = targetPosition;
 			Vector2 targetDir = targetPosition - (Vector2)transform.position;
 
-			targetDistance = targetDir.magnitude;
-			targetDirection = targetDir.normalized;
-
-			bool targetOtherDirection = (direction.isFacingRight && targetDirection.x < 0)
-				|| (!direction.isFacingRight && targetDirection.x > 0);
+			bool targetOtherDirection = (direction.isFacingRight && targetDir.x < 0)
+				|| (!direction.isFacingRight && targetDir.x > 0);
 
 			Debug.DrawLine(transform.position, targetPosition, Color.red);
 
@@ -65,7 +73,7 @@ public class ChaseBehavior : EntityBehavior
 			return true;
 		}
 
-		targetPosition = Vector2.zero;
+		targetPosition = lastTargetPosition;
 		return false;
 	}
 }

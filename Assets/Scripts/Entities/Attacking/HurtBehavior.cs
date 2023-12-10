@@ -27,6 +27,12 @@ public class HurtBehavior : EntityBehavior
 		enemyLayer = LayerMask.NameToLayer("Enemy");
 		enemyInvulnerableLayer = LayerMask.NameToLayer("Enemy Invulnerable");
 
+		if (enemyLayer != gameObject.layer)
+		{
+			enemyLayer = LayerMask.NameToLayer("Enemy Flying");
+			enemyInvulnerableLayer = LayerMask.NameToLayer("Enemy Flying Invulnerable");
+		}
+
 		lastHurtTime = float.PositiveInfinity;
 
 		health = data.health;
