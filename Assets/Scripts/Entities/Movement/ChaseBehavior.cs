@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(FlipBehavior))]
-[RequireComponent(typeof(GroundedBehavior))]
 public class ChaseBehavior : EntityBehavior
 {
 	public ChaseBehaviorData data;
@@ -38,7 +37,7 @@ public class ChaseBehavior : EntityBehavior
 
 			Debug.DrawLine(transform.position, targetPosition, Color.red);
 
-			if (targetOtherDirection && ground.isGrounded)
+			if (targetOtherDirection && (ground == null || ground.isGrounded))
 				direction.flip();
 		}
 	}
@@ -59,7 +58,7 @@ public class ChaseBehavior : EntityBehavior
 			if (distance > data.maxDistance || distance < data.minDistance)
 				continue;
 
-			if (Physics2D.Raycast(transform.position, targetDir.normalized, distance, ground.data.groundLayers))
+			if (Physics2D.Raycast(transform.position, targetDir.normalized, distance, data.obstructLayers))
 				continue;
 
 			targetPosition = position;

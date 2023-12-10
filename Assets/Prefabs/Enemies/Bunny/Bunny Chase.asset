@@ -15,5 +15,8 @@ MonoBehaviour:
   targetLayers:
     serializedVersion: 2
     m_Bits: 12288
+  obstructLayers:
+    serializedVersion: 2
+    m_Bits: 768
   maxDistance: 20
   minDistance: 3

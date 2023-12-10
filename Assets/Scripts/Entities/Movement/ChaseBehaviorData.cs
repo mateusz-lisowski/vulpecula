@@ -3,7 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Behavior/Chase")]
 public class ChaseBehaviorData : ScriptableObject
 {
+	[Tooltip("Layers to chase")]
 	public LayerMask targetLayers;
+	[Tooltip("Layers that hide the target")]
+	public LayerMask obstructLayers;
 
 	[Space(10)]
 
