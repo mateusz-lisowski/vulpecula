@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(FlipBehavior))]
 public class FlyBehavior : EntityBehavior
@@ -13,11 +10,13 @@ public class FlyBehavior : EntityBehavior
 	[field: SerializeField, ReadOnly] public Vector2 netDisturb { get; private set; }
 
 	private FlipBehavior direction;
+	private ChaseBehavior chase;
 
 
 	public override void onAwake()
 	{
 		direction = controller.getBehavior<FlipBehavior>();
+		chase = controller.getBehavior<ChaseBehavior>();
 	}
 
 	public override void onUpdate()
@@ -34,6 +33,9 @@ public class FlyBehavior : EntityBehavior
 
 		if (isDisturbed)
 			targetVelocity -= netDisturb * data.avoidSpeed;
+
+		if (chase != null && chase.isChasing)
+			targetVelocity += chase.targetDirection * data.flySpeed;
 
 		if (targetVelocity == Vector2.zero)
 			return true;

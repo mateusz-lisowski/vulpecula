@@ -369,6 +369,7 @@ GameObject:
   - component: {fileID: 5030657850188554627}
   - component: {fileID: 2762993218868523}
   - component: {fileID: 5663872807992000401}
+  - component: {fileID: -1536801149954234200}
   - component: {fileID: -6215608061113549384}
   m_Layer: 16
   m_Name: dragon
@@ -469,6 +470,22 @@ MonoBehaviour:
   <lastHurtTime>k__BackingField: 0
   <hurtCooldown>k__BackingField: 0
   <health>k__BackingField: 0
+--- !u!114 &-1536801149954234200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664657130570261996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c8b284478474b44b93b144c051b3e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 2aef89c85a65e4e47b32995d4e6fc6cc, type: 2}
+  <isChasing>k__BackingField: 0
+  <targetDistance>k__BackingField: 0
+  <targetDirection>k__BackingField: {x: 0, y: 0}
 --- !u!114 &-6215608061113549384
 MonoBehaviour:
   m_ObjectHideFlags: 0

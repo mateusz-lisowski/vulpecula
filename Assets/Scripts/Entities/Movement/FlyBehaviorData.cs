@@ -19,6 +19,8 @@ public class FlyBehaviorData : ScriptableObject
 	public float avoidSpeed = 3.0f;
 	[Tooltip("Flying speed while falling")]
 	public float fallSpeed = 3.0f;
+	[Tooltip("General flying speed")]
+	public float flySpeed = 3.0f;
 
 	[Space(5)]
 
