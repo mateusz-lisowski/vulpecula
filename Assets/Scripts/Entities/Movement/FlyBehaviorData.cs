@@ -9,12 +9,19 @@ public class FlyBehaviorData : ScriptableObject
 	[Space(10)]
 
 	[Tooltip("Minimum distance to avoid obstacles")]
-	public float safeSpace = 2.5f;
-	
+	public float safeSpaceSmall = 2.5f;
+	[Tooltip("Minimum distance to avoid obstacles")]
+	public float safeSpaceBig = 2.5f;
+
 	[Space(5)]
 
-	[Tooltip("Maximum flying speed")]
-	public float maxSpeed = 3.0f;
+	[Tooltip("Flying speed while avoiding obstacles")]
+	public float avoidSpeed = 3.0f;
+	[Tooltip("Flying speed while falling")]
+	public float fallSpeed = 3.0f;
+
+	[Space(5)]
+
 	[Tooltip("Lerp between current velocity (0) and maxSpeed (1)")]
 	[Range(0.0f, 1.0f)] public float accelerationCoefficient = 0.8f;
 }

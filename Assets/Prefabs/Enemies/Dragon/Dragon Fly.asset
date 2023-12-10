@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avoidLayers:
     serializedVersion: 2
-    m_Bits: 1792
-  safeSpace: 2.5
-  maxSpeed: 3
-  accelerationCoefficient: 0.8
+    m_Bits: 768
+  safeSpaceSmall: 2
+  safeSpaceBig: 3.5
+  avoidSpeed: 5
+  fallSpeed: 3
+  accelerationCoefficient: 0.3

@@ -8,66 +8,82 @@ public class FlyBehavior : EntityBehavior
 {
 	public FlyBehaviorData data;
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isDisturbed { get; private set; }
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public float disturbDistance { get; private set; }
-	[field: SerializeField, ReadOnly] public Vector2 disturbDirection { get; private set; }
+	[field: SerializeField, ReadOnly] public Vector2 netDisturb { get; private set; }
 
 	private FlipBehavior direction;
-
-	private Collider2D fallCheck;
-	private Collider2D disturbCheck;
 
 
 	public override void onAwake()
 	{
 		direction = controller.getBehavior<FlipBehavior>();
-
-		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
-		disturbCheck = transform.Find("Safe Space Check").GetComponent<Collider2D>();
 	}
 
 	public override void onUpdate()
 	{
-		isFalling = !fallCheck.IsTouchingLayers(data.avoidLayers);
-
-		ContactFilter2D filter = new ContactFilter2D().NoFilter();
-		filter.SetLayerMask(data.avoidLayers);
-		filter.useLayerMask = true;
-
-		List<Collider2D> contacts = new List<Collider2D>();
-		isDisturbed = disturbCheck.OverlapCollider(filter, contacts) != 0;
-
-		if (isDisturbed)
-			calculateAverageDisturb(contacts);
 	}
 
 	public override bool onFixedUpdate()
 	{
-		if (isFalling)
-			addSmoothForce(data.maxSpeed, data.accelerationCoefficient, Vector2.down);
+		Vector2 targetVelocity = Vector2.zero;
+
+		isDisturbed = calculateAverageDisturb();
+
+		targetVelocity += Vector2.down * data.fallSpeed;
 
 		if (isDisturbed)
-			addSmoothForce(data.maxSpeed, data.accelerationCoefficient, -disturbDirection);
+			targetVelocity -= netDisturb * data.avoidSpeed;
+
+		if (targetVelocity == Vector2.zero)
+			return true;
+
+		addSmoothForce(targetVelocity.magnitude, data.accelerationCoefficient, targetVelocity.normalized);
 
 		return true;
 	}
 
 
-	private void calculateAverageDisturb(List<Collider2D> contacts)
+	private bool calculateAverageDisturb()
 	{
-		Vector2 netDisturb = Vector2.zero;
+		netDisturb = Vector2.zero;
+		int rotationCount = 30;
 
-		foreach (var contact in contacts)
+		Vector2 center = transform.position;
+		center.y -= data.fallSpeed / data.avoidSpeed * data.safeSpaceSmall / 2;
+
+		for (int i = 0; i < rotationCount; i++)
 		{
-			Vector2 closestPoint = contact.ClosestPoint(transform.position);
+			float delta = 2 * i * Mathf.PI  / rotationCount;
+			Vector2 dir = new Vector2(Mathf.Cos(delta), Mathf.Sin(delta));
 
-			netDisturb += closestPoint - (Vector2)transform.position;
+			var hit = Physics2D.Raycast(center, dir, data.safeSpaceBig, data.avoidLayers);
+
+			if (!hit)
+				continue;
+
+			Vector2 vec = hit.point - center;
+			float vecMag = vec.magnitude;
+
+			Vector2 contribution;
+			if (vecMag == 0)
+				contribution = Vector2.down;
+			else if (vecMag <= data.safeSpaceSmall)
+				contribution = vec.normalized;
+			else
+				contribution = vec.normalized * ((data.safeSpaceBig - vec.magnitude) 
+					/ (data.safeSpaceBig - data.safeSpaceSmall));
+
+			netDisturb += contribution;
 		}
 
-		disturbDistance = netDisturb.magnitude;
-		disturbDirection = netDisturb.normalized;
+		if (netDisturb == Vector2.zero)
+			return false;
+
+		if (netDisturb.magnitude > 1)
+			netDisturb = netDisturb.normalized;
+
+		return true;
 	}
 
 }
