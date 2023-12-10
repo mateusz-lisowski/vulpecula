@@ -12,24 +12,40 @@ public class FlyBehavior : EntityBehavior
 
 	private FlipBehavior direction;
 	private ChaseBehavior chase;
+	private SleepBehavior sleep;
 
 
 	public override void onAwake()
 	{
 		direction = controller.getBehavior<FlipBehavior>();
 		chase = controller.getBehavior<ChaseBehavior>();
+		sleep = controller.getBehavior<SleepBehavior>();
 	}
 
 	public override void onUpdate()
 	{
+		isDisturbed = calculateAverageDisturb();
 	}
 
 	public override bool onFixedUpdate()
 	{
+		Vector2 targetVelocity = calculateTargetVelocity();
+
+		if (targetVelocity == Vector2.zero)
+			return true;
+
+		addSmoothForce(targetVelocity.magnitude, data.accelerationCoefficient, targetVelocity.normalized);
+
+		return true;
+	}
+
+
+	public Vector2 calculateTargetVelocity()
+	{
 		Vector2 targetVelocity = Vector2.zero;
 
-		isDisturbed = calculateAverageDisturb();
 		bool isChasing = chase != null && chase.isChasing;
+		bool isReturning = sleep != null && !isChasing;
 
 		if (isDisturbed)
 			targetVelocity -= disturbVec * data.avoidSpeed;
@@ -42,18 +58,20 @@ public class FlyBehavior : EntityBehavior
 			if (targetVelocity.magnitude < chaseVelocity.magnitude)
 				targetVelocity = targetVelocity.normalized * chaseVelocity.magnitude;
 		}
+		else if (isReturning)
+		{
+			Vector2 returnVelocity = (sleep.sleepPosition - (Vector2)transform.position).normalized * data.flySpeed;
+			targetVelocity = targetVelocity + returnVelocity;
 
-		if ((isDisturbed || !isChasing) && targetVelocity.y >= 0f)
+			if (targetVelocity.magnitude < returnVelocity.magnitude)
+				targetVelocity = targetVelocity.normalized * returnVelocity.magnitude;
+		}
+
+		if ((isDisturbed || (!isChasing && !isReturning)) && targetVelocity.y >= 0f)
 			targetVelocity += Vector2.down * data.fallSpeed;
 
-		if (targetVelocity == Vector2.zero)
-			return true;
-
-		addSmoothForce(targetVelocity.magnitude, data.accelerationCoefficient, targetVelocity.normalized);
-
-		return true;
+		return targetVelocity;
 	}
-
 
 	private bool calculateAverageDisturb()
 	{

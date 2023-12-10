@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2787628816381798416}
   - component: {fileID: 4669360722883422849}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 964799965640087778}
   - component: {fileID: 2307098623284714275}
   - component: {fileID: 3788567222075516214}
-  m_Layer: 16
+  m_Layer: 18
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +293,10 @@ GameObject:
   - component: {fileID: 2762993218868523}
   - component: {fileID: 5663872807992000401}
   - component: {fileID: 4255831889263061473}
-  m_Layer: 16
+  - component: {fileID: 9011121308853312370}
+  - component: {fileID: 6586535848505891476}
+  - component: {fileID: -7620087905939716521}
+  m_Layer: 18
   m_Name: bat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +334,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: a0db26f4c034cda40a107330a5fa74af, type: 2}
@@ -407,3 +410,49 @@ MonoBehaviour:
   <isProvoked>k__BackingField: 0
   <isAttacking>k__BackingField: 0
   <attackCooldown>k__BackingField: 0
+--- !u!114 &9011121308853312370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664657130570261996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c8b284478474b44b93b144c051b3e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 26cb33d27f5ec074bbee0b869f63a4e6, type: 2}
+  <isChasing>k__BackingField: 0
+  <isChasingPastTarget>k__BackingField: 0
+  <lastTargetPosition>k__BackingField: {x: 0, y: 0}
+--- !u!114 &6586535848505891476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664657130570261996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10487bf17ff95d44a9a23da44f62413c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: ef1d16f1879ebdf4c87c31505e9748b5, type: 2}
+  <isSleeping>k__BackingField: 0
+  <sleepPosition>k__BackingField: {x: 0, y: 0}
+--- !u!114 &-7620087905939716521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664657130570261996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 618849b773e56814fb21e1c7876dd7b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 1af34746aff4de84283e52e6d3713344, type: 2}
+  <isDisturbed>k__BackingField: 0
+  <disturbVec>k__BackingField: {x: 0, y: 0}
