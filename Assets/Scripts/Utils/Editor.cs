@@ -27,6 +27,18 @@ public class ReadOnlyDrawer : PropertyDrawer
 			case SerializedPropertyType.String:
 				valueStr = prop.stringValue;
 				break;
+			case SerializedPropertyType.Vector2:
+				valueStr = prop.vector2Value.ToString();
+				break;
+			case SerializedPropertyType.Vector2Int:
+				valueStr = prop.vector2IntValue.ToString();
+				break;
+			case SerializedPropertyType.Vector3:
+				valueStr = prop.vector3Value.ToString();
+				break;
+			case SerializedPropertyType.Vector3Int:
+				valueStr = prop.vector3IntValue.ToString();
+				break;
 			default:
 				valueStr = "(not supported)";
 				break;
