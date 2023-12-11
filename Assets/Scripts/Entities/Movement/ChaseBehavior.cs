@@ -6,7 +6,8 @@ public class ChaseBehavior : EntityBehavior
 	public ChaseBehaviorData data;
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public bool isChasing { get; private set; }
-	[field: SerializeField, ReadOnly] public bool isChasingPastTarget { get; private set; }
+	[field: Space(5)]
+	[field: SerializeField, ReadOnly] public float lastSeenTime { get; private set; }
 	[field: Space(10)]
 	[field: SerializeField, ReadOnly] public Vector2 lastTargetPosition { get; private set; }
 
@@ -18,25 +19,25 @@ public class ChaseBehavior : EntityBehavior
 	{
 		direction = controller.getBehavior<FlipBehavior>();
 		ground = controller.getBehavior<GroundedBehavior>();
+
+		lastSeenTime = float.PositiveInfinity;
 	}
 
 	public override void onUpdate()
 	{
+		lastSeenTime += Time.deltaTime;
+
 		Vector2 targetPosition;
 		isChasing = tryFindTarget(out targetPosition);
 
-		if (!isChasing && isChasingPastTarget)
-		{
-			if ((lastTargetPosition - (Vector2)transform.position).magnitude <= data.minDistance)
-				isChasingPastTarget = false;
-			else
-				isChasing = true;
-		}
+		if (isChasing)
+			lastSeenTime = 0f;
+
+		if (!isChasing && lastSeenTime <= data.determinationTime)
+			isChasing = true;
 
 		if (isChasing)
 		{
-			isChasingPastTarget = true;
-
 			lastTargetPosition = targetPosition;
 
 			Debug.DrawLine(transform.position, targetPosition, Color.red);

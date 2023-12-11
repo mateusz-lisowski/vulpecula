@@ -14,4 +14,9 @@ public class ChaseBehaviorData : ScriptableObject
 	public float maxDistance = 10f;
 	[Tooltip("Minimum distance to detect and chase the target")]
 	public float minDistance = 3f;
+
+	[Space(5)]
+
+	[Tooltip("Time to chase a lost target")]
+	public float determinationTime = 6f;
 }
