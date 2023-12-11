@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class HitData
 {
+	public ProjectileBehavior source;
 	public Vector3 right;
 	public Bounds bounds;
 	public int strength;
@@ -19,7 +20,7 @@ public class ProjectileBehavior : EntityBehavior
 	private Action<HitData> hitCallback;
 	private LayerMask hitLayers;
 
-	private Vector2 velocity;
+	private Vector2 frameVelocity;
 	private bool isVertical;
 	private int strength = 1;
 
@@ -28,13 +29,17 @@ public class ProjectileBehavior : EntityBehavior
 	{
 		if (data is PlayerData)
 			hitLayers = ((PlayerData)data).attack.hitLayers;
-		else if (data is MeleeAtackBehaviorData)
-			hitLayers = ((MeleeAtackBehaviorData)data).hitLayers;
+		else if (data is MeleeAttackBehaviorData)
+			hitLayers = ((MeleeAttackBehaviorData)data).hitLayers;
+		else if (data is RangedAttackBehaviorData)
+			hitLayers = ((RangedAttackBehaviorData)data).hitLayers;
+		else
+			throw new ApplicationException("Unknown projectile data.");
 	}
 
-	public void setVelocity(Vector2 vel)
+	public void setFrameVelocity(Vector2 vel)
 	{
-		velocity = vel;
+		frameVelocity = vel;
 	}
 	public void setVertical(bool val = true)
 	{
@@ -84,8 +89,11 @@ public class ProjectileBehavior : EntityBehavior
 	{
 		transform.parent = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Projectiles];
 
-		if (velocity != Vector2.zero)
-			StartCoroutine(Effects.instance.frameMove.run(transform, velocity, 2f));
+		if (frameVelocity != Vector2.zero)
+		{
+			StartCoroutine(Effects.instance.frameMove.run(transform, frameVelocity, float.PositiveInfinity));
+			frameVelocity = Vector2.zero;
+		}
 
 		ContactFilter2D filter = new ContactFilter2D().NoFilter();
 		filter.SetLayerMask(hitLayers);
@@ -96,6 +104,7 @@ public class ProjectileBehavior : EntityBehavior
 			return;
 
 		HitData hit = new HitData();
+		hit.source = this;
 		hit.right = transform.right;
 		hit.bounds = hitbox.bounds;
 		hit.strength = strength;
@@ -106,7 +115,8 @@ public class ProjectileBehavior : EntityBehavior
 			hitCallback(hit);
 
 		foreach (Collider2D contact in contacts)
-			contact.SendMessageUpwards("onMessage", new EntityMessage("hit", hit));
+			contact.SendMessageUpwards("onMessage", new EntityMessage("hit", hit), 
+				SendMessageOptions.DontRequireReceiver);
 	}
 
 	public void halt()

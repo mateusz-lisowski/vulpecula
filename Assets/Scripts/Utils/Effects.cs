@@ -65,7 +65,7 @@ public class Effects : ScriptableObject
 
 		public IEnumerator run(Transform target, Vector3 speed, float time)
 		{
-			int times = (int)Mathf.Round(time * frameRate);
+			int times = time == float.PositiveInfinity ? int.MaxValue : Mathf.RoundToInt(time * frameRate);
 			float waitTime = 1f / frameRate;
 			Vector3 frameSpeed = speed / frameRate;
 

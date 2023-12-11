@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeAtackBehavior : EntityBehavior
+[RequireComponent(typeof(ChaseBehavior))]
+public class RangedAttackBehavior : EntityBehavior
 {
-	public MeleeAttackBehaviorData data;
+	public RangedAttackBehaviorData data;
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool isProvoked { get; private set; }
 	[field: SerializeField, ReadOnly] public bool isAttacking { get; private set; }
 	[field: Space(5)]
 	[field: SerializeField, ReadOnly] public float attackCooldown { get; private set; }
 
 	private HurtBehavior hurt;
+	private ChaseBehavior chase;
 
 	private Dictionary<string, Transform> attackTransforms;
-	private Collider2D attackCheck;
 
 	private bool justAttacked = false;
 	private ProjectileBehavior currentAttackData = null;
@@ -22,9 +22,9 @@ public class MeleeAtackBehavior : EntityBehavior
 	public override void onAwake()
 	{
 		hurt = controller.getBehavior<HurtBehavior>();
+		chase = controller.getBehavior<ChaseBehavior>();
 
 		Transform attackTransform = controller.transform.Find(data.provokeDetectionName);
-		attackCheck = attackTransform.GetComponent<Collider2D>();
 
 		attackTransforms = new Dictionary<string, Transform>();
 
@@ -49,8 +49,6 @@ public class MeleeAtackBehavior : EntityBehavior
 	{
 		attackCooldown -= Time.deltaTime;
 
-		updateCollisions();
-
 		updateAttack();
 
 		foreach (var param in controller.animator.parameters)
@@ -72,14 +70,25 @@ public class MeleeAtackBehavior : EntityBehavior
 	}
 
 
-	private void updateCollisions()
-	{
-		isProvoked = attackCheck.IsTouchingLayers(data.provokeLayers);
-	}
-
 	private bool canAttack()
 	{
-		return attackCooldown <= 0 && isProvoked && !(hurt != null && hurt.isDistressed);
+		return attackCooldown <= 0 && chase.lastSeenTime == 0f && !(hurt != null && hurt.isDistressed);
+	}
+	private void attackBreak(HitData data)
+	{
+		data.source.controller.rigidBody.velocity = Vector2.zero;
+
+		Animator animator = data.source.controller.animator;
+
+		if (animator != null)
+			foreach (var param in animator.parameters)
+				if (param.name == "onHit")
+				{
+					animator.SetTrigger("onHit");
+					return;
+				}
+
+		Destroy(data.source.gameObject);
 	}
 	private void attackInstantiate(Transform attackTransform)
 	{
@@ -91,6 +100,10 @@ public class MeleeAtackBehavior : EntityBehavior
 		currentAttackData.initialize(data);
 		currentAttackData.setStrength(data.strength);
 		currentAttackData.setHitboxSize(attackTransform.lossyScale);
+		currentAttackData.setHitCallback(attackBreak);
+
+		currentAttackData.controller.rigidBody.velocity = 
+			(chase.lastTargetPosition - (Vector2)transform.position).normalized * data.speed;
 	}
 	private void attack()
 	{

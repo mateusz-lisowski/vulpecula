@@ -35,7 +35,7 @@ public abstract class EntityBehavior : MonoBehaviour
 	{
 		controller = parent;
 	}
-	protected EntityBehaviorController controller { get; private set; }
+	public EntityBehaviorController controller { get; private set; }
 
 	public void disableCurrentFixedUpdate()
 	{

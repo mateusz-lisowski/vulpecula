@@ -372,6 +372,7 @@ GameObject:
   - component: {fileID: -1536801149954234200}
   - component: {fileID: 4974053214697071053}
   - component: {fileID: -7812581293860542983}
+  - component: {fileID: 8900800631532248527}
   - component: {fileID: -6215608061113549384}
   m_Layer: 18
   m_Name: dragon
@@ -486,7 +487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2aef89c85a65e4e47b32995d4e6fc6cc, type: 2}
   <isChasing>k__BackingField: 0
-  <isChasingPastTarget>k__BackingField: 0
+  <lastSeenTime>k__BackingField: 0
   <lastTargetPosition>k__BackingField: {x: 0, y: 0}
 --- !u!114 &4974053214697071053
 MonoBehaviour:
@@ -518,6 +519,21 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 289b1a60e57ad354a9c0b726e0b9fea7, type: 2}
   <isAvoiding>k__BackingField: 0
   <avoidVec>k__BackingField: {x: 0, y: 0}
+--- !u!114 &8900800631532248527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664657130570261996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00fc506aaf34eb4c82e7321f350252c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 0b5c102a1d7af5e4493c2959ee816b53, type: 2}
+  <isAttacking>k__BackingField: 0
+  <attackCooldown>k__BackingField: 0
 --- !u!114 &-6215608061113549384
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Behavior/MeleeAttack")]
-public class MeleeAttackBehaviorData : ScriptableObject
+[CreateAssetMenu(menuName = "Data/Behavior/RangedAttack")]
+public class RangedAttackBehaviorData : ScriptableObject
 {
 	[Tooltip("Name of the event instantiating the attack")]
 	public string attackInstantiateEventName = "attack";
@@ -12,8 +12,6 @@ public class MeleeAttackBehaviorData : ScriptableObject
 
 	[Space(10)]
 
-	[Tooltip("Layers that can provoke an attack")]
-	public LayerMask provokeLayers;
 	[Tooltip("Layers that can be hit by an attack")]
 	public LayerMask hitLayers;
 	[Tooltip("Object to instantiate on an attack")]
@@ -23,6 +21,8 @@ public class MeleeAttackBehaviorData : ScriptableObject
 
 	[Tooltip("Minimum time between two consecutive attacks")]
 	public float cooldown = 0.3f;
+	[Tooltip("Speed of an attack")]
+	public float speed = 3f;
 
 	[Space(5)]
 

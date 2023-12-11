@@ -120,7 +120,7 @@ public class PlayerAttack : EntityBehavior
 		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
 		currentAttackData.initialize(data);
-		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
+		currentAttackData.setFrameVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 		currentAttackData.setStrength(isStrong ? data.attack.forwardStrongStrength 
 			: data.attack.forwardStrength);
 		currentAttackData.setHitboxSize(currentAttackTransform.localScale);
@@ -161,7 +161,7 @@ public class PlayerAttack : EntityBehavior
 		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
 		currentAttackData.initialize(data);
-		currentAttackData.setVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
+		currentAttackData.setFrameVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 		currentAttackData.setStrength(data.attack.forwardAirStrength);
 		currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
 	}
@@ -184,7 +184,7 @@ public class PlayerAttack : EntityBehavior
 			movement.registeredDownHitHighJump = true;
 
 		movement.registeredDownHitJump = true;
-		currentAttackData.setHitCallback(null);
+		hitData.source.setHitCallback(null);
 	}
 	private void attackDownInstantiate()
 	{
