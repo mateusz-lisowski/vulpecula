@@ -23,6 +23,7 @@ public class ProjectileBehavior : EntityBehavior
 	private Vector2 frameVelocity;
 	private bool isVertical;
 	private int strength = 1;
+	private bool onFixedUpdateResolve = false;
 
 
 	public void initialize(ScriptableObject data)
@@ -67,7 +68,10 @@ public class ProjectileBehavior : EntityBehavior
 	{
 		hitCallback = callback;
 	}
-
+	public void setOnFixedUpdateResolve(bool val = true)
+	{
+		onFixedUpdateResolve = val;
+	}
 
 
 	public override void onAwake()
@@ -83,6 +87,14 @@ public class ProjectileBehavior : EntityBehavior
 			case "resolve": resolve(); break;
 			case "halt": halt(); break;
 		}
+	}
+
+	public override bool onFixedUpdate()
+	{
+		if (!onFixedUpdateResolve)
+			return false;
+		resolve();
+		return true;
 	}
 
 

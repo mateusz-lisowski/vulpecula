@@ -78,6 +78,7 @@ public class RangedAttackBehavior : EntityBehavior
 	}
 	private void attackBreak(HitData data)
 	{
+		data.source.setOnFixedUpdateResolve(false);
 		data.source.controller.rigidBody.velocity = Vector2.zero;
 		data.source.controller.onEvent("hit", data);
 	}
@@ -92,9 +93,12 @@ public class RangedAttackBehavior : EntityBehavior
 		currentAttackData.setStrength(data.strength);
 		currentAttackData.setHitboxSize(attackTransform.lossyScale);
 		currentAttackData.setHitCallback(attackBreak);
+		currentAttackData.setOnFixedUpdateResolve();
 
 		currentAttackData.controller.rigidBody.velocity = 
 			(chase.lastTargetPosition - (Vector2)transform.position).normalized * data.speed;
+
+		Destroy(currentAttack, data.maxLifetime);
 	}
 	private void attack()
 	{
