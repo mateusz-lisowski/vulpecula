@@ -17,6 +17,22 @@ public struct EntityMessage
 
 public abstract class EntityEventReceiver : MonoBehaviour
 {
+	[Serializable]
+	public struct InputtableEvent
+	{
+		public static bool matches(string name, string data, string eventName, object eventData)
+		{
+			return name == eventName && (data == "" || (eventData != null && data == eventData.ToString()));
+		}
+		public bool matches(string eventName, object eventData)
+		{
+			return matches(name, data, eventName, eventData);
+		}
+
+		public string name;
+		public string data;
+	}
+
 	public virtual string[] capturableEvents { get => Array.Empty<string>(); }
 	public virtual void onEvent(string eventName, object eventData) { }
 }

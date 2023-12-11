@@ -36,8 +36,8 @@ public class AnimatorEventReceiver : EntityEventReceiver
 	public override void onEvent(string eventName, object eventData)
 	{
 		foreach (var eventTransformer in eventTransformers)
-			if (eventTransformer.eventName == eventName && (eventTransformer.eventData == ""
-				|| (eventData != null && eventTransformer.eventData == (eventData as string))))
+			if (InputtableEvent.matches(
+				eventTransformer.eventName, eventTransformer.eventData, eventName, eventData))
 				switch (eventTransformer.type)
 				{
 					case EventTransformer.Type.Trigger:

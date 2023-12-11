@@ -55,6 +55,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9069406933905661333}
+  - component: {fileID: 418712233900573136}
   - component: {fileID: 8097520147870503578}
   m_Layer: 1
   m_Name: Dash Trail
@@ -78,6 +79,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3832259940529436474}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &418712233900573136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356456561226632121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6119de524be3bd41ba6bfe4a4e7f193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventEnable:
+    name: dashBegin
+    data: 
+  eventDisable:
+    name: dashFinish
+    data: 
 --- !u!96 &8097520147870503578
 TrailRenderer:
   serializedVersion: 3

@@ -45,7 +45,6 @@ public class PlayerMovement : EntityBehavior
 	[field: SerializeField, ReadOnly] public float dashCooldown { get; private set; }
 
 
-    private TrailRenderer trail;
     private Collider2D groundCheck;
     private Collider2D slopeCheck;
     private Collider2D wallCheck;
@@ -74,7 +73,6 @@ public class PlayerMovement : EntityBehavior
 
 	public override void onAwake()
 	{
-		trail = transform.Find("Dash Trail").GetComponent<TrailRenderer>();
 		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
 		slopeCheck = transform.Find("Slope Check").GetComponent<Collider2D>();
 		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
@@ -386,6 +384,7 @@ public class PlayerMovement : EntityBehavior
 		if (canDash())
 		{
 			dash();
+			controller.onEvent("dashBegin", null);
 		}
 
 		if (isDashing)
@@ -393,6 +392,7 @@ public class PlayerMovement : EntityBehavior
 				|| isFacingWall || Mathf.Abs(controller.rigidBody.velocity.y) > minVerticalMovementVelocity)
 			{
 				isDashing = false;
+				controller.onEvent("dashFinish", null);
 			}
 
 		if (isDashing)
@@ -400,7 +400,6 @@ public class PlayerMovement : EntityBehavior
 			isFalling = false;
 			isGrounded = false;
 		}
-		trail.emitting = isDashing;
 
 		if (isGrounded || lastWallHoldingTime == 0)
 		{
