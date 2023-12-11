@@ -2,35 +2,30 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
-public class AnimatorEventReceiver : EntityEventReceiver
+[RequireComponent(typeof(ParticleSystem))]
+public class ParticleSystemEventReceiver : EntityEventReceiver
 {
 	[Serializable]
 	public class EventTransformer
 	{
 		public enum Type
 		{
-			Trigger, Boolean
+			Play, Stop
 		}
 
 		public string eventName;
 		public string eventData;
-		public string animatorName;
 		public Type type;
-
-		[Space(5)]
-
-		public bool setBoolean;
 	}
 	public EventTransformer[] eventTransformers;
 
-    private Animator animator;
+	private ParticleSystem particles;
 
 
-    private void Awake()
-    {
-        animator = transform.GetComponent<Animator>();
-    }
+	private void Awake()
+	{
+		particles = transform.GetComponent<ParticleSystem>();
+	}
 
 	public override string[] capturableEvents => eventTransformers.Select(e => e.eventName).ToArray();
 	public override void onEvent(string eventName, object eventData)
@@ -40,11 +35,11 @@ public class AnimatorEventReceiver : EntityEventReceiver
 				eventTransformer.eventName, eventTransformer.eventData, eventName, eventData))
 				switch (eventTransformer.type)
 				{
-					case EventTransformer.Type.Trigger:
-						animator.SetTrigger(eventTransformer.animatorName);
+					case EventTransformer.Type.Play:
+						particles.Play();
 						break;
-					case EventTransformer.Type.Boolean:
-						animator.SetBool(eventTransformer.animatorName, eventTransformer.setBoolean);
+					case EventTransformer.Type.Stop:
+						particles.Stop();
 						break;
 				}
 	}

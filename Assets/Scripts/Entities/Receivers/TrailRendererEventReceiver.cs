@@ -22,5 +22,4 @@ public class EmitterEventReceiver : EntityEventReceiver
 		else if (eventDisable.matches(eventName, eventData))
 			trail.emitting = false;
 	}
-
 }

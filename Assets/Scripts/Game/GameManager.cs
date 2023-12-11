@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 	public RuntimeDataManager runtimeDataInstance = null;
     public Effects effectsInstance;
 
-	public enum RuntimeGroup { Effects, Enemies, Collectibles, Projectiles }
+	public enum RuntimeGroup { Effects, Enemies, Collectibles, Projectiles, Disinherited }
 	public Dictionary<RuntimeGroup, Transform> runtimeGroup { get; private set; }
 
 	
@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviour
 			{ RuntimeGroup.Enemies, new GameObject("Enemies").transform },
 			{ RuntimeGroup.Collectibles, new GameObject("Collectibles").transform },
 			{ RuntimeGroup.Projectiles, new GameObject("Projectiles").transform },
-			{ RuntimeGroup.Effects, new GameObject("Effects").transform }
+			{ RuntimeGroup.Effects, new GameObject("Effects").transform },
+			{ RuntimeGroup.Disinherited, new GameObject("Disinherited").transform }
 		};
 
 		Transform runtimeMainGroup = new GameObject("Runtime").transform;
