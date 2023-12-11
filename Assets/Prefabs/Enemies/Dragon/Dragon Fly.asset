@@ -19,6 +19,6 @@ MonoBehaviour:
   safeSpaceBig: 3.5
   avoidSpeed: 5
   fallSpeed: 3
-  flySpeed: 8
+  flySpeed: 4
   accelerationCoefficient: 0.3
   fallRate: 0.28

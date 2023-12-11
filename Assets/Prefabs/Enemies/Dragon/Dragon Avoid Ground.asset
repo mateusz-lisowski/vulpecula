@@ -15,6 +15,6 @@ MonoBehaviour:
   avoidLayers:
     serializedVersion: 2
     m_Bits: 256
-  strength: 5
-  distanceSmall: 2
+  strength: 8
+  distanceSmall: 1
   distanceBig: 3.5
