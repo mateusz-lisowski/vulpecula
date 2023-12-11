@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -6,14 +8,12 @@ public class FlyBehavior : EntityBehavior
 {
 	public FlyBehaviorData data;
 	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool isDisturbed { get; private set; }
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public Vector2 disturbVec { get; private set; }
 	[field: SerializeField, ReadOnly] public Vector2 targetVelocity { get; private set; }
 
 	private FlipBehavior direction;
 	private ChaseBehavior chase;
 	private SleepBehavior sleep;
+	private List<AvoidBehavior> avoids;
 
 
 	public override void onAwake()
@@ -21,14 +21,11 @@ public class FlyBehavior : EntityBehavior
 		direction = controller.getBehavior<FlipBehavior>();
 		chase = controller.getBehavior<ChaseBehavior>();
 		sleep = controller.getBehavior<SleepBehavior>();
+		avoids = controller.getBehaviors<AvoidBehavior>();
 	}
 
 	public override void onUpdate()
 	{
-		isDisturbed = calculateDisturb();
-
-		if (chase == null || !chase.isChasing)
-			direction.faceTowards((Vector2)transform.position + targetVelocity);
 	}
 
 	public override bool onFixedUpdate()
@@ -44,74 +41,53 @@ public class FlyBehavior : EntityBehavior
 	}
 
 
-	public Vector2 calculateTargetVelocity()
+	private Vector2 findAverageVector(List<Vector2> vectors)
 	{
-		Vector2 targetVelocity = Vector2.zero;
+		Vector2 targetVector = Vector2.zero;
+		if (vectors.Count == 0)
+			return targetVector;
 
+		float maxMagnitude = 0f;
+
+		foreach (var vector in vectors)
+		{
+			float magnitude = vector.magnitude;
+
+			if (magnitude > maxMagnitude)
+				maxMagnitude = magnitude;
+
+			targetVector += vector;
+		}
+
+		if (targetVector == Vector2.zero)
+			return targetVector;
+
+		targetVector = targetVector.normalized * maxMagnitude;
+
+		return targetVector;
+	}
+	private Vector2 calculateTargetVelocity()
+	{
 		bool isChasing = chase != null && chase.isChasing;
 		bool isReturning = sleep != null && !isChasing;
 
-		if (isDisturbed)
-			targetVelocity -= disturbVec * data.avoidSpeed;
+		List<Vector2> vectors = new List<Vector2>();
+
+		foreach (var avoid in avoids)
+			if (avoid.isAvoiding)
+				vectors.Add(avoid.avoidVec);
 
 		if (isChasing)
-		{
-			Vector2 chaseVelocity = (chase.lastTargetPosition - (Vector2)transform.position).normalized * data.flySpeed;
-			targetVelocity = targetVelocity + chaseVelocity;
-
-			if (targetVelocity.magnitude < chaseVelocity.magnitude)
-				targetVelocity = targetVelocity.normalized * chaseVelocity.magnitude;
-		}
+			vectors.Add((chase.lastTargetPosition - (Vector2)transform.position).normalized * data.flySpeed);
 		else if (isReturning)
-		{
-			Vector2 returnVelocity = (sleep.sleepPosition - (Vector2)transform.position).normalized * data.flySpeed;
-			targetVelocity = returnVelocity;
-		}
+			vectors.Add((sleep.sleepPosition - (Vector2)transform.position).normalized * data.flySpeed);
 
-		if ((isDisturbed || (!isChasing && !isReturning)) && targetVelocity.y >= 0f)
+		Vector2 targetVelocity = findAverageVector(vectors);
+
+		if (!isChasing && !isReturning)
 			targetVelocity += Vector2.down * data.fallSpeed;
 
 		return targetVelocity;
-	}
-
-	private bool calculateDisturb()
-	{
-		float minDist = float.PositiveInfinity;
-
-		int rotationCount = 30;
-		for (int i = 0; i < rotationCount; i++)
-		{
-			float delta = 2 * i * Mathf.PI  / rotationCount;
-			Vector2 dir = new Vector2(-Mathf.Sin(delta), Mathf.Cos(delta));
-
-			var hit = Physics2D.Raycast(transform.position, dir, data.safeSpaceBig, data.avoidLayers);
-
-			if (!hit)
-				continue;
-
-			Vector2 vec = hit.point - (Vector2)transform.position;
-			float dist = vec.magnitude;
-
-			if (dist == 0)
-				continue;
-
-			if (dist < minDist)
-			{
-				minDist = dist;
-				disturbVec = vec;
-			}
-		}
-
-		if (minDist == float.PositiveInfinity)
-			return false;
-
-		if (minDist <= data.safeSpaceSmall)
-			disturbVec = disturbVec.normalized;
-		else
-			disturbVec = disturbVec.normalized * (data.safeSpaceBig - minDist) 
-				/ (data.safeSpaceBig - data.safeSpaceSmall);
-
-		return true;
 	}
 
 }
