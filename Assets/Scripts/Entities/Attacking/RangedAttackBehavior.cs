@@ -30,18 +30,28 @@ public class RangedAttackBehavior : EntityBehavior
 
 		attackTransforms[data.attackInstantiateEventName] = attackTransform;
 		foreach (Transform childTransform in attackTransform)
-			attackTransforms[data.attackInstantiateEventName + ":" + childTransform.name] = childTransform;
+			attackTransforms[data.attackInstantiateEventName + "." + childTransform.name] = childTransform;
 	}
 
+	public override string[] capturableEvents => new string[] { "attack", "attackExit" };
 	public override void onEvent(string eventName, object eventData)
 	{
-		if (eventName == data.attackInstantiateEventName + "Exit")
-			isAttacking = false;
-		else if (attackTransforms.ContainsKey(eventName))
+		string name = eventData == null ? "attack" : eventData as string;
+
+		switch (eventName)
 		{
-			attackInstantiate(attackTransforms[eventName]);
-			if (eventName == data.attackInstantiateEventName)
-				isAttacking = false;
+			case "attackExit": 
+				if (name == data.attackInstantiateEventName) 
+					isAttacking = false; 
+				break;
+			case "attack":
+				if (attackTransforms.ContainsKey(name))
+				{
+					attackInstantiate(attackTransforms[name]);
+					if (name == data.attackInstantiateEventName)
+						isAttacking = false;
+				}
+			break;
 		}
 	}
 

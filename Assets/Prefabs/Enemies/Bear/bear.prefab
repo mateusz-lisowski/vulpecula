@@ -244,8 +244,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: fcf90161074affd42b84b20509393f6e, type: 2}
   <isChasing>k__BackingField: 0
-  <targetDistance>k__BackingField: 0
-  <targetDirection>k__BackingField: {x: 0, y: 0}
+  <lastSeenTime>k__BackingField: 0
+  <lastTargetPosition>k__BackingField: {x: 0, y: 0}
 --- !u!114 &4846482311299018571
 MonoBehaviour:
   m_ObjectHideFlags: 0

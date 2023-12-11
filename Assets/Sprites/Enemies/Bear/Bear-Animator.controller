@@ -40,7 +40,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  eventName: roarExit
+  eventName: attackExit:roar
 --- !u!114 &-6766642711712730486
 MonoBehaviour:
   m_ObjectHideFlags: 1

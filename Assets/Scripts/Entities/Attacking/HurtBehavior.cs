@@ -38,6 +38,7 @@ public class HurtBehavior : EntityBehavior
 		health = data.health;
 	}
 
+	public override string[] capturableEvents => new string[] { "hit" };
 	public override void onEvent(string eventName, object eventData)
 	{
 		switch (eventName)

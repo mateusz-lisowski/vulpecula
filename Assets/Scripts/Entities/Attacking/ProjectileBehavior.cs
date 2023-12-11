@@ -75,6 +75,7 @@ public class ProjectileBehavior : EntityBehavior
 		hitbox = controller.hitbox.GetComponent<Collider2D>();
 	}
 
+	public override string[] capturableEvents => new string[] { "resolve", "halt" };
 	public override void onEvent(string eventName, object eventData)
 	{
 		switch (eventName)

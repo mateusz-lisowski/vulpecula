@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using Unity.VisualScripting.FullSerializer.Internal;
-using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerMovement))]
@@ -34,6 +31,7 @@ public class PlayerInfo : EntityBehavior
 		runtimeData = RuntimeDataManager.get<RuntimeData>("Player");
 	}
 
+	public override string[] capturableEvents => new string[] { "collect" };
 	public override void onEvent(string eventName, object eventData)
 	{
 		switch (eventName)

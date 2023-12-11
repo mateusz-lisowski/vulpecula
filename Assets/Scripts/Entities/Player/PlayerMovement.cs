@@ -98,6 +98,7 @@ public class PlayerMovement : EntityBehavior
 		lastPassInputTime = float.PositiveInfinity;
 	}
 
+	public override string[] capturableEvents => new string[] { "hit" };
 	public override void onEvent(string eventName, object eventData)
 	{
 		switch (eventName)

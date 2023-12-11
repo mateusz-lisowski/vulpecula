@@ -46,20 +46,20 @@ public class PlayerAttack : EntityBehavior
 		lastAttackDownTime = float.PositiveInfinity;
 	}
 
+	public override string[] capturableEvents => 
+		new string[] { "attackForward", "attackForwardReset", "attackForwardAir", "attackDown", "attackExit" };
 	public override void onEvent(string eventName, object eventData)
 	{
-		if (eventName == "attackExit:" + currentAttackName)
-		{
-			attackFinish();
-			return;
-		}
-
 		switch (eventName)
 		{
 			case "attackForward": attackForwardInstantiate(); break;
 			case "attackForwardReset": attackForwardReset(); break;
 			case "attackForwardAir": attackForwardAirInstantiate(); break;
 			case "attackDown": attackDownInstantiate(); break;
+			case "attackExit": 
+				if (eventData != null && eventData as string == currentAttackName) 
+					attackFinish(); 
+				break;
 		}
 	}
 

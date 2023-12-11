@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  eventName: attackExit
+  eventName: attackExit:tongue
 --- !u!1101 &3507273293436613529
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

@@ -5,6 +5,7 @@ public class SpawnOnEventBehavior : EntityBehavior
 	public SpawnOnEventBehaviorData data;
 
 
+	public override string[] capturableEvents => new string[] { data.eventName };
 	public override void onEvent(string eventName, object eventData)
 	{
 		if (eventName != data.eventName)

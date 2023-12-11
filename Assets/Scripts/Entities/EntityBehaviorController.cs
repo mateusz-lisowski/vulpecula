@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,7 +16,13 @@ public struct EntityMessage
 }
 
 [RequireComponent(typeof(EntityBehaviorController))]
-public abstract class EntityBehavior : MonoBehaviour
+public abstract class EntityEventReceiver : MonoBehaviour
+{
+	public virtual string[] capturableEvents { get => Array.Empty<string>(); }
+	public virtual void onEvent(string eventName, object eventData) { }
+}
+
+public abstract class EntityBehavior : EntityEventReceiver
 {
 	public void addSmoothForce(float targetSpeed, float accelerationCoefficient, Vector2 direction)
 	{
@@ -27,10 +34,9 @@ public abstract class EntityBehavior : MonoBehaviour
 
 	public virtual void onAwake() { }
 	public virtual void onStart() { }
-	public virtual void onEvent(string eventName, object eventData) { }
 	public virtual void onUpdate() { }
 	public virtual bool onFixedUpdate() { return false; }
-
+	
 	public void setController(EntityBehaviorController parent)
 	{
 		controller = parent;
@@ -59,6 +65,8 @@ public class EntityBehaviorController : MonoBehaviour
 
 	public int currentUpdate { get; private set; }
 	public int currentFixedUpdate { get; private set; }
+
+	private Dictionary<string, List<EntityEventReceiver>> eventDispatcher;
 
 
 	public B getBehavior<B>() where B : EntityBehavior
@@ -91,6 +99,8 @@ public class EntityBehaviorController : MonoBehaviour
 
 		foreach (var behavior in behaviors)
 			behavior.onAwake();
+
+		initializeEventDispatcher();
 	}
 	private void Start()
 	{
@@ -116,8 +126,9 @@ public class EntityBehaviorController : MonoBehaviour
 
 	public void onEvent(string eventName, object eventData)
 	{
-		foreach (var behavior in behaviors)
-			behavior.onEvent(eventName, eventData);
+		if (eventDispatcher.ContainsKey(eventName))
+			foreach (var receiver in eventDispatcher[eventName])
+				receiver.onEvent(eventName, eventData);
 
 		if (eventName == "destroy")
 			Destroy(gameObject);
@@ -125,5 +136,18 @@ public class EntityBehaviorController : MonoBehaviour
 	public void onMessage(EntityMessage msg)
 	{
 		onEvent(msg.name, msg.data);
+	}
+
+
+	private void initializeEventDispatcher()
+	{
+		eventDispatcher = new Dictionary<string, List<EntityEventReceiver>>();
+
+		foreach (var receiver in transform.GetComponentsInChildren<EntityEventReceiver>())
+			foreach (var capturableEvent in receiver.capturableEvents)
+				if (!eventDispatcher.ContainsKey(capturableEvent))
+					eventDispatcher.Add(capturableEvent, new List<EntityEventReceiver> { receiver });
+				else
+					eventDispatcher[capturableEvent].Add(receiver);
 	}
 }

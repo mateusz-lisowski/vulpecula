@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0f2eac1db483484abb2a22057ee16f5, type: 3}
   m_Name: Frog Attack
   m_EditorClassIdentifier: 
-  attackInstantiateEventName: attack
+  attackInstantiateEventName: tongue
   provokeDetectionName: Attack
   animatorEventName: onAttack
   provokeLayers:
@@ -23,5 +23,6 @@ MonoBehaviour:
     m_Bits: 4096
   attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
   cooldown: 3
+  strength: 1
   attackRunSpeed: 0
   accelerationCoefficient: 0.8
