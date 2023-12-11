@@ -137,20 +137,11 @@ public class PlayerAttack : EntityBehavior
 		attackForwardCombo++;
 
 		if (attackForwardCombo == 1)
-		{
 			currentAttackName = "attack1";
-			controller.animator.SetTrigger("onAttack1");
-		}
 		else if (attackForwardCombo == 2)
-		{
 			currentAttackName = "attack2";
-			controller.animator.SetTrigger("onAttack2");
-		}
 		else
-		{
 			currentAttackName = "attack3";
-			controller.animator.SetTrigger("onAttack3");
-		}
 	}
 
 	private void attackForwardAirInstantiate()
@@ -175,7 +166,6 @@ public class PlayerAttack : EntityBehavior
 		attackAnyCooldown = attackForwardCooldown = data.attack.forwardCooldown;
 
 		currentAttackName = "attackAir";
-		controller.animator.SetTrigger("onAttackAir");
 	}
 
 	private void attackDownHitCallback(HitData hitData)
@@ -210,7 +200,6 @@ public class PlayerAttack : EntityBehavior
 		attackAnyCooldown = attackDownCooldown = data.attack.downCooldown;
 
 		currentAttackName = "attackDown";
-		controller.animator.SetTrigger("onAttackDown");
 	}
 
 	private bool canAttackAny()
@@ -257,6 +246,8 @@ public class PlayerAttack : EntityBehavior
 					else
 						attackForward();
 			}
+
+			controller.onEvent("attackBegin", currentAttackName);
 		}
 	}
 }

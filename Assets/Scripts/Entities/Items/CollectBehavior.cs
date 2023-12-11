@@ -41,9 +41,7 @@ public class CollectBehavior : EntityBehavior
 			runtimeData.isCollected = true;
 			triggerCollect();
 
-			foreach (var param in controller.animator.parameters)
-				if (param.name == "onCollect")
-					controller.animator.SetTrigger("onCollect");
+			controller.onEvent("collected", null);
 		}
 	}
 

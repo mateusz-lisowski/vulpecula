@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 2833117969731910243}
   - component: {fileID: 8262793675236343647}
   - component: {fileID: 7330796483480989753}
+  - component: {fileID: 8162218149829116674}
   - component: {fileID: 1597347564915874360}
   m_Layer: 16
   m_Name: Sprite
@@ -150,7 +151,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1400974387
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 74dadd4a8d5e5dd47b0cd8af9c084565, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -176,6 +177,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 864963838177054668}
+--- !u!114 &8162218149829116674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563566873769212274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573d1be3b3429c0419234ec32b2df685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventTransformers:
+  - eventName: hurt
+    eventData: 
+    animatorName: isDistressed
+    type: 1
+    setBoolean: 1
+  - eventName: recover
+    eventData: 
+    animatorName: isDistressed
+    type: 1
+    setBoolean: 0
+  - eventName: died
+    eventData: 
+    animatorName: onDeath
+    type: 0
+    setBoolean: 0
+  - eventName: attackBegin
+    eventData: attack
+    animatorName: onAttack
+    type: 0
+    setBoolean: 0
 --- !u!95 &1597347564915874360
 Animator:
   serializedVersion: 5
@@ -359,8 +393,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 6e31774dcaa88d54693eb752922b946b, type: 2}
   <isChasing>k__BackingField: 0
-  <targetDistance>k__BackingField: 0
-  <targetDirection>k__BackingField: {x: 0, y: 0}
+  <lastSeenTime>k__BackingField: 0
+  <lastTargetPosition>k__BackingField: {x: 0, y: 0}
 --- !u!114 &2042868004939667613
 MonoBehaviour:
   m_ObjectHideFlags: 0

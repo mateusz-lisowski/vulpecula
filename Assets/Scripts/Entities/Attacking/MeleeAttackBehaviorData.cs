@@ -7,8 +7,6 @@ public class MeleeAttackBehaviorData : ScriptableObject
 	public string attackInstantiateEventName = "attack";
 	[Tooltip("Name of the child object detecting provokation")]
 	public string provokeDetectionName = "Attack";
-	[Tooltip("Name of the animator trigger event")]
-	public string animatorEventName = "onAttack";
 
 	[Space(10)]
 

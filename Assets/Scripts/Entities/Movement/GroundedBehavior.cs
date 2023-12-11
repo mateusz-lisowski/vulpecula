@@ -54,6 +54,7 @@ public class GroundedBehavior : EntityBehavior
 			isOnSlope = false;
 		}
 
+		bool wasFalling = isFalling;
 		isFalling = !isGrounded && controller.rigidBody.velocity.y <= 0;
 
 		foreach (var param in controller.animator.parameters)
@@ -61,5 +62,8 @@ public class GroundedBehavior : EntityBehavior
 				controller.animator.SetBool("isGrounded", isGrounded);
 			else if (param.name == "isFalling")
 				controller.animator.SetBool("isFalling", isFalling);
+
+		if (wasFalling && !isFalling)
+			controller.onEvent("fell", null);
 	}
 }

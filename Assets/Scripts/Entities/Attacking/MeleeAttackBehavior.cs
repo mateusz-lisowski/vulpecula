@@ -15,7 +15,6 @@ public class MeleeAtackBehavior : EntityBehavior
 	private Dictionary<string, Transform> attackTransforms;
 	private Collider2D attackCheck;
 
-	private bool justAttacked = false;
 	private ProjectileBehavior currentAttackData = null;
 
 
@@ -62,13 +61,6 @@ public class MeleeAtackBehavior : EntityBehavior
 		updateCollisions();
 
 		updateAttack();
-
-		foreach (var param in controller.animator.parameters)
-			if (param.name == data.animatorEventName)
-			{
-				if (justAttacked)
-					controller.animator.SetTrigger(data.animatorEventName);
-			}
 	}
 
 	public override bool onFixedUpdate()
@@ -106,13 +98,12 @@ public class MeleeAtackBehavior : EntityBehavior
 	{
 		isAttacking = true;
 
-		justAttacked = true;
 		attackCooldown = data.cooldown;
+
+		controller.onEvent("attackBegin", data.attackInstantiateEventName);
 	}
 	private void updateAttack()
 	{
-		justAttacked = false;
-
 		if (canAttack())
 		{
 			attack();

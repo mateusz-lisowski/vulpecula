@@ -15,7 +15,6 @@ public class RangedAttackBehavior : EntityBehavior
 
 	private Dictionary<string, Transform> attackTransforms;
 
-	private bool justAttacked = false;
 	private ProjectileBehavior currentAttackData = null;
 
 
@@ -60,13 +59,6 @@ public class RangedAttackBehavior : EntityBehavior
 		attackCooldown -= Time.deltaTime;
 
 		updateAttack();
-
-		foreach (var param in controller.animator.parameters)
-			if (param.name == data.animatorEventName)
-			{
-				if (justAttacked)
-					controller.animator.SetTrigger(data.animatorEventName);
-			}
 	}
 
 	public override bool onFixedUpdate()
@@ -87,18 +79,7 @@ public class RangedAttackBehavior : EntityBehavior
 	private void attackBreak(HitData data)
 	{
 		data.source.controller.rigidBody.velocity = Vector2.zero;
-
-		Animator animator = data.source.controller.animator;
-
-		if (animator != null)
-			foreach (var param in animator.parameters)
-				if (param.name == "onHit")
-				{
-					animator.SetTrigger("onHit");
-					return;
-				}
-
-		Destroy(data.source.gameObject);
+		data.source.controller.onEvent("hit", data);
 	}
 	private void attackInstantiate(Transform attackTransform)
 	{
@@ -119,13 +100,12 @@ public class RangedAttackBehavior : EntityBehavior
 	{
 		isAttacking = true;
 
-		justAttacked = true;
 		attackCooldown = data.cooldown;
+
+		controller.onEvent("attackBegin", data.attackInstantiateEventName);
 	}
 	private void updateAttack()
 	{
-		justAttacked = false;
-
 		if (canAttack())
 		{
 			attack();

@@ -126,7 +126,6 @@ public class PlayerMovement : EntityBehavior
 		updateGroundBreak();
 
 		controller.animator.SetBool("isGrounded", isGrounded);
-		controller.animator.SetBool("isDistressed", isDistressed);
 		controller.animator.SetBool("isFalling", isFalling);
 		controller.animator.SetBool("isMoving", isMoving);
 		controller.animator.SetBool("isWallHolding", lastWallHoldingTime == 0);
@@ -311,6 +310,7 @@ public class PlayerMovement : EntityBehavior
 		}
 
 		flip();
+		controller.onEvent("hurt", null);
 	}
 	private void updateHurt()
 	{
@@ -328,6 +328,7 @@ public class PlayerMovement : EntityBehavior
 		{
 			flip();
 			isDistressed = false;
+			controller.onEvent("recover", null);
 		}
 
 		if (isDistressed)
@@ -515,6 +516,9 @@ public class PlayerMovement : EntityBehavior
 			isFalling = false;
 			lastGroundedTime = 0;
 			lastWallJumpTime = float.PositiveInfinity;
+
+			if (lastWallHoldingTime != 0)
+				controller.onEvent("fell", null);
 		}
 
 		if (controller.rigidBody.velocity.y < -data.gravity.maxFallSpeed)

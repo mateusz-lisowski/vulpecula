@@ -29,10 +29,6 @@ public class JumpBehavior : EntityBehavior
 		jumpCooldown -= Time.deltaTime;
 
 		updateJump();
-
-		foreach (var param in controller.animator.parameters)
-			if (param.name == "isJumping")
-				controller.animator.SetBool("isJumping", isJumping);
 	}
 
 	public override bool onFixedUpdate()
@@ -66,6 +62,8 @@ public class JumpBehavior : EntityBehavior
 				force -= controller.rigidBody.velocity.y;
 				controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
 			}
+
+			controller.onEvent("jumped", null);
 		}
 		else
 			direction.flip();
@@ -73,9 +71,7 @@ public class JumpBehavior : EntityBehavior
 	private void updateJump()
 	{
 		if (ground.isGrounded)
-		{
 			isJumping = false;
-		}
 
 		if (canJump())
 		{
@@ -135,8 +131,6 @@ public class JumpBehavior : EntityBehavior
 			if (currentPosition.y < position.y - data.maxFall)
 				return false;
 		}
-
-		//drawParabola(position, velocity, acceleration, currentTime);
 
 		if (hit.normal.y > 0.4f)
 			return true;

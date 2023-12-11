@@ -26,6 +26,8 @@ public class SleepBehavior : EntityBehavior
 
 	public override void onUpdate()
 	{
+		bool wasSleeping = isSleeping;
+
 		if (chase.isChasing)
 			isSleeping = false;
 		else if (Vector2.Distance(transform.position, sleepPosition) < data.lockInDistance)
@@ -34,9 +36,11 @@ public class SleepBehavior : EntityBehavior
 		if (isSleeping)
 			transform.position = sleepPosition;
 
-		foreach (var param in controller.animator.parameters)
-			if (param.name == "isSleeping")
-				controller.animator.SetBool("isSleeping", isSleeping);
+		if (isSleeping != wasSleeping)
+			if (isSleeping)
+				controller.onEvent("fellAsleep", null);
+			else
+				controller.onEvent("awoke", null);
 	}
 
 	public override bool onFixedUpdate()

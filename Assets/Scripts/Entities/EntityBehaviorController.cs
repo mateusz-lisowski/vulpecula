@@ -15,13 +15,13 @@ public struct EntityMessage
 	public object data;
 }
 
-[RequireComponent(typeof(EntityBehaviorController))]
 public abstract class EntityEventReceiver : MonoBehaviour
 {
 	public virtual string[] capturableEvents { get => Array.Empty<string>(); }
 	public virtual void onEvent(string eventName, object eventData) { }
 }
 
+[RequireComponent(typeof(EntityBehaviorController))]
 public abstract class EntityBehavior : EntityEventReceiver
 {
 	public void addSmoothForce(float targetSpeed, float accelerationCoefficient, Vector2 direction)
@@ -148,6 +148,10 @@ public class EntityBehaviorController : MonoBehaviour
 				if (!eventDispatcher.ContainsKey(capturableEvent))
 					eventDispatcher.Add(capturableEvent, new List<EntityEventReceiver> { receiver });
 				else
-					eventDispatcher[capturableEvent].Add(receiver);
+				{
+					var dispatcher = eventDispatcher[capturableEvent];
+					if (!dispatcher.Contains(receiver))
+						dispatcher.Add(receiver);
+				}
 	}
 }

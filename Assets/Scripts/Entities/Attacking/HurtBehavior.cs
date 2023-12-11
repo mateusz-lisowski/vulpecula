@@ -74,13 +74,8 @@ public class HurtBehavior : EntityBehavior
 		if (isDistressed && lastHurtTime >= data.distressTime)
 		{
 			isDistressed = false;
+			controller.onEvent("recover", null);
 		}
-
-		foreach (var param in controller.animator.parameters)
-			if (param.name == "isDistressed")
-				controller.animator.SetBool("isDistressed", isDistressed);
-			else if (param.name == "health")
-				controller.animator.SetInteger("health", health);
 	}
 
 	public override bool onFixedUpdate()
@@ -130,6 +125,8 @@ public class HurtBehavior : EntityBehavior
 
 		controller.StartCoroutine(Effects.instance.flashing.run(
 			controller.spriteRenderer, data.invulnerabilityTime, burst: true));
+		
+		controller.onEvent("hurt", null);
 	}
 
 	private void die()
@@ -138,6 +135,8 @@ public class HurtBehavior : EntityBehavior
 
 		controller.StartCoroutine(Effects.instance.flashing.run(
 			controller.spriteRenderer, 0, burst: true));
+
+		controller.onEvent("died", null);
 	}
 
 	private void block()

@@ -458,6 +458,7 @@ GameObject:
   - component: {fileID: 6020151066667385311}
   - component: {fileID: 6250774349617447535}
   - component: {fileID: 6426440952860175011}
+  - component: {fileID: 5585957623948579603}
   - component: {fileID: 1737283858026289727}
   m_Layer: 16
   m_Name: Sprite
@@ -546,6 +547,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 3719971410987988227}
+--- !u!114 &5585957623948579603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4669477061351089914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573d1be3b3429c0419234ec32b2df685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventTransformers:
+  - eventName: hurt
+    eventData: 
+    animatorName: isDistressed
+    type: 1
+    setBoolean: 1
+  - eventName: recover
+    eventData: 
+    animatorName: isDistressed
+    type: 1
+    setBoolean: 0
+  - eventName: died
+    eventData: 
+    animatorName: onDeath
+    type: 0
+    setBoolean: 0
+  - eventName: attackBegin
+    eventData: attack
+    animatorName: onAttack
+    type: 0
+    setBoolean: 0
+  - eventName: attackBegin
+    eventData: roar
+    animatorName: onRoar
+    type: 0
+    setBoolean: 0
 --- !u!95 &1737283858026289727
 Animator:
   serializedVersion: 5
