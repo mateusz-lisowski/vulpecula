@@ -4,9 +4,9 @@ using UnityEngine;
 public class ChaseBehaviorData : ScriptableObject
 {
 	[Tooltip("Layers to chase")]
-	public LayerMask targetLayers;
+	public LayerManager.LayerMaskInput targetLayers;
 	[Tooltip("Layers that hide the target")]
-	public LayerMask obstructLayers;
+	public LayerManager.LayerMaskInput obstructLayers;
 
 	[Space(10)]
 

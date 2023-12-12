@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundDropping:
     collidingLayers:
-      serializedVersion: 2
-      m_Bits: 995328
+      value: 995328
     shakeTime: 0.5
     respawnTime: 3
     idleEffectPrefab: {fileID: 8936189067721242303, guid: b1398976c0122bc4394afb7e59b307d9, type: 3}
@@ -23,7 +22,6 @@ MonoBehaviour:
     breakEffectPrefab: {fileID: 0}
   groundBreaking:
     collidingLayers:
-      serializedVersion: 2
-      m_Bits: 995328
+      value: 995328
     respawnTime: 3
     breakEffectPrefab: {fileID: 2695810944054436799, guid: 1cd418e073bafb1409d7d734adfec5da, type: 3}

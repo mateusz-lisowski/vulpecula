@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6423328600542823185}
   - component: {fileID: 1942289453974087875}
   - component: {fileID: 4880422513107043270}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Attack
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,9 +102,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6137707891989996833}
   - component: {fileID: 2295190985574876657}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Ground Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,7 +179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5852261567689816271}
   - component: {fileID: 8375095639737827638}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 6198419711971689103}
   - component: {fileID: 8022337454006928920}
   - component: {fileID: 8395690554940734941}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -417,9 +417,9 @@ GameObject:
   - component: {fileID: -8327117584992023542}
   - component: {fileID: -5512098875398612276}
   - component: {fileID: 966967818323690364}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: grasshopper
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -438,8 +438,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8146997211341501770}
-  - {fileID: 6423328600542823185}
   - {fileID: 5852261567689816271}
+  - {fileID: 6423328600542823185}
   - {fileID: 6137707891989996833}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

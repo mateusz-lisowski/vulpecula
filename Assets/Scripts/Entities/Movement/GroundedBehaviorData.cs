@@ -6,11 +6,11 @@ public class GroundBehaviorData : ScriptableObject
 	[Space(10)]
 
 	[Tooltip("Layers that can be run on")]
-	public LayerMask groundLayers;
+	public LayerManager.LayerMaskInput groundLayers;
 	[Tooltip("Layers that trigger flip")]
-	public LayerMask wallLayers;
+	public LayerManager.LayerMaskInput wallLayers;
 	[Tooltip("Layers that can be passed through")]
-	public LayerMask passingLayers;
+	public LayerManager.LayerMaskInput passingLayers;
 	[Tooltip("Layer detecting whether ground is a slope")]
-	public LayerMask slopeLayer;
+	public LayerManager.LayerMaskInput slopeLayer;
 }

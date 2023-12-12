@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Dragon Run Away
   m_EditorClassIdentifier: 
   avoidLayers:
-    serializedVersion: 2
-    m_Bits: 12288
+    value: 12288
   strength: 6
   distanceSmall: 4
   distanceBig: 8

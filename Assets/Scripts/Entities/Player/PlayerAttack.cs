@@ -111,7 +111,7 @@ public class PlayerAttack : EntityBehavior
 		Transform currentAttackTransform = 
 			isStrong ? attackForwardStrongTransform : attackForwardTransform;
 
-		GameObject currentAttack = Instantiate(
+		GameObject currentAttack = QolUtility.Instantiate(
 			isStrong ? data.attack.attackForward3Prefab 
 			: attackForwardCombo == 2 ? data.attack.attackForward2Prefab
 			: data.attack.attackForward1Prefab,
@@ -146,7 +146,7 @@ public class PlayerAttack : EntityBehavior
 
 	private void attackForwardAirInstantiate()
 	{
-		GameObject currentAttack = Instantiate(data.attack.attackForwardAirPrefab,
+		GameObject currentAttack = QolUtility.Instantiate(data.attack.attackForwardAirPrefab,
 			attackForwardAirTransform.position, attackForwardAirTransform.rotation, transform);
 
 		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
@@ -178,7 +178,7 @@ public class PlayerAttack : EntityBehavior
 	}
 	private void attackDownInstantiate()
 	{
-		GameObject currentAttack = Instantiate(data.attack.attackDownPrefab, 
+		GameObject currentAttack = QolUtility.Instantiate(data.attack.attackDownPrefab, 
 			attackDownTransform.position, attackDownTransform.rotation, transform);
 
 		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();

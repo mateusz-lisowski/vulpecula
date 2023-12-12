@@ -13,14 +13,10 @@ MonoBehaviour:
   m_Name: Enemy Grounded Data
   m_EditorClassIdentifier: 
   groundLayers:
-    serializedVersion: 2
-    m_Bits: 768
+    value: 768
   wallLayers:
-    serializedVersion: 2
-    m_Bits: 256
+    value: 256
   passingLayers:
-    serializedVersion: 2
-    m_Bits: 512
+    value: 512
   slopeLayer:
-    serializedVersion: 2
-    m_Bits: 33554432
+    value: 33554432

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	public LayerMask hiddenLayers;
+	public LayerManager.LayerMaskInput hiddenLayers;
 
     public Transform target;
     public PolygonCollider2D boundary;

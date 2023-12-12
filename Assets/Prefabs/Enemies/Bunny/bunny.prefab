@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5763412196948733543}
   - component: {fileID: 7992258085248392656}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 7330796483480989753}
   - component: {fileID: 8162218149829116674}
   - component: {fileID: 1597347564915874360}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -249,9 +249,9 @@ GameObject:
   - component: {fileID: 4570672024762158509}
   - component: {fileID: 2042868004939667613}
   - component: {fileID: 4986181646444518800}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: bunny
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -270,8 +270,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2833117969731910243}
-  - {fileID: 6902937960065260763}
   - {fileID: 5763412196948733543}
+  - {fileID: 6902937960065260763}
   - {fileID: 2661268023394957242}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -438,9 +438,9 @@ GameObject:
   - component: {fileID: 6902937960065260763}
   - component: {fileID: 4197033727953417548}
   - component: {fileID: 7980826016383653629}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Attack
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -529,9 +529,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2661268023394957242}
   - component: {fileID: 5937674125989109332}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Ground Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

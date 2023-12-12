@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 [RequireComponent(typeof(FlipBehavior))]
 public class FlyBehavior : EntityBehavior

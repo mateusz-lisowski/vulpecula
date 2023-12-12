@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 890903343718232265}
   - component: {fileID: 4694327463031797481}
   - component: {fileID: 690692092914063149}
-  m_Layer: 28
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,6 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventTransformers:
   - eventName: collected
+    eventData: 
     animatorName: onCollect
     type: 0
     setBoolean: 0
@@ -149,9 +150,9 @@ GameObject:
   - component: {fileID: 6934805462752500647}
   - component: {fileID: 4828684322568374723}
   - component: {fileID: 3884011235213485169}
-  m_Layer: 28
+  m_Layer: 0
   m_Name: collectible
-  m_TagString: Untagged
+  m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,7 +210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8810830279441743328}
   - component: {fileID: 8737563008732937128}
-  m_Layer: 28
+  m_Layer: 0
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7649001583239632081}
   - component: {fileID: 6185121685875574064}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: CollectCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

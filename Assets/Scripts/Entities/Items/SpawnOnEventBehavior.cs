@@ -13,7 +13,7 @@ public class SpawnOnEventBehavior : EntityBehavior
 
 		foreach (var toSpawn in data.objects)
 		{
-			Instantiate(toSpawn.prefab, transform.position, Quaternion.identity, 
+			QolUtility.Instantiate(toSpawn.prefab, transform.position, Quaternion.identity, 
 				GameManager.instance.runtimeGroup[toSpawn.group]);
 		}
 	}

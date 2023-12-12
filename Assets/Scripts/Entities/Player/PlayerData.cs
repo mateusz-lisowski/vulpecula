@@ -39,7 +39,7 @@ public class PlayerData : ScriptableObject
 	[System.Serializable] public struct Attack
 	{
 		[Tooltip("Layers that can be hit by an attack")]
-		public LayerMask hitLayers;
+		public LayerManager.LayerMaskInput hitLayers;
 		[Tooltip("Object to instantiate on a forward attack 1")]
 		public GameObject attackForward1Prefab;
 		[Tooltip("Object to instantiate on a forward attack 2")]
@@ -95,9 +95,9 @@ public class PlayerData : ScriptableObject
 	[System.Serializable] public struct Run
 	{
 		[Tooltip("Layers that can be run on")]
-		public LayerMask groundLayers;
+		public LayerManager.LayerMaskInput groundLayers;
 		[Tooltip("Layer detecting whether ground is a slope")]
-		public LayerMask slopeLayer;
+		public LayerManager.LayerMaskInput slopeLayer;
 		[Tooltip("Maximum running speed")]
 		public float maxSpeed;
 		[Tooltip("Acceleration rate (0 = none, maxSpeed = instant)")]
@@ -149,7 +149,7 @@ public class PlayerData : ScriptableObject
 	[System.Serializable] public struct Wall
 	{
 		[Tooltip("Layers that can be slid and jumped from")]
-		public LayerMask layers;
+		public LayerManager.LayerMaskInput layers;
 		[Tooltip("Maximum wall slide speed")]
 		public float slideMaxSpeed;
 		[Tooltip("Acceleration rate (0 = none, wallSlideMaxSpeed = instant)")]
@@ -168,7 +168,7 @@ public class PlayerData : ScriptableObject
 
 		[Header("Wall Jump")]
 		[Tooltip("Layer detecting whether can wall jump")]
-		public LayerMask canJumpLayer;
+		public LayerManager.LayerMaskInput canJumpLayer;
 		[Tooltip("Force to jump off a wall")]
 		public float jumpForce;
 		[Tooltip("Input reduction after wall jumping")]
@@ -206,7 +206,7 @@ public class PlayerData : ScriptableObject
 	[System.Serializable] public struct PlatformPassing
 	{
 		[Tooltip("Layers that can be passed through")]
-		public LayerMask layers;
+		public LayerManager.LayerMaskInput layers;
 
 		[Space(10)]
 
@@ -216,9 +216,9 @@ public class PlayerData : ScriptableObject
 	[System.Serializable] public struct Detection
 	{
 		[Tooltip("Layer detecting whether the ground can damage")]
-		public LayerMask canDamageLayer;
+		public LayerManager.LayerMaskInput canDamageLayer;
 		[Tooltip("Layer detecting whether the ground can drop")]
-		public LayerMask canDropLayer;
+		public LayerManager.LayerMaskInput canDropLayer;
 	}
 
 	public Gravity gravity;

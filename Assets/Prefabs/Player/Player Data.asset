@@ -26,8 +26,7 @@ MonoBehaviour:
     knockbackForce: 8.112875
   attack:
     hitLayers:
-      serializedVersion: 2
-      m_Bits: 17760256
+      value: 17760256
     attackForward1Prefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
     attackForward2Prefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
     attackForward3Prefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
@@ -50,11 +49,9 @@ MonoBehaviour:
     inputBufferTime: 0.1
   run:
     groundLayers:
-      serializedVersion: 2
-      m_Bits: 1792
+      value: 1792
     slopeLayer:
-      serializedVersion: 2
-      m_Bits: 33554432
+      value: 33554432
     maxSpeed: 7
     acceleration: 2
     deceleration: 4
@@ -75,16 +72,14 @@ MonoBehaviour:
     inputBufferTime: 0.05
   wall:
     layers:
-      serializedVersion: 2
-      m_Bits: 256
+      value: 256
     slideMaxSpeed: 20
     slideAcceleration: 1
     slideDeceleration: 6
     slideAccelerationForce: 2.5
     slideDecelerationForce: 15
     canJumpLayer:
-      serializedVersion: 2
-      m_Bits: 4194304
+      value: 4194304
     jumpForce: 10
     jumpInputReduction: 0.6
     jumpTime: 0.6
@@ -99,13 +94,10 @@ MonoBehaviour:
     inputBufferTime: 0.2
   platformPassing:
     layers:
-      serializedVersion: 2
-      m_Bits: 1536
+      value: 1536
     inputBufferTime: 0.05
   detection:
     canDamageLayer:
-      serializedVersion: 2
-      m_Bits: 2097152
+      value: 2097152
     canDropLayer:
-      serializedVersion: 2
-      m_Bits: 8388608
+      value: 8388608

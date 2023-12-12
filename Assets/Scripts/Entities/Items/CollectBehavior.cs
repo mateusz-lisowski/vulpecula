@@ -38,6 +38,8 @@ public class CollectBehavior : EntityBehavior
 
 		if (collectCheck.IsTouchingLayers(data.collectingLayers))
 		{
+			Debug.Log("collected");
+
 			runtimeData.isCollected = true;
 			triggerCollect();
 

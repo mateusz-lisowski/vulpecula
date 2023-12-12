@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/Layers")]
-public class LayerManager : ScriptableObject
+public class LayerManager : ScriptableObject, ISerializationCallbackReceiver
 {
 	public enum Layer
 	{ 
@@ -22,6 +22,8 @@ public class LayerManager : ScriptableObject
 		PlayerInvulnerable = 13,
 		Enemy = 16,
 		EnemyInvulnerable = 17,
+		EnemyFlying = 18,
+		EnemyFlyingInvulnerable = 19,
 		Detection = 20,
 		GroundDamaging = 21,
 		WallJumpable = 22,
@@ -31,18 +33,211 @@ public class LayerManager : ScriptableObject
 		Collectible = 28,
 		Editor = 31
 	}
+	public enum Tag
+	{
+		None,
+		EditorOnly,
+		Player,
+		Enemy,
+		EnemyFlying,
+		Detection,
+		Ground,
+		Passable,
+		PassablePlayer,
+		Collectible,
+		WallJumpable,
+		GroundDamaging,
+		GroundDroppable,
+		Breakable,
+		BreakableExplode,
+		Slope,
+	}
+	
+	[Serializable] public struct LayerMaskInput
+	{
+		public int value;
 
-	[SerializeField]
-	public bool[] collisionMatrix = new bool[32 * 32];
+		public static implicit operator LayerMask(LayerMaskInput m) => m.value;
+		public static implicit operator int(LayerMaskInput m) => m.value;
+	}
+
+	private int[] collisionMatrixBackup = new int[0];
+	public void installCollisionMatrix()
+	{
+		if (collisionMatrixBackup.Length == 0)
+		{
+			collisionMatrixBackup = new int[32];
+			for (int i = 0; i < 32; i++)
+				collisionMatrixBackup[i] = Physics2D.GetLayerCollisionMask(i);
+		}
+
+		for (int i = 0; i < 32; i++)
+		{
+			int mask = 0;
+			for (int j = 0; j < 32; j++)
+				if (collisionMatrix[32 * i + j])
+					mask |= 1 << j;
+
+			Physics2D.SetLayerCollisionMask(i, mask);
+		}
+	}
+	public void uninstallCollisionMatrix()
+	{
+		if (collisionMatrixBackup.Length == 0)
+			return;
+
+		for (int i = 0; i < 32; i++)
+			 Physics2D.SetLayerCollisionMask(i, collisionMatrixBackup[i]);
+
+		collisionMatrixBackup = new int[0];
+	}
+	public void mapTagsToLayers(GameObject gameObject)
+	{
+		Stack<GameObject> objects = new Stack<GameObject>();
+		objects.Push(gameObject);
+
+		GameObject currentObject;
+		while (objects.TryPop(out currentObject))
+		{
+			currentObject.layer = (int)tagMapping.layer(currentObject.tag);
+
+			if (currentObject.layer == 0 && currentObject != gameObject)
+				currentObject.layer = currentObject.transform.parent.gameObject.layer;
+
+			foreach (Transform child in currentObject.transform)
+				objects.Push(child.gameObject);
+		}
+	}
+
+
+	public class TagMapper
+	{
+		public Tag tag(string name)
+		{
+			if (nameToTag.ContainsKey(name))
+				return nameToTag[name];
+			else
+				return Tag.None;
+		}
+		public Layer layer(string name)
+		{
+			if (nameToTag.ContainsKey(name))
+				return tagToLayer[(int)nameToTag[name]];
+			else
+				return Layer.Default;
+		}
+		public Layer layer(Tag tag)
+		{
+			return tagToLayer[(int)tag];
+		}
+		public string name(Tag tag)
+		{
+			foreach (var pair in nameToTag)
+				if (pair.Value == tag)
+					return pair.Key;
+			return "";
+		}
+
+		public Dictionary<string, Tag> nameToTag = new Dictionary<string, Tag>();
+		public Layer[] tagToLayer = new Layer[Enum.GetValues(typeof(Tag)).Cast<int>().Max() + 1];
+	}
+	[NonSerialized] public TagMapper tagMapping = new TagMapper();
+	[NonSerialized] public bool[] collisionMatrix = new bool[32 * 32];
+
+
+	[Serializable] private struct SerializableTagMappingData
+	{
+		public string name;
+		public Layer layer;
+	}
+	[SerializeField] private SerializableTagMappingData[] serializableTagMapping;
+	[SerializeField] private int[] serializableCollisionMatrix = new int[32];
+
+	public void OnBeforeSerialize()
+	{
+		serializableTagMapping = new SerializableTagMappingData[tagMapping.tagToLayer.Length];
+		for (int i = 0; i < serializableTagMapping.Length; i++)
+			serializableTagMapping[i] = new SerializableTagMappingData { 
+				name = tagMapping.name((Tag)i), layer = tagMapping.layer((Tag)i) 
+			};
+
+		for (int i = 0; i < 32; i++)
+			for (int j = 0; j < 32; j++)
+				if (collisionMatrix[32 * i + j])
+					serializableCollisionMatrix[i] |= 1 << j;
+				else
+					serializableCollisionMatrix[i] &= ~(1 << j);
+	}
+	public void OnAfterDeserialize()
+	{
+		tagMapping.nameToTag.Clear();
+
+		for (int i = 0; i < serializableTagMapping.Length; i++)
+		{
+			tagMapping.tagToLayer[i] = serializableTagMapping[i].layer;
+			if (!tagMapping.nameToTag.ContainsKey(serializableTagMapping[i].name))
+				tagMapping.nameToTag.Add(serializableTagMapping[i].name, (Tag)i);
+		}
+
+		for (int i = 0; i < 32; i++)
+			for (int j = 0; j < 32; j++)
+				collisionMatrix[32 * i + j] = (serializableCollisionMatrix[i] & (1 << j)) != 0;
+	}
 }
 
+
+[CustomPropertyDrawer(typeof(LayerManager.LayerMaskInput))]
+public class LayerMaskDrawer : PropertyDrawer
+{
+	private enum LayerMaskEnum
+	{
+		Default = 1 << 0,
+		TransparentFX = 1 << 1,
+		IgnoreRaycast = 1 << 2,
+		Water = 1 << 4,
+		UI = 1 << 5,
+		Ground = 1 << 8,
+		PlatformPassable = 1 << 9,
+		PlayerPlatformPassable = 1 << 10,
+		Player = 1 << 12,
+		PlayerInvulnerable = 1 << 13,
+		Enemy = 1 << 16,
+		EnemyInvulnerable = 1 << 17,
+		EnemyFlying = 1 << 18,
+		EnemyFlyingInvulnerable = 1 << 19,
+		Detection = 1 << 20,
+		GroundDamaging = 1 << 21,
+		WallJumpable = 1 << 22,
+		GroundDroppable = 1 << 23,
+		GroundBreakable = 1 << 24,
+		Slope = 1 << 25,
+		Collectible = 1 << 28,
+		Editor = 1 << 31
+	}
+
+	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+	{
+		string name = property.displayName;
+		property.Next(true);
+
+		var newMask = (int)(LayerMaskEnum)EditorGUI.EnumFlagsField(
+			position, name, (LayerMaskEnum)property.intValue);
+
+		if (property.intValue != newMask)
+		{
+			property.intValue = newMask;
+			property.serializedObject.ApplyModifiedProperties();
+		}
+	}
+}
 
 [CustomEditor(typeof(LayerManager))]
 public class LayerManagerEditor : Editor
 {
-	LayerManager manager;
+	private LayerManager manager;
 
 	private static Type layerType { get { return typeof(LayerManager.Layer); } }
+	private static Type tagType { get { return typeof(LayerManager.Tag); } }
 	private static class Styles
 	{
 		public static GUIStyle window
@@ -96,9 +291,10 @@ public class LayerManagerEditor : Editor
 				Styles.layerLabel.Add(new GUIContent(Styles.SeparateCammelCase(Enum.GetName(layerType, i))));
 	}
 	
-	bool showLayers = false;
-	bool showCollisionMatrix = false;
-	Vector2 scrollCollisionMatrix = Vector2.zero;
+	private static bool showLayers = false;
+	private static bool showTagMappings = false;
+	private static bool showCollisionMatrix = false;
+	private static Vector2 scrollCollisionMatrix = Vector2.zero;
 
 	private void InspectorLayers()
 	{
@@ -122,7 +318,49 @@ public class LayerManagerEditor : Editor
 		EditorGUILayout.EndFoldoutHeaderGroup();
 	}
 
-	private void InspectorCollisionMatrix()
+	private void InspectorTagMappings(ref bool dirty)
+	{
+		showTagMappings = EditorGUILayout.BeginFoldoutHeaderGroup(showTagMappings, "Tag Mappings");
+		if (showTagMappings)
+		{
+			EditorGUILayout.BeginVertical(Styles.window);
+
+			foreach (LayerManager.Tag tag in Enum.GetValues(tagType))
+			{
+				var name = manager.tagMapping.name(tag);
+				var layer = manager.tagMapping.layer(tag);
+
+				EditorGUILayout.BeginHorizontal();
+
+
+				EditorGUI.BeginDisabledGroup(true);
+				EditorGUILayout.TextField(Styles.SeparateCammelCase(Enum.GetName(tagType, tag)));
+				EditorGUI.EndDisabledGroup();
+
+				var newName = EditorGUILayout.TagField(name);
+				var newLayer = (LayerManager.Layer)EditorGUILayout.EnumPopup(layer);
+
+				EditorGUILayout.EndHorizontal();
+
+				if (layer != newLayer)
+				{
+					manager.tagMapping.tagToLayer[(int)tag] = newLayer;
+					dirty = true;
+				}
+				if (name != newName)
+				{
+					manager.tagMapping.nameToTag.Remove(name);
+					manager.tagMapping.nameToTag[newName] = tag;
+					dirty = true;
+				}
+			}
+
+			EditorGUILayout.EndVertical();
+		}
+		EditorGUILayout.EndFoldoutHeaderGroup();
+	}
+
+	private void InspectorCollisionMatrix(ref bool dirty)
 	{
 		showCollisionMatrix = EditorGUILayout.BeginFoldoutHeaderGroup(showCollisionMatrix, "Collision Matrix");
 		if (showCollisionMatrix)
@@ -175,6 +413,7 @@ public class LayerManagerEditor : Editor
 							{
 								manager.collisionMatrix[i * 32 + j] = collision;
 								manager.collisionMatrix[j * 32 + i] = collision;
+								dirty = true;
 							}
 
 							currentRect.position = new Vector2(
@@ -190,8 +429,14 @@ public class LayerManagerEditor : Editor
 	
 	public override void OnInspectorGUI()
 	{
+		bool dirty = false;
+
 		InspectorLayers();
-		InspectorCollisionMatrix();
+		InspectorTagMappings(ref dirty);
+		InspectorCollisionMatrix(ref dirty);
+
+		if (dirty)
+			EditorUtility.SetDirty(manager);
 	}
 
 }

@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Bunny Chase
   m_EditorClassIdentifier: 
   targetLayers:
-    serializedVersion: 2
-    m_Bits: 12288
+    value: 12288
   obstructLayers:
-    serializedVersion: 2
-    m_Bits: 768
+    value: 768
   maxDistance: 20
   minDistance: 3
+  determinationTime: 6

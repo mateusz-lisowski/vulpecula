@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 308361091081015905}
   - component: {fileID: 4532352890291527368}
   - component: {fileID: 1068291418730209859}
-  m_Layer: 1
+  m_Layer: 0
   m_Name: Break Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}

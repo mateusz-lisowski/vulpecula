@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 3640888242353900506}
   - component: {fileID: 6020743277163612326}
   - component: {fileID: 1634662194067445727}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Roar
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,9 +110,9 @@ GameObject:
   - component: {fileID: 4846482311299018571}
   - component: {fileID: 4615439821049667569}
   - component: {fileID: 9203199264713230724}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: bear
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -303,9 +303,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4426760888118494808}
   - component: {fileID: 6872886466931054267}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Ground Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -380,9 +380,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6006811781466966336}
   - component: {fileID: 1766377922914385240}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Wall Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -460,7 +460,7 @@ GameObject:
   - component: {fileID: 6426440952860175011}
   - component: {fileID: 5585957623948579603}
   - component: {fileID: 1737283858026289727}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -617,7 +617,7 @@ GameObject:
   - component: {fileID: 4017531919156685666}
   - component: {fileID: 4304962064406298219}
   - component: {fileID: 3156062769000397221}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -720,9 +720,9 @@ GameObject:
   - component: {fileID: 9070286609925223309}
   - component: {fileID: 917166117585792264}
   - component: {fileID: 1209210810689822924}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Attack
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -811,9 +811,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8925054836924469842}
   - component: {fileID: 3162293762834622434}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Fall Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

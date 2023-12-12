@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Dragon Chase
   m_EditorClassIdentifier: 
   targetLayers:
-    serializedVersion: 2
-    m_Bits: 12288
+    value: 12288
   obstructLayers:
-    serializedVersion: 2
-    m_Bits: 256
+    value: 256
   maxDistance: 30
   minDistance: 1
+  determinationTime: 6

@@ -4,7 +4,7 @@ using UnityEngine;
 public class FlyBehaviorData : ScriptableObject
 {
 	[Tooltip("Layers to fly away from")]
-	public LayerMask avoidLayers;
+	public LayerManager.LayerMaskInput avoidLayers;
 
 	[Space(10)]
 

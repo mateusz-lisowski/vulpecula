@@ -12,3 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d241151739e5a704bbc090ad42aa6a0b, type: 3}
   m_Name: Layer Data
   m_EditorClassIdentifier: 
+  serializableTagMapping:
+  - name: Untagged
+    layer: 0
+  - name: EditorOnly
+    layer: 31
+  - name: Player
+    layer: 12
+  - name: Enemy
+    layer: 16
+  - name: Enemy Flying
+    layer: 18
+  - name: Detection
+    layer: 20
+  - name: Ground
+    layer: 8
+  - name: Passable
+    layer: 9
+  - name: Passable Player
+    layer: 10
+  - name: Collectible
+    layer: 28
+  - name: Wall Jumpable
+    layer: 22
+  - name: Ground Damaging
+    layer: 21
+  - name: Ground Droppable
+    layer: 23
+  - name: Breakable
+    layer: 24
+  - name: Breakable Explode
+    layer: 24
+  - name: Slope
+    layer: 25
+  serializableCollisionMatrix: 050000000000000005330f000000000000300f00000000000000000000000000043313000433130000301000000000001407f0111407f0110000000000000000140310001403100014001000140010000037ef030030100000301000003010000030100000001000000000000000000000300000000000000000000000000000

@@ -11,9 +11,9 @@ public class MeleeAttackBehaviorData : ScriptableObject
 	[Space(10)]
 
 	[Tooltip("Layers that can provoke an attack")]
-	public LayerMask provokeLayers;
+	public LayerManager.LayerMaskInput provokeLayers;
 	[Tooltip("Layers that can be hit by an attack")]
-	public LayerMask hitLayers;
+	public LayerManager.LayerMaskInput hitLayers;
 	[Tooltip("Object to instantiate on an attack")]
 	public GameObject attackPrefab;
 

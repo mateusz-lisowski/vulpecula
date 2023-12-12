@@ -6,7 +6,7 @@ public class TerrainData : ScriptableObject
 	[System.Serializable] public struct GroundDropping
 	{
 		[Tooltip("Layers that prevent ground respawn")]
-		public LayerMask collidingLayers;
+		public LayerManager.LayerMaskInput collidingLayers;
 		[Tooltip("Time before droppable platform breaks")]
 		public float shakeTime;
 		[Tooltip("Time needed for ground to respawn")]
@@ -24,7 +24,7 @@ public class TerrainData : ScriptableObject
 	[System.Serializable] public struct GroundBreaking
 	{
 		[Tooltip("Layers that prevent ground respawn")]
-		public LayerMask collidingLayers;
+		public LayerManager.LayerMaskInput collidingLayers;
 		[Tooltip("Time needed for ground to respawn")]
 		public float respawnTime;
 

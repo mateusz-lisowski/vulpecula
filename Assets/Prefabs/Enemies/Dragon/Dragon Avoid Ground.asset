@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Dragon Avoid Ground
   m_EditorClassIdentifier: 
   avoidLayers:
-    serializedVersion: 2
-    m_Bits: 256
+    value: 256
   strength: 8
   distanceSmall: 1
   distanceBig: 3.5

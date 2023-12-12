@@ -11,7 +11,7 @@ public class RangedAttackBehaviorData : ScriptableObject
 	[Space(10)]
 
 	[Tooltip("Layers that can be hit by an attack")]
-	public LayerMask hitLayers;
+	public LayerManager.LayerMaskInput hitLayers;
 	[Tooltip("Object to instantiate on an attack")]
 	public GameObject attackPrefab;
 

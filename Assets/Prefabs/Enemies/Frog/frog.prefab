@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1642654263003763592}
   - component: {fileID: 7891664456806165166}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,9 +57,9 @@ GameObject:
   - component: {fileID: 3155811580736260116}
   - component: {fileID: 2479392873802536622}
   - component: {fileID: 6561812869863982228}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Attack
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,9 +151,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5125355141331903604}
   - component: {fileID: 5800760633922557919}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Ground Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -236,9 +236,9 @@ GameObject:
   - component: {fileID: -2228746537645460814}
   - component: {fileID: -4449186211063729794}
   - component: {fileID: -7355532693949374735}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: frog
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -257,8 +257,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5798181098646458329}
-  - {fileID: 3155811580736260116}
   - {fileID: 277871995881727760}
+  - {fileID: 3155811580736260116}
   - {fileID: 5125355141331903604}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -427,7 +427,7 @@ GameObject:
   - component: {fileID: 6316168764164656428}
   - component: {fileID: 5096507749377008870}
   - component: {fileID: 970581033973772870}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -578,7 +578,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6201698582145731337}
   - component: {fileID: 1967969097875762484}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -624,7 +624,7 @@ GameObject:
   m_Component:
   - component: {fileID: 277871995881727760}
   - component: {fileID: 4396339692862543349}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +701,7 @@ GameObject:
   m_Component:
   - component: {fileID: 837518697391015584}
   - component: {fileID: 6419831399344480400}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}

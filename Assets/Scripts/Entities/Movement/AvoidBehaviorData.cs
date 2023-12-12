@@ -4,7 +4,7 @@ using UnityEngine;
 public class AvoidBehaviorData : ScriptableObject
 {
 	[Tooltip("Layers to avoid")]
-	public LayerMask avoidLayers;
+	public LayerManager.LayerMaskInput avoidLayers;
 
 	[Space(10)]
 

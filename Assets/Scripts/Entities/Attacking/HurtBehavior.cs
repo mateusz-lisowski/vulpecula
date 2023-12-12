@@ -14,8 +14,6 @@ public class HurtBehavior : EntityBehavior
 	[field: SerializeField, ReadOnly] public int health { get; private set; }
 
 	private FlipBehavior direction;
-	private LayerMask enemyLayer;
-	private LayerMask enemyInvulnerableLayer;
 
 	private HitData hitData = null;
 
@@ -23,15 +21,6 @@ public class HurtBehavior : EntityBehavior
 	public override void onAwake()
 	{
 		direction = controller.getBehavior<FlipBehavior>();
-
-		enemyLayer = LayerMask.NameToLayer("Enemy");
-		enemyInvulnerableLayer = LayerMask.NameToLayer("Enemy Invulnerable");
-
-		if (enemyLayer != gameObject.layer)
-		{
-			enemyLayer = LayerMask.NameToLayer("Enemy Flying");
-			enemyInvulnerableLayer = LayerMask.NameToLayer("Enemy Flying Invulnerable");
-		}
 
 		lastHurtTime = float.PositiveInfinity;
 
@@ -107,7 +96,17 @@ public class HurtBehavior : EntityBehavior
 	}
 	private void setInvulnerability(bool val)
 	{
-		int layer = val ? enemyInvulnerableLayer : enemyLayer;
+		int layer;
+
+		switch (gameObject.layer)
+		{
+			case (int)LayerManager.Layer.EnemyFlying:
+				layer = (int)(val ? LayerManager.Layer.EnemyFlyingInvulnerable : LayerManager.Layer.EnemyFlying);
+				break;
+			default:
+				layer = (int)(val ? LayerManager.Layer.EnemyInvulnerable : LayerManager.Layer.Enemy);
+				break;
+		}
 
 		foreach (Transform child in controller.hitbox)
 			child.gameObject.layer = layer;

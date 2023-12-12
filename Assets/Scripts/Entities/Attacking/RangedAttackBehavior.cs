@@ -84,7 +84,7 @@ public class RangedAttackBehavior : EntityBehavior
 	}
 	private void attackInstantiate(Transform attackTransform)
 	{
-		GameObject currentAttack = Instantiate(data.attackPrefab,
+		GameObject currentAttack = QolUtility.Instantiate(data.attackPrefab,
 			attackTransform.position, attackTransform.rotation, transform);
 
 		currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();

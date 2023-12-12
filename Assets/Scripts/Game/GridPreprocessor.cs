@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -36,7 +35,6 @@ public class GridPreprocessor : MonoBehaviour
 	private Tilemap bounceOnBreakTilemap;
 	private Transform groundDroppingGroup;
 	private Transform groundBreakingGroup;
-	private Transform groundShadowCastingGroup;
 	private Transform enemiesGroup;
 	private Transform collectiblesGroup;
 
@@ -120,7 +118,7 @@ public class GridPreprocessor : MonoBehaviour
 	{
 		if (createTilemap(out slopesTilemap, autogenGroup, "Slope", data.slopes.color))
 		{
-			slopesTilemap.gameObject.layer = LayerMask.NameToLayer("Slope");
+			QolUtility.setTag(slopesTilemap.gameObject, LayerManager.Tag.Slope);
 
 			slopesTilemap.gameObject.SetActive(true);
 		}
@@ -131,8 +129,7 @@ public class GridPreprocessor : MonoBehaviour
 	{
 		if (createTilemap(out bounceOnBreakTilemap, autogenGroup, "Bounce On Break", data.bounceOnBreak.color))
 		{
-			bounceOnBreakTilemap.gameObject.layer = LayerMask.NameToLayer("Ground-Breakable");
-			bounceOnBreakTilemap.tag = "BreakBounce";
+			QolUtility.setTag(bounceOnBreakTilemap.gameObject, LayerManager.Tag.BreakableExplode);
 
 			GroundBreakingController controller = bounceOnBreakTilemap.AddComponent<GroundBreakingController>();
 			controller.data = data.terrainData;

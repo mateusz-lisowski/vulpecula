@@ -3,7 +3,10 @@ guid: c904273fd31da9d4da09bf53536dbd7e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - runtimeDataInstance: {instanceID: 0}
+  - effectsInstance: {fileID: 11400000, guid: a84de9c7366551148bea97a7f6350a9a, type: 2}
+  - layerManager: {fileID: 11400000, guid: e7b8b3f3d4d5f6445946bb4a1d1c1e12, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

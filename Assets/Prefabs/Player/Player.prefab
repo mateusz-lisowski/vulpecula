@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2697825214369746921}
   - component: {fileID: 4891264046935432204}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Forward Air
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,9 +57,9 @@ GameObject:
   - component: {fileID: 9069406933905661333}
   - component: {fileID: 418712233900573136}
   - component: {fileID: 8097520147870503578}
-  m_Layer: 1
+  m_Layer: 0
   m_Name: Dash Trail
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -229,9 +229,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2188919946705559147}
   - component: {fileID: 4431464414825281603}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Wall Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -305,9 +305,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5470671596442281111}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Attack
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -341,9 +341,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4003190519705964510}
   - component: {fileID: 8694989105001187256}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Ground Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -418,9 +418,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1242777753836099041}
   - component: {fileID: 2484487255520938033}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Forward
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -464,9 +464,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1092172617215121164}
   - component: {fileID: 4346458289546140473}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Forward Strong
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -510,7 +510,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7071415583164569986}
   - component: {fileID: 5585025896100651302}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Torso
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -587,9 +587,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6979564297770308376}
   - component: {fileID: 6080039275774513190}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Down
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -633,7 +633,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4206373446299396839}
   - component: {fileID: 2632581244443578782}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Legs
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -704,7 +704,7 @@ GameObject:
   - component: {fileID: 7855963956060272660}
   - component: {fileID: 7745948289286802684}
   - component: {fileID: 5465061390922904559}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -867,9 +867,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8046565173484584860}
   - component: {fileID: 3950854042253518385}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Slope Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -933,9 +933,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2343478288898875487}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Hitbox
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -967,9 +967,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6078022760842014294}
   - component: {fileID: 9085387035526218212}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Within Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1047,9 +1047,9 @@ GameObject:
   - component: {fileID: 581019160695041272}
   - component: {fileID: 7967206446167475440}
   - component: {fileID: 7414998402016230667}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Sprite
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1218,9 +1218,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6621236938980059075}
   - component: {fileID: 136316937756862674}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Passing Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

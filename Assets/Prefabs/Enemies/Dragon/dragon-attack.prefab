@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8339096072637330580}
   - component: {fileID: 2418407608918720950}
   - component: {fileID: 6097104743701127665}
-  m_Layer: 1
+  m_Layer: 0
   m_Name: dragon-attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,9 +99,9 @@ GameObject:
   - component: {fileID: 8848779873147501475}
   - component: {fileID: 7106438096912716168}
   - component: {fileID: 234013075986561072}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Hitbox
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 3102756872334370042}
   - component: {fileID: 1618957469645852917}
   - component: {fileID: 2719793696838670561}
-  m_Layer: 1
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 3957675821912538696}
   - component: {fileID: 3003242368926319878}
   - component: {fileID: 5255463866674577618}
-  m_Layer: 1
+  m_Layer: 0
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

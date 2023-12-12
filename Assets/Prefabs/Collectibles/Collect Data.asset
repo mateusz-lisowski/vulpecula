@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: Collect Data
   m_EditorClassIdentifier: 
   collectingLayers:
-    serializedVersion: 2
-    m_Bits: 12288
+    value: 12288

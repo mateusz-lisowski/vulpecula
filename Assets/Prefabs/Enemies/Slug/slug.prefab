@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1823659053987704645}
   - component: {fileID: 2397905738124325138}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Ground Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,9 +87,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7226291453236989273}
   - component: {fileID: 400382455265139459}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Fall Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,7 +164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1161937158606599100}
   - component: {fileID: 4028986288796907911}
-  m_Layer: 17
+  m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,9 +236,9 @@ GameObject:
   - component: {fileID: -2336596898302992064}
   - component: {fileID: 3673337748574421983}
   - component: {fileID: 5803961606106945468}
-  m_Layer: 17
+  m_Layer: 0
   m_Name: slug
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -379,9 +379,9 @@ GameObject:
   m_Component:
   - component: {fileID: 319667961094765303}
   - component: {fileID: 7364522056575562150}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Wall Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -459,7 +459,7 @@ GameObject:
   - component: {fileID: 347191726378668002}
   - component: {fileID: 6092477958415072482}
   - component: {fileID: 7893073195133319073}
-  m_Layer: 17
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

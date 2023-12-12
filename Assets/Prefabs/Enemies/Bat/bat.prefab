@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2787628816381798416}
   - component: {fileID: 4669360722883422849}
-  m_Layer: 18
+  m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 2307098623284714275}
   - component: {fileID: 1535092000149799339}
   - component: {fileID: 3788567222075516214}
-  m_Layer: 18
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,9 +242,9 @@ GameObject:
   - component: {fileID: 7896816204720726917}
   - component: {fileID: 3983134536804366728}
   - component: {fileID: 1891483724572851601}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Attack
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -341,9 +341,9 @@ GameObject:
   - component: {fileID: 6586535848505891476}
   - component: {fileID: 3252465057023649082}
   - component: {fileID: -7620087905939716521}
-  m_Layer: 18
+  m_Layer: 0
   m_Name: bat
-  m_TagString: Untagged
+  m_TagString: Enemy Flying
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

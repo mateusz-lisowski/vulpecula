@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4750702366738759334}
   - component: {fileID: 6907050958584456934}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,9 +84,9 @@ GameObject:
   - component: {fileID: 6117020772506448074}
   - component: {fileID: 4166851228994670503}
   - component: {fileID: 6314607325405711325}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: pig
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -257,9 +257,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2669229480847899964}
   - component: {fileID: 5737880956009919875}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Ground Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -334,9 +334,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9041976028202437825}
   - component: {fileID: 8547301872942223977}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Fall Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -414,7 +414,7 @@ GameObject:
   - component: {fileID: 1809657954902994471}
   - component: {fileID: 1729906665454975679}
   - component: {fileID: 3733172564904939717}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -566,9 +566,9 @@ GameObject:
   - component: {fileID: 5216733286932967786}
   - component: {fileID: 1533992438684531747}
   - component: {fileID: 2549594033856648059}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Attack
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -657,9 +657,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2206275383897797304}
   - component: {fileID: 6327330540574072490}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Wall Check
-  m_TagString: Untagged
+  m_TagString: Detection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

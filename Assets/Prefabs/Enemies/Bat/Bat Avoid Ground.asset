@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Bat Avoid Ground
   m_EditorClassIdentifier: 
   avoidLayers:
-    serializedVersion: 2
-    m_Bits: 256
+    value: 256
   strength: 5
   distanceSmall: 2
   distanceBig: 3.5

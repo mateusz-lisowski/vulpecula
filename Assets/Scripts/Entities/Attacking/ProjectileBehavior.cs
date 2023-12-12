@@ -122,7 +122,7 @@ public class ProjectileBehavior : EntityBehavior
 		hit.bounds = hitbox.bounds;
 		hit.strength = strength;
 		hit.isVertical = isVertical;
-		hit.bounce = contacts.Any(c => c.tag == "BreakBounce");
+		hit.bounce = contacts.Any(c => c.tag == "Breakable Explode");
 
 		if (hitCallback != null)
 			hitCallback(hit);

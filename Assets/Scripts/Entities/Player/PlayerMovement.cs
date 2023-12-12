@@ -51,8 +51,6 @@ public class PlayerMovement : EntityBehavior
     private Collider2D passingCheck;
     private Collider2D withinCheck;
 
-	private LayerMask playerLayer;
-	private LayerMask playerInvulnerableLayer;
 	private LayerMask currentGroundLayers;
 
 	private HitData hitData = null;
@@ -79,8 +77,6 @@ public class PlayerMovement : EntityBehavior
 		passingCheck = transform.Find("Passing Check").GetComponent<Collider2D>();
 		withinCheck = transform.Find("Within Check").GetComponent<Collider2D>();
 
-		playerLayer = LayerMask.NameToLayer("Player");
-		playerInvulnerableLayer = LayerMask.NameToLayer("Player Invulnerable");
 		currentGroundLayers = data.run.groundLayers;
 
 		isFacingRight = true;
@@ -282,7 +278,7 @@ public class PlayerMovement : EntityBehavior
 	{
 		isInvulnerable = val;
 
-		int layer = val ? playerInvulnerableLayer : playerLayer;
+		int layer = (int)(val ? LayerManager.Layer.PlayerInvulnerable : LayerManager.Layer.Player);
 
 		foreach (Transform child in controller.hitbox)
 			child.gameObject.layer = layer;
@@ -536,8 +532,8 @@ public class PlayerMovement : EntityBehavior
 	private void setPassable(bool val)
 	{
 		passingLayersDisabled = val;
-		int mask = Physics2D.GetLayerCollisionMask(playerLayer);
-		int maskInv = Physics2D.GetLayerCollisionMask(playerInvulnerableLayer);
+		int mask = Physics2D.GetLayerCollisionMask((int)LayerManager.Layer.Player);
+		int maskInv = Physics2D.GetLayerCollisionMask((int)LayerManager.Layer.PlayerInvulnerable);
 
 		if (!passingLayersDisabled)
 		{
@@ -552,8 +548,8 @@ public class PlayerMovement : EntityBehavior
 			currentGroundLayers &= ~data.platformPassing.layers;
 		}
 
-		Physics2D.SetLayerCollisionMask(playerLayer, mask);
-		Physics2D.SetLayerCollisionMask(playerInvulnerableLayer, maskInv);
+		Physics2D.SetLayerCollisionMask((int)LayerManager.Layer.Player, mask);
+		Physics2D.SetLayerCollisionMask((int)LayerManager.Layer.PlayerInvulnerable, maskInv);
 	}
 	private void updatePass()
 	{
