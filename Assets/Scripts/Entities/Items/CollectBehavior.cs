@@ -21,7 +21,7 @@ public class CollectBehavior : EntityBehavior
 
 	public override void onAwake()
 	{
-		collectCheck = transform.Find("CollectCheck").GetComponent<Collider2D>();
+		collectCheck = transform.Find("Detection/Collect").GetComponent<Collider2D>();
 	}
 	public override void onStart()
 	{

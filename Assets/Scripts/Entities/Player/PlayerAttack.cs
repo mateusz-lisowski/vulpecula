@@ -20,7 +20,6 @@ public class PlayerAttack : EntityBehavior
 	private PlayerMovement movement;
 	private PlayerData data;
 
-	private Transform attackTransform;
 	private Transform attackForwardTransform;
 	private Transform attackForwardStrongTransform;
 	private Transform attackForwardAirTransform;
@@ -35,11 +34,10 @@ public class PlayerAttack : EntityBehavior
 		movement = controller.getBehavior<PlayerMovement>();
 		data = movement.data;
 
-		attackTransform = transform.Find("Attack");
-		attackForwardTransform = attackTransform.Find("Forward");
-		attackForwardStrongTransform = attackTransform.Find("Forward Strong");
-		attackForwardAirTransform = attackTransform.Find("Forward Air");
-		attackDownTransform = attackTransform.Find("Down");
+		attackForwardTransform = transform.Find("Attack/Forward");
+		attackForwardStrongTransform = transform.Find("Attack/Forward Strong");
+		attackForwardAirTransform = transform.Find("Attack/Forward Air");
+		attackDownTransform = transform.Find("Attack/Down");
 
 		lastAttackInputTime = float.PositiveInfinity;
 		lastAttackTime = float.PositiveInfinity;

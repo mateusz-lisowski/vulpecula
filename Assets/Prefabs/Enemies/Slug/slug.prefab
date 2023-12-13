@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1823659053987704645}
   - component: {fileID: 2397905738124325138}
   m_Layer: 0
-  m_Name: Ground Check
-  m_TagString: Detection
+  m_Name: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: -0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3853070327677240971}
+  m_Father: {fileID: 1394325853030639911}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &2397905738124325138
 BoxCollider2D:
@@ -88,8 +88,8 @@ GameObject:
   - component: {fileID: 7226291453236989273}
   - component: {fileID: 400382455265139459}
   m_Layer: 0
-  m_Name: Fall Check
-  m_TagString: Detection
+  m_Name: Fall
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +107,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3853070327677240971}
+  m_Father: {fileID: 1394325853030639911}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &400382455265139459
 BoxCollider2D:
@@ -258,9 +258,7 @@ Transform:
   m_Children:
   - {fileID: 2063674265990691563}
   - {fileID: 1161937158606599100}
-  - {fileID: 1823659053987704645}
-  - {fileID: 319667961094765303}
-  - {fileID: 7226291453236989273}
+  - {fileID: 1394325853030639911}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &164482286500472992
@@ -369,6 +367,40 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: ca8e01ae28ff7ac4fab2a8ce1db01bfd, type: 2}
   <isFacingWall>k__BackingField: 0
   <isNoGroundAhead>k__BackingField: 0
+--- !u!1 &7339668243469404634
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1394325853030639911}
+  m_Layer: 0
+  m_Name: Detection
+  m_TagString: Detection
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1394325853030639911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7339668243469404634}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1823659053987704645}
+  - {fileID: 319667961094765303}
+  - {fileID: 7226291453236989273}
+  m_Father: {fileID: 3853070327677240971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8173101486877777392
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,8 +412,8 @@ GameObject:
   - component: {fileID: 319667961094765303}
   - component: {fileID: 7364522056575562150}
   m_Layer: 0
-  m_Name: Wall Check
-  m_TagString: Detection
+  m_Name: Wall
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -399,7 +431,7 @@ Transform:
   m_LocalScale: {x: 0.3, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3853070327677240971}
+  m_Father: {fileID: 1394325853030639911}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &7364522056575562150
 BoxCollider2D:

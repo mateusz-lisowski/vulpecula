@@ -36,7 +36,7 @@ public class GroundedBehavior : EntityBehavior
 
 	public override void onAwake()
 	{
-		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
+		groundCheck = transform.Find("Detection/Ground").GetComponent<Collider2D>();
 	}
 
 	public override void onUpdate()

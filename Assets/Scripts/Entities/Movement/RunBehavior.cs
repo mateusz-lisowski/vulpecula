@@ -21,8 +21,8 @@ public class RunBehavior : EntityBehavior
 		direction = controller.getBehavior<FlipBehavior>();
 		ground = controller.getBehavior<GroundedBehavior>();
 
-		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
-		fallCheck = transform.Find("Fall Check").GetComponent<Collider2D>();
+		wallCheck = transform.Find("Detection/Wall").GetComponent<Collider2D>();
+		fallCheck = transform.Find("Detection/Fall").GetComponent<Collider2D>();
 	}
 
 	public override void onUpdate()

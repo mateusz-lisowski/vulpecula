@@ -46,10 +46,10 @@ public class PlayerMovement : EntityBehavior
 
 
     private Collider2D groundCheck;
-    private Collider2D slopeCheck;
     private Collider2D wallCheck;
-    private Collider2D passingCheck;
+    private Collider2D slopeCheck;
     private Collider2D withinCheck;
+    private Collider2D passingCheck;
 
 	private LayerMask currentGroundLayers;
 
@@ -71,11 +71,11 @@ public class PlayerMovement : EntityBehavior
 
 	public override void onAwake()
 	{
-		groundCheck = transform.Find("Ground Check").GetComponent<Collider2D>();
-		slopeCheck = transform.Find("Slope Check").GetComponent<Collider2D>();
-		wallCheck = transform.Find("Wall Check").GetComponent<Collider2D>();
-		passingCheck = transform.Find("Passing Check").GetComponent<Collider2D>();
-		withinCheck = transform.Find("Within Check").GetComponent<Collider2D>();
+		groundCheck = transform.Find("Detection/Ground").GetComponent<Collider2D>();
+		wallCheck = transform.Find("Detection/Wall").GetComponent<Collider2D>();
+		slopeCheck = transform.Find("Detection/Slope").GetComponent<Collider2D>();
+		withinCheck = transform.Find("Detection/Within").GetComponent<Collider2D>();
+		passingCheck = transform.Find("Detection/Passing").GetComponent<Collider2D>();
 
 		currentGroundLayers = data.run.groundLayers;
 

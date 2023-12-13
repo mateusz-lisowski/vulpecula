@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bear Roar
   m_EditorClassIdentifier: 
   attackInstantiateEventName: roar
-  provokeDetectionName: Roar
+  provokeDetectionName: Attack/Roar
   provokeLayers:
     value: 4096
   hitLayers:
