@@ -327,6 +327,8 @@ public class PlayerMovement : EntityBehavior
 
 		if (isDistressed)
 		{
+			if (isDashing)
+				controller.onEvent("dashFinish", null);
 			isDashing = false;
 			isJumping = false;
 			isGrounded = false;
