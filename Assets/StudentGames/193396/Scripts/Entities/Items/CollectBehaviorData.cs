@@ -8,6 +8,6 @@ namespace _193396
 		[Space(10)]
 
 		[Tooltip("Layers that can collect")]
-		public LayerManager.LayerMaskInput collectingLayers;
+		public RuntimeSettings.LayerMaskInput collectingLayers;
 	}
 }

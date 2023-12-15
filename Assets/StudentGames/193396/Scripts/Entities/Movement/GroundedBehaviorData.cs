@@ -8,12 +8,12 @@ namespace _193396
 		[Space(10)]
 
 		[Tooltip("Layers that can be run on")]
-		public LayerManager.LayerMaskInput groundLayers;
+		public RuntimeSettings.LayerMaskInput groundLayers;
 		[Tooltip("Layers that trigger flip")]
-		public LayerManager.LayerMaskInput wallLayers;
+		public RuntimeSettings.LayerMaskInput wallLayers;
 		[Tooltip("Layers that can be passed through")]
-		public LayerManager.LayerMaskInput passingLayers;
+		public RuntimeSettings.LayerMaskInput passingLayers;
 		[Tooltip("Layer detecting whether ground is a slope")]
-		public LayerManager.LayerMaskInput slopeLayer;
+		public RuntimeSettings.LayerMaskInput slopeLayer;
 	}
 }

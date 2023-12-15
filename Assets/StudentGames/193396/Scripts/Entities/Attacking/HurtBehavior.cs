@@ -102,11 +102,11 @@ namespace _193396
 
 			switch (gameObject.layer)
 			{
-				case (int)LayerManager.Layer.EnemyFlying:
-					layer = (int)(val ? LayerManager.Layer.EnemyFlyingInvulnerable : LayerManager.Layer.EnemyFlying);
+				case (int)RuntimeSettings.Layer.EnemyFlying:
+					layer = (int)(val ? RuntimeSettings.Layer.EnemyFlyingInvulnerable : RuntimeSettings.Layer.EnemyFlying);
 					break;
 				default:
-					layer = (int)(val ? LayerManager.Layer.EnemyInvulnerable : LayerManager.Layer.Enemy);
+					layer = (int)(val ? RuntimeSettings.Layer.EnemyInvulnerable : RuntimeSettings.Layer.Enemy);
 					break;
 			}
 

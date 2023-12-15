@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d241151739e5a704bbc090ad42aa6a0b, type: 3}
-  m_Name: Layer Data
+  m_Name: Runtime Data
   m_EditorClassIdentifier: 
+  serializablePhysics:
+    gravity: -30
   serializableTagMapping:
   - name: Untagged
     layer: 0

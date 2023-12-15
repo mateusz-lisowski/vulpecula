@@ -8,12 +8,12 @@ namespace _193396
 {
 	public static class QolUtility
 	{
-		public static void setTag(GameObject target, LayerManager.Tag tag)
+		public static void setTag(GameObject target, RuntimeSettings.Tag tag)
 		{
-			LayerManager layerManager = GameManager.instance.layerManager;
+			RuntimeSettings runtimeSettings = GameManager.instance.runtimeSettings;
 
-			target.tag = layerManager.tagMapping.name(tag);
-			layerManager.mapTagsToLayers(target);
+			target.tag = runtimeSettings.tagMapping.name(tag);
+			runtimeSettings.mapTagsToLayers(target);
 		}
 
 		public static bool createIfNotExist(out Transform target, Transform parent, string name)
@@ -53,7 +53,7 @@ namespace _193396
 			{
 #endif
 				gameObject = Object.Instantiate<GameObject>(prefab, parent);
-				GameManager.instance.layerManager.mapTagsToLayers(gameObject);
+				GameManager.instance.runtimeSettings.mapTagsToLayers(gameObject);
 #if UNITY_EDITOR
 			}
 			else
@@ -72,7 +72,7 @@ namespace _193396
 			{
 #endif
 				gameObject = Object.Instantiate<GameObject>(prefab, position, rotation, parent);
-				GameManager.instance.layerManager.mapTagsToLayers(gameObject);
+				GameManager.instance.runtimeSettings.mapTagsToLayers(gameObject);
 #if UNITY_EDITOR
 			}
 			else

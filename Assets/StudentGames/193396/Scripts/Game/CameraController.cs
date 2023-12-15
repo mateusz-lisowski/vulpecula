@@ -4,7 +4,7 @@ namespace _193396
 {
 	public class CameraController : MonoBehaviour
 	{
-		public LayerManager.LayerMaskInput hiddenLayers;
+		public RuntimeSettings.LayerMaskInput hiddenLayers;
 
 		public Transform target;
 		public PolygonCollider2D boundary;

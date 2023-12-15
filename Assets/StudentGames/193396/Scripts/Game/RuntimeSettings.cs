@@ -8,7 +8,7 @@ using UnityEngine;
 namespace _193396
 {
 	[CreateAssetMenu(menuName = "Data/Layers")]
-	public class LayerManager : ScriptableObject, ISerializationCallbackReceiver
+	public class RuntimeSettings : ScriptableObject, ISerializationCallbackReceiver
 	{
 		public enum Layer
 		{
@@ -64,14 +64,24 @@ namespace _193396
 			public static implicit operator int(LayerMaskInput m) => m.value;
 		}
 
-		private int[] collisionMatrixBackup = new int[0];
-		public void installCollisionMatrix()
+		public struct PhysicsSettings
 		{
-			if (collisionMatrixBackup.Length == 0)
+			public Vector2 gravity;
+		}
+
+		private bool installed = false;
+		private int[] collisionMatrixBackup = new int[32];
+		private PhysicsSettings physicsBackup;
+		public void install()
+		{
+			if (!installed)
 			{
-				collisionMatrixBackup = new int[32];
+				installed = true;
+
 				for (int i = 0; i < 32; i++)
 					collisionMatrixBackup[i] = Physics2D.GetLayerCollisionMask(i);
+
+				physicsBackup.gravity = Physics2D.gravity;
 			}
 
 			for (int i = 0; i < 32; i++)
@@ -83,16 +93,19 @@ namespace _193396
 
 				Physics2D.SetLayerCollisionMask(i, mask);
 			}
+
+			Physics2D.gravity = physics.gravity;
 		}
-		public void uninstallCollisionMatrix()
+		public void uninstall()
 		{
-			if (collisionMatrixBackup.Length == 0)
+			if (!installed)
 				return;
+			installed = false;
 
 			for (int i = 0; i < 32; i++)
 				Physics2D.SetLayerCollisionMask(i, collisionMatrixBackup[i]);
 
-			collisionMatrixBackup = new int[0];
+			Physics2D.gravity = physicsBackup.gravity;
 		}
 		public void mapTagsToLayers(GameObject gameObject)
 		{
@@ -144,21 +157,31 @@ namespace _193396
 			public Dictionary<string, Tag> nameToTag = new Dictionary<string, Tag>();
 			public Layer[] tagToLayer = new Layer[Enum.GetValues(typeof(Tag)).Cast<int>().Max() + 1];
 		}
+		[NonSerialized] public PhysicsSettings physics = new PhysicsSettings();
 		[NonSerialized] public TagMapper tagMapping = new TagMapper();
 		[NonSerialized] public bool[] collisionMatrix = new bool[32 * 32];
 
 
+		[Serializable]
+		private struct SerializablePhysicsSettings
+		{
+			public float gravity;
+		}
 		[Serializable]
 		private struct SerializableTagMappingData
 		{
 			public string name;
 			public Layer layer;
 		}
+		[SerializeField] private SerializablePhysicsSettings serializablePhysics;
 		[SerializeField] private SerializableTagMappingData[] serializableTagMapping;
 		[SerializeField] private int[] serializableCollisionMatrix = new int[32];
 
 		public void OnBeforeSerialize()
 		{
+			serializablePhysics = new SerializablePhysicsSettings();
+			serializablePhysics.gravity = physics.gravity.y;
+
 			serializableTagMapping = new SerializableTagMappingData[tagMapping.tagToLayer.Length];
 			for (int i = 0; i < serializableTagMapping.Length; i++)
 				serializableTagMapping[i] = new SerializableTagMappingData
@@ -176,6 +199,8 @@ namespace _193396
 		}
 		public void OnAfterDeserialize()
 		{
+			physics.gravity = new Vector2(0f, serializablePhysics.gravity);
+
 			tagMapping.nameToTag.Clear();
 
 			for (int i = 0; i < serializableTagMapping.Length; i++)
@@ -192,7 +217,7 @@ namespace _193396
 	}
 
 
-	[CustomPropertyDrawer(typeof(LayerManager.LayerMaskInput))]
+	[CustomPropertyDrawer(typeof(RuntimeSettings.LayerMaskInput))]
 	public class LayerMaskDrawer : PropertyDrawer
 	{
 		private enum LayerMaskEnum
@@ -237,13 +262,13 @@ namespace _193396
 		}
 	}
 
-	[CustomEditor(typeof(LayerManager))]
-	public class LayerManagerEditor : Editor
+	[CustomEditor(typeof(RuntimeSettings))]
+	public class RuntimeSettingsEditor : Editor
 	{
-		private LayerManager manager;
+		private RuntimeSettings manager;
 
-		private static Type layerType { get { return typeof(LayerManager.Layer); } }
-		private static Type tagType { get { return typeof(LayerManager.Tag); } }
+		private static Type layerType { get { return typeof(RuntimeSettings.Layer); } }
+		private static Type tagType { get { return typeof(RuntimeSettings.Tag); } }
 		private static class Styles
 		{
 			public static GUIStyle window
@@ -289,7 +314,7 @@ namespace _193396
 
 		private void OnEnable()
 		{
-			manager = target as LayerManager;
+			manager = target as RuntimeSettings;
 
 			Styles.layerLabel = new List<GUIContent>();
 			for (int i = 0; i < 32; i++)
@@ -297,10 +322,30 @@ namespace _193396
 					Styles.layerLabel.Add(new GUIContent(Styles.SeparateCammelCase(Enum.GetName(layerType, i))));
 		}
 
+		private static bool showPhysics = false;
 		private static bool showLayers = false;
 		private static bool showTagMappings = false;
 		private static bool showCollisionMatrix = false;
 		private static Vector2 scrollCollisionMatrix = Vector2.zero;
+
+		private void InspectorPhysics(ref bool dirty)
+		{
+			showPhysics = EditorGUILayout.BeginFoldoutHeaderGroup(showPhysics, "Physics Settings");
+			if (showPhysics)
+			{
+				EditorGUILayout.BeginVertical(Styles.window);
+
+				float newGravity = EditorGUILayout.FloatField("Gravity", manager.physics.gravity.y);
+				if (newGravity != manager.physics.gravity.y)
+				{
+					manager.physics.gravity.y = newGravity;
+					dirty = true;
+				}
+
+				EditorGUILayout.EndVertical();
+			}
+			EditorGUILayout.EndFoldoutHeaderGroup();
+		}
 
 		private void InspectorLayers()
 		{
@@ -331,7 +376,7 @@ namespace _193396
 			{
 				EditorGUILayout.BeginVertical(Styles.window);
 
-				foreach (LayerManager.Tag tag in Enum.GetValues(tagType))
+				foreach (RuntimeSettings.Tag tag in Enum.GetValues(tagType))
 				{
 					var name = manager.tagMapping.name(tag);
 					var layer = manager.tagMapping.layer(tag);
@@ -344,7 +389,7 @@ namespace _193396
 					EditorGUI.EndDisabledGroup();
 
 					var newName = EditorGUILayout.TagField(name);
-					var newLayer = (LayerManager.Layer)EditorGUILayout.EnumPopup(layer);
+					var newLayer = (RuntimeSettings.Layer)EditorGUILayout.EnumPopup(layer);
 
 					EditorGUILayout.EndHorizontal();
 
@@ -437,6 +482,7 @@ namespace _193396
 		{
 			bool dirty = false;
 
+			InspectorPhysics(ref dirty);
 			InspectorLayers();
 			InspectorTagMappings(ref dirty);
 			InspectorCollisionMatrix(ref dirty);

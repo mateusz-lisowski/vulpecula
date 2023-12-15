@@ -22,9 +22,10 @@ namespace _193396
 			}
 		}
 
+		[HideInInspector]
 		public RuntimeDataManager runtimeDataInstance = null;
 		public Effects effectsInstance;
-		public LayerManager layerManager;
+		public RuntimeSettings runtimeSettings;
 
 		public enum RuntimeGroup { Effects, Enemies, Collectibles, Projectiles, Disinherited }
 		public Dictionary<RuntimeGroup, Transform> runtimeGroup { get; private set; }
@@ -54,10 +55,10 @@ namespace _193396
 				group.Value.parent = runtimeMainGroup;
 
 
-			layerManager.installCollisionMatrix();
+			runtimeSettings.install();
 
 			foreach (GameObject rootObject in SceneManager.GetActiveScene().GetRootGameObjects())
-				layerManager.mapTagsToLayers(rootObject);
+				runtimeSettings.mapTagsToLayers(rootObject);
 		}
 		private void Awake()
 		{
@@ -65,7 +66,7 @@ namespace _193396
 		}
 		private void OnDestroy()
 		{
-			layerManager.uninstallCollisionMatrix();
+			runtimeSettings.uninstall();
 		}
 
 		private void Update()

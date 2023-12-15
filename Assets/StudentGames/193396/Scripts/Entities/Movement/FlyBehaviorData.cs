@@ -6,7 +6,7 @@ namespace _193396
 	public class FlyBehaviorData : ScriptableObject
 	{
 		[Tooltip("Layers to fly away from")]
-		public LayerManager.LayerMaskInput avoidLayers;
+		public RuntimeSettings.LayerMaskInput avoidLayers;
 
 		[Space(10)]
 

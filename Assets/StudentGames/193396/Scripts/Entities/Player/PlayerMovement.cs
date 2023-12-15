@@ -280,7 +280,7 @@ namespace _193396
 		{
 			isInvulnerable = val;
 
-			int layer = (int)(val ? LayerManager.Layer.PlayerInvulnerable : LayerManager.Layer.Player);
+			int layer = (int)(val ? RuntimeSettings.Layer.PlayerInvulnerable : RuntimeSettings.Layer.Player);
 
 			foreach (Transform child in controller.hitbox)
 				child.gameObject.layer = layer;
@@ -536,8 +536,8 @@ namespace _193396
 		private void setPassable(bool val)
 		{
 			passingLayersDisabled = val;
-			int mask = Physics2D.GetLayerCollisionMask((int)LayerManager.Layer.Player);
-			int maskInv = Physics2D.GetLayerCollisionMask((int)LayerManager.Layer.PlayerInvulnerable);
+			int mask = Physics2D.GetLayerCollisionMask((int)RuntimeSettings.Layer.Player);
+			int maskInv = Physics2D.GetLayerCollisionMask((int)RuntimeSettings.Layer.PlayerInvulnerable);
 
 			if (!passingLayersDisabled)
 			{
@@ -552,8 +552,8 @@ namespace _193396
 				currentGroundLayers &= ~data.platformPassing.layers;
 			}
 
-			Physics2D.SetLayerCollisionMask((int)LayerManager.Layer.Player, mask);
-			Physics2D.SetLayerCollisionMask((int)LayerManager.Layer.PlayerInvulnerable, maskInv);
+			Physics2D.SetLayerCollisionMask((int)RuntimeSettings.Layer.Player, mask);
+			Physics2D.SetLayerCollisionMask((int)RuntimeSettings.Layer.PlayerInvulnerable, maskInv);
 		}
 		private void updatePass()
 		{

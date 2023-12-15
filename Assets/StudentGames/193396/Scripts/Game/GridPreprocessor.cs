@@ -121,7 +121,7 @@ namespace _193396
 		{
 			if (createTilemap(out slopesTilemap, autogenGroup, "Slope", data.slopes.color))
 			{
-				QolUtility.setTag(slopesTilemap.gameObject, LayerManager.Tag.Slope);
+				QolUtility.setTag(slopesTilemap.gameObject, RuntimeSettings.Tag.Slope);
 
 				slopesTilemap.gameObject.SetActive(true);
 			}
@@ -132,7 +132,7 @@ namespace _193396
 		{
 			if (createTilemap(out bounceOnBreakTilemap, autogenGroup, "Bounce On Break", data.bounceOnBreak.color))
 			{
-				QolUtility.setTag(bounceOnBreakTilemap.gameObject, LayerManager.Tag.BreakableExplode);
+				QolUtility.setTag(bounceOnBreakTilemap.gameObject, RuntimeSettings.Tag.BreakableExplode);
 
 				GroundBreakingController controller = bounceOnBreakTilemap.AddComponent<GroundBreakingController>();
 				controller.data = data.terrainData;

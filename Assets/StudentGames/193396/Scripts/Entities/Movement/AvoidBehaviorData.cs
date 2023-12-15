@@ -6,7 +6,7 @@ namespace _193396
 	public class AvoidBehaviorData : ScriptableObject
 	{
 		[Tooltip("Layers to avoid")]
-		public LayerManager.LayerMaskInput avoidLayers;
+		public RuntimeSettings.LayerMaskInput avoidLayers;
 
 		[Space(10)]
 

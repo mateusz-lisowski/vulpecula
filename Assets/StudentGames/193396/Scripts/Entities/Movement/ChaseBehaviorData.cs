@@ -6,9 +6,9 @@ namespace _193396
 	public class ChaseBehaviorData : ScriptableObject
 	{
 		[Tooltip("Layers to chase")]
-		public LayerManager.LayerMaskInput targetLayers;
+		public RuntimeSettings.LayerMaskInput targetLayers;
 		[Tooltip("Layers that hide the target")]
-		public LayerManager.LayerMaskInput obstructLayers;
+		public RuntimeSettings.LayerMaskInput obstructLayers;
 
 		[Space(10)]
 
