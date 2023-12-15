@@ -1,51 +1,54 @@
 using UnityEngine;
 
-[RequireComponent(typeof(ChaseBehavior))]
-public class SleepBehavior : EntityBehavior
+namespace _193396
 {
-	public SleepBehaviorData data;
-
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool isSleeping { get; private set; }
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public Vector2 sleepPosition { get; private set; }
-
-	private ChaseBehavior chase;
-
-
-	public override void onAwake()
+	[RequireComponent(typeof(ChaseBehavior))]
+	public class SleepBehavior : EntityBehavior
 	{
-		chase = controller.getBehavior<ChaseBehavior>();
+		public SleepBehaviorData data;
 
-		isSleeping = true;
-	}
-	public override void onStart()
-	{
-		sleepPosition = transform.position;
-	}
+		[field: Space(10)]
+		[field: SerializeField, ReadOnly] public bool isSleeping { get; private set; }
+		[field: Space(10)]
+		[field: SerializeField, ReadOnly] public Vector2 sleepPosition { get; private set; }
 
-	public override void onUpdate()
-	{
-		bool wasSleeping = isSleeping;
+		private ChaseBehavior chase;
 
-		if (chase.isChasing)
-			isSleeping = false;
-		else if (Vector2.Distance(transform.position, sleepPosition) < data.lockInDistance)
+
+		public override void onAwake()
+		{
+			chase = controller.getBehavior<ChaseBehavior>();
+
 			isSleeping = true;
+		}
+		public override void onStart()
+		{
+			sleepPosition = transform.position;
+		}
 
-		if (isSleeping)
-			transform.position = sleepPosition;
+		public override void onUpdate()
+		{
+			bool wasSleeping = isSleeping;
 
-		if (isSleeping != wasSleeping)
+			if (chase.isChasing)
+				isSleeping = false;
+			else if (Vector2.Distance(transform.position, sleepPosition) < data.lockInDistance)
+				isSleeping = true;
+
 			if (isSleeping)
-				controller.onEvent("fellAsleep", null);
-			else
-				controller.onEvent("awoke", null);
-	}
+				transform.position = sleepPosition;
 
-	public override bool onFixedUpdate()
-	{
-		return isSleeping;
-	}
+			if (isSleeping != wasSleeping)
+				if (isSleeping)
+					controller.onEvent("fellAsleep", null);
+				else
+					controller.onEvent("awoke", null);
+		}
 
+		public override bool onFixedUpdate()
+		{
+			return isSleeping;
+		}
+
+	}
 }

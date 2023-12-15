@@ -1,24 +1,27 @@
 using UnityEngine;
 
-public class EntityBehaviorEventOnAnimation : StateMachineBehaviour
+namespace _193396
 {
-	public enum StateType
+	public class EntityBehaviorEventOnAnimation : StateMachineBehaviour
 	{
-		Enter = 0, Exit = 1
-	}
+		public enum StateType
+		{
+			Enter = 0, Exit = 1
+		}
 
-	public StateType type = StateType.Enter;
-	public string eventName;
+		public StateType type = StateType.Enter;
+		public string eventName;
 
-	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	{
-		if (type == StateType.Enter)
-			animator.gameObject.GetComponent<EntityBehaviorEventCaller>().callEvent(eventName);
-	}
+		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+		{
+			if (type == StateType.Enter)
+				animator.gameObject.GetComponent<EntityBehaviorEventCaller>().callEvent(eventName);
+		}
 
-	public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	{
-		if (type == StateType.Exit)
-			animator.gameObject.GetComponent<EntityBehaviorEventCaller>().callEvent(eventName);
+		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+		{
+			if (type == StateType.Exit)
+				animator.gameObject.GetComponent<EntityBehaviorEventCaller>().callEvent(eventName);
+		}
 	}
 }

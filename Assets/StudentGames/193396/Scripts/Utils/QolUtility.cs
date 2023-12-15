@@ -4,90 +4,93 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public static class QolUtility
+namespace _193396
 {
-	public static void setTag(GameObject target, LayerManager.Tag tag)
+	public static class QolUtility
 	{
-		LayerManager layerManager = GameManager.instance.layerManager;
-
-		target.tag = layerManager.tagMapping.name(tag);
-		layerManager.mapTagsToLayers(target);
-	}
-
-	public static bool createIfNotExist(out Transform target, Transform parent, string name)
-	{
-		target = parent.Find(name);
-
-		if (target == null)
+		public static void setTag(GameObject target, LayerManager.Tag tag)
 		{
-			target = new GameObject(name).transform;
-			target.parent = parent;
-			return true;
-		}
-		else
-			return false;
-	}
-	public static bool createIfNotExist(out Transform target, Transform parent, string name, GameObject prefab)
-	{
-		target = parent.Find(name);
+			LayerManager layerManager = GameManager.instance.layerManager;
 
-		if (target == null)
+			target.tag = layerManager.tagMapping.name(tag);
+			layerManager.mapTagsToLayers(target);
+		}
+
+		public static bool createIfNotExist(out Transform target, Transform parent, string name)
 		{
-			target = QolUtility.Instantiate(prefab, parent).transform;
-			target.name = name;
-			target.parent = parent;
-			return true;
-		}
-		else
-			return false;
-	}
+			target = parent.Find(name);
 
-	public static GameObject Instantiate(GameObject prefab, Transform parent)
-    {
-		GameObject gameObject;
+			if (target == null)
+			{
+				target = new GameObject(name).transform;
+				target.parent = parent;
+				return true;
+			}
+			else
+				return false;
+		}
+		public static bool createIfNotExist(out Transform target, Transform parent, string name, GameObject prefab)
+		{
+			target = parent.Find(name);
+
+			if (target == null)
+			{
+				target = QolUtility.Instantiate(prefab, parent).transform;
+				target.name = name;
+				target.parent = parent;
+				return true;
+			}
+			else
+				return false;
+		}
+
+		public static GameObject Instantiate(GameObject prefab, Transform parent)
+		{
+			GameObject gameObject;
 
 #if UNITY_EDITOR
-		if (Application.isPlaying)
-		{
+			if (Application.isPlaying)
+			{
 #endif
-			gameObject = Object.Instantiate<GameObject>(prefab, parent);
-			GameManager.instance.layerManager.mapTagsToLayers(gameObject);
+				gameObject = Object.Instantiate<GameObject>(prefab, parent);
+				GameManager.instance.layerManager.mapTagsToLayers(gameObject);
 #if UNITY_EDITOR
-		}
-		else
-		{
-			gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
-		}
+			}
+			else
+			{
+				gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
+			}
 #endif
-		return gameObject;
-	}
-	public static GameObject Instantiate(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
-	{
-		GameObject gameObject;
+			return gameObject;
+		}
+		public static GameObject Instantiate(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
+		{
+			GameObject gameObject;
 
 #if UNITY_EDITOR
-		if (Application.isPlaying)
-		{
+			if (Application.isPlaying)
+			{
 #endif
-			gameObject = Object.Instantiate<GameObject>(prefab, position, rotation, parent);
-			GameManager.instance.layerManager.mapTagsToLayers(gameObject);
+				gameObject = Object.Instantiate<GameObject>(prefab, position, rotation, parent);
+				GameManager.instance.layerManager.mapTagsToLayers(gameObject);
 #if UNITY_EDITOR
-		}
-		else
-		{
-			gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
-			gameObject.transform.position = position;
-			gameObject.transform.rotation = rotation;
-		}
+			}
+			else
+			{
+				gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
+				gameObject.transform.position = position;
+				gameObject.transform.rotation = rotation;
+			}
 #endif
-		return gameObject;
-	}
+			return gameObject;
+		}
 
-	public static void DestroyExecutableInEditMode(GameObject gameObject)
-	{
-		if (Application.isPlaying)
-			Object.Destroy(gameObject);
-		else
-			Object.DestroyImmediate(gameObject);
+		public static void DestroyExecutableInEditMode(GameObject gameObject)
+		{
+			if (Application.isPlaying)
+				Object.Destroy(gameObject);
+			else
+				Object.DestroyImmediate(gameObject);
+		}
 	}
 }

@@ -1,17 +1,20 @@
 using UnityEngine;
 
-public class EntityBehaviorEventCaller : MonoBehaviour
+namespace _193396
 {
-	public EntityBehaviorController controller;
-
-	public void callEvent(string name)
+	public class EntityBehaviorEventCaller : MonoBehaviour
 	{
-		int separatorIndex = name.IndexOf(':');
+		public EntityBehaviorController controller;
 
-		if (separatorIndex == -1)
-			controller.onEvent(name, null);
-		else
-			controller.onEvent(name.Substring(0, separatorIndex), 
-				name.Substring(separatorIndex + 1, name.Length - separatorIndex - 1));
+		public void callEvent(string name)
+		{
+			int separatorIndex = name.IndexOf(':');
+
+			if (separatorIndex == -1)
+				controller.onEvent(name, null);
+			else
+				controller.onEvent(name.Substring(0, separatorIndex),
+					name.Substring(separatorIndex + 1, name.Length - separatorIndex - 1));
+		}
 	}
 }

@@ -1,52 +1,55 @@
 using UnityEngine;
 
-public class FlipBehavior : EntityBehavior
+namespace _193396
 {
-	public FlipBehaviorData data;
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] public float turnCooldown { get; private set; }
-	[field: Space(10)]
-	[field: SerializeField, ReadOnly] private int lastDisabledUpdate = -1;
-	[field: SerializeField, ReadOnly] private int lastTurnFixedUpdate = -1;
-
-
-	public void disableFlipNextFrame()
+	public class FlipBehavior : EntityBehavior
 	{
-		lastDisabledUpdate = controller.currentUpdate + 1;
-	}
+		public FlipBehaviorData data;
+		[field: Space(10)]
+		[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
+		[field: Space(10)]
+		[field: SerializeField, ReadOnly] public float turnCooldown { get; private set; }
+		[field: Space(10)]
+		[field: SerializeField, ReadOnly] private int lastDisabledUpdate = -1;
+		[field: SerializeField, ReadOnly] private int lastTurnFixedUpdate = -1;
 
-	public void flip()
-	{
-		if (turnCooldown > 0 || lastDisabledUpdate >= controller.currentUpdate)
-			return;
 
-		turnCooldown = data.cooldown;
-		lastTurnFixedUpdate = controller.currentFixedUpdate;
+		public void disableFlipNextFrame()
+		{
+			lastDisabledUpdate = controller.currentUpdate + 1;
+		}
 
-		isFacingRight = !isFacingRight;
-		controller.transform.Rotate(0, 180, 0);
-	}
-	public void faceTowards(Vector2 point)
-	{
-		Vector2 dir = point - (Vector2)transform.position;
+		public void flip()
+		{
+			if (turnCooldown > 0 || lastDisabledUpdate >= controller.currentUpdate)
+				return;
 
-		if ((isFacingRight && dir.x < 0) || (!isFacingRight && dir.x > 0))
-			flip();
-	}
-	public bool isPhysicsNotUpdatedAfterFlip()
-	{
-		return lastTurnFixedUpdate >= controller.currentFixedUpdate - 1;
-	}
+			turnCooldown = data.cooldown;
+			lastTurnFixedUpdate = controller.currentFixedUpdate;
 
-	public override void onStart()
-	{
-		isFacingRight = controller.transform.right.x > 0;
-	}
+			isFacingRight = !isFacingRight;
+			controller.transform.Rotate(0, 180, 0);
+		}
+		public void faceTowards(Vector2 point)
+		{
+			Vector2 dir = point - (Vector2)transform.position;
 
-	public override void onUpdate()
-	{
-		turnCooldown -= Time.deltaTime;
+			if ((isFacingRight && dir.x < 0) || (!isFacingRight && dir.x > 0))
+				flip();
+		}
+		public bool isPhysicsNotUpdatedAfterFlip()
+		{
+			return lastTurnFixedUpdate >= controller.currentFixedUpdate - 1;
+		}
+
+		public override void onStart()
+		{
+			isFacingRight = controller.transform.right.x > 0;
+		}
+
+		public override void onUpdate()
+		{
+			turnCooldown -= Time.deltaTime;
+		}
 	}
 }

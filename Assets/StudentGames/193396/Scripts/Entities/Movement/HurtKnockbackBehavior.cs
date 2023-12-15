@@ -1,44 +1,47 @@
 using UnityEngine;
 
-[RequireComponent(typeof(HurtBehavior))]
-public class HurtKnockbackBehavior : EntityBehavior
+namespace _193396
 {
-	public HurtKnockbackBehaviorData data;
-
-	private HurtBehavior hurt;
-	private GroundedBehavior ground;
-
-
-	public override void onAwake()
+	[RequireComponent(typeof(HurtBehavior))]
+	public class HurtKnockbackBehavior : EntityBehavior
 	{
-		hurt = controller.GetComponent<HurtBehavior>();
-		ground = controller.GetComponent<GroundedBehavior>();
-	}
+		public HurtKnockbackBehaviorData data;
 
-	public override void onUpdate()
-	{
-		if (hurt.lastHurtTime == 0)
+		private HurtBehavior hurt;
+		private GroundedBehavior ground;
+
+
+		public override void onAwake()
 		{
-			float force = data.knockbackForce;
-			if (force > controller.rigidBody.velocity.y)
-			{
-				force -= controller.rigidBody.velocity.y;
-				controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
-			}
+			hurt = controller.GetComponent<HurtBehavior>();
+			ground = controller.GetComponent<GroundedBehavior>();
 		}
 
-		if (ground != null && hurt.isDistressed)
-			ground.disableGroundedThisFrame();
+		public override void onUpdate()
+		{
+			if (hurt.lastHurtTime == 0)
+			{
+				float force = data.knockbackForce;
+				if (force > controller.rigidBody.velocity.y)
+				{
+					force -= controller.rigidBody.velocity.y;
+					controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
+				}
+			}
 
-	}
+			if (ground != null && hurt.isDistressed)
+				ground.disableGroundedThisFrame();
 
-	public override bool onFixedUpdate()
-	{
-		if (!hurt.isDistressed)
-			return false;
+		}
 
-		addSmoothForce(data.knockbackSpeed, 1f, -transform.right);
+		public override bool onFixedUpdate()
+		{
+			if (!hurt.isDistressed)
+				return false;
 
-		return true;
+			addSmoothForce(data.knockbackSpeed, 1f, -transform.right);
+
+			return true;
+		}
 	}
 }

@@ -1,17 +1,18 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEditor;
 
-namespace UnityEditor.Tilemaps
+namespace _193396
 {
 	/// <summary>
 	/// This Brush targets multiple Tilemaps linked through the same GridLayout.
 	/// Use this as an example to edit multiple Tilemaps at once.
 	/// </summary>
 	[CustomGridBrush(true, false, false, "Everything Brush")]
-	public class EverythingBrush : GridBrush
+	public class EverythingBrush : UnityEditor.Tilemaps.GridBrush
 	{
-		internal GridBrush[] gridBrushes;
+		internal UnityEditor.Tilemaps.GridBrush[] gridBrushes;
 		internal GameObject[] brushTargets;
 		private GridLayout cachedGridLayout;
 
@@ -52,10 +53,10 @@ namespace UnityEditor.Tilemaps
 			var tilemaps = gridLayout.gameObject.GetComponentsInChildren<Tilemap>();
 			if (gridBrushes == null || gridBrushes.Length != tilemaps.Length)
 			{
-				gridBrushes = new GridBrush[tilemaps.Length];
+				gridBrushes = new UnityEditor.Tilemaps.GridBrush[tilemaps.Length];
 				for (int i = 0; i < tilemaps.Length; ++i)
 				{
-					gridBrushes[i] = ScriptableObject.CreateInstance<GridBrush>();
+					gridBrushes[i] = ScriptableObject.CreateInstance<UnityEditor.Tilemaps.GridBrush>();
 				}
 			}
 			else
@@ -196,7 +197,7 @@ namespace UnityEditor.Tilemaps
 	/// The Brush Editor for a Layer Brush.
 	/// </summary>
 	[CustomEditor(typeof(EverythingBrush))]
-	public class EverythingBrushEditor : GridBrushEditor
+	public class EverythingBrushEditor : UnityEditor.Tilemaps.GridBrushEditor
 	{
 		public EverythingBrush layerBrush
 		{
@@ -206,7 +207,7 @@ namespace UnityEditor.Tilemaps
 			}
 		}
 
-		private GridBrushEditor[] editors;
+		private UnityEditor.Tilemaps.GridBrushEditor[] editors;
 
 		public override GameObject[] validTargets 
 		{
@@ -222,10 +223,10 @@ namespace UnityEditor.Tilemaps
 				&& (editors == null
 				|| editors.Length != layerBrush.gridBrushes.Length))
 			{
-				editors = new GridBrushEditor[layerBrush.gridBrushes.Length];
+				editors = new UnityEditor.Tilemaps.GridBrushEditor[layerBrush.gridBrushes.Length];
 				for (int i = 0; i < editors.Length; ++i)
 				{
-					editors[i] = Editor.CreateEditor(layerBrush.gridBrushes[i]) as GridBrushEditor;
+					editors[i] = Editor.CreateEditor(layerBrush.gridBrushes[i]) as UnityEditor.Tilemaps.GridBrushEditor;
 				}
 			}
 		}

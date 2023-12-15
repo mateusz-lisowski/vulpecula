@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Tilemaps;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using UnityEditor.Tilemaps;
+using UnityEditor;
 
-namespace UnityEditor
+namespace _193396
 {
 	[CustomGridBrush(true, true, true, "Default Brush")]
 	public class OrderedBrush : GridBrush { }

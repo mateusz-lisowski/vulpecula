@@ -6,9 +6,10 @@ using System.Linq;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEditor;
 using Object = UnityEngine.Object;
 
-namespace UnityEditor
+namespace _193396
 {
 	/// <summary>
 	/// The Editor for a AdvancedRuleTile.

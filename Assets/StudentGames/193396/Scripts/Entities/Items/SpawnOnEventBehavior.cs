@@ -1,20 +1,23 @@
 using UnityEngine;
 
-public class SpawnOnEventBehavior : EntityBehavior
+namespace _193396
 {
-	public SpawnOnEventBehaviorData data;
-
-
-	public override string[] capturableEvents => new string[] { data.eventName };
-	public override void onEvent(string eventName, object eventData)
+	public class SpawnOnEventBehavior : EntityBehavior
 	{
-		if (eventName != data.eventName)
-			return;
+		public SpawnOnEventBehaviorData data;
 
-		foreach (var toSpawn in data.objects)
+
+		public override string[] capturableEvents => new string[] { data.eventName };
+		public override void onEvent(string eventName, object eventData)
 		{
-			QolUtility.Instantiate(toSpawn.prefab, transform.position, Quaternion.identity, 
-				GameManager.instance.runtimeGroup[toSpawn.group]);
+			if (eventName != data.eventName)
+				return;
+
+			foreach (var toSpawn in data.objects)
+			{
+				QolUtility.Instantiate(toSpawn.prefab, transform.position, Quaternion.identity,
+					GameManager.instance.runtimeGroup[toSpawn.group]);
+			}
 		}
 	}
 }

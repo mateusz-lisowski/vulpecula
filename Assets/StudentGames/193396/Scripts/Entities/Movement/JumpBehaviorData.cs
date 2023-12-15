@@ -1,23 +1,26 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Behavior/Jump")]
-public class JumpBehaviorData : ScriptableObject
+namespace _193396
 {
-	[Space(10)]
+	[CreateAssetMenu(menuName = "Data/Behavior/Jump")]
+	public class JumpBehaviorData : ScriptableObject
+	{
+		[Space(10)]
 
-	[Tooltip("Maximum distance that can jump down")]
-	public float maxFall = 3.0f;
+		[Tooltip("Maximum distance that can jump down")]
+		public float maxFall = 3.0f;
 
-	[Tooltip("Height of a longest jump")]
-	public float longHeight = 3.0f;
-	[Tooltip("Speed of a longest jump")]
-	public float longSpeed = 3.0f;
+		[Tooltip("Height of a longest jump")]
+		public float longHeight = 3.0f;
+		[Tooltip("Speed of a longest jump")]
+		public float longSpeed = 3.0f;
 
-	[Tooltip("Height of a shortest jump")]
-	public float shortHeight = 3.0f;
-	[Tooltip("Speed of a shortest jump")]
-	public float shortSpeed = 3.0f;
+		[Tooltip("Height of a shortest jump")]
+		public float shortHeight = 3.0f;
+		[Tooltip("Speed of a shortest jump")]
+		public float shortSpeed = 3.0f;
 
-	[Tooltip("Minimum time between two consecutive jumps")]
-	public float cooldown;
+		[Tooltip("Minimum time between two consecutive jumps")]
+		public float cooldown;
+	}
 }

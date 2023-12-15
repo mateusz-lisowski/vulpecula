@@ -2,45 +2,48 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(ParticleSystem))]
-public class ParticleSystemEventReceiver : EntityEventReceiver
+namespace _193396
 {
-	[Serializable]
-	public class EventTransformer
+	[RequireComponent(typeof(ParticleSystem))]
+	public class ParticleSystemEventReceiver : EntityEventReceiver
 	{
-		public enum Type
+		[Serializable]
+		public class EventTransformer
 		{
-			Play, Stop
+			public enum Type
+			{
+				Play, Stop
+			}
+
+			public string eventName;
+			public string eventData;
+			public Type type;
+		}
+		public EventTransformer[] eventTransformers;
+
+		private ParticleSystem particles;
+
+
+		private void Awake()
+		{
+			particles = transform.GetComponent<ParticleSystem>();
 		}
 
-		public string eventName;
-		public string eventData;
-		public Type type;
-	}
-	public EventTransformer[] eventTransformers;
-
-	private ParticleSystem particles;
-
-
-	private void Awake()
-	{
-		particles = transform.GetComponent<ParticleSystem>();
-	}
-
-	public override string[] capturableEvents => eventTransformers.Select(e => e.eventName).ToArray();
-	public override void onEvent(string eventName, object eventData)
-	{
-		foreach (var eventTransformer in eventTransformers)
-			if (InputtableEvent.matches(
-				eventTransformer.eventName, eventTransformer.eventData, eventName, eventData))
-				switch (eventTransformer.type)
-				{
-					case EventTransformer.Type.Play:
-						particles.Play();
-						break;
-					case EventTransformer.Type.Stop:
-						particles.Stop();
-						break;
-				}
+		public override string[] capturableEvents => eventTransformers.Select(e => e.eventName).ToArray();
+		public override void onEvent(string eventName, object eventData)
+		{
+			foreach (var eventTransformer in eventTransformers)
+				if (InputtableEvent.matches(
+					eventTransformer.eventName, eventTransformer.eventData, eventName, eventData))
+					switch (eventTransformer.type)
+					{
+						case EventTransformer.Type.Play:
+							particles.Play();
+							break;
+						case EventTransformer.Type.Stop:
+							particles.Stop();
+							break;
+					}
+		}
 	}
 }

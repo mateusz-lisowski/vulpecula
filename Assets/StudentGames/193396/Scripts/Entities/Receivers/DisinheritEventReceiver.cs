@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class DisinheritEventReceiver : EntityEventReceiver
+namespace _193396
 {
-	[Tooltip("Time after which the object is destroyed")]
-	public float leftTime = 3f;
-
-
-	public override string[] capturableEvents => new string[] { "destroy" };
-	public override void onEvent(string eventName, object eventData)
+	public class DisinheritEventReceiver : EntityEventReceiver
 	{
-		transform.parent = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Disinherited];
-		Destroy(gameObject, leftTime);
+		[Tooltip("Time after which the object is destroyed")]
+		public float leftTime = 3f;
+
+
+		public override string[] capturableEvents => new string[] { "destroy" };
+		public override void onEvent(string eventName, object eventData)
+		{
+			transform.parent = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Disinherited];
+			Destroy(gameObject, leftTime);
+		}
 	}
 }

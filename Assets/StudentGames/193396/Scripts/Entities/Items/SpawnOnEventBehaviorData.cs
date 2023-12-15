@@ -1,18 +1,22 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Behavior/SpawnOnEvent")]
-public class SpawnOnEventBehaviorData : ScriptableObject
+namespace _193396
 {
-	[System.Serializable] public class Spawnable
+	[CreateAssetMenu(menuName = "Data/Behavior/SpawnOnEvent")]
+	public class SpawnOnEventBehaviorData : ScriptableObject
 	{
-		public GameManager.RuntimeGroup group = GameManager.RuntimeGroup.Effects;
-		public GameObject prefab;
+		[System.Serializable]
+		public class Spawnable
+		{
+			public GameManager.RuntimeGroup group = GameManager.RuntimeGroup.Effects;
+			public GameObject prefab;
+		}
+
+		[Space(10)]
+
+		[Tooltip("Name of the event triggering spawning")]
+		public string eventName;
+		[Tooltip("Objects to spawn on death")]
+		public Spawnable[] objects;
 	}
-
-	[Space(10)]
-
-	[Tooltip("Name of the event triggering spawning")]
-	public string eventName;
-	[Tooltip("Objects to spawn on death")]
-	public Spawnable[] objects;
 }

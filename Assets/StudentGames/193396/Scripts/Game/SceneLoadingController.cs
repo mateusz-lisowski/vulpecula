@@ -2,25 +2,28 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoadingController : MonoBehaviour
+namespace _193396
 {
-    public SceneAsset scene;
-
-	private bool justTriggered = false;
-
-	private void OnTriggerEnter2D(Collider2D collision)
+	public class SceneLoadingController : MonoBehaviour
 	{
-		if (collision.tag == "Player")
-			justTriggered = true;
-	}
+		public SceneAsset scene;
 
-	private void Update()
-	{
-		if (justTriggered)
+		private bool justTriggered = false;
+
+		private void OnTriggerEnter2D(Collider2D collision)
 		{
-			SceneManager.LoadScene(scene.name);
+			if (collision.tag == "Player")
+				justTriggered = true;
 		}
 
-		justTriggered = false;
+		private void Update()
+		{
+			if (justTriggered)
+			{
+				SceneManager.LoadScene(scene.name);
+			}
+
+			justTriggered = false;
+		}
 	}
 }
