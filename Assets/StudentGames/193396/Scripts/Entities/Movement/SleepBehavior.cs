@@ -30,9 +30,12 @@ namespace _193396
 		{
 			bool wasSleeping = isSleeping;
 
-			if (chase.isChasing)
+			if (isSleeping && chase.isChasing 
+				&& Vector2.Distance(transform.position, chase.lastTargetPosition) <= data.minWakeDistance)
 				isSleeping = false;
-			else if (Vector2.Distance(transform.position, sleepPosition) < data.lockInDistance)
+			
+			if (!isSleeping && !chase.isChasing 
+				&& Vector2.Distance(transform.position, sleepPosition) < data.lockInDistance)
 				isSleeping = true;
 
 			if (isSleeping)
