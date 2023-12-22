@@ -7,7 +7,7 @@ namespace _193396
 	{
 		public enum Type
 		{
-			Play, Stop
+			Play, Stop, PlayContinue
 		}
 
 		public Type type = Type.Play;
@@ -34,13 +34,15 @@ namespace _193396
 		{
 			if (eventCooldown > 0f)
 				return;
-
 			if (!InputtableEvent.matches(this.eventName, this.eventData, eventName, eventData))
 				return;
 
 			switch (type)
 			{
+				case Type.PlayContinue:
 				case Type.Play:
+					if (type == Type.PlayContinue && source.isPlaying)
+						break;
 					source.Play();
 					break;
 				case Type.Stop:
