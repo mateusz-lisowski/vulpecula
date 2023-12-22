@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9b6a23c714121d48854ba2ca7c0acd7, type: 3}
+  m_Name: Terrain Data
+  m_EditorClassIdentifier: 
+  groundDropping:
+    collidingLayers:
+      value: 995328
+    shakeTime: 0.5
+    respawnTime: 3
+    idleEffectPrefab: {fileID: 8936189067721242303, guid: b1398976c0122bc4394afb7e59b307d9, type: 3}
+    shakeEffectPrefab: {fileID: 2695810944054436799, guid: 5ea3ee41d687a31418746dbfdcc521fb, type: 3}
+    breakEffectPrefab: {fileID: 0}
+  groundBreaking:
+    collidingLayers:
+      value: 995328
+    respawnTime: 3
+    breakEffectPrefab: {fileID: 2695810944054436799, guid: 1cd418e073bafb1409d7d734adfec5da, type: 3}

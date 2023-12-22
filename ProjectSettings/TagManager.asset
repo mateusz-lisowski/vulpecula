@@ -4,7 +4,19 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - BreakBounce
+  - Enemy
+  - Enemy Flying
+  - Detection
+  - Ground
+  - Passable
+  - Passable Player
+  - Collectible
+  - Wall Jumpable
+  - Ground Damaging
+  - Ground Droppable
+  - Breakable
+  - Breakable Explode
+  - Slope
   layers:
   - Default
   - TransparentFX
@@ -14,36 +26,36 @@ TagManager:
   - UI
   - 
   - 
-  - Ground
-  - Platform Passable
-  - Player Platform Passable
-  - 
-  - Player
-  - Player Invulnerable
   - 
   - 
-  - Enemy
-  - Enemy Invulnerable
   - 
   - 
-  - Detection
-  - Ground-Damaging
-  - Wall-Jumpable
-  - Ground-Droppable
-  - Ground-Breakable
-  - Slope
   - 
   - 
-  - Collectible
   - 
   - 
-  - Editor
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Background
     uniqueID: 2274104453
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0
   - name: Environment
     uniqueID: 4255069353
