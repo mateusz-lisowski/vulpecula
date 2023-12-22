@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 namespace _193396
 {

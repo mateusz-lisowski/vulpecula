@@ -78,12 +78,14 @@ namespace _193396
 		private IEnumerator dropTiles(TilemapHelper.Region region, List<TilemapHelper.TileData> tiles)
 		{
 			region.gameObject.SetActive(true);
+			var regionController = region.gameObject.GetComponent<EntityBehaviorController>();
 
 			foreach (var tile in tiles)
 				tile.parent.SetTile(tile.coord, null);
 
 			if (particlesShake != null)
 				region.emit(particlesShake, particlesShake.emission.GetBurst(0).count.constant);
+			regionController.onEvent("shake", region.gameObject.tag);
 
 			yield return new WaitForSeconds(data.groundDropping.shakeTime);
 
@@ -92,6 +94,7 @@ namespace _193396
 
 			if (particlesBreak != null)
 				region.emit(particlesBreak, particlesBreak.emission.GetBurst(0).count.constant);
+			regionController.onEvent("break", region.gameObject.tag);
 
 			StartCoroutine(Effects.instance.fade.run(region.gameObject, region.layers));
 

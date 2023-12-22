@@ -80,8 +80,10 @@ namespace _193396
 				}
 			}
 
-			createRegions(ref groundDroppingRegions, groundDroppingGroup, transform.GetComponentsInChildren<GroundDroppingController>());
-			createRegions(ref groundBreakingRegions, groundBreakingGroup, transform.GetComponentsInChildren<GroundBreakingController>());
+			createRegions(ref groundDroppingRegions, groundDroppingGroup, 
+				transform.GetComponentsInChildren<GroundDroppingController>(), data.terrainData.groundDropping.prefab);
+			createRegions(ref groundBreakingRegions, groundBreakingGroup, 
+				transform.GetComponentsInChildren<GroundBreakingController>(), data.terrainData.groundBreaking.prefab);
 		}
 		public void clear()
 		{
@@ -193,7 +195,8 @@ namespace _193396
 					newEntity.rotation = rotation;
 				}
 		}
-		private void createRegions(ref List<TilemapHelper.Region> regions, Transform parent, GroundController[] groundControllers)
+		private void createRegions(ref List<TilemapHelper.Region> regions, Transform parent, 
+			GroundController[] groundControllers, GameObject prefab)
 		{
 			var newRegions = new List<TilemapHelper.Region>();
 			List<Vector3Int> ignore = new List<Vector3Int>();
@@ -218,7 +221,7 @@ namespace _193396
 					TilemapHelper.Region region = null;
 					Transform regionTransform;
 					if (!QolUtility.createIfNotExist(out regionTransform, parent,
-						RuntimeDataManager.getUniqueName(triggerTilemap.gameObject, TilemapHelper.hash(triggeredCoords))))
+						RuntimeDataManager.getUniqueName(triggerTilemap.gameObject, TilemapHelper.hash(triggeredCoords)), prefab))
 						if (region != null)
 							region = regions.Find(r => r.gameObject == regionTransform.gameObject);
 
@@ -229,6 +232,8 @@ namespace _193396
 						region = new TilemapHelper.Region(regionTransform.gameObject, tiles, triggeredCoords);
 						regionTransform.gameObject.SetActive(false);
 					}
+
+					regionTransform.tag = groundController.tag;
 
 					ignore.AddRange(region.coords);
 					newRegions.Add(region);

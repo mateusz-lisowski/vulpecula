@@ -17,6 +17,11 @@ namespace _193396
 
 			[Space(10)]
 
+			[Tooltip("Object to instantiate for every region")]
+			public GameObject prefab;
+
+			[Space(5)]
+
 			[Tooltip("Effect to play on default")]
 			public GameObject idleEffectPrefab;
 			[Tooltip("Effect to play on shake")]
@@ -33,6 +38,11 @@ namespace _193396
 			public float respawnTime;
 
 			[Space(10)]
+
+			[Tooltip("Object to instantiate for every region")]
+			public GameObject prefab;
+
+			[Space(5)]
 
 			[Tooltip("Effect to play on break")]
 			public GameObject breakEffectPrefab;

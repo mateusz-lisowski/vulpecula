@@ -99,8 +99,8 @@ namespace _193396
 		private void Awake()
 		{
 			rigidBody = transform.GetComponent<Rigidbody2D>();
-			animator = transform.Find("Sprite").GetComponent<Animator>();
-			spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
+			animator = transform.Find("Sprite")?.GetComponent<Animator>();
+			spriteRenderer = transform.Find("Sprite")?.GetComponent<SpriteRenderer>();
 			hitbox = transform.Find("Hitbox")?.GetComponent<Transform>();
 
 			currentUpdate = 0;

@@ -62,12 +62,14 @@ namespace _193396
 		private IEnumerator breakTiles(TilemapHelper.Region region, List<TilemapHelper.TileData> tiles)
 		{
 			region.gameObject.SetActive(true);
+			var regionController = region.gameObject.GetComponent<EntityBehaviorController>();
 
 			foreach (var tile in region.layers.SelectMany(l => l.tiles).Concat(tiles))
 				tile.parent.SetTile(tile.coord, null);
 
 			if (particlesBreak != null)
 				region.emit(particlesBreak, particlesBreak.emission.GetBurst(0).count.constant);
+			regionController.onEvent("break", region.gameObject.tag);
 
 			StartCoroutine(Effects.instance.fade.run(region.gameObject, region.layers, move: false));
 
