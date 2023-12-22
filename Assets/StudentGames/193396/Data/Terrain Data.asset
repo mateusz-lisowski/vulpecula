@@ -25,3 +25,6 @@ MonoBehaviour:
       value: 995328
     respawnTime: 3
     breakEffectPrefab: {fileID: 2695810944054436799, guid: 1cd418e073bafb1409d7d734adfec5da, type: 3}
+  groundMoving:
+    slidingLayers:
+      value: 12288

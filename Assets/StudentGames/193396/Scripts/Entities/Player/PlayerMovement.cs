@@ -56,6 +56,7 @@ namespace _193396
 		private LayerMask currentGroundLayers;
 
 		private HitData hitData = null;
+		private Vector2 groundSlide;
 		private Vector2 moveInput;
 		private bool passingLayersDisabled = false;
 
@@ -94,13 +95,16 @@ namespace _193396
 			lastPassInputTime = float.PositiveInfinity;
 		}
 
-		public override string[] capturableEvents => new string[] { "hit" };
+		public override string[] capturableEvents => new string[] { "hit", "slide" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
 			{
 				case "hit":
 					hitData = eventData as HitData;
+					break;
+				case "slide":
+					groundSlide += (Vector2)eventData;
 					break;
 			}
 		}
@@ -621,10 +625,15 @@ namespace _193396
 				accelRate = data.attack.forwardAcceleration;
 			}
 
-			float speedDif = targetSpeed - controller.rigidBody.velocity.x;
+			if (!isGrounded)
+				groundSlide = Vector2.zero;
+
+			float speedDif = targetSpeed - (controller.rigidBody.velocity.x - groundSlide.x / Time.fixedDeltaTime);
 			float movement = speedDif * accelRate;
 
 			controller.rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
+
+			groundSlide = Vector2.zero;
 		}
 
 		private void updateFall()

@@ -37,8 +37,15 @@ namespace _193396
 			[Tooltip("Effect to play on break")]
 			public GameObject breakEffectPrefab;
 		}
+		[System.Serializable]
+		public struct GroundMoving
+		{
+			[Tooltip("Layers that slide with the ground")]
+			public RuntimeSettings.LayerMaskInput slidingLayers;
+		}
 
 		public GroundDropping groundDropping;
 		public GroundBreaking groundBreaking;
+		public GroundMoving groundMoving;
 	}
 }
