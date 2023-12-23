@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ae030b1fcc84d4386ed55bad9f958d, type: 3}
   m_Name: Bat Sleep
   m_EditorClassIdentifier: 
+  minWakeDistance: 5
   lockInDistance: 0.1

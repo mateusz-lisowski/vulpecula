@@ -17,6 +17,7 @@ MonoBehaviour:
       value: 995328
     shakeTime: 0.5
     respawnTime: 3
+    prefab: {fileID: 1890165134758866136, guid: 151732722db9c1d419c0efb38d047c19, type: 3}
     idleEffectPrefab: {fileID: 8936189067721242303, guid: b1398976c0122bc4394afb7e59b307d9, type: 3}
     shakeEffectPrefab: {fileID: 2695810944054436799, guid: 5ea3ee41d687a31418746dbfdcc521fb, type: 3}
     breakEffectPrefab: {fileID: 0}
@@ -24,4 +25,8 @@ MonoBehaviour:
     collidingLayers:
       value: 995328
     respawnTime: 3
+    prefab: {fileID: 1890165134758866136, guid: f63d1b49df50bc14ea827a5f1f85bc02, type: 3}
     breakEffectPrefab: {fileID: 2695810944054436799, guid: 1cd418e073bafb1409d7d734adfec5da, type: 3}
+  groundMoving:
+    slidingLayers:
+      value: 12288

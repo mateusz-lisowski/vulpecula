@@ -56,6 +56,7 @@ namespace _193396
 		private LayerMask currentGroundLayers;
 
 		private HitData hitData = null;
+		private Vector2 groundSlide;
 		private Vector2 moveInput;
 		private bool passingLayersDisabled = false;
 
@@ -94,13 +95,16 @@ namespace _193396
 			lastPassInputTime = float.PositiveInfinity;
 		}
 
-		public override string[] capturableEvents => new string[] { "hit" };
+		public override string[] capturableEvents => new string[] { "hit", "slide" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
 			{
 				case "hit":
 					hitData = eventData as HitData;
+					break;
+				case "slide":
+					groundSlide += (Vector2)eventData;
 					break;
 			}
 		}
@@ -355,7 +359,7 @@ namespace _193396
 		private bool canDash()
 		{
 			return dashCooldown <= 0 && lastDashInputTime <= data.dash.inputBufferTime && dashesLeft > 0
-				&& !isDistressed && !isAttacking;
+				&& !isDistressed && !isAttacking && !isFacingWall;
 		}
 		private void dash()
 		{
@@ -454,6 +458,8 @@ namespace _193396
 				float wallJumpForce = data.wall.jumpForce;
 				controller.rigidBody.AddForce(wallJumpForce * forceDirection * Vector2.right, ForceMode2D.Impulse);
 			}
+
+			controller.onEvent("jumped", null);
 		}
 		private void updateGravityScale()
 		{
@@ -510,14 +516,14 @@ namespace _193396
 
 			if ((isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wall.jumpMinTime)
 			{
+				if (isFalling && lastWallHoldingTime != 0)
+					controller.onEvent("fell", null);
+
 				jumpsLeft = data.jump.jumpsCount;
 				isJumping = false;
 				isFalling = false;
 				lastGroundedTime = 0;
 				lastWallJumpTime = float.PositiveInfinity;
-
-				if (lastWallHoldingTime != 0)
-					controller.onEvent("fell", null);
 			}
 
 			if (controller.rigidBody.velocity.y < -data.gravity.maxFallSpeed)
@@ -621,10 +627,18 @@ namespace _193396
 				accelRate = data.attack.forwardAcceleration;
 			}
 
-			float speedDif = targetSpeed - controller.rigidBody.velocity.x;
+			if (!isGrounded)
+				groundSlide = Vector2.zero;
+
+			float speedDif = targetSpeed - (controller.rigidBody.velocity.x - groundSlide.x / Time.fixedDeltaTime);
 			float movement = speedDif * accelRate;
 
+			if (isGrounded && targetSpeed != 0f)
+				controller.onEvent("walked", null);
+
 			controller.rigidBody.AddForce(movement * Vector2.right, ForceMode2D.Force);
+
+			groundSlide = Vector2.zero;
 		}
 
 		private void updateFall()

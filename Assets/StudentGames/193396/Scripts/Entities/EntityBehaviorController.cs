@@ -24,7 +24,24 @@ namespace _193396
 		{
 			public static bool matches(string name, string data, string eventName, object eventData)
 			{
-				return name == eventName && (data == "" || (eventData != null && data == eventData.ToString()));
+				if (name != eventName)
+					return false;
+				if (data == "")
+					return true;
+
+				bool isNegation = data.StartsWith('!');
+
+				if (eventData == null)
+					return isNegation ? true : false;
+
+				string eventDataString = eventData.ToString();
+				if (isNegation)
+					eventDataString = '!' + eventDataString;
+
+				if (data == eventDataString)
+					return isNegation ? false : true;
+				else
+					return isNegation ? true : false;
 			}
 			public bool matches(string eventName, object eventData)
 			{
@@ -99,8 +116,8 @@ namespace _193396
 		private void Awake()
 		{
 			rigidBody = transform.GetComponent<Rigidbody2D>();
-			animator = transform.Find("Sprite").GetComponent<Animator>();
-			spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
+			animator = transform.Find("Sprite")?.GetComponent<Animator>();
+			spriteRenderer = transform.Find("Sprite")?.GetComponent<SpriteRenderer>();
 			hitbox = transform.Find("Hitbox")?.GetComponent<Transform>();
 
 			currentUpdate = 0;

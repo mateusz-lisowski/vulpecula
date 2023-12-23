@@ -6,7 +6,10 @@ namespace _193396
 {
 	public class MovingPlatformController : MonoBehaviour
 	{
+		public TerrainData data;
 		public int startingWaypointIndex = 0;
+
+		private Collider2D stickyCheck;
 
 		private PathData path;
 		private List<Transform> waypoints;
@@ -15,6 +18,8 @@ namespace _193396
 
 		private void Awake()
 		{
+			stickyCheck = transform.Find("Detection/Sticky").GetComponent<Collider2D>();
+
 			path = transform.parent.GetComponent<PathData>();
 
 			waypoints = new List<Transform>();
@@ -42,6 +47,9 @@ namespace _193396
 
 			Vector2 newPosition = Vector2.MoveTowards(
 				transform.position, target.position, path.speed * Time.deltaTime);
+
+			Vector2 delta = (Vector2)transform.position - newPosition;
+			slideDetected(delta);
 
 			transform.position = newPosition;
 		}
@@ -72,5 +80,20 @@ namespace _193396
 			}
 		}
 
+
+		private void slideDetected(Vector2 delta)
+		{
+			ContactFilter2D filter = new ContactFilter2D().NoFilter();
+			filter.SetLayerMask(data.groundMoving.slidingLayers);
+			filter.useLayerMask = true;
+
+			List<Collider2D> contacts = new List<Collider2D>();
+			if (stickyCheck.OverlapCollider(filter, contacts) == 0)
+				return;
+
+			foreach (Collider2D contact in contacts)
+				contact.SendMessageUpwards("onMessage", new EntityMessage("slide", -delta),
+					SendMessageOptions.DontRequireReceiver);
+		}
 	}
 }
