@@ -310,7 +310,6 @@ namespace _193396
 			}
 
 			flip();
-			controller.onEvent("hurt", null);
 		}
 		private void updateHurt()
 		{

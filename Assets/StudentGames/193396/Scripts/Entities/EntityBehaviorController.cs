@@ -135,7 +135,9 @@ namespace _193396
 			foreach (var behavior in behaviors)
 				behavior.onAwake();
 
-			initializeEventDispatcher();
+			eventDispatcher = new Dictionary<string, List<EntityEventReceiver>>();
+			foreach (var receiver in transform.GetComponentsInChildren<EntityEventReceiver>())
+				addEventReceiver(receiver);
 		}
 		private void Start()
 		{
@@ -173,21 +175,28 @@ namespace _193396
 			onEvent(msg.name, msg.data);
 		}
 
-
-		private void initializeEventDispatcher()
+		public void addEventReceiver(EntityEventReceiver receiver)
 		{
-			eventDispatcher = new Dictionary<string, List<EntityEventReceiver>>();
+			foreach (var capturableEvent in receiver.capturableEvents)
+				if (!eventDispatcher.ContainsKey(capturableEvent))
+					eventDispatcher.Add(capturableEvent, new List<EntityEventReceiver> { receiver });
+				else
+				{
+					var dispatcher = eventDispatcher[capturableEvent];
+					if (!dispatcher.Contains(receiver))
+						dispatcher.Add(receiver);
+				}
+		}
+		public void removeEventReceiver(EntityEventReceiver receiver)
+		{
+			foreach (var capturableEvent in receiver.capturableEvents)
+			{
+				var receivers = eventDispatcher[capturableEvent];
 
-			foreach (var receiver in transform.GetComponentsInChildren<EntityEventReceiver>())
-				foreach (var capturableEvent in receiver.capturableEvents)
-					if (!eventDispatcher.ContainsKey(capturableEvent))
-						eventDispatcher.Add(capturableEvent, new List<EntityEventReceiver> { receiver });
-					else
-					{
-						var dispatcher = eventDispatcher[capturableEvent];
-						if (!dispatcher.Contains(receiver))
-							dispatcher.Add(receiver);
-					}
+				receivers.Remove(receiver);
+				if (receivers.Count == 0)
+					eventDispatcher.Remove(capturableEvent);
+			}
 		}
 	}
 }

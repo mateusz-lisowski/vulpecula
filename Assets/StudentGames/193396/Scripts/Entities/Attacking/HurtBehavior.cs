@@ -127,7 +127,7 @@ namespace _193396
 			controller.StartCoroutine(Effects.instance.flashing.run(
 				controller.spriteRenderer, data.invulnerabilityTime, burst: true));
 
-			controller.onEvent("hurt", null);
+			controller.onEvent("hurt", (float)health / data.health);
 		}
 
 		private void die()
@@ -137,6 +137,7 @@ namespace _193396
 			controller.StartCoroutine(Effects.instance.flashing.run(
 				controller.spriteRenderer, 0, burst: true));
 
+			controller.onEvent("hurt", 0f);
 			controller.onEvent("died", null);
 		}
 

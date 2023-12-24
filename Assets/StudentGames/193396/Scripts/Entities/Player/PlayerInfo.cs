@@ -10,6 +10,7 @@ namespace _193396
 		[Serializable]
 		private class RuntimeData : RuntimeDataManager.Data
 		{
+			[field: SerializeField, ReadOnly] public int health = 0;
 			[field: SerializeField, ReadOnly] public int score = 0;
 			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public float playtime = 0;
@@ -21,6 +22,7 @@ namespace _193396
 		private PlayerData data;
 
 		private List<int> justCollected = new List<int>();
+		private bool justHit = false;
 
 
 		public override void onAwake()
@@ -31,13 +33,16 @@ namespace _193396
 		public override void onStart()
 		{
 			runtimeData = RuntimeDataManager.get<RuntimeData>("Player");
+
+			runtimeData.health = data.hurt.health;
 		}
 
-		public override string[] capturableEvents => new string[] { "collect" };
+		public override string[] capturableEvents => new string[] { "hit", "collect" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
 			{
+				case "hit": hit(eventData as HitData); break;
 				case "collect": collect(eventData as CollectData); break;
 			}
 		}
@@ -47,8 +52,23 @@ namespace _193396
 			runtimeData.playtime += Time.deltaTime;
 
 			justCollected.Clear();
+			justHit = false;
 		}
 
+
+		private void hit(HitData hitData)
+		{
+			if (justHit)
+				return;
+			justHit = true;
+
+			runtimeData.health = Math.Max(runtimeData.health - hitData.strength, 0);
+
+			controller.onEvent("hurt", (float)runtimeData.health / data.hurt.health);
+
+			if (runtimeData.health == 0)
+				controller.onEvent("died", null);
+		}
 
 		private void collect(CollectData collect)
 		{
