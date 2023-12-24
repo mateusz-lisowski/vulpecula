@@ -152,8 +152,8 @@ namespace _193396
 
 			QolUtility.createIfNotExist(out groundDroppingGroup, autogenGroup, "Ground Dropping");
 			QolUtility.createIfNotExist(out groundBreakingGroup, autogenGroup, "Ground Breaking");
-			QolUtility.createIfNotExist(out enemiesGroup, autogenGroup, "Enemies");
-			QolUtility.createIfNotExist(out collectiblesGroup, autogenGroup, "Collectibles");
+			enemiesGroup = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Enemies];
+			collectiblesGroup = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Collectibles];
 		}
 
 		private void tryAddTiles(Tile tile, Vector3Int coord, Tilemap parent, BoundedTile[] tiles)
@@ -241,22 +241,6 @@ namespace _193396
 			}
 
 			regions = newRegions;
-		}
-	}
-
-	[CustomEditor(typeof(GridPreprocessor))]
-	public class GridPreprocessorEditor : Editor
-	{
-		public override void OnInspectorGUI()
-		{
-			GridPreprocessor gridPreprocessor = target as GridPreprocessor;
-
-			if (GUILayout.Button("Regenerate"))
-				gridPreprocessor.regenerate();
-			if (GUILayout.Button("Clear"))
-				gridPreprocessor.clear();
-
-			base.OnInspectorGUI();
 		}
 	}
 }
