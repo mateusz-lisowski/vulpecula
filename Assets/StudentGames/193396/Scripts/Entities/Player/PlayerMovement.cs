@@ -266,6 +266,9 @@ namespace _193396
 			hitData = new HitData();
 			hitData.isVertical = true;
 			hitData.right = transform.right;
+			hitData.strength = 1;
+
+			controller.onEvent("hit", hitData);
 		}
 		private bool canHurt()
 		{
