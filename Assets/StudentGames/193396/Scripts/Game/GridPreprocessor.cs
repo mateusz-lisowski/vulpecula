@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 namespace _193396
@@ -180,7 +181,7 @@ namespace _193396
 					Matrix4x4 tileTransform = tilemap.GetTransformMatrix(coord);
 					Quaternion tileRotation = tileTransform.GetR();
 
-					Vector2 pivotOffset = (tile.sprite.pivot - tile.sprite.rect.size / 2) / tile.sprite.pixelsPerUnit;
+					Vector2 pivotOffset = (tile.sprite.pivot - renderer.sprite.pivot) / tile.sprite.pixelsPerUnit;
 					Vector3 offset = renderer.transform.position;
 					Quaternion rotation = tileRotation;
 					if (renderer.flipX)

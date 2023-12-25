@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _193396
 {
@@ -10,7 +11,7 @@ namespace _193396
 		[Serializable]
 		private class RuntimeData : RuntimeDataManager.Data
 		{
-			[field: SerializeField, ReadOnly] public int health = 0;
+			[field: SerializeField, ReadOnly] public int health;
 			[field: SerializeField, ReadOnly] public int score = 0;
 			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public bool unlocked_key_1 = false;
@@ -18,6 +19,8 @@ namespace _193396
 			[field: SerializeField, ReadOnly] public bool unlocked_key_3 = false;
 			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public float playtime = 0;
+			[field: Space(5)]
+			[field: SerializeField, ReadOnly] public Vector2 spawnpoint;
 		}
 
 		[field: SerializeField, Flatten] private RuntimeData runtimeData;
@@ -52,6 +55,7 @@ namespace _193396
 			runtimeData = RuntimeDataManager.get<RuntimeData>("Player");
 
 			runtimeData.health = data.hurt.health;
+			runtimeData.spawnpoint = transform.position;
 		}
 
 		public override string[] capturableEvents => new string[] { "hit", "collect" };
@@ -86,6 +90,16 @@ namespace _193396
 			if (runtimeData.health == 0)
 				controller.onEvent("died", null);
 		}
+		private void tryHeal(int count)
+		{
+			int newHealth = Math.Min(runtimeData.health + count, data.hurt.health);
+			int heal = newHealth - runtimeData.health;
+
+			runtimeData.health = newHealth;
+
+			if (heal > 0)
+				controller.onEvent("healed", heal);
+		}
 
 		private void collect(CollectData collect)
 		{
@@ -110,8 +124,14 @@ namespace _193396
 					runtimeData.unlocked_key_3 = true;
 					controller.onEvent("unlocked", "key-3");
 					break;
+				case "checkpoint":
+					runtimeData.spawnpoint = collect.position;
+					break;
 				default:
-					Debug.LogWarning("Collected item of unknown type: " + collect.name);
+					if (collect.name.StartsWith("heal:"))
+						tryHeal(int.Parse(collect.name.Substring(5)));
+					else
+						Debug.LogWarning("Collected item of unknown type: " + collect.name);
 					break;
 			}
 		}
