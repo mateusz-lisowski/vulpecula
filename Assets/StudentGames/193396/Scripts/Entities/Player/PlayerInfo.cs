@@ -33,6 +33,10 @@ namespace _193396
 		{
 			return runtimeData.playtime;
 		}
+		public int score()
+		{
+			return runtimeData.score;
+		}
 
 		public override void onAwake()
 		{

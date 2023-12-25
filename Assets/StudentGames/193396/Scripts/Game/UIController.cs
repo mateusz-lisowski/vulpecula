@@ -12,6 +12,7 @@ namespace _193396
 		private float healthLevel = 1f;
 
 		private TextMeshProUGUI playtime;
+		private TextMeshProUGUI score;
 
 
 		private void Awake()
@@ -20,6 +21,7 @@ namespace _193396
 			healthLevelTransform = transform.Find("Canvas/Top-Left/health/level").GetComponent<RectTransform>();
 
 			playtime = transform.Find("Canvas/Top-Right/playtime").GetComponent<TextMeshProUGUI>();
+			score = transform.Find("Canvas/Top-Right/score").GetComponent<TextMeshProUGUI>();
 		}
 
 		private void Update()
@@ -30,6 +32,7 @@ namespace _193396
 			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, y);
 
 			playtime.text = string.Format("{0:0.00}", info.playtime());
+			score.text = string.Format("Score: {0}", info.score());
 		}
 
 
