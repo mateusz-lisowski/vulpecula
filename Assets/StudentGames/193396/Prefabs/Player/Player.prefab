@@ -1743,13 +1743,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeData:
-    health: 0
     score: 0
     unlocked_key_1: 0
     unlocked_key_2: 0
     unlocked_key_3: 0
     playtime: 0
-    spawnpoint: {x: 0, y: 0}
+  health: 0
+  spawnpoint: {x: 0, y: 0}
 --- !u!1 &6762855587386811600
 GameObject:
   m_ObjectHideFlags: 0

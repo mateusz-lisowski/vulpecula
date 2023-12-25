@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace _193396
@@ -11,19 +12,21 @@ namespace _193396
 		[Serializable]
 		private class RuntimeData : RuntimeDataManager.Data
 		{
-			[field: SerializeField, ReadOnly] public int health;
-			[field: SerializeField, ReadOnly] public int score = 0;
-			[field: Space(5)]
-			[field: SerializeField, ReadOnly] public bool unlocked_key_1 = false;
-			[field: SerializeField, ReadOnly] public bool unlocked_key_2 = false;
-			[field: SerializeField, ReadOnly] public bool unlocked_key_3 = false;
-			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public float playtime = 0;
 			[field: Space(5)]
+			[field: SerializeField, ReadOnly] public int score = 0;
+			[field: Space(5)]
+			[field: SerializeField, ReadOnly] public bool unlockedKey1 = false;
+			[field: SerializeField, ReadOnly] public bool unlockedKey2 = false;
+			[field: SerializeField, ReadOnly] public bool unlockedKey3 = false;
+			[field: Space(5)]
+			[field: SerializeField, ReadOnly] public string spawnpointLevel;
 			[field: SerializeField, ReadOnly] public Vector2 spawnpoint;
 		}
 
-		[field: SerializeField, Flatten] private RuntimeData runtimeData;
+		[field: SerializeField] private RuntimeData runtimeData;
+		[Space(5)]
+		[field: SerializeField, ReadOnly] private int health;
 
 		private PlayerMovement movement;
 		private PlayerData data;
@@ -32,9 +35,9 @@ namespace _193396
 		private bool justHit = false;
 
 
-		public float health()
+		public float healthNormalized()
 		{
-			return (float)runtimeData.health / data.hurt.health;
+			return (float)health / data.hurt.health;
 		}
 		public float playtime()
 		{
@@ -49,22 +52,30 @@ namespace _193396
 		{
 			movement = controller.getBehavior<PlayerMovement>();
 			data = movement.data;
+
+			health = data.hurt.health;
 		}
 		public override void onStart()
 		{
 			runtimeData = RuntimeDataManager.get<RuntimeData>("Player");
 
-			runtimeData.health = data.hurt.health;
-			runtimeData.spawnpoint = transform.position;
+			if (runtimeData.spawnpointLevel == gameObject.scene.name)
+				transform.position = runtimeData.spawnpoint;
+			else
+			{
+				runtimeData.spawnpoint = transform.position;
+				runtimeData.spawnpointLevel = gameObject.scene.name;
+			}
 		}
 
-		public override string[] capturableEvents => new string[] { "hit", "collect" };
+		public override string[] capturableEvents => new string[] { "hit", "collect", "respawn" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
 			{
 				case "hit": hit(eventData as HitData); break;
 				case "collect": collect(eventData as CollectData); break;
+				case "respawn": respawn(); break;
 			}
 		}
 
@@ -77,25 +88,34 @@ namespace _193396
 		}
 
 
+		private void respawn()
+		{
+			if (health != 0)
+				return;
+
+			health = data.hurt.health;
+			transform.position = runtimeData.spawnpoint;
+		}
+
 		private void hit(HitData hitData)
 		{
 			if (justHit)
 				return;
 			justHit = true;
 
-			runtimeData.health = Math.Max(runtimeData.health - hitData.strength, 0);
+			health = Math.Max(health - hitData.strength, 0);
 
-			controller.onEvent("hurt", health());
+			controller.onEvent("hurt", healthNormalized());
 
-			if (runtimeData.health == 0)
+			if (health == 0)
 				controller.onEvent("died", null);
 		}
 		private void tryHeal(int count)
 		{
-			int newHealth = Math.Min(runtimeData.health + count, data.hurt.health);
-			int heal = newHealth - runtimeData.health;
+			int newHealth = Math.Min(health + count, data.hurt.health);
+			int heal = newHealth - health;
 
-			runtimeData.health = newHealth;
+			health = newHealth;
 
 			if (heal > 0)
 				controller.onEvent("healed", heal);
@@ -113,19 +133,20 @@ namespace _193396
 					runtimeData.score++;
 					break;
 				case "key-1":
-					runtimeData.unlocked_key_1 = true;
+					runtimeData.unlockedKey1 = true;
 					controller.onEvent("unlocked", "key-1");
 					break;
 				case "key-2":
-					runtimeData.unlocked_key_2 = true;
+					runtimeData.unlockedKey2 = true;
 					controller.onEvent("unlocked", "key-2");
 					break;
 				case "key-3":
-					runtimeData.unlocked_key_3 = true;
+					runtimeData.unlockedKey3 = true;
 					controller.onEvent("unlocked", "key-3");
 					break;
 				case "checkpoint":
 					runtimeData.spawnpoint = collect.position;
+					runtimeData.spawnpointLevel = gameObject.scene.name;
 					break;
 				default:
 					if (collect.name.StartsWith("heal:"))

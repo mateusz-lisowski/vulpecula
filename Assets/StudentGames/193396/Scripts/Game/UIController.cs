@@ -26,7 +26,7 @@ namespace _193396
 		private void Update()
 		{
 			float y = healthLevelTransform.anchoredPosition.y 
-				- healthLevelTransform.sizeDelta.y * (1f - info.health());
+				- healthLevelTransform.sizeDelta.y * (1f - info.healthNormalized());
 
 			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, y);
 

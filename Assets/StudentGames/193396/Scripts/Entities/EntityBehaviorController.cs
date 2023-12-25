@@ -67,6 +67,11 @@ namespace _193396
 			controller.rigidBody.AddForce(movement * direction, ForceMode2D.Force);
 		}
 
+		private void OnDestroy()
+		{
+			controller.removeEventReceiver(this);
+		}
+
 		public virtual void onAwake() { }
 		public virtual void onStart() { }
 		public virtual void onUpdate() { }
