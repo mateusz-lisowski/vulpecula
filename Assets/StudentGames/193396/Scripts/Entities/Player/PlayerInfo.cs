@@ -29,6 +29,11 @@ namespace _193396
 		private bool justHit = false;
 
 
+		public float playtime()
+		{
+			return runtimeData.playtime;
+		}
+
 		public override void onAwake()
 		{
 			movement = controller.getBehavior<PlayerMovement>();
