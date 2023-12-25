@@ -9,7 +9,6 @@ namespace _193396
 
 		private RectTransform healthTransform;
 		private RectTransform healthLevelTransform;
-		private float healthLevel = 1f;
 
 		private TextMeshProUGUI playtime;
 		private TextMeshProUGUI score;
@@ -27,7 +26,7 @@ namespace _193396
 		private void Update()
 		{
 			float y = healthLevelTransform.anchoredPosition.y 
-				- healthLevelTransform.sizeDelta.y * (1f - healthLevel);
+				- healthLevelTransform.sizeDelta.y * (1f - info.health());
 
 			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, y);
 
@@ -36,15 +35,9 @@ namespace _193396
 		}
 
 
-		public override string[] capturableEvents => new string[] { "hurt" };
+		public override string[] capturableEvents => new string[] { };
 		public override void onEvent(string eventName, object eventData)
 		{
-			switch(eventName)
-			{
-				case "hurt":
-					healthLevel = (float)eventData;
-					break;
-			}
 		}
 	}
 }

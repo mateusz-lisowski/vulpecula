@@ -29,6 +29,10 @@ namespace _193396
 		private bool justHit = false;
 
 
+		public float health()
+		{
+			return (float)runtimeData.health / data.hurt.health;
+		}
 		public float playtime()
 		{
 			return runtimeData.playtime;
@@ -77,7 +81,7 @@ namespace _193396
 
 			runtimeData.health = Math.Max(runtimeData.health - hitData.strength, 0);
 
-			controller.onEvent("hurt", (float)runtimeData.health / data.hurt.health);
+			controller.onEvent("hurt", health());
 
 			if (runtimeData.health == 0)
 				controller.onEvent("died", null);
