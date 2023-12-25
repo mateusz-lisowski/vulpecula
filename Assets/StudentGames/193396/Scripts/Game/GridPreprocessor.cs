@@ -180,11 +180,13 @@ namespace _193396
 					Matrix4x4 tileTransform = tilemap.GetTransformMatrix(coord);
 					Quaternion tileRotation = tileTransform.GetR();
 
+					Vector2 pivotOffset = (tile.sprite.pivot - tile.sprite.rect.size / 2) / tile.sprite.pixelsPerUnit;
+					Vector3 offset = renderer.transform.position;
 					Quaternion rotation = tileRotation;
 					if (renderer.flipX)
 						rotation *= Quaternion.Euler(0, 180, 0);
-					Vector2 pivotOffset = (tile.sprite.pivot - tile.sprite.rect.size / 2) / tile.sprite.pixelsPerUnit;
-					Vector3 offset = renderer.transform.position;
+					if (rotation.y > 0.5f)
+						offset.x = -offset.x;
 
 					Vector3 position = tilemap.CellToWorld(coord) + new Vector3(0.5f, 0.5f);
 					position -= (Vector3)pivotOffset;
