@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	public class EntityBehaviorEventOnAnimation : StateMachineBehaviour
+	public class AnimationEventCaller : StateMachineBehaviour
 	{
 		public enum StateType
 		{

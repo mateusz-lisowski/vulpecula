@@ -1,9 +1,8 @@
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 namespace _193396
 {
-	public class EnterEventSender : EntityEventReceiver
+	public class EnterEventCaller : MonoBehaviour
 	{
 		public string eventName;
 		public string eventData;
