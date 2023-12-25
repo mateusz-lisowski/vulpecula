@@ -13,6 +13,10 @@ namespace _193396
 			[field: SerializeField, ReadOnly] public int health = 0;
 			[field: SerializeField, ReadOnly] public int score = 0;
 			[field: Space(5)]
+			[field: SerializeField, ReadOnly] public bool unlocked_key_1 = false;
+			[field: SerializeField, ReadOnly] public bool unlocked_key_2 = false;
+			[field: SerializeField, ReadOnly] public bool unlocked_key_3 = false;
+			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public float playtime = 0;
 		}
 
@@ -74,12 +78,29 @@ namespace _193396
 		{
 			if (justCollected.Contains(collect.id))
 				return;
-
 			justCollected.Add(collect.id);
-			runtimeData.score++;
 
-			Debug.Log("Collected " + runtimeData.score + " collectible at: " + runtimeData.playtime);
+			switch (collect.name)
+			{
+				case "collectible":
+					runtimeData.score++;
+					break;
+				case "key-1":
+					runtimeData.unlocked_key_1 = true;
+					controller.onEvent("unlocked", "key-1");
+					break;
+				case "key-2":
+					runtimeData.unlocked_key_2 = true;
+					controller.onEvent("unlocked", "key-2");
+					break;
+				case "key-3":
+					runtimeData.unlocked_key_3 = true;
+					controller.onEvent("unlocked", "key-3");
+					break;
+				default:
+					Debug.LogWarning("Collected item of unknown type: " + collect.name);
+					break;
+			}
 		}
-
 	}
 }

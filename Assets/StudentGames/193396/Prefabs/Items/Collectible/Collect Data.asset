@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectingLayers:
     value: 12288
+  eventName: collectible

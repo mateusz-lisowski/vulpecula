@@ -6,6 +6,7 @@ namespace _193396
 	public class CollectData
 	{
 		public int id;
+		public string name;
 	}
 
 	public class CollectBehavior : EntityBehavior
@@ -40,8 +41,6 @@ namespace _193396
 
 			if (collectCheck.IsTouchingLayers(data.collectingLayers))
 			{
-				Debug.Log("collected");
-
 				runtimeData.isCollected = true;
 				triggerCollect();
 
@@ -62,6 +61,7 @@ namespace _193396
 
 			CollectData collect = new CollectData();
 			collect.id = gameObject.GetInstanceID();
+			collect.name = data.eventName;
 
 			foreach (Collider2D contact in contacts)
 				contact.SendMessageUpwards("onMessage", new EntityMessage("collect", collect));

@@ -9,5 +9,7 @@ namespace _193396
 
 		[Tooltip("Layers that can collect")]
 		public RuntimeSettings.LayerMaskInput collectingLayers;
+		[Tooltip("Name of the collected item")]
+		public string eventName;
 	}
 }

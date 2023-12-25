@@ -11,8 +11,8 @@ namespace _193396
 
 		private void Awake()
 		{
-			healthTransform = transform.Find("Canvas/health/fluid").GetComponent<RectTransform>();
-			healthLevelTransform = transform.Find("Canvas/health/level").GetComponent<RectTransform>();
+			healthTransform = transform.Find("Canvas/Top-Left/health/fluid").GetComponent<RectTransform>();
+			healthLevelTransform = transform.Find("Canvas/Top-Left/health/level").GetComponent<RectTransform>();
 		}
 
 		private void Update()

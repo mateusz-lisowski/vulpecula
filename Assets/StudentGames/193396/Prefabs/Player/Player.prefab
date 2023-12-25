@@ -1743,6 +1743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeData:
+    health: 0
     score: 0
     playtime: 0
 --- !u!1 &6762855587386811600
