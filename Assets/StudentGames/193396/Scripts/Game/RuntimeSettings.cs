@@ -33,6 +33,7 @@ namespace _193396
 			GroundDroppable = 23,
 			GroundBreakable = 24,
 			Slope = 25,
+			CustomRegion = 26,
 			Collectible = 28,
 			Editor = 31
 		}
@@ -54,6 +55,7 @@ namespace _193396
 			Breakable,
 			BreakableExplode,
 			Slope,
+			CustomRegion,
 		}
 
 		[Serializable]
@@ -244,6 +246,7 @@ namespace _193396
 			GroundDroppable = 1 << 23,
 			GroundBreakable = 1 << 24,
 			Slope = 1 << 25,
+			CustomRegion = 1 << 26,
 			Collectible = 1 << 28,
 			Editor = 1 << 31
 		}

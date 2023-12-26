@@ -16,7 +16,7 @@ namespace _193396
 
 
 		[Serializable]
-		public struct Flashing
+		public class Flashing
 		{
 			[Tooltip("Frequency of a flash")]
 			public float frequency;
@@ -60,7 +60,7 @@ namespace _193396
 		}
 
 		[Serializable]
-		public struct FrameMove
+		public class FrameMove
 		{
 			[Tooltip("Number of frames per second")]
 			public float frameRate;
@@ -80,7 +80,7 @@ namespace _193396
 		}
 
 		[Serializable]
-		public struct Fade
+		public class Fade
 		{
 			[Tooltip("Distance before fully fading")]
 			public float distance;
@@ -89,6 +89,14 @@ namespace _193396
 			[Tooltip("Frequency of fade updates")]
 			public float updateFrequency;
 
+			[Space(10)]
+
+			[Tooltip("Direction of fading")]
+			public Vector3 direction = Vector3.down;
+			[Tooltip("Change of alpha when fully faded")]
+			public float alphaDelta = 1f;
+
+
 			public IEnumerator run(GameObject target, IList<TilemapHelper.RegionLayer> tilemaps,
 								   Func<bool> stop = null, bool revert = false, bool move = true)
 			{
@@ -96,7 +104,7 @@ namespace _193396
 				float waitTime = 1f / updateFrequency;
 
 				float updateDistance = (!revert ? distance : -distance) / times;
-				float updateColor = (!revert ? 1f : -1f) / times;
+				float updateColor = (!revert ? alphaDelta : -alphaDelta) / times;
 
 				bool stopping;
 
@@ -114,7 +122,7 @@ namespace _193396
 					if (move)
 					{
 						Vector3 position = target.transform.position;
-						position.y -= !stopping ? updateDistance : -updateDistance;
+						position += (!stopping ? updateDistance : -updateDistance) * direction;
 						target.transform.position = position;
 					}
 

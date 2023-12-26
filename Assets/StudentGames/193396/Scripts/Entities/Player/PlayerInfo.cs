@@ -107,6 +107,28 @@ namespace _193396
 				controller.onEvent("healed", heal);
 		}
 
+		private void unlock(string name)
+		{
+			switch (name)
+			{
+				case "key-1":
+					runtimeData.unlockedKey1 = true;
+					controller.onEvent("unlocked", "key-1");
+					break;
+				case "key-2":
+					runtimeData.unlockedKey2 = true;
+					controller.onEvent("unlocked", "key-2");
+					break;
+				case "key-3":
+					runtimeData.unlockedKey3 = true;
+					controller.onEvent("unlocked", "key-3");
+					break;
+			}
+
+			if (runtimeData.unlockedKey1 && runtimeData.unlockedKey2 && runtimeData.unlockedKey3)
+				controller.onEvent("unlocked", "boss");
+		}
+
 		private void collect(CollectData collect)
 		{
 			if (justCollected.Contains(collect.id))
@@ -119,16 +141,9 @@ namespace _193396
 					runtimeData.score++;
 					break;
 				case "key-1":
-					runtimeData.unlockedKey1 = true;
-					controller.onEvent("unlocked", "key-1");
-					break;
 				case "key-2":
-					runtimeData.unlockedKey2 = true;
-					controller.onEvent("unlocked", "key-2");
-					break;
 				case "key-3":
-					runtimeData.unlockedKey3 = true;
-					controller.onEvent("unlocked", "key-3");
+					unlock(collect.name);
 					break;
 				case "checkpoint":
 					runtimeData.spawnpoint = collect.position;

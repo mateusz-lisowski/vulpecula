@@ -17,6 +17,7 @@ TagManager:
   - Breakable
   - Breakable Explode
   - Slope
+  - Custom Region
   layers:
   - Default
   - TransparentFX
