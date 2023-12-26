@@ -26,12 +26,12 @@ namespace _193396
 		private void Update()
 		{
 			float y = healthLevelTransform.anchoredPosition.y 
-				- healthLevelTransform.sizeDelta.y * (1f - info.healthNormalized());
+				- healthLevelTransform.sizeDelta.y * (1f - info.healthNormalized);
 
 			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, y);
 
-			playtime.text = string.Format("{0:0.00}", info.playtime());
-			score.text = string.Format("Score: {0}", info.score());
+			playtime.text = string.Format("{0:0.00}", info.playtime);
+			score.text = string.Format("Score: {0}", info.score);
 		}
 
 

@@ -2,9 +2,15 @@ using UnityEngine;
 
 namespace _193396
 {
+	[RequireComponent(typeof(PlayerInfo))]
+	[RequireComponent(typeof(PlayerInput))]
 	[RequireComponent(typeof(PlayerMovement))]
 	public class PlayerAttack : EntityBehavior
 	{
+		private PlayerInfo info;
+		private PlayerInput input;
+		private PlayerMovement movement;
+		private PlayerData data => info.data;
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public bool isAttackDownInput { get; private set; }
 		[field: Space(10)]
@@ -19,9 +25,6 @@ namespace _193396
 		[field: SerializeField, ReadOnly] public int attackForwardCombo { get; private set; }
 
 
-		private PlayerMovement movement;
-		private PlayerData data;
-
 		private Transform attackForwardTransform;
 		private Transform attackForwardStrongTransform;
 		private Transform attackForwardAirTransform;
@@ -33,8 +36,9 @@ namespace _193396
 
 		public override void onAwake()
 		{
+			info = controller.getBehavior<PlayerInfo>();
+			input = controller.getBehavior<PlayerInput>();
 			movement = controller.getBehavior<PlayerMovement>();
-			data = movement.data;
 
 			attackForwardTransform = transform.Find("Attack/Forward");
 			attackForwardStrongTransform = transform.Find("Attack/Forward Strong");
@@ -86,10 +90,10 @@ namespace _193396
 
 		private void updateInputs()
 		{
-			if (Input.GetKeyDown(KeyCode.X))
+			if (input.isInputAttack)
 				lastAttackInputTime = 0;
 
-			isAttackDownInput = Input.GetKey(KeyCode.DownArrow);
+			isAttackDownInput = input.isInputAttackDown;
 		}
 
 
@@ -221,7 +225,7 @@ namespace _193396
 		}
 		private void updateAttack()
 		{
-			if (movement.isDistressed)
+			if (!input.isEnabled || movement.isDistressed)
 			{
 				movement.isAttacking = false;
 				if (currentAttackData != null)

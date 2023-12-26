@@ -98,22 +98,21 @@ namespace _193396
 		}
 		private void setInvulnerability(bool val)
 		{
-			int layer;
-
 			switch (gameObject.layer)
 			{
 				case (int)RuntimeSettings.Layer.EnemyFlying:
-					layer = (int)(val ? RuntimeSettings.Layer.EnemyFlyingInvulnerable : RuntimeSettings.Layer.EnemyFlying);
+					if (val)
+						setHitboxLayer(RuntimeSettings.Layer.EnemyFlyingInvulnerable);
+					else
+						setHitboxLayer(RuntimeSettings.Layer.EnemyFlying);
 					break;
 				default:
-					layer = (int)(val ? RuntimeSettings.Layer.EnemyInvulnerable : RuntimeSettings.Layer.Enemy);
+					if (val)
+						setHitboxLayer(RuntimeSettings.Layer.EnemyInvulnerable);
+					else
+						setHitboxLayer(RuntimeSettings.Layer.Enemy);
 					break;
 			}
-
-			foreach (Transform child in controller.hitbox)
-				child.gameObject.layer = layer;
-
-			controller.hitbox.gameObject.layer = layer;
 		}
 		private void hurt()
 		{

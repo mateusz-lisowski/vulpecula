@@ -333,6 +333,7 @@ MonoBehaviour:
   eventName: dashBegin
   eventData: 
   cooldown: 0
+  transitionTime: 0
 --- !u!1 &1679998860894510800
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +479,7 @@ MonoBehaviour:
   eventName: walked
   eventData: 
   cooldown: 0.2
+  transitionTime: 0
 --- !u!1 &2859902028959753577
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,6 +727,7 @@ GameObject:
   - component: {fileID: 7401596785829134112}
   - component: {fileID: 8997710387890157603}
   - component: {fileID: 3850944457831189235}
+  - component: {fileID: 8381628761456572204}
   m_Layer: 0
   m_Name: Forest
   m_TagString: Untagged
@@ -859,6 +862,7 @@ MonoBehaviour:
   eventName: regionEnter
   eventData: '!forest'
   cooldown: 0
+  transitionTime: 0
 --- !u!114 &3850944457831189235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -875,6 +879,24 @@ MonoBehaviour:
   eventName: regionEnter
   eventData: forest
   cooldown: 0
+  transitionTime: 0
+--- !u!114 &8381628761456572204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3105245608655119813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f76f3133d2badc4a8895480127ac4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  eventName: died
+  eventData: 
+  cooldown: 0
+  transitionTime: 0.5
 --- !u!1 &3317683930131098186
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,7 +943,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: f71bc366aa7f1ef4189b533c48b0fbd5, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.5
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -1018,8 +1040,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   eventName: hurt
-  eventData: 
+  eventData: '!0'
   cooldown: 0
+  transitionTime: 0
 --- !u!1 &3548394364348894223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1165,6 +1188,7 @@ MonoBehaviour:
   eventName: fell
   eventData: 
   cooldown: 0
+  transitionTime: 0
 --- !u!1 &3604271867985205894
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,6 +1334,171 @@ MonoBehaviour:
   eventName: jumped
   eventData: 
   cooldown: 0
+  transitionTime: 0
+--- !u!1 &3625319635429273898
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3931984877829537815}
+  - component: {fileID: 330755564614115638}
+  - component: {fileID: 4474008503335986449}
+  - component: {fileID: 814432183631394414}
+  m_Layer: 0
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3931984877829537815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625319635429273898}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1590852814310258827}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &330755564614115638
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625319635429273898}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: eb5fbfd593db8c1438b5e88a72a22b17, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &4474008503335986449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625319635429273898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f76f3133d2badc4a8895480127ac4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  eventName: died
+  eventData: 
+  cooldown: 0
+  transitionTime: 0.5
+--- !u!114 &814432183631394414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625319635429273898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f76f3133d2badc4a8895480127ac4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  eventName: respawn
+  eventData: 
+  cooldown: 0
+  transitionTime: 2
 --- !u!1 &4363498411601349099
 GameObject:
   m_ObjectHideFlags: 0
@@ -1433,6 +1622,153 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &4382500554628669163
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1590852814310258827}
+  - component: {fileID: 5650687496051297363}
+  - component: {fileID: 1722925523092149326}
+  m_Layer: 0
+  m_Name: Death
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1590852814310258827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4382500554628669163}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3931984877829537815}
+  m_Father: {fileID: 1231151292735923661}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &5650687496051297363
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4382500554628669163}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: f71bc366aa7f1ef4189b533c48b0fbd5, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1722925523092149326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4382500554628669163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f76f3133d2badc4a8895480127ac4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  eventName: died
+  eventData: 
+  cooldown: 0
+  transitionTime: 0
 --- !u!1 &4684031009702523882
 GameObject:
   m_ObjectHideFlags: 0
@@ -1593,9 +1929,10 @@ GameObject:
   - component: {fileID: 3832259940529436474}
   - component: {fileID: 7730965748514213015}
   - component: {fileID: 366798822763329414}
+  - component: {fileID: 5465061390922904559}
+  - component: {fileID: 1488219391124004180}
   - component: {fileID: 7855963956060272660}
   - component: {fileID: 7745948289286802684}
-  - component: {fileID: 5465061390922904559}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1662,6 +1999,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eab231cf91216e4428feaf4505180e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5465061390922904559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367288690823563264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b945b5538239846418637784584838aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 18f7920bae5a96143b2fae235a56f260, type: 2}
+  runtimeData:
+    playtime: 0
+    score: 0
+    unlockedKey1: 0
+    unlockedKey2: 0
+    unlockedKey3: 0
+    spawnpointLevel: 
+    spawnpoint: {x: 0, y: 0}
+  health: 0
+--- !u!114 &1488219391124004180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367288690823563264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 783bff841eff26245ba1082f7afad3c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <isEnabled>k__BackingField: 1
+  <isInputMoveUp>k__BackingField: 0
+  <isInputMoveDown>k__BackingField: 0
+  <isInputMoveLeft>k__BackingField: 0
+  <isInputMoveRight>k__BackingField: 0
+  <isInputJump>k__BackingField: 0
+  <isInputJumpReleased>k__BackingField: 0
+  <isInputDash>k__BackingField: 0
+  <isInputDashReleased>k__BackingField: 0
+  <isInputPassthrough>k__BackingField: 0
+  <isInputAttack>k__BackingField: 0
+  <isInputAttackDown>k__BackingField: 0
 --- !u!114 &7855963956060272660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1674,7 +2057,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff3a32f6b7c6914090f98055585db25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 18f7920bae5a96143b2fae235a56f260, type: 2}
   <isFacingRight>k__BackingField: 0
   <isMoving>k__BackingField: 0
   <isJumping>k__BackingField: 0
@@ -1730,26 +2112,6 @@ MonoBehaviour:
   <attackForwardCooldown>k__BackingField: 0
   <attackDownCooldown>k__BackingField: 0
   <attackForwardCombo>k__BackingField: 0
---- !u!114 &5465061390922904559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6367288690823563264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b945b5538239846418637784584838aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  runtimeData:
-    score: 0
-    unlocked_key_1: 0
-    unlocked_key_2: 0
-    unlocked_key_3: 0
-    playtime: 0
-  health: 0
-  spawnpoint: {x: 0, y: 0}
 --- !u!1 &6762855587386811600
 GameObject:
   m_ObjectHideFlags: 0
@@ -1928,6 +2290,7 @@ MonoBehaviour:
   eventName: attackBegin
   eventData: 
   cooldown: 0
+  transitionTime: 0
 --- !u!1 &7202530949931120794
 GameObject:
   m_ObjectHideFlags: 0
@@ -7075,8 +7438,13 @@ MonoBehaviour:
     setBoolean: 0
   - eventName: died
     eventData: 
-    animatorName: onDeath
-    type: 0
+    animatorName: isDead
+    type: 1
+    setBoolean: 1
+  - eventName: respawn
+    eventData: 
+    animatorName: isDead
+    type: 1
     setBoolean: 0
   - eventName: attackBegin
     eventData: attack1
@@ -7136,6 +7504,7 @@ GameObject:
   - component: {fileID: 8720328907817740563}
   - component: {fileID: 5151924526723805989}
   - component: {fileID: 8042779470282594720}
+  - component: {fileID: 8740408026329250189}
   m_Layer: 0
   m_Name: Cave
   m_TagString: Untagged
@@ -7270,6 +7639,7 @@ MonoBehaviour:
   eventName: regionEnter
   eventData: '!cave'
   cooldown: 0
+  transitionTime: 0
 --- !u!114 &8042779470282594720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7286,6 +7656,24 @@ MonoBehaviour:
   eventName: regionEnter
   eventData: cave
   cooldown: 0
+  transitionTime: 0
+--- !u!114 &8740408026329250189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8572228390535799043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f76f3133d2badc4a8895480127ac4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  eventName: died
+  eventData: 
+  cooldown: 0
+  transitionTime: 0.5
 --- !u!1 &8574662963483078663
 GameObject:
   m_ObjectHideFlags: 0
@@ -7323,6 +7711,7 @@ Transform:
   - {fileID: 3067206836952491699}
   - {fileID: 4264217023357636341}
   - {fileID: 1109070514640909247}
+  - {fileID: 1590852814310258827}
   m_Father: {fileID: 3832259940529436474}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8806314532430602294

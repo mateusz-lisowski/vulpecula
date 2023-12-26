@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 namespace _193396
 {
-	[RequireComponent(typeof(PlayerMovement))]
 	public class PlayerInfo : EntityBehavior
 	{
 		[Serializable]
@@ -24,35 +23,22 @@ namespace _193396
 			[field: SerializeField, ReadOnly] public Vector2 spawnpoint;
 		}
 
+		public PlayerData data;
+		[field: Space(10)]
 		[field: SerializeField] private RuntimeData runtimeData;
 		[Space(5)]
 		[field: SerializeField, ReadOnly] private int health;
-
-		private PlayerMovement movement;
-		private PlayerData data;
 
 		private List<int> justCollected = new List<int>();
 		private bool justHit = false;
 
 
-		public float healthNormalized()
-		{
-			return (float)health / data.hurt.health;
-		}
-		public float playtime()
-		{
-			return runtimeData.playtime;
-		}
-		public int score()
-		{
-			return runtimeData.score;
-		}
+		public float healthNormalized => (float)health / data.hurt.health;
+		public float playtime => runtimeData.playtime;
+		public float score => runtimeData.score;
 
 		public override void onAwake()
 		{
-			movement = controller.getBehavior<PlayerMovement>();
-			data = movement.data;
-
 			health = data.hurt.health;
 		}
 		public override void onStart()
@@ -105,7 +91,7 @@ namespace _193396
 
 			health = Math.Max(health - hitData.strength, 0);
 
-			controller.onEvent("hurt", healthNormalized());
+			controller.onEvent("hurt", healthNormalized);
 
 			if (health == 0)
 				controller.onEvent("died", null);
