@@ -45624,6 +45624,7 @@ MonoBehaviour:
   eventName: unlocked
   eventData: key-3
   targetPath: 3
+  timeOffset: 0
 --- !u!114 &1427032381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45640,6 +45641,7 @@ MonoBehaviour:
   eventName: unlocked
   eventData: key-2
   targetPath: 2
+  timeOffset: 0
 --- !u!114 &1427032382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45656,6 +45658,7 @@ MonoBehaviour:
   eventName: unlocked
   eventData: key-1
   targetPath: 1
+  timeOffset: 0
 --- !u!1 &1443364365
 GameObject:
   m_ObjectHideFlags: 0

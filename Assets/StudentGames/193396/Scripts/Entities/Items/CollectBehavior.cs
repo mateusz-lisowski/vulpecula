@@ -55,7 +55,7 @@ namespace _193396
 				cooldown = data.cooldown;
 				triggerCollect();
 
-				controller.onEvent("collected", null);
+				controller.onEvent("collected", data.eventName);
 			}
 		}
 

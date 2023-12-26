@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
@@ -16,6 +17,8 @@ namespace _193396
 		public string eventData;
 		[Space(5)]
 		public string targetPath;
+		[Space(5)]
+		public float timeOffset = 0f;
 
 		private Transform target;
 
@@ -34,12 +37,26 @@ namespace _193396
 			switch (type)
 			{
 				case Type.Enable:
-					target.gameObject.SetActive(true);
+					if (timeOffset == 0f)
+						target.gameObject.SetActive(true);
+					else
+						StartCoroutine(activate(true));
 					break;
 				case Type.Disable:
-					target.gameObject.SetActive(false);
+					if (timeOffset == 0f)
+						target.gameObject.SetActive(false);
+					else
+						StartCoroutine(activate(false));
 					break;
 			}
+		}
+
+
+		private IEnumerator activate(bool active)
+		{
+			yield return new WaitForSeconds(timeOffset);
+
+			target.gameObject.SetActive(active);
 		}
 	}
 }
