@@ -5,6 +5,9 @@ namespace _193396
 {
 	public class CollectData
 	{
+		private static int _idGenerator = 1;
+		public static int idGenerator => _idGenerator++;
+
 		public int id;
 		public string name;
 		public Vector2 position;
@@ -68,7 +71,7 @@ namespace _193396
 				return;
 
 			CollectData collect = new CollectData();
-			collect.id = gameObject.GetInstanceID();
+			collect.id = CollectData.idGenerator;
 			collect.name = data.eventName;
 			collect.position = transform.position;
 
