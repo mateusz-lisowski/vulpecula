@@ -158,7 +158,7 @@ namespace _193396
 				behavior.onAwake();
 
 			eventDispatcher = new Dictionary<string, List<EntityEventReceiver>>();
-			foreach (var receiver in transform.GetComponentsInChildren<EntityEventReceiver>())
+			foreach (var receiver in transform.GetComponentsInChildren<EntityEventReceiver>(true))
 				addEventReceiver(receiver);
 		}
 		private void Start()
