@@ -55,6 +55,8 @@ namespace _193396
 		public virtual string[] capturableEvents { get => Array.Empty<string>(); }
 		public virtual void onEvent(string eventName, object eventData) { }
 
+		public virtual void onDisable() { }
+
 		public bool receiveUpdates { get; private set; }
 		private void OnEnable()
 		{
@@ -63,6 +65,7 @@ namespace _193396
 		private void OnDisable()
 		{
 			receiveUpdates = false;
+			onDisable();
 		}
 	}
 

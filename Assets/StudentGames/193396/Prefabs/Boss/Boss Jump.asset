@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxFall: 10
   longHeight: 10
-  longSpeed: 8
-  shortHeight: 5
-  shortSpeed: 3
-  cooldown: 0
+  longSpeed: 12
+  shortHeight: 3
+  shortSpeed: 8
+  cooldown: 1
   jumpOnlyAtTargets: 1
   targetLayers:
     value: 12288

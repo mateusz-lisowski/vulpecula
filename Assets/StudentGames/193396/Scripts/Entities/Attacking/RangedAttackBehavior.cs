@@ -34,6 +34,11 @@ namespace _193396
 				attackTransforms[data.attackInstantiateEventName + "." + childTransform.name] = childTransform;
 		}
 
+		public override void onDisable()
+		{
+			isAttacking = false;
+		}
+
 		public override string[] capturableEvents => new string[] { "attack", "attackExit" };
 		public override void onEvent(string eventName, object eventData)
 		{

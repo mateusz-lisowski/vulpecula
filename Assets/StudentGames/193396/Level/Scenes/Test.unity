@@ -81480,10 +81480,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 57.5, y: 27}
+    - - {x: 57.5, y: 23}
       - {x: 57.5, y: 15}
       - {x: 114.5, y: 15}
-      - {x: 114.5, y: 27}
+      - {x: 114.5, y: 23}
   m_UseDelaunayMesh: 0
 --- !u!4 &1493266003
 Transform:

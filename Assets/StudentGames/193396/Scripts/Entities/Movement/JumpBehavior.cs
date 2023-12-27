@@ -19,11 +19,15 @@ namespace _193396
 		private FlipBehavior direction;
 		private GroundedBehavior ground;
 
+		private Collider2D jumpCheck;
+
 
 		public override void onAwake()
 		{
 			direction = controller.getBehavior<FlipBehavior>();
 			ground = controller.getBehavior<GroundedBehavior>();
+
+			jumpCheck = transform.Find("Detection/Jump")?.GetComponent<Collider2D>();
 		}
 
 		public override void onUpdate()
@@ -35,6 +39,9 @@ namespace _193396
 
 		public override bool onFixedUpdate()
 		{
+			if (data.jumpOnlyAtTargets && !isJumping)
+				return false;
+
 			if (!isJumping)
 				ground.tryStopSlopeFixedUpdate();
 
@@ -86,11 +93,18 @@ namespace _193396
 
 		private Bounds hitboxBounds()
 		{
-			Collider2D[] colliders = controller.hitbox.GetComponents<Collider2D>();
+			Bounds b;
 
-			Bounds b = colliders[0].bounds;
-			foreach (Collider2D collider in colliders)
-				b.Encapsulate(collider.bounds);
+			if (jumpCheck != null)
+				b = jumpCheck.bounds;
+			else
+			{
+				Collider2D[] colliders = controller.hitbox.GetComponents<Collider2D>();
+
+				b = colliders[0].bounds;
+				foreach (Collider2D collider in colliders)
+					b.Encapsulate(collider.bounds);
+			}
 
 			b.min -= transform.position;
 			b.max -= transform.position;
@@ -121,16 +135,20 @@ namespace _193396
 				if (currentPosition != position)
 					hitboxSize.y += 0.5f;
 
-				hit = Physics2D.BoxCast(currentPosition, hitboxSize, 0f,
-					dir.normalized, dir.magnitude,
-					isRising ? ground.data.wallLayers : ground.data.groundLayers);
-				if (hit)
-					break;
-
 				if (data.jumpOnlyAtTargets)
-					if (Physics2D.BoxCast(currentPosition, hitboxSize, 0f, 
+				{
+					if (Physics2D.BoxCast(currentPosition, hitboxSize, 0f,
 						dir.normalized, dir.magnitude, data.targetLayers))
 						return true;
+				}
+				else
+				{
+					hit = Physics2D.BoxCast(currentPosition, hitboxSize, 0f,
+						dir.normalized, dir.magnitude,
+						isRising ? ground.data.wallLayers : ground.data.groundLayers);
+					if (hit)
+						break;
+				}
 
 				currentPosition = nextPosition;
 				currentTime += deltaTime;
@@ -151,14 +169,18 @@ namespace _193396
 		{
 			Bounds bounds = hitboxBounds();
 
-			int times = Mathf.RoundToInt((data.longSpeed - data.shortSpeed) / 0.5f) + 1;
+			int times = Mathf.RoundToInt((data.longHeight - data.shortHeight) / 0.5f) + 1;
 
 			for (int i = 0; i < times; i++)
 			{
-				speed = Mathf.Lerp(data.longSpeed, data.shortSpeed, times > 1 ? i / (float)(times - 1) : 0);
-				height = Mathf.Lerp(data.longHeight, data.shortHeight, times > 1 ? i / (float)(times - 1) : 0);
+				float lerp = times > 1 ? i / (float)(times - 1) : 0;
+				if (data.jumpOnlyAtTargets)
+					lerp = 1f - lerp;
 
-				if (tryFindTarget(transform.position, bounds, height, speed))
+				speed = Mathf.Lerp(data.longSpeed, data.shortSpeed, lerp);
+				height = Mathf.Lerp(data.longHeight, data.shortHeight, lerp);
+
+				if (tryFindTarget(transform.position + bounds.center, bounds, height, speed))
 					return true;
 			}
 
