@@ -71,6 +71,16 @@ namespace _193396
 
 			justCollected.Clear();
 			justHit = false;
+
+
+			if (Input.GetKeyDown(KeyCode.F1))
+				controller.onEvent("hit", new HitData { isVertical = true, right = Vector3.right, strength = 999 });
+			else if (Input.GetKeyDown(KeyCode.F2))
+			{
+				controller.onEvent("collect", new CollectData { id = CollectData.idGenerator, name = "key-1" });
+				controller.onEvent("collect", new CollectData { id = CollectData.idGenerator, name = "key-2" });
+				controller.onEvent("collect", new CollectData { id = CollectData.idGenerator, name = "key-3" });
+			}
 		}
 
 
