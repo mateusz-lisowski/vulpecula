@@ -123,7 +123,7 @@ namespace _193396
 		public int currentUpdate { get; private set; }
 		public int currentFixedUpdate { get; private set; }
 
-		private Dictionary<string, List<EntityEventReceiver>> eventDispatcher;
+		private Dictionary<string, List<EntityEventReceiver>> eventDispatcher = new Dictionary<string, List<EntityEventReceiver>>();
 
 
 		public B getBehavior<B>() where B : EntityBehavior
@@ -157,7 +157,6 @@ namespace _193396
 			foreach (var behavior in behaviors)
 				behavior.onAwake();
 
-			eventDispatcher = new Dictionary<string, List<EntityEventReceiver>>();
 			foreach (var receiver in transform.GetComponentsInChildren<EntityEventReceiver>(true))
 				addEventReceiver(receiver);
 		}
@@ -200,22 +199,29 @@ namespace _193396
 			onEvent(msg.name, msg.data);
 		}
 
-		public void addEventReceiver(EntityEventReceiver receiver)
+		public void addEventReceiver(EntityEventReceiver receiver, List<string> receivableEvents = null)
 		{
 			foreach (var capturableEvent in receiver.capturableEvents)
-				if (!eventDispatcher.ContainsKey(capturableEvent))
-					eventDispatcher.Add(capturableEvent, new List<EntityEventReceiver> { receiver });
-				else
-				{
-					var dispatcher = eventDispatcher[capturableEvent];
-					if (!dispatcher.Contains(receiver))
-						dispatcher.Add(receiver);
-				}
+				if (receivableEvents == null || receivableEvents.Contains(capturableEvent))
+					if (!eventDispatcher.ContainsKey(capturableEvent))
+						eventDispatcher.Add(capturableEvent, new List<EntityEventReceiver> { receiver });
+					else
+					{
+						var dispatcher = eventDispatcher[capturableEvent];
+						if (!dispatcher.Contains(receiver))
+							dispatcher.Add(receiver);
+					}
 		}
 		public void removeEventReceiver(EntityEventReceiver receiver)
 		{
+			if (eventDispatcher == null)
+				return;
+
 			foreach (var capturableEvent in receiver.capturableEvents)
 			{
+				if (!eventDispatcher.ContainsKey(capturableEvent))
+					continue;
+
 				var receivers = eventDispatcher[capturableEvent];
 
 				receivers.Remove(receiver);

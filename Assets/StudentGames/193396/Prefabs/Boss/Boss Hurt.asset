@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bd1fad3ccd0556439296817c4a58867, type: 3}
-  m_Name: Boss Data
+  m_Script: {fileID: 11500000, guid: c999a51b1c68c5541bb667963be18f7e, type: 3}
+  m_Name: Boss Hurt
   m_EditorClassIdentifier: 
-  targetLayers:
-    value: 12288
-  passiveHealCooldown: 0.1
-  restTime: 2
+  invulnerabilityTime: 0
+  distressTime: 0
+  health: 20
+  maxBlock: 0

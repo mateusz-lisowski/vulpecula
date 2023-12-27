@@ -29,6 +29,8 @@ namespace _193396
 
 			isFacingRight = !isFacingRight;
 			controller.transform.Rotate(0, 180, 0);
+
+			controller.onEvent("flipped", null);
 		}
 		public void faceTowards(Vector2 point)
 		{

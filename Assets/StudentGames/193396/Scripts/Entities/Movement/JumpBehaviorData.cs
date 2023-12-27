@@ -22,5 +22,12 @@ namespace _193396
 
 		[Tooltip("Minimum time between two consecutive jumps")]
 		public float cooldown;
+
+		[Space(10)]
+
+		[Tooltip("Is jumping only at target layers")]
+		public bool jumpOnlyAtTargets = false;
+		[Tooltip("Layers to jump at")]
+		public RuntimeSettings.LayerMaskInput targetLayers;
 	}
 }

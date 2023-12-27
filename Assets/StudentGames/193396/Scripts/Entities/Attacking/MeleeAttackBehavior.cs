@@ -78,7 +78,10 @@ namespace _193396
 
 		private void updateCollisions()
 		{
-			isProvoked = attackCheck.IsTouchingLayers(data.provokeLayers);
+			if (attackCheck != null)
+				isProvoked = attackCheck.IsTouchingLayers(data.provokeLayers);
+			else
+				isProvoked = true;
 		}
 
 		private bool canAttack()

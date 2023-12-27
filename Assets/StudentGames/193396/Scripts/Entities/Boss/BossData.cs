@@ -5,18 +5,12 @@ namespace _193396
 	[CreateAssetMenu(menuName = "Data/Boss")]
 	public class BossData : ScriptableObject
 	{
-		[System.Serializable]
-		public struct Hurt
-		{
-			[Tooltip("Time of invulnerability after getting hit")]
-			public float invulnerabilityTime;
+		[Tooltip("Layers to chase")]
+		public RuntimeSettings.LayerMaskInput targetLayers;
 
-			[Space(5)]
-
-			[Tooltip("Cumulative strength of received attacks resulting in death")]
-			public int health;
-		}
-
-		public Hurt hurt;
+		[Tooltip("Heal cooldown when not active")]
+		public float passiveHealCooldown = 0.1f;
+		[Tooltip("Rest time between attacks")]
+		public float restTime = 5f;
 	}
 }

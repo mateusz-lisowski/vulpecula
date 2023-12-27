@@ -67,7 +67,7 @@ namespace _193396
 
 				controller.onEvent("jumped", null);
 			}
-			else
+			else if (!data.jumpOnlyAtTargets)
 				direction.flip();
 		}
 		private void updateJump()
@@ -127,12 +127,20 @@ namespace _193396
 				if (hit)
 					break;
 
+				if (data.jumpOnlyAtTargets)
+					if (Physics2D.BoxCast(currentPosition, hitboxSize, 0f, 
+						dir.normalized, dir.magnitude, data.targetLayers))
+						return true;
+
 				currentPosition = nextPosition;
 				currentTime += deltaTime;
 
 				if (currentPosition.y < position.y - data.maxFall)
 					return false;
 			}
+
+			if (data.jumpOnlyAtTargets)
+				return false;
 
 			if (hit.normal.y > 0.4f)
 				return true;

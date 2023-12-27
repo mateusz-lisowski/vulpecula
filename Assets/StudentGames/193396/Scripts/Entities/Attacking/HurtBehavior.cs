@@ -20,6 +20,17 @@ namespace _193396
 		private HitData hitData = null;
 
 
+		public void tryHeal(int count)
+		{
+			int newHealth = Math.Min(health + count, data.health);
+			int heal = newHealth - health;
+
+			health = newHealth;
+
+			if (heal > 0)
+				controller.onEvent("healed", heal);
+		}
+
 		public override void onAwake()
 		{
 			direction = controller.getBehavior<FlipBehavior>();
@@ -82,7 +93,7 @@ namespace _193396
 
 		private bool canHurt()
 		{
-			return hitData != null && hurtCooldown <= 0;
+			return hitData != null && hurtCooldown < 0;
 		}
 		private void setDistressDirection()
 		{
