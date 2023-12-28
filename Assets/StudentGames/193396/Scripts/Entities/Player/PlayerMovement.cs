@@ -32,6 +32,7 @@ namespace _193396
 		[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
 		[field: SerializeField, ReadOnly] public bool canGroundDrop { get; private set; }
 		[field: SerializeField, ReadOnly] public bool canTakeGroundDamage { get; private set; }
+		[field: SerializeField, ReadOnly] public bool canGetInstaKilled { get; private set; }
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 		[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
@@ -67,6 +68,7 @@ namespace _193396
 		private int lastEnabledFrame = -1;
 		private int lastJumpFrame = -1;
 		private int lastTurnFrame = -1;
+		private int lastInstaKillFrame = -1;
 
 		private bool currentJumpCuttable = false;
 		private bool jumpCutInput = false;
@@ -286,11 +288,16 @@ namespace _193396
 			canWallJump		= input.isEnabled && withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
 			canGroundDrop	= input.isEnabled && withinCheck.IsTouchingLayers(data.detection.canDropLayer);
 			canTakeGroundDamage = input.isEnabled && groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
+			canGetInstaKilled = input.isEnabled && controller.rigidBody.IsTouchingLayers(data.detection.canInstaKillLayer);
 
 			// disable registering wall collision immediately after turning because wallCheck's hitbox
 			// needs time to get updated
 			if (lastTurnFrame >= controller.currentFixedUpdate - 1)
 				isFacingWall = false;
+
+			// disable insant kill when just insta killed
+			if (lastInstaKillFrame >= controller.currentFixedUpdate - 1)
+				canGetInstaKilled = false;
 
 			// enable grounded when just spawned before groundCheck updates
 			if (lastEnabledFrame >= controller.currentFixedUpdate - 1)
@@ -308,6 +315,17 @@ namespace _193396
 			}
 		}
 
+		private void instaKill()
+		{
+			lastInstaKillFrame = controller.currentFixedUpdate;
+
+			hitData = new HitData();
+			hitData.isVertical = true;
+			hitData.right = transform.right;
+			hitData.strength = 9999;
+
+			controller.onEvent("hit", hitData);
+		}
 		private bool canTriggerGroundDamage()
 		{
 			return canTakeGroundDamage && isGrounded && !isInvulnerable;
@@ -365,6 +383,9 @@ namespace _193396
 		}
 		private void updateHurt()
 		{
+			if (canGetInstaKilled)
+				instaKill();
+
 			if (canTriggerGroundDamage())
 				takeGroundDamage();
 

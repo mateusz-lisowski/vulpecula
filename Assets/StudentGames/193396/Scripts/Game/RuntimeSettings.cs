@@ -20,6 +20,7 @@ namespace _193396
 			Ground = 8,
 			PlatformPassable = 9,
 			PlayerPlatformPassable = 10,
+			PlayerGround = 11,
 			Player = 12,
 			PlayerInvulnerable = 13,
 			PlayerTransition = 14,
@@ -33,7 +34,8 @@ namespace _193396
 			GroundDroppable = 23,
 			GroundBreakable = 24,
 			Slope = 25,
-			CustomRegion = 26,
+			InstantKill = 26,
+			CustomRegion = 27,
 			Collectible = 28,
 			Editor = 31
 		}
@@ -56,6 +58,8 @@ namespace _193396
 			BreakableExplode,
 			Slope,
 			CustomRegion,
+			InstantKill,
+			PlayerGround,
 		}
 
 		[Serializable]
@@ -233,6 +237,7 @@ namespace _193396
 			Ground = 1 << 8,
 			PlatformPassable = 1 << 9,
 			PlayerPlatformPassable = 1 << 10,
+			PlayerGround = 1 << 11,
 			Player = 1 << 12,
 			PlayerInvulnerable = 1 << 13,
 			PlayerTransition = 1 << 14,
@@ -246,7 +251,8 @@ namespace _193396
 			GroundDroppable = 1 << 23,
 			GroundBreakable = 1 << 24,
 			Slope = 1 << 25,
-			CustomRegion = 1 << 26,
+			InstantKill = 1 << 26,
+			CustomRegion = 1 << 27,
 			Collectible = 1 << 28,
 			Editor = 1 << 31
 		}

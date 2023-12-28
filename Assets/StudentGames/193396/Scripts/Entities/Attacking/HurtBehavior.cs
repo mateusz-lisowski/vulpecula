@@ -56,6 +56,9 @@ namespace _193396
 			lastHurtTime += Time.deltaTime;
 			hurtCooldown -= Time.deltaTime;
 
+			if (controller.rigidBody.IsTouchingLayers(data.canInstaKillLayer))
+				instaKill();
+
 			if (canHurt())
 				if (hitData.strength >= data.maxBlock)
 				{
@@ -90,6 +93,16 @@ namespace _193396
 			return true;
 		}
 
+
+		private void instaKill()
+		{
+			hitData = new HitData();
+			hitData.isVertical = true;
+			hitData.right = transform.right;
+			hitData.strength = 9999;
+
+			controller.onEvent("hit", hitData);
+		}
 
 		private bool canHurt()
 		{

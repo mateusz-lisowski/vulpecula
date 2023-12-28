@@ -5,6 +5,9 @@ namespace _193396
 	[CreateAssetMenu(menuName = "Data/Behavior/Hurt")]
 	public class HurtBehaviorData : ScriptableObject
 	{
+		[Tooltip("Layer detecting whether the ground can instantly kill")]
+		public RuntimeSettings.LayerMaskInput canInstaKillLayer;
+
 		[Space(10)]
 
 		[Tooltip("Time of invulnerability after getting hit")]
