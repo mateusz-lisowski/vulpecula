@@ -122,18 +122,23 @@ namespace _193396
 			switch (name)
 			{
 				case "key-1":
+					if (runtimeData.unlockedKey1)
+						return;
 					runtimeData.unlockedKey1 = true;
-					controller.onEvent("unlocked", "key-1");
 					break;
 				case "key-2":
+					if (runtimeData.unlockedKey2)
+						return;
 					runtimeData.unlockedKey2 = true;
-					controller.onEvent("unlocked", "key-2");
 					break;
 				case "key-3":
+					if (runtimeData.unlockedKey3)
+						return;
 					runtimeData.unlockedKey3 = true;
-					controller.onEvent("unlocked", "key-3");
 					break;
 			}
+
+			controller.onEvent("unlocked", name);
 
 			if (runtimeData.unlockedKey1 && runtimeData.unlockedKey2 && runtimeData.unlockedKey3)
 				controller.onEvent("unlocked", "boss");

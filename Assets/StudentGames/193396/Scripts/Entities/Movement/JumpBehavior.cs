@@ -19,15 +19,11 @@ namespace _193396
 		private FlipBehavior direction;
 		private GroundedBehavior ground;
 
-		private Collider2D jumpCheck;
-
 
 		public override void onAwake()
 		{
 			direction = controller.getBehavior<FlipBehavior>();
 			ground = controller.getBehavior<GroundedBehavior>();
-
-			jumpCheck = transform.Find("Detection/Jump")?.GetComponent<Collider2D>();
 		}
 
 		public override void onUpdate()
@@ -39,9 +35,6 @@ namespace _193396
 
 		public override bool onFixedUpdate()
 		{
-			if (data.jumpOnlyAtTargets && !isJumping)
-				return false;
-
 			if (!isJumping)
 				ground.tryStopSlopeFixedUpdate();
 
@@ -74,7 +67,7 @@ namespace _193396
 
 				controller.onEvent("jumped", null);
 			}
-			else if (!data.jumpOnlyAtTargets)
+			else
 				direction.flip();
 		}
 		private void updateJump()
@@ -93,18 +86,11 @@ namespace _193396
 
 		private Bounds hitboxBounds()
 		{
-			Bounds b;
+			Collider2D[] colliders = controller.hitbox.GetComponents<Collider2D>();
 
-			if (jumpCheck != null)
-				b = jumpCheck.bounds;
-			else
-			{
-				Collider2D[] colliders = controller.hitbox.GetComponents<Collider2D>();
-
-				b = colliders[0].bounds;
-				foreach (Collider2D collider in colliders)
-					b.Encapsulate(collider.bounds);
-			}
+			Bounds b = colliders[0].bounds;
+			foreach (Collider2D collider in colliders)
+				b.Encapsulate(collider.bounds);
 
 			b.min -= transform.position;
 			b.max -= transform.position;
@@ -134,21 +120,12 @@ namespace _193396
 				Vector2 hitboxSize = bounds.size;
 				if (currentPosition != position)
 					hitboxSize.y += 0.5f;
-
-				if (data.jumpOnlyAtTargets)
-				{
-					if (Physics2D.BoxCast(currentPosition, hitboxSize, 0f,
-						dir.normalized, dir.magnitude, data.targetLayers))
-						return true;
-				}
-				else
-				{
-					hit = Physics2D.BoxCast(currentPosition, hitboxSize, 0f,
-						dir.normalized, dir.magnitude,
-						isRising ? ground.data.wallLayers : ground.data.groundLayers);
-					if (hit)
-						break;
-				}
+				
+				hit = Physics2D.BoxCast(currentPosition, hitboxSize, 0f,
+					dir.normalized, dir.magnitude,
+					isRising ? ground.data.wallLayers : ground.data.groundLayers);
+				if (hit)
+					break;
 
 				currentPosition = nextPosition;
 				currentTime += deltaTime;
@@ -156,9 +133,6 @@ namespace _193396
 				if (currentPosition.y < position.y - data.maxFall)
 					return false;
 			}
-
-			if (data.jumpOnlyAtTargets)
-				return false;
 
 			if (hit.normal.y > 0.4f)
 				return true;
@@ -174,8 +148,6 @@ namespace _193396
 			for (int i = 0; i < times; i++)
 			{
 				float lerp = times > 1 ? i / (float)(times - 1) : 0;
-				if (data.jumpOnlyAtTargets)
-					lerp = 1f - lerp;
 
 				speed = Mathf.Lerp(data.longSpeed, data.shortSpeed, lerp);
 				height = Mathf.Lerp(data.longHeight, data.shortHeight, lerp);

@@ -6,7 +6,7 @@ namespace _193396
 	public class UIController : EntityEventReceiver
 	{
 		public PlayerInfo info;
-		public BossInfo bossInfo;
+		public HurtBehavior bossHealth;
 
 		private RectTransform healthTransform;
 		private RectTransform healthLevelTransform;
@@ -35,7 +35,7 @@ namespace _193396
 			float healthY = healthLevelTransform.anchoredPosition.y - healthLevelTransform.sizeDelta.y * (1f - info.healthNormalized);
 			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, healthY);
 
-			float bossHealthX = bossHealthLevelTransform.anchoredPosition.x - bossHealthLevelTransform.sizeDelta.x * (1f - bossInfo.healthNormalized);
+			float bossHealthX = bossHealthLevelTransform.anchoredPosition.x - bossHealthLevelTransform.sizeDelta.x * (1f - bossHealth.healthNormalized);
 			bossHealthTransform.anchoredPosition = new Vector2(bossHealthX, bossHealthTransform.anchoredPosition.y);
 
 			playtime.text = string.Format("{0:0.00}", info.playtime);

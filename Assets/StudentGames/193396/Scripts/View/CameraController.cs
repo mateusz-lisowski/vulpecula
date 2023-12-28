@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace _193396
@@ -13,6 +15,25 @@ namespace _193396
 		public float yMargin = 1f; // Distance in the y axis the player can move before the camera follows.
 		public float xSmooth = 8f; // How smoothly the camera catches up with it's target movement in the x axis.
 		public float ySmooth = 8f; // How smoothly the camera catches up with it's target movement in the y axis.
+
+
+		private List<Transform> targetStack = new List<Transform>();
+		public void pushTarget(Transform newTarget)
+		{
+			targetStack.Add(target);
+			target = newTarget;
+		}
+		public void popTarget(Transform oldTarget)
+		{
+			while (target == oldTarget)
+			{
+				target = targetStack.Last();
+				targetStack.RemoveAt(targetStack.Count - 1);
+			}
+
+			targetStack.RemoveAll(t => t == oldTarget);
+		}
+
 
 		private void OnValidate()
 		{

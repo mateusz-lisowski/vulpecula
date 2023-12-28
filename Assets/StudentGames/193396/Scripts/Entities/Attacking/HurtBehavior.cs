@@ -20,6 +20,8 @@ namespace _193396
 		private HitData hitData = null;
 
 
+		public float healthNormalized => (float)health / data.health;
+
 		public void tryHeal(int count)
 		{
 			int newHealth = Math.Min(health + count, data.health);
@@ -40,13 +42,16 @@ namespace _193396
 			health = data.health;
 		}
 
-		public override string[] capturableEvents => new string[] { "hit" };
+		public override string[] capturableEvents => new string[] { "hit", "heal" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
 			{
 				case "hit":
 					hitData = eventData as HitData;
+					break;
+				case "heal":
+					tryHeal((int)eventData);
 					break;
 			}
 		}

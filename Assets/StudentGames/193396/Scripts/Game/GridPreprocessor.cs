@@ -51,7 +51,7 @@ namespace _193396
 			regenerate();
 		}
 
-		public void regenerate()
+		private void regenerate()
 		{
 			QolUtility.createIfNotExist(out autogenGroup, transform, "Autogen");
 
@@ -88,7 +88,7 @@ namespace _193396
 			createRegions(ref customRegions, customRegionsGroup,
 				transform.GetComponentsInChildren<CustomRegionSource>(), null);
 		}
-		public void clear()
+		private void clear()
 		{
 			if (autogenGroup != null)
 			{
@@ -199,6 +199,8 @@ namespace _193396
 
 					newEntity.position = position;
 					newEntity.rotation = rotation;
+
+					tilemap.SetTile(coord, null);
 				}
 		}
 		private void createRegions(ref List<TilemapHelper.Region> regions, Transform parent, 

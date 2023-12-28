@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -9,7 +8,6 @@ namespace _193396
     public class GateController : EntityBehavior
     {
         public TerrainData data;
-		public CameraController focusCamera;
 		[Space(10)]
 		public float openTime;
 		public Vector2 openDistance;
@@ -97,20 +95,10 @@ namespace _193396
 				isInTransition = true;
 				isOpened = opening;
 
-				Transform oldTarget = null;
-				if (focused)
-				{
-					oldTarget = focusCamera.target;
-					focusCamera.target = transform;
-				}
-
 				if (opening)
 					yield return open();
 				else
 					yield return close();
-
-				if (oldTarget != null)
-					focusCamera.target = oldTarget;
 
 				isInTransition = false;
 			}
