@@ -20,7 +20,6 @@ namespace _193396
 			Ground = 8,
 			PlatformPassable = 9,
 			PlayerPlatformPassable = 10,
-			PlayerGround = 11,
 			Player = 12,
 			PlayerInvulnerable = 13,
 			PlayerTransition = 14,
@@ -37,6 +36,8 @@ namespace _193396
 			InstantKill = 26,
 			CustomRegion = 27,
 			Collectible = 28,
+			PlayerOnlyGround = 29,
+			EnemyOnlyGround = 30,
 			Editor = 31
 		}
 		public enum Tag
@@ -59,7 +60,8 @@ namespace _193396
 			Slope,
 			CustomRegion,
 			InstantKill,
-			PlayerGround,
+			PlayerOnlyGround,
+			EnemyOnlyGround,
 		}
 
 		[Serializable]
@@ -237,7 +239,6 @@ namespace _193396
 			Ground = 1 << 8,
 			PlatformPassable = 1 << 9,
 			PlayerPlatformPassable = 1 << 10,
-			PlayerGround = 1 << 11,
 			Player = 1 << 12,
 			PlayerInvulnerable = 1 << 13,
 			PlayerTransition = 1 << 14,
@@ -254,6 +255,8 @@ namespace _193396
 			InstantKill = 1 << 26,
 			CustomRegion = 1 << 27,
 			Collectible = 1 << 28,
+			PlayerOnlyGround = 1 << 29,
+			EnemyOnlyGround = 1 << 30,
 			Editor = 1 << 31
 		}
 

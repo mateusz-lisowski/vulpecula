@@ -50,7 +50,7 @@ MonoBehaviour:
     inputBufferTime: 0.1
   run:
     groundLayers:
-      value: 1792
+      value: 536872704
     slopeLayer:
       value: 33554432
     maxSpeed: 7

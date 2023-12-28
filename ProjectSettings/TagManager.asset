@@ -19,7 +19,8 @@ TagManager:
   - Slope
   - Custom Region
   - Instant Kill
-  - Player Ground
+  - Player Only Ground
+  - Enemy Only Ground
   layers:
   - Default
   - TransparentFX
