@@ -30,12 +30,16 @@ namespace _193396
 			lastSeenTime += Time.deltaTime;
 
 			Vector2 targetPosition;
-			isChasing = tryFindTarget(out targetPosition);
+			bool caught;
+			isChasing = tryFindTarget(out targetPosition, out caught);
 
 			if (isChasing)
 				lastSeenTime = 0f;
 
-			if (!isChasing && lastSeenTime <= data.determinationTime)
+			if (!isChasing && caught)
+				lastSeenTime = data.determinationTime;
+
+			if (!isChasing && lastSeenTime < data.determinationTime)
 				isChasing = true;
 
 			if (isChasing)
@@ -50,10 +54,12 @@ namespace _193396
 		}
 
 
-		private bool tryFindTarget(out Vector2 targetPosition)
+		private bool tryFindTarget(out Vector2 targetPosition, out bool caught)
 		{
 			Collider2D[] targetsInRange = Physics2D.OverlapCircleAll(
 				transform.position, data.maxDistance, data.targetLayers);
+
+			caught = false;
 
 			foreach (Collider2D targetInRange in targetsInRange)
 			{
@@ -61,6 +67,9 @@ namespace _193396
 				Vector2 targetDir = position - (Vector2)transform.position;
 
 				float distance = targetDir.magnitude;
+
+				if (distance < data.minDistance)
+					caught = true;
 
 				if (distance > data.maxDistance || distance < data.minDistance)
 					continue;
