@@ -20,7 +20,7 @@ MonoBehaviour:
   hurt:
     invulnerabilityTime: 1.2
     distressTime: 0.5
-    health: 3
+    health: 10
     knockbackMaxSpeed: 5
     knockbackHeightScale: 0.7
     knockbackHeight: 1.4487277

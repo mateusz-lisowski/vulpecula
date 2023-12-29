@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectingLayers:
     value: 12288
-  eventName: heal:1
+  eventName: heal:3
   active: 1
   cooldown: 1
   runtimeDataPostfix: .heal
