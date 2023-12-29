@@ -10,6 +10,8 @@ namespace _193396
 
 		public void callEvent(string name)
 		{
+			Debug.Log("Event: " + name);
+
 			int separatorIndex = name.IndexOf(':');
 
 			if (separatorIndex == -1)

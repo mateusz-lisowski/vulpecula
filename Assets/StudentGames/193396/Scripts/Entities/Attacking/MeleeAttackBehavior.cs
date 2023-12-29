@@ -86,7 +86,7 @@ namespace _193396
 			if (attackCheck != null)
 				isProvoked = attackCheck.IsTouchingLayers(data.provokeLayers);
 			else
-				isProvoked = true;
+				isProvoked = false;
 		}
 
 		private bool canAttack()

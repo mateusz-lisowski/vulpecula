@@ -39,9 +39,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026e257190f952a4886bc78e959fd11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   eventName: attackExit:smash
-  waitFor: 0
 --- !u!1101 &-8282255069710021717
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -184,7 +183,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   eventName: attackExit
-  waitFor: 0
 --- !u!1101 &-6127261953756041697
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -451,7 +449,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   eventName: howl:end
-  waitFor: 0
 --- !u!114 &-1206997536777105789
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -466,7 +463,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   eventName: jumpEnd
-  waitFor: 0
 --- !u!1101 &-1051658544614156738
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -705,7 +701,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   eventName: destroy
-  waitFor: 0
 --- !u!1102 &3504079408080456595
 AnimatorState:
   serializedVersion: 6

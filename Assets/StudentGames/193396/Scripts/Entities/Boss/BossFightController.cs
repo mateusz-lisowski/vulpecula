@@ -76,9 +76,6 @@ namespace _193396
 					bossRun.enabled = enable;
 					bossRunAttack.enabled = enable;
 					break;
-				case "smash":
-					bossSmashAttack.enabled = enable;
-					break;
 				default:
 					Debug.LogWarning("Unknown boss component: " + name);
 					break;
