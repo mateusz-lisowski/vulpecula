@@ -181,7 +181,15 @@ namespace _193396
 					Matrix4x4 tileTransform = tilemap.GetTransformMatrix(coord);
 					Quaternion tileRotation = tileTransform.GetR();
 
-					Vector2 pivotOffset = (tile.sprite.pivot - renderer.sprite.pivot) / tile.sprite.pixelsPerUnit;
+					var sprite = tile.sprite;
+					var rendererSprite = renderer.sprite;
+
+					if (sprite == null || rendererSprite == null)
+					{
+						int a = 2;
+					}
+
+					Vector2 pivotOffset = (sprite.pivot - rendererSprite.pivot) / sprite.pixelsPerUnit;
 					Vector3 offset = renderer.transform.position;
 					Quaternion rotation = tileRotation;
 					if (renderer.flipX)
