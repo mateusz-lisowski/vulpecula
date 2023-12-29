@@ -1,15 +1,16 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _193396
 {
 	public class BossFightController : EntityBehavior
     {
-		private Animator stateMachine;
-
 		private HurtBehavior bossHurt;
 		private RunBehavior bossRun;
 		private JumpAtBehavior bossJumpAt;
+		private MeleeAtackBehavior bossRunAttack;
+		private MeleeAtackBehavior bossSmashAttack;
 
 		private Transform baseLocation;
 		private Transform smashLocation;
@@ -20,12 +21,16 @@ namespace _193396
 
 		public override void onAwake()
 		{
-			stateMachine = GetComponent<Animator>();
-
 			Transform boss = transform.Find("boss");
-			bossHurt = boss.GetComponent<HurtBehavior>();
-			bossRun = boss.GetComponent<RunBehavior>();
-			bossJumpAt = boss.GetComponent<JumpAtBehavior>();
+			EntityBehaviorController bossController = boss.GetComponent<EntityBehaviorController>();
+
+			bossHurt = bossController.getBehavior<HurtBehavior>();
+			bossRun = bossController.getBehavior<RunBehavior>();
+			bossJumpAt = bossController.getBehavior<JumpAtBehavior>();
+
+			List<MeleeAtackBehavior> bossAttacks = bossController.getBehaviors<MeleeAtackBehavior>();
+			bossRunAttack = bossAttacks[0];
+			bossSmashAttack = bossAttacks[1];
 
 			Transform bossRoom = transform.Find("Room");
 			baseLocation = (new GameObject("Base")).transform;
@@ -39,8 +44,7 @@ namespace _193396
 		}
 
 		public override string[] capturableEvents => new string[] { 
-			"jumpAt", "jumpBegin", "spawnAndWait", 
-			"enable", "disable", "setT", "clearT", "set", "clear", "getRandom" };
+			"jumpAt", "jumpBegin", "spawn", "enable", "disable" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
@@ -51,29 +55,14 @@ namespace _193396
 				case "jumpBegin":
 					jumpBegin();
 					break;
-				case "spawnAndWait":
-					StartCoroutine(spawnAndWait((string)eventData));
+				case "spawn":
+					StartCoroutine(spawnAndWait());
 					break;
 				case "enable":
 					enableComponent((string)eventData, true);
 					break;
 				case "disable":
 					enableComponent((string)eventData, false);
-					break;
-				case "setT":
-					stateMachine.SetTrigger((string)eventData);
-					break;
-				case "clearT":
-					stateMachine.ResetTrigger((string)eventData);
-					break;
-				case "set":
-					stateMachine.SetBool((string)eventData, true);
-					break;
-				case "clear":
-					stateMachine.SetBool((string)eventData, false);
-					break;
-				case "getRandom":
-					stateMachine.SetInteger("rand", Random.Range(0, (int)eventData));
 					break;
 			}
 		}
@@ -85,6 +74,10 @@ namespace _193396
 			{
 				case "run":
 					bossRun.enabled = enable;
+					bossRunAttack.enabled = enable;
+					break;
+				case "smash":
+					bossSmashAttack.enabled = enable;
 					break;
 				default:
 					Debug.LogWarning("Unknown boss component: " + name);
@@ -123,11 +116,11 @@ namespace _193396
 			jumpAtTarget = null;
 		}
 
-		private IEnumerator spawnAndWait(string trigger)
+		private IEnumerator spawnAndWait()
 		{
-			yield return new WaitForSeconds(1);
+			yield return new WaitForSeconds(5);
 
-			stateMachine.SetTrigger(trigger);
+			controller.onEvent("roomCleared", null);
 		}
 	}
 }

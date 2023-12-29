@@ -8,10 +8,6 @@ namespace _193396
 	{
 		public EntityBehaviorController controller;
 
-		private int coroutinesIndex = 0;
-		private HashSet<int> activeCoroutines = new HashSet<int>();
-
-
 		public void callEvent(string name)
 		{
 			int separatorIndex = name.IndexOf(':');
@@ -29,35 +25,6 @@ namespace _193396
 				else
 					controller.onEvent(name, dataString);
 			}
-		}
-		public void callEventWaited(string name, float waitFor, out int waitIndex)
-		{
-			waitIndex = -1;
-
-			if (waitFor == 0f)
-				callEvent(name);
-			else
-			{
-				waitIndex = ++coroutinesIndex;
-				activeCoroutines.Add(waitIndex);
-				StartCoroutine(callEventWaitedCoroutine(name, waitFor, waitIndex));
-			}
-		}
-		public void haltEventWaited(int waitIndex)
-		{
-			if (waitIndex == -1)
-				return;
-
-			activeCoroutines.Remove(waitIndex);
-		}
-
-
-		private IEnumerator callEventWaitedCoroutine(string name, float waitFor, int waitIndex)
-		{
-			yield return new WaitForSeconds(waitFor);
-
-			if (activeCoroutines.Remove(waitIndex))
-				callEvent(name);
 		}
 	}
 }

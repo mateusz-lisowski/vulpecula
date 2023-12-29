@@ -12,7 +12,7 @@ namespace _193396
 		{
 			public enum Type
 			{
-				Trigger, Boolean
+				Trigger, Boolean, FloatForward
 			}
 
 			public string eventName;
@@ -47,6 +47,9 @@ namespace _193396
 							break;
 						case EventTransformer.Type.Boolean:
 							animator.SetBool(eventTransformer.animatorName, eventTransformer.setBoolean);
+							break;
+						case EventTransformer.Type.FloatForward:
+							animator.SetFloat(eventTransformer.animatorName, (float)eventData);
 							break;
 					}
 		}

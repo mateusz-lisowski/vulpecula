@@ -76,8 +76,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4113224551713123967}
   - component: {fileID: 4970043599425682693}
-  - component: {fileID: 1228668580135097504}
   - component: {fileID: 3180406887858140571}
+  - component: {fileID: 3598961595660571854}
+  - component: {fileID: 1228668580135097504}
   - component: {fileID: 5380396940183965255}
   - component: {fileID: 490190435741887861}
   - component: {fileID: 4043623005602071873}
@@ -122,6 +123,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eab231cf91216e4428feaf4505180e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3180406887858140571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2578095634417574177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a914c70e61edfee438d7d4830b93cf0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3598961595660571854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2578095634417574177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a625c2a49d29be44a9464a57887e684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1228668580135097504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,18 +160,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 4970043599425682693}
---- !u!114 &3180406887858140571
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2578095634417574177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a914c70e61edfee438d7d4830b93cf0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5380396940183965255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,19 +183,24 @@ MonoBehaviour:
     animatorName: isActive
     type: 1
     setBoolean: 0
+  - eventName: hurt
+    eventData: 
+    animatorName: healthNormalized
+    type: 2
+    setBoolean: 0
   - eventName: died
     eventData: 
     animatorName: onDeath
     type: 0
     setBoolean: 0
-  - eventName: jumpEnd
-    eventData: 
-    animatorName: onLanding
-    type: 0
-    setBoolean: 0
   - eventName: flipped
     eventData: 
     animatorName: onFlip
+    type: 0
+    setBoolean: 0
+  - eventName: jumpEnd
+    eventData: 
+    animatorName: onLanding
     type: 0
     setBoolean: 0
   - eventName: howl
@@ -193,6 +211,11 @@ MonoBehaviour:
   - eventName: attackExit
     eventData: smash
     animatorName: onSmashEnd
+    type: 0
+    setBoolean: 0
+  - eventName: roomCleared
+    eventData: 
+    animatorName: onRoomCleared
     type: 0
     setBoolean: 0
 --- !u!95 &490190435741887861
@@ -250,6 +273,7 @@ MonoBehaviour:
   - died
   - fell
   - flipped
+  - hurt
   - jumpBegin
   - jumpEnd
   - howl
