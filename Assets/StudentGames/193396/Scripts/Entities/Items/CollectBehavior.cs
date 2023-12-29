@@ -5,7 +5,12 @@ namespace _193396
 {
 	public class CollectData
 	{
+		private static int _idGenerator = 1;
+		public static int idGenerator => _idGenerator++;
+
 		public int id;
+		public string name;
+		public Vector2 position;
 	}
 
 	public class CollectBehavior : EntityBehavior
@@ -20,6 +25,8 @@ namespace _193396
 
 		private Collider2D collectCheck;
 
+		private float cooldown = 0f;
+
 
 		public override void onAwake()
 		{
@@ -27,7 +34,7 @@ namespace _193396
 		}
 		public override void onStart()
 		{
-			runtimeData = RuntimeDataManager.get<RuntimeData>(name);
+			runtimeData = RuntimeDataManager.get<RuntimeData>(name + data.runtimeDataPostfix);
 
 			if (runtimeData.isCollected)
 				Destroy(gameObject);
@@ -35,17 +42,20 @@ namespace _193396
 
 		public override void onUpdate()
 		{
-			if (runtimeData.isCollected)
+			cooldown -= Time.deltaTime;
+
+			if (runtimeData.isCollected || cooldown > 0f)
 				return;
 
 			if (collectCheck.IsTouchingLayers(data.collectingLayers))
 			{
-				Debug.Log("collected");
+				if (!data.active)
+					runtimeData.isCollected = true;
 
-				runtimeData.isCollected = true;
+				cooldown = data.cooldown;
 				triggerCollect();
 
-				controller.onEvent("collected", null);
+				controller.onEvent("collected", data.eventName);
 			}
 		}
 
@@ -61,7 +71,9 @@ namespace _193396
 				return;
 
 			CollectData collect = new CollectData();
-			collect.id = gameObject.GetInstanceID();
+			collect.id = CollectData.idGenerator;
+			collect.name = data.eventName;
+			collect.position = transform.position;
 
 			foreach (Collider2D contact in contacts)
 				contact.SendMessageUpwards("onMessage", new EntityMessage("collect", collect));
