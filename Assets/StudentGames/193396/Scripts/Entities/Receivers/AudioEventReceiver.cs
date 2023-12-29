@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace _193396
@@ -15,14 +16,20 @@ namespace _193396
 		public string eventData;
 		[Space(5)]
 		public float cooldown = 0f;
+		[Space(5)]
+		public float transitionTime = 0f;
 
 		private AudioSource source;
 		private float eventCooldown = 0f;
+
+		private float volume;
 
 
 		private void Awake()
 		{
 			source = transform.GetComponent<AudioSource>();
+
+			volume = source.volume;
 		}
 		private void Update()
 		{
@@ -43,14 +50,46 @@ namespace _193396
 				case Type.Play:
 					if (type == Type.PlayContinue && source.isPlaying)
 						break;
-					source.Play();
+					if (transitionTime == 0f)
+						source.Play();
+					else
+						StartCoroutine(transition(play: true));
 					break;
 				case Type.Stop:
-					source.Stop();
+					if (transitionTime == 0f)
+						source.Stop();
+					else
+						StartCoroutine(transition(play: false));
 					break;
 			}
 
 			eventCooldown = cooldown;
+		}
+
+		
+		private IEnumerator transition(bool play)
+		{
+			float timeLeft = transitionTime;
+
+			if (play)
+				source.Play();
+
+			while (timeLeft > 0)
+			{
+				float vol = timeLeft / transitionTime;
+				if (play)
+					vol = 1f - vol;
+
+				source.volume = volume * vol;
+
+				yield return null;
+				timeLeft -= Time.deltaTime;
+			}
+
+			source.volume = volume;
+
+			if (!play)
+				source.Stop();
 		}
 	}
 }

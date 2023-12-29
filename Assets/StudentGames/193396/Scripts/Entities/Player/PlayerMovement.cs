@@ -3,11 +3,15 @@ using UnityEngine;
 
 namespace _193396
 {
+	[RequireComponent(typeof(PlayerInfo))]
+	[RequireComponent(typeof(PlayerInput))]
 	public class PlayerMovement : EntityBehavior
 	{
 		const float minVerticalMovementVelocity = 0.01f;
 
-		public PlayerData data;
+		private PlayerInfo info;
+		private PlayerInput input;
+		private PlayerData data => info.data;
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
@@ -60,6 +64,7 @@ namespace _193396
 		private Vector2 moveInput;
 		private bool passingLayersDisabled = false;
 
+		private int lastEnabledFrame = -1;
 		private int lastJumpFrame = -1;
 		private int lastTurnFrame = -1;
 
@@ -74,6 +79,9 @@ namespace _193396
 
 		public override void onAwake()
 		{
+			info = controller.getBehavior<PlayerInfo>();
+			input = controller.getBehavior<PlayerInput>();
+
 			groundCheck = transform.Find("Detection/Ground").GetComponent<Collider2D>();
 			wallCheck = transform.Find("Detection/Wall").GetComponent<Collider2D>();
 			slopeCheck = transform.Find("Detection/Slope").GetComponent<Collider2D>();
@@ -171,14 +179,52 @@ namespace _193396
 			isFacingRight = !isFacingRight;
 			transform.Rotate(0, 180, 0);
 		}
+		private void resetRespawn()
+		{
+			lastEnabledFrame = controller.currentFixedUpdate;
+
+			controller.rigidBody.velocity = Vector2.zero;
+
+			if (!isFacingRight)
+				flip();
+		}
+		private void updateInputOverride()
+		{
+			bool isInTransition = controller.hitbox.gameObject.layer == (int)RuntimeSettings.Layer.PlayerTransition;
+
+			if (input.isEnabled && isInTransition)
+				setHitboxLayer(RuntimeSettings.Layer.Player);
+			else if (!input.isEnabled && !isInTransition)
+				setHitboxLayer(RuntimeSettings.Layer.PlayerTransition);
+
+			if (controller.rigidBody.simulated != input.isEnabled)
+			{
+				controller.rigidBody.simulated = input.isEnabled;
+				if (input.isEnabled)
+					resetRespawn();
+			}
+
+			if (input.isEnabled)
+				return;
+
+			lastTurnTime = float.PositiveInfinity;
+			lastGroundedTime = float.PositiveInfinity;
+			lastHurtTime = float.PositiveInfinity;
+			lastWallHoldingTime = float.PositiveInfinity;
+			lastJumpInputTime = float.PositiveInfinity;
+			lastWallJumpTime = float.PositiveInfinity;
+			lastDashInputTime = float.PositiveInfinity;
+			lastDashTime = float.PositiveInfinity;
+			lastPassInputTime = float.PositiveInfinity;
+		}
 		private void updateInputs()
 		{
 			moveInput = new Vector2();
 
-			if (Input.GetKey(KeyCode.RightArrow)) moveInput.x += 1;
-			if (Input.GetKey(KeyCode.LeftArrow)) moveInput.x -= 1;
-			if (Input.GetKey(KeyCode.UpArrow)) moveInput.y += 1;
-			if (Input.GetKey(KeyCode.DownArrow)) moveInput.y -= 1;
+			if (input.isInputMoveRight) moveInput.x += 1;
+			if (input.isInputMoveLeft) moveInput.x -= 1;
+			if (input.isInputMoveUp) moveInput.y += 1;
+			if (input.isInputMoveDown) moveInput.y -= 1;
 
 			isMoving = moveInput.x != 0;
 
@@ -186,18 +232,20 @@ namespace _193396
 				if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
 					flip();
 
-			if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Z))
+			if (input.isInputJump)
 				lastJumpInputTime = 0;
 
-			jumpCutInput = !Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.Z);
+			jumpCutInput = input.isInputJumpReleased;
 
-			if (Input.GetKeyDown(KeyCode.C))
+			if (input.isInputDash)
 				lastDashInputTime = 0;
 
-			dashCutInput = !Input.GetKey(KeyCode.C);
+			dashCutInput = input.isInputDashReleased;
 
-			if (Input.GetKeyDown(KeyCode.DownArrow))
+			if (input.isInputPassthrough)
 				lastPassInputTime = 0;
+
+			updateInputOverride();
 		}
 
 		private bool isGroundedFalsePositive()
@@ -230,21 +278,24 @@ namespace _193396
 		}
 		private void updateCollisions()
 		{
-			isGrounded = groundCheck.IsTouchingLayers(currentGroundLayers);
-			isSlopeGrounded = slopeCheck.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers);
-			isOnSlope = slopeCheck.IsTouchingLayers(data.run.slopeLayer);
-			isFacingWall = wallCheck.IsTouchingLayers(data.wall.layers);
-			isPassing = passingCheck.IsTouchingLayers(data.platformPassing.layers);
-			canWallJump = withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
-			canGroundDrop = withinCheck.IsTouchingLayers(data.detection.canDropLayer);
-			canTakeGroundDamage = groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
+			isGrounded		= input.isEnabled && groundCheck.IsTouchingLayers(currentGroundLayers);
+			isSlopeGrounded = input.isEnabled && slopeCheck.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers);
+			isOnSlope		= input.isEnabled && slopeCheck.IsTouchingLayers(data.run.slopeLayer);
+			isFacingWall	= input.isEnabled && wallCheck.IsTouchingLayers(data.wall.layers);
+			isPassing		= input.isEnabled && passingCheck.IsTouchingLayers(data.platformPassing.layers);
+			canWallJump		= input.isEnabled && withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
+			canGroundDrop	= input.isEnabled && withinCheck.IsTouchingLayers(data.detection.canDropLayer);
+			canTakeGroundDamage = input.isEnabled && groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
 
 			// disable registering wall collision immediately after turning because wallCheck's hitbox
 			// needs time to get updated
 			if (lastTurnFrame >= controller.currentFixedUpdate - 1)
 				isFacingWall = false;
 
-			if ((isGrounded || isSlopeGrounded) && isGroundedFalsePositive())
+			// enable grounded when just spawned before groundCheck updates
+			if (lastEnabledFrame >= controller.currentFixedUpdate - 1)
+				isGrounded = true;
+			else if ((isGrounded || isSlopeGrounded) && isGroundedFalsePositive())
 			{
 				isGrounded = false;
 				isSlopeGrounded = false;
@@ -266,6 +317,9 @@ namespace _193396
 			hitData = new HitData();
 			hitData.isVertical = true;
 			hitData.right = transform.right;
+			hitData.strength = 1;
+
+			controller.onEvent("hit", hitData);
 		}
 		private bool canHurt()
 		{
@@ -284,12 +338,10 @@ namespace _193396
 		{
 			isInvulnerable = val;
 
-			int layer = (int)(val ? RuntimeSettings.Layer.PlayerInvulnerable : RuntimeSettings.Layer.Player);
-
-			foreach (Transform child in controller.hitbox)
-				child.gameObject.layer = layer;
-
-			controller.hitbox.gameObject.layer = layer;
+			if (isInvulnerable)
+				setHitboxLayer(RuntimeSettings.Layer.PlayerInvulnerable);
+			else
+				setHitboxLayer(RuntimeSettings.Layer.Player);
 		}
 		private void hurt()
 		{
@@ -310,7 +362,6 @@ namespace _193396
 			}
 
 			flip();
-			controller.onEvent("hurt", null);
 		}
 		private void updateHurt()
 		{
@@ -463,7 +514,11 @@ namespace _193396
 		}
 		private void updateGravityScale()
 		{
-			if (isDashing)
+			if (!input.isEnabled)
+			{
+				controller.rigidBody.gravityScale = 0;
+			}
+			else if (isDashing)
 			{
 				controller.rigidBody.gravityScale = 0;
 			}

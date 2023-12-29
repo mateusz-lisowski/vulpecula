@@ -53,7 +53,7 @@ namespace _193396
 						yield return new WaitForSeconds(waitTime);
 					}
 
-					target.color = color;
+					target.color = new Color(color.r, color.g, color.b, 1f);
 					yield return new WaitForSeconds(waitTime);
 				}
 			}

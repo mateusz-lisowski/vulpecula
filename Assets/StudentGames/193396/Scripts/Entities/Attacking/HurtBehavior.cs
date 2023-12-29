@@ -98,22 +98,21 @@ namespace _193396
 		}
 		private void setInvulnerability(bool val)
 		{
-			int layer;
-
 			switch (gameObject.layer)
 			{
 				case (int)RuntimeSettings.Layer.EnemyFlying:
-					layer = (int)(val ? RuntimeSettings.Layer.EnemyFlyingInvulnerable : RuntimeSettings.Layer.EnemyFlying);
+					if (val)
+						setHitboxLayer(RuntimeSettings.Layer.EnemyFlyingInvulnerable);
+					else
+						setHitboxLayer(RuntimeSettings.Layer.EnemyFlying);
 					break;
 				default:
-					layer = (int)(val ? RuntimeSettings.Layer.EnemyInvulnerable : RuntimeSettings.Layer.Enemy);
+					if (val)
+						setHitboxLayer(RuntimeSettings.Layer.EnemyInvulnerable);
+					else
+						setHitboxLayer(RuntimeSettings.Layer.Enemy);
 					break;
 			}
-
-			foreach (Transform child in controller.hitbox)
-				child.gameObject.layer = layer;
-
-			controller.hitbox.gameObject.layer = layer;
 		}
 		private void hurt()
 		{
@@ -127,7 +126,7 @@ namespace _193396
 			controller.StartCoroutine(Effects.instance.flashing.run(
 				controller.spriteRenderer, data.invulnerabilityTime, burst: true));
 
-			controller.onEvent("hurt", null);
+			controller.onEvent("hurt", (float)health / data.health);
 		}
 
 		private void die()
@@ -137,6 +136,7 @@ namespace _193396
 			controller.StartCoroutine(Effects.instance.flashing.run(
 				controller.spriteRenderer, 0, burst: true));
 
+			controller.onEvent("hurt", 0f);
 			controller.onEvent("died", null);
 		}
 

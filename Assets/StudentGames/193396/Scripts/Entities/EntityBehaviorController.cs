@@ -54,6 +54,16 @@ namespace _193396
 
 		public virtual string[] capturableEvents { get => Array.Empty<string>(); }
 		public virtual void onEvent(string eventName, object eventData) { }
+
+		public bool receiveUpdates { get; private set; }
+		private void OnEnable()
+		{
+			receiveUpdates = true;
+		}
+		private void OnDisable()
+		{
+			receiveUpdates = false;
+		}
 	}
 
 	[RequireComponent(typeof(EntityBehaviorController))]
@@ -65,6 +75,18 @@ namespace _193396
 			float movement = speedDif * accelerationCoefficient / Time.fixedDeltaTime;
 
 			controller.rigidBody.AddForce(movement * direction, ForceMode2D.Force);
+		}
+		public void setHitboxLayer(RuntimeSettings.Layer layer)
+		{
+			foreach (Transform child in controller.hitbox)
+				child.gameObject.layer = (int)layer;
+
+			controller.hitbox.gameObject.layer = (int)layer;
+		}
+
+		private void OnDestroy()
+		{
+			controller.removeEventReceiver(this);
 		}
 
 		public virtual void onAwake() { }
@@ -135,7 +157,9 @@ namespace _193396
 			foreach (var behavior in behaviors)
 				behavior.onAwake();
 
-			initializeEventDispatcher();
+			eventDispatcher = new Dictionary<string, List<EntityEventReceiver>>();
+			foreach (var receiver in transform.GetComponentsInChildren<EntityEventReceiver>(true))
+				addEventReceiver(receiver);
 		}
 		private void Start()
 		{
@@ -147,23 +171,26 @@ namespace _193396
 			currentUpdate++;
 
 			foreach (var behavior in behaviors)
-				behavior.onUpdate();
+				if (behavior.receiveUpdates)
+					behavior.onUpdate();
 		}
 		private void FixedUpdate()
 		{
 			currentFixedUpdate++;
 
 			foreach (var behavior in behaviors)
-				if (!behavior.currentFixedUpdateDisabled())
-					if (behavior.onFixedUpdate())
-						break;
+				if (behavior.receiveUpdates)
+					if (!behavior.currentFixedUpdateDisabled())
+						if (behavior.onFixedUpdate())
+							break;
 		}
 
 		public void onEvent(string eventName, object eventData)
 		{
 			if (eventDispatcher.ContainsKey(eventName))
 				foreach (var receiver in eventDispatcher[eventName])
-					receiver.onEvent(eventName, eventData);
+					if (receiver.receiveUpdates)
+						receiver.onEvent(eventName, eventData);
 
 			if (eventName == "destroy")
 				Destroy(gameObject);
@@ -173,21 +200,28 @@ namespace _193396
 			onEvent(msg.name, msg.data);
 		}
 
-
-		private void initializeEventDispatcher()
+		public void addEventReceiver(EntityEventReceiver receiver)
 		{
-			eventDispatcher = new Dictionary<string, List<EntityEventReceiver>>();
+			foreach (var capturableEvent in receiver.capturableEvents)
+				if (!eventDispatcher.ContainsKey(capturableEvent))
+					eventDispatcher.Add(capturableEvent, new List<EntityEventReceiver> { receiver });
+				else
+				{
+					var dispatcher = eventDispatcher[capturableEvent];
+					if (!dispatcher.Contains(receiver))
+						dispatcher.Add(receiver);
+				}
+		}
+		public void removeEventReceiver(EntityEventReceiver receiver)
+		{
+			foreach (var capturableEvent in receiver.capturableEvents)
+			{
+				var receivers = eventDispatcher[capturableEvent];
 
-			foreach (var receiver in transform.GetComponentsInChildren<EntityEventReceiver>())
-				foreach (var capturableEvent in receiver.capturableEvents)
-					if (!eventDispatcher.ContainsKey(capturableEvent))
-						eventDispatcher.Add(capturableEvent, new List<EntityEventReceiver> { receiver });
-					else
-					{
-						var dispatcher = eventDispatcher[capturableEvent];
-						if (!dispatcher.Contains(receiver))
-							dispatcher.Add(receiver);
-					}
+				receivers.Remove(receiver);
+				if (receivers.Count == 0)
+					eventDispatcher.Remove(capturableEvent);
+			}
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 namespace _193396
@@ -152,8 +153,8 @@ namespace _193396
 
 			QolUtility.createIfNotExist(out groundDroppingGroup, autogenGroup, "Ground Dropping");
 			QolUtility.createIfNotExist(out groundBreakingGroup, autogenGroup, "Ground Breaking");
-			QolUtility.createIfNotExist(out enemiesGroup, autogenGroup, "Enemies");
-			QolUtility.createIfNotExist(out collectiblesGroup, autogenGroup, "Collectibles");
+			enemiesGroup = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Enemies];
+			collectiblesGroup = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Collectibles];
 		}
 
 		private void tryAddTiles(Tile tile, Vector3Int coord, Tilemap parent, BoundedTile[] tiles)
@@ -180,11 +181,13 @@ namespace _193396
 					Matrix4x4 tileTransform = tilemap.GetTransformMatrix(coord);
 					Quaternion tileRotation = tileTransform.GetR();
 
+					Vector2 pivotOffset = (tile.sprite.pivot - renderer.sprite.pivot) / tile.sprite.pixelsPerUnit;
+					Vector3 offset = renderer.transform.position;
 					Quaternion rotation = tileRotation;
 					if (renderer.flipX)
 						rotation *= Quaternion.Euler(0, 180, 0);
-					Vector2 pivotOffset = (tile.sprite.pivot - tile.sprite.rect.size / 2) / tile.sprite.pixelsPerUnit;
-					Vector3 offset = renderer.transform.position;
+					if (rotation.y > 0.5f)
+						offset.x = -offset.x;
 
 					Vector3 position = tilemap.CellToWorld(coord) + new Vector3(0.5f, 0.5f);
 					position -= (Vector3)pivotOffset;
@@ -241,22 +244,6 @@ namespace _193396
 			}
 
 			regions = newRegions;
-		}
-	}
-
-	[CustomEditor(typeof(GridPreprocessor))]
-	public class GridPreprocessorEditor : Editor
-	{
-		public override void OnInspectorGUI()
-		{
-			GridPreprocessor gridPreprocessor = target as GridPreprocessor;
-
-			if (GUILayout.Button("Regenerate"))
-				gridPreprocessor.regenerate();
-			if (GUILayout.Button("Clear"))
-				gridPreprocessor.clear();
-
-			base.OnInspectorGUI();
 		}
 	}
 }

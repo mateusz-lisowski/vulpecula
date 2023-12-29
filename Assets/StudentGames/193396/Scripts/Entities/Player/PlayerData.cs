@@ -27,6 +27,14 @@ namespace _193396
 			public float invulnerabilityTime;
 			[Tooltip("Time to ignore input after getting hit")]
 			public float distressTime;
+
+			[Space(5)]
+
+			[Tooltip("Cumulative strength of received attacks resulting in death")]
+			public int health;
+
+			[Space(10)]
+
 			[Tooltip("Maximum knockback speed")]
 			public float knockbackMaxSpeed;
 			[Tooltip("Knockback height (point on parabola when returned input)")]
