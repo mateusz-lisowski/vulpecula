@@ -18,3 +18,4 @@ MonoBehaviour:
   distressTime: 0
   health: 20
   maxBlock: 0
+  faceHit: 0

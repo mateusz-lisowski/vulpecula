@@ -21,5 +21,7 @@ namespace _193396
 		public int health = 3;
 		[Tooltip("Maximum strength of an attack that is blocked")]
 		public int maxBlock = 0;
+		[Tooltip("Is changing direction to face towards incoming projectile")]
+		public bool faceHit = true;
 	}
 }

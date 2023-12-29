@@ -115,7 +115,7 @@ namespace _193396
 		}
 		private void setDistressDirection()
 		{
-			if (direction == null)
+			if (direction == null || !data.faceHit)
 				return;
 
 			if (hitData.isVertical)
