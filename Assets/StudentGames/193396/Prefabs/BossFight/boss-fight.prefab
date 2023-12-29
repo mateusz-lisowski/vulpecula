@@ -795,6 +795,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: boss
       objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[5].type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[6].type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[5].eventData
+      value: run
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[5].eventName
+      value: enable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[6].eventData
+      value: run
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[6].eventName
+      value: disable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[5].setBoolean
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[6].setBoolean
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[5].animatorName
+      value: isMoving
+      objectReference: {fileID: 0}
+    - target: {fileID: 3524004364235514491, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
+      propertyPath: eventTransformers.Array.data[6].animatorName
+      value: isMoving
+      objectReference: {fileID: 0}
     - target: {fileID: 4139621468639175730, guid: 28c6f730a4cb78b40888880a11f11bbc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
