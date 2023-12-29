@@ -32,10 +32,8 @@ namespace _193396
 		{
 			if (data is PlayerData)
 				hitLayers = ((PlayerData)data).attack.hitLayers;
-			else if (data is MeleeAttackBehaviorData)
-				hitLayers = ((MeleeAttackBehaviorData)data).hitLayers;
-			else if (data is RangedAttackBehaviorData)
-				hitLayers = ((RangedAttackBehaviorData)data).hitLayers;
+			else if (data is BaseAttackBehaviorData)
+				hitLayers = ((BaseAttackBehaviorData)data).hitLayers;
 			else
 				throw new ApplicationException("Unknown projectile data.");
 		}
@@ -78,7 +76,7 @@ namespace _193396
 
 		public override void onAwake()
 		{
-			hitbox = controller.hitbox.GetComponent<Collider2D>();
+			hitbox = controller.hitbox?.GetComponent<Collider2D>();
 		}
 
 		public override string[] capturableEvents => new string[] { "resolve", "halt" };

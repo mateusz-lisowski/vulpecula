@@ -668,7 +668,7 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: onTrigger
     m_EventTreshold: 0
-  - m_ConditionMode: 6
+  - m_ConditionMode: 7
     m_ConditionEvent: rand
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -1803,7 +1803,7 @@ MonoBehaviour:
   callType: 6
   parameterName: rand
   data:
-    intValue: 2
+    intValue: 1
     floatValue: 0
     waitFor: 0
 --- !u!1101 &8668054478399508697

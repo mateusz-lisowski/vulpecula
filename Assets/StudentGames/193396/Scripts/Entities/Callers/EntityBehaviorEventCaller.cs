@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace _193396
@@ -10,8 +8,6 @@ namespace _193396
 
 		public void callEvent(string name)
 		{
-			Debug.Log("Event: " + name);
-
 			int separatorIndex = name.IndexOf(':');
 
 			if (separatorIndex == -1)

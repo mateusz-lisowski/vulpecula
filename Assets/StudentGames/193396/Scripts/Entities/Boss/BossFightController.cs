@@ -10,7 +10,6 @@ namespace _193396
 		private RunBehavior bossRun;
 		private JumpAtBehavior bossJumpAt;
 		private MeleeAtackBehavior bossRunAttack;
-		private MeleeAtackBehavior bossSmashAttack;
 
 		private Transform baseLocation;
 		private Transform smashLocation;
@@ -30,7 +29,6 @@ namespace _193396
 
 			List<MeleeAtackBehavior> bossAttacks = bossController.getBehaviors<MeleeAtackBehavior>();
 			bossRunAttack = bossAttacks[0];
-			bossSmashAttack = bossAttacks[1];
 
 			Transform bossRoom = transform.Find("Room");
 			baseLocation = (new GameObject("Base")).transform;
