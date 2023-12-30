@@ -85,7 +85,9 @@ namespace _193396
 			{
 				if (isJumping)
 				{
-					if (Vector2.Dot(transform.right, target.right) < -0.01f)
+					if (Vector2.Distance(transform.position, target.position) > 1f)
+						direction.faceTowards(target.position);
+					else if (Vector2.Dot(transform.right, target.right) < -0.01f)
 						direction.flip();
 
 					if (data.autoResetTarget)

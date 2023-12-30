@@ -139,6 +139,10 @@ PrefabInstance:
       propertyPath: eventData
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3282050636432917690, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
+      propertyPath: eventData
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5848918719824801408, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12
@@ -74246,6 +74250,10 @@ PrefabInstance:
       propertyPath: eventData
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3282050636432917690, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
+      propertyPath: eventData
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5848918719824801408, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12
@@ -79335,6 +79343,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2508622768693607819, guid: 93caa9f6fc2c2be4f8740846afd1f89e, type: 3}
     - target: {fileID: -712818463967668944, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
+      propertyPath: eventData
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282050636432917690, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
       propertyPath: eventData
       value: 2
       objectReference: {fileID: 0}
@@ -85373,6 +85385,10 @@ PrefabInstance:
       propertyPath: eventData
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3282050636432917690, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
+      propertyPath: eventData
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5848918719824801408, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12
@@ -85445,6 +85461,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8664657130570261996, guid: 26b45518357f01845910c7bb4fcac655, type: 3}
     - target: {fileID: -712818463967668944, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
+      propertyPath: eventData
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282050636432917690, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
       propertyPath: eventData
       value: 0
       objectReference: {fileID: 0}
@@ -88160,6 +88180,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4864005080215702783, guid: 9a92d92379808034996c584b111c3982, type: 3}
     - target: {fileID: -712818463967668944, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
+      propertyPath: eventData
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282050636432917690, guid: 3aecb13060e53ce478040d46a6f8b831, type: 3}
       propertyPath: eventData
       value: 1
       objectReference: {fileID: 0}

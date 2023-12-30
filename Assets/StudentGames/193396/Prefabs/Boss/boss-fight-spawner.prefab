@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5848918719824801408}
   - component: {fileID: -712818463967668944}
+  - component: {fileID: 3282050636432917690}
   m_Layer: 0
   m_Name: boss-fight-spawner
   m_TagString: Untagged
@@ -48,4 +49,25 @@ MonoBehaviour:
   eventData: 
   group: 1
   prefab: {fileID: 0}
+  timeOffset: 0.25
+  autoDestroy: 0
+  destroyTimeOffset: 0
+--- !u!114 &3282050636432917690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6361794306981449051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac1718a7cf9f66488879c6e6ee03ecd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: spawn
+  eventData: 
+  group: 0
+  prefab: {fileID: 8837269615920095396, guid: 82fe6363bad76874c9c031f459f353f4, type: 3}
   timeOffset: 0
+  autoDestroy: 1
+  destroyTimeOffset: 0.5

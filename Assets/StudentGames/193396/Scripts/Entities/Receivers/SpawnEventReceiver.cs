@@ -12,6 +12,9 @@ namespace _193396
 		public GameObject prefab;
 		[Space(5)]
 		public float timeOffset = 0f;
+		[Space(5)]
+		public bool autoDestroy = false;
+		public float destroyTimeOffset = 0f;
 
 		private Transform target;
 
@@ -31,8 +34,11 @@ namespace _193396
 
 		private void spawn()
 		{
-			QolUtility.Instantiate(prefab, transform.position, transform.rotation,
+			GameObject spawned = QolUtility.Instantiate(prefab, transform.position, transform.rotation,
 					GameManager.instance.runtimeGroup[group]);
+
+			if (autoDestroy)
+				Destroy(spawned, destroyTimeOffset);
 		}
 		private IEnumerator spawnWaited()
 		{

@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackInstantiateEventName: attack
   provokeDetectionName: Attack/Run
-  provokeLayers:
-    value: 12288
   hitLayers:
     value: 4096
   attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
-  cooldown: 0.3
+  cooldown: 0.5
   strength: 1
   attackRunSpeed: 8
   accelerationCoefficient: 0.8
+  provokeLayers:
+    value: 12288
