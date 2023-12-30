@@ -6,24 +6,33 @@ namespace _193396
 {
 	public class BossFightController : EntityBehavior
     {
+		public RuntimeSettings.LayerMaskInput enemyLayers;
+
+		private Transform boss;
+		private FlipBehavior bossDirection;
 		private HurtBehavior bossHurt;
 		private GroundedBehavior bossGround;
 		private RunBehavior bossRun;
 		private JumpAtBehavior bossJumpAt;
 		private MeleeAtackBehavior bossRunAttack;
 
+		private Collider2D findPlayerRegion;
+		private Collider2D findEnemiesRegion;
 		private Transform baseLocation;
 		private Transform smashLocation;
 		private Transform[] enterLocations;
 
 		private Transform jumpAtTarget;
 
+		private int nextSpawn = -1;
+
 
 		public override void onAwake()
 		{
-			Transform boss = transform.Find("boss");
+			boss = transform.Find("boss");
 			EntityBehaviorController bossController = boss.GetComponent<EntityBehaviorController>();
 
+			bossDirection = bossController.getBehavior<FlipBehavior>();
 			bossHurt = bossController.getBehavior<HurtBehavior>();
 			bossGround = bossController.getBehavior<GroundedBehavior>();
 			bossRun = bossController.getBehavior<RunBehavior>();
@@ -40,25 +49,35 @@ namespace _193396
 			baseLocation.rotation = boss.rotation;
 			baseLocation.parent = bossRoom;
 
+			findPlayerRegion = transform.Find("Room/FindPlayer").GetComponent<Collider2D>();
+			findEnemiesRegion = transform.Find("Room/FindEnemies").GetComponent<Collider2D>();
 			smashLocation = transform.Find("Room/Center");
-
 			enterLocations = transform.Find("Room/Landing").GetComponentsInChildren<Transform>();
 		}
 
-		public override string[] capturableEvents => new string[] { 
-			"jumpAt", "jumpBegin", "spawn", "enable", "disable" };
+		public override string[] capturableEvents => new string[] {
+			 "faceAt", "jumpAt", "jumpBegin", "spawnRoom", "clearRoom", "spawnEnd", "enable", "disable" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
 			{
+				case "faceAt":
+					bossDirection.faceTowards(stringToTarget((string)eventData).position);
+					break;
 				case "jumpAt":
-					jumpAt((string)eventData);
+					jumpAtTarget = stringToTarget((string)eventData);
 					break;
 				case "jumpBegin":
 					jumpBegin();
 					break;
-				case "spawn":
+				case "spawnRoom":
 					StartCoroutine(spawnAndWait());
+					break;
+				case "clearRoom":
+					clearRoom();
+					break;
+				case "spawnEnd":
+					nextSpawn++;
 					break;
 				case "enable":
 					enableComponent((string)eventData, true);
@@ -84,30 +103,36 @@ namespace _193396
 			}
 		}
 
-		private void jumpAt(string name)
+		private Transform playerLocation()
 		{
-			Transform target;
+			ContactFilter2D filter = new ContactFilter2D().NoFilter();
+			filter.SetLayerMask(bossRunAttack.data.provokeLayers);
+			filter.useLayerMask = true;
 
-			switch(name)
+			List<Collider2D> contacts = new List<Collider2D>();
+			if (findPlayerRegion.OverlapCollider(filter, contacts) == 0)
+				return smashLocation;
+
+			return contacts[0].transform;
+		}
+		private Transform stringToTarget(string name)
+		{
+			switch (name)
 			{
 				case "begin":
-					target = enterLocations[0];
-					break;
+					return enterLocations[0];
 				case "reenter":
-					target = enterLocations[Random.Range(0, enterLocations.Length)];
-					break;
+					return enterLocations[Random.Range(0, enterLocations.Length)];
 				case "base":
-					target = baseLocation;
-					break;
+					return baseLocation;
 				case "smash":
-					target = smashLocation;
-					break;
+					return smashLocation;
+				case "player":
+					return playerLocation();
 				default:
 					Debug.LogWarning("Unknown boss jump target: " + name);
-					return;
+					return null;
 			}
-
-			jumpAtTarget = target;
 		}
 		private void jumpBegin()
 		{
@@ -115,10 +140,41 @@ namespace _193396
 			jumpAtTarget = null;
 		}
 
+		private void clearRoom()
+		{
+			nextSpawn = -1;
+
+			ContactFilter2D filter = new ContactFilter2D().NoFilter();
+			filter.SetLayerMask(enemyLayers);
+			filter.useLayerMask = true;
+
+			List<Collider2D> contacts = new List<Collider2D>();
+			if (findEnemiesRegion.OverlapCollider(filter, contacts) == 0)
+				return;
+
+			HitData hitData = new HitData();
+			hitData.isVertical = true;
+			hitData.right = Vector2.up;
+			hitData.strength = 9999;
+
+			foreach (var contact in contacts)
+				if (contact.attachedRigidbody.transform != boss)
+					contact.attachedRigidbody.SendMessage("onMessage", new EntityMessage("hit", hitData));
+		}
 		private IEnumerator spawnAndWait()
 		{
-			yield return new WaitForSeconds(1);
+			for (int i = 0; i < 3; i++)
+			{
+				nextSpawn = i;
 
+				controller.onEvent("spawnBegin", i);
+				while (nextSpawn == i || findEnemiesRegion.IsTouchingLayers(enemyLayers))
+					yield return null;
+
+				if (nextSpawn == -1)
+					break;
+			}
+			
 			controller.onEvent("roomCleared", null);
 		}
 	}

@@ -65,7 +65,7 @@ namespace _193396
 
 			float t = Mathf.Sqrt(2 * (height - yt) / -Physics2D.gravity.y);
 			t *= xt / (xt - 0.5f * distance);
-			jumpSpeed = distance / t;
+			jumpSpeed = xt / t;
 
 			if (force > controller.rigidBody.velocity.y)
 			{

@@ -168,7 +168,9 @@ namespace _193396
 		private void messageDeath(EntityBehaviorController sourceEntity)
 		{
 			controller.onEvent("died", null);
-			sourceEntity.onEvent("killed", data.killEventName);
+
+			if (sourceEntity != null)
+				sourceEntity.onEvent("killed", data.killEventName);
 		}
 		private IEnumerator waitForDeathCondition(EntityBehaviorController sourceEntity)
 		{
@@ -189,9 +191,9 @@ namespace _193396
 			controller.onEvent("hurt", 0f);
 
 			if (deathCondition == null || deathCondition())
-				messageDeath(hitData.source.sourceEntity);
+				messageDeath(hitData.source?.sourceEntity);
 			else
-				StartCoroutine(waitForDeathCondition(hitData.source.sourceEntity));			
+				StartCoroutine(waitForDeathCondition(hitData.source?.sourceEntity));			
 		}
 
 		private void block()
