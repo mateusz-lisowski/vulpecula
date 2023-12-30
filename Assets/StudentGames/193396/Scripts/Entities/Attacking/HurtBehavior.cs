@@ -167,7 +167,7 @@ namespace _193396
 
 		private void messageDeath(EntityBehaviorController sourceEntity)
 		{
-			controller.onEvent("died", null);
+			controller.onEvent("died", data.killEventName);
 
 			if (sourceEntity != null)
 				sourceEntity.onEvent("killed", data.killEventName);

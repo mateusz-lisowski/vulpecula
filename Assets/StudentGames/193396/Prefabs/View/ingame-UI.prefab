@@ -532,11 +532,6 @@ MonoBehaviour:
     animatorName: isActive
     type: 1
     setBoolean: 0
-  - eventName: died
-    eventData: 
-    animatorName: isActive
-    type: 1
-    setBoolean: 0
 --- !u!95 &1472747537931362217
 Animator:
   serializedVersion: 5
