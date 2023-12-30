@@ -184,11 +184,6 @@ namespace _193396
 					var sprite = tile.sprite;
 					var rendererSprite = renderer.sprite;
 
-					if (sprite == null || rendererSprite == null)
-					{
-						int a = 2;
-					}
-
 					Vector2 pivotOffset = (sprite.pivot - rendererSprite.pivot) / sprite.pixelsPerUnit;
 					Vector3 offset = renderer.transform.position;
 					Quaternion rotation = tileRotation;
