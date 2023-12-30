@@ -186,6 +186,8 @@ namespace _193396
 			switch (name)
 			{
 				case "boss":
+					controller.animator.enabled = false;
+					StartCoroutine(Effects.instance.fade.run(controller.spriteRenderer, move: false));
 					isUnhittable = true;
 					break;
 			}

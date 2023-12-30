@@ -333,6 +333,7 @@ MonoBehaviour:
   eventName: dashBegin
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 0
 --- !u!1 &1679998860894510800
 GameObject:
@@ -479,6 +480,7 @@ MonoBehaviour:
   eventName: walked
   eventData: 
   cooldown: 0.2
+  transitionStartTime: 0
   transitionTime: 0
 --- !u!1 &2859902028959753577
 GameObject:
@@ -860,6 +862,7 @@ MonoBehaviour:
   eventName: hurt
   eventData: '!0'
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 0
 --- !u!1 &3548394364348894223
 GameObject:
@@ -1006,6 +1009,7 @@ MonoBehaviour:
   eventName: fell
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 0
 --- !u!1 &3604271867985205894
 GameObject:
@@ -1152,6 +1156,7 @@ MonoBehaviour:
   eventName: jumped
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 0
 --- !u!1 &3625319635429273898
 GameObject:
@@ -1299,6 +1304,7 @@ MonoBehaviour:
   eventName: died
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 0.5
 --- !u!114 &814432183631394414
 MonoBehaviour:
@@ -1316,6 +1322,7 @@ MonoBehaviour:
   eventName: respawn
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 2
 --- !u!1 &4363498411601349099
 GameObject:
@@ -1586,6 +1593,7 @@ MonoBehaviour:
   eventName: died
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 0
 --- !u!1 &4684031009702523882
 GameObject:
@@ -1833,11 +1841,13 @@ MonoBehaviour:
   runtimeData:
     playtime: 0
     score: 0
+    killCount: 0
     unlockedKey1: 0
     unlockedKey2: 0
     unlockedKey3: 0
     spawnpointLevel: 
     spawnpoint: {x: 0, y: 0}
+  isUnhittable: 0
   health: 0
 --- !u!114 &1488219391124004180
 MonoBehaviour:
@@ -2076,6 +2086,7 @@ MonoBehaviour:
   eventName: attackBegin
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 0
 --- !u!1 &7202530949931120794
 GameObject:
@@ -7106,6 +7117,7 @@ MonoBehaviour:
   eventName: healed
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
   transitionTime: 0
 --- !u!114 &3998799502310921187
 MonoBehaviour:

@@ -97,8 +97,34 @@ namespace _193396
 			public float alphaDelta = 1f;
 
 
+			public IEnumerator run(SpriteRenderer target,
+								   Func<bool> stop = null, bool revert = false, bool move = true)
+			{
+				yield return runImpl(target.gameObject, (float delta) => {
+
+					Color color = target.color;
+					color.a = color.a + delta;
+					target.color = color;
+
+				}, stop, revert, move);
+			}
 			public IEnumerator run(GameObject target, IList<TilemapHelper.RegionLayer> tilemaps,
 								   Func<bool> stop = null, bool revert = false, bool move = true)
+			{
+				yield return runImpl(target, (float delta) => {
+
+					foreach (TilemapHelper.RegionLayer layer in tilemaps)
+					{
+						Color color = layer.tilemap.color;
+						color.a = color.a + delta;
+						layer.tilemap.color = color;
+					}
+
+				}, stop, revert, move);
+			}
+		
+			private IEnumerator runImpl(GameObject target, Action<float> changeAlpha, 
+										Func<bool> stop, bool revert, bool move)
 			{
 				int times = (int)Mathf.Round(time * updateFrequency);
 				float waitTime = 1f / updateFrequency;
@@ -126,12 +152,7 @@ namespace _193396
 						target.transform.position = position;
 					}
 
-					foreach (TilemapHelper.RegionLayer layer in tilemaps)
-					{
-						Color color = layer.tilemap.color;
-						color.a = color.a - (!stopping ? updateColor : -updateColor);
-						layer.tilemap.color = color;
-					}
+					changeAlpha((!stopping ? -updateColor : updateColor));
 				}
 			}
 		}
