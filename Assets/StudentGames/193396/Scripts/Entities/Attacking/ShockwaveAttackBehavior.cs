@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace _193396
@@ -47,6 +48,9 @@ namespace _193396
 			while (true)
 			{
 				yield return new WaitForSeconds(1f / data.spawnFrequency);
+
+				if (attackTransform.IsDestroyed())
+					yield break;
 
 				GameObject currentAttack = QolUtility.Instantiate(data.wavePrefab,
 					projectile.transform.position, projectile.transform.rotation,
