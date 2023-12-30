@@ -26,7 +26,10 @@ namespace _193396
 		[field: Space(10)]
 		[field: SerializeField] private RuntimeData runtimeData;
 		[Space(5)]
+		[field: SerializeField, ReadOnly] private bool isUnhittable;
+		[Space(5)]
 		[field: SerializeField, ReadOnly] private int health;
+
 
 		private List<int> justCollected = new List<int>();
 		private bool justHit = false;
@@ -98,7 +101,7 @@ namespace _193396
 
 		private void hit(HitData hitData)
 		{
-			if (justHit)
+			if (justHit || isUnhittable)
 				return;
 			justHit = true;
 
@@ -179,6 +182,13 @@ namespace _193396
 		private void killed(string name)
 		{
 			runtimeData.killCount++;
+
+			switch (name)
+			{
+				case "boss":
+					isUnhittable = true;
+					break;
+			}
 		}
 	}
 }
