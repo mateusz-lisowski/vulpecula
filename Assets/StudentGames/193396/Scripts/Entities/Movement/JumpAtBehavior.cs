@@ -73,6 +73,10 @@ namespace _193396
 				controller.rigidBody.AddForce(force * Vector2.up, ForceMode2D.Impulse);
 			}
 
+			drawParabola(controller.rigidBody.position, 
+				controller.rigidBody.velocity + jumpSpeed * (Vector2)transform.right, 
+				Physics2D.gravity, t);
+
 			controller.onEvent("jumped", null);
 		}
 		private void updateJump()
@@ -98,6 +102,20 @@ namespace _193396
 
 			if (isJumping && !ground.isFalling)
 				ground.disableGroundedNextFrame();
+		}
+
+		private void drawParabola(Vector2 position, Vector2 velocity, Vector2 acceleration, float time)
+		{
+			Vector2 startPosition = position;
+
+			for (float t = 0.1f; t < time + 0.1f / 2; t += 0.1f)
+			{
+				Vector2 nextPosition = startPosition + (velocity + 0.5f * acceleration * t) * t;
+
+				Debug.DrawLine(position, nextPosition, Color.red, time);
+
+				position = nextPosition;
+			}
 		}
 	}
 }

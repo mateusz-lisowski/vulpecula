@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace _193396
 {
@@ -14,6 +12,7 @@ namespace _193396
 			[field: SerializeField, ReadOnly] public float playtime = 0;
 			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public int score = 0;
+			[field: SerializeField, ReadOnly] public int killCount = 0;
 			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public bool unlockedKey1 = false;
 			[field: SerializeField, ReadOnly] public bool unlockedKey2 = false;
@@ -54,14 +53,18 @@ namespace _193396
 			}
 		}
 
-		public override string[] capturableEvents => new string[] { "hit", "collect", "respawn" };
+		public override string[] capturableEvents => new string[] { 
+			"hit", "collect", "killed", "respawn", "focused", "unfocused" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
 			{
 				case "hit": hit(eventData as HitData); break;
 				case "collect": collect(eventData as CollectData); break;
+				case "killed": killed((string)eventData); break;
 				case "respawn": respawn(); break;
+				case "focused": controller.onEvent("inputEnable", null); break;
+				case "unfocused": controller.onEvent("inputDisable", null); break;
 			}
 		}
 
@@ -171,6 +174,11 @@ namespace _193396
 						Debug.LogWarning("Collected item of unknown type: " + collect.name);
 					break;
 			}
+		}
+	
+		private void killed(string name)
+		{
+			runtimeData.killCount++;
 		}
 	}
 }

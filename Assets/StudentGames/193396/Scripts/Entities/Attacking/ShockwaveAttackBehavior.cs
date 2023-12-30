@@ -54,7 +54,7 @@ namespace _193396
 
 				ProjectileBehavior currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-				currentAttackData.initialize(data);
+				currentAttackData.initialize(controller, data);
 				currentAttackData.setStrength(data.strength);
 				currentAttackData.setHitboxSize(attackTransform.lossyScale);
 			}
@@ -69,7 +69,7 @@ namespace _193396
 
 				ProjectileBehavior currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-				currentAttackData.initialize(data);
+				currentAttackData.initialize(controller, data);
 				currentAttackData.setStrength(data.strength);
 
 				currentAttackData.controller.rigidBody.velocity = direction.normalized * data.speed;

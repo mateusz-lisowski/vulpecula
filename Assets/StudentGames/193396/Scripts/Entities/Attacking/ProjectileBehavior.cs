@@ -17,6 +17,8 @@ namespace _193396
 
 	public class ProjectileBehavior : EntityBehavior
 	{
+		public EntityBehaviorController sourceEntity { get; private set; }
+
 		private Collider2D hitbox;
 
 		private Action<HitData> hitCallback;
@@ -28,8 +30,10 @@ namespace _193396
 		private bool onFixedUpdateResolve = false;
 
 
-		public void initialize(ScriptableObject data)
+		public void initialize(EntityBehaviorController source, ScriptableObject data)
 		{
+			sourceEntity = source;
+
 			if (data is PlayerData)
 				hitLayers = ((PlayerData)data).attack.hitLayers;
 			else if (data is BaseAttackBehaviorData)

@@ -18,16 +18,26 @@ namespace _193396
 
 
 		private List<Transform> targetStack = new List<Transform>();
+		private void setTarget(Transform newTarget)
+		{
+			if (target != null)
+				target.gameObject.SendMessageUpwards("onMessage", new EntityMessage("unfocused", null), 
+					SendMessageOptions.DontRequireReceiver);
+
+			target = newTarget;
+			target.gameObject.SendMessageUpwards("onMessage", new EntityMessage("focused", null), 
+				SendMessageOptions.DontRequireReceiver);
+		}
 		public void pushTarget(Transform newTarget)
 		{
 			targetStack.Add(target);
-			target = newTarget;
+			setTarget(newTarget);
 		}
 		public void popTarget(Transform oldTarget)
 		{
 			while (target == oldTarget)
 			{
-				target = targetStack.Last();
+				setTarget(targetStack.Last());
 				targetStack.RemoveAt(targetStack.Count - 1);
 			}
 
@@ -40,6 +50,13 @@ namespace _193396
 			Camera camera = transform.GetComponent<Camera>();
 
 			camera.cullingMask = ~hiddenLayers;
+		}
+
+		private void Awake()
+		{
+			var targetTmp = target;
+			target = null;
+			setTarget(targetTmp);
 		}
 
 		private void Update()

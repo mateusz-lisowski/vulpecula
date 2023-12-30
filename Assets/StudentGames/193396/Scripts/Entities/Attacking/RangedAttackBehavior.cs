@@ -36,7 +36,7 @@ namespace _193396
 
 			ProjectileBehavior currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-			currentAttackData.initialize(data);
+			currentAttackData.initialize(controller, data);
 			currentAttackData.setStrength(data.strength);
 			currentAttackData.setHitboxSize(attackTransform.lossyScale);
 			currentAttackData.setHitCallback(attackBreak);

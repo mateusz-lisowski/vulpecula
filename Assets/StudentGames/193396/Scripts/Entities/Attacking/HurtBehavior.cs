@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace _193396
@@ -18,6 +19,12 @@ namespace _193396
 		private FlipBehavior direction;
 
 		private HitData hitData = null;
+
+		private Func<bool> deathCondition;
+		public void setDeathCondition(Func<bool> condition)
+		{
+			deathCondition = condition;
+		}
 
 
 		public float healthNormalized => (float)health / data.health;
@@ -158,6 +165,20 @@ namespace _193396
 			controller.onEvent("hurt", (float)health / data.health);
 		}
 
+		private void messageDeath(EntityBehaviorController sourceEntity)
+		{
+			controller.onEvent("died", null);
+			sourceEntity.onEvent("killed", data.killEventName);
+		}
+		private IEnumerator waitForDeathCondition(EntityBehaviorController sourceEntity)
+		{
+			do
+			{
+				yield return null;
+			} while (deathCondition != null && !deathCondition());
+
+			messageDeath(sourceEntity);
+		}
 		private void die()
 		{
 			setDistressDirection();
@@ -166,7 +187,11 @@ namespace _193396
 				controller.spriteRenderer, 0, burst: true));
 
 			controller.onEvent("hurt", 0f);
-			controller.onEvent("died", null);
+
+			if (deathCondition == null || deathCondition())
+				messageDeath(hitData.source.sourceEntity);
+			else
+				StartCoroutine(waitForDeathCondition(hitData.source.sourceEntity));			
 		}
 
 		private void block()

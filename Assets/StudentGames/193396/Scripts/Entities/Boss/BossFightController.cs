@@ -7,6 +7,7 @@ namespace _193396
 	public class BossFightController : EntityBehavior
     {
 		private HurtBehavior bossHurt;
+		private GroundedBehavior bossGround;
 		private RunBehavior bossRun;
 		private JumpAtBehavior bossJumpAt;
 		private MeleeAtackBehavior bossRunAttack;
@@ -24,8 +25,11 @@ namespace _193396
 			EntityBehaviorController bossController = boss.GetComponent<EntityBehaviorController>();
 
 			bossHurt = bossController.getBehavior<HurtBehavior>();
+			bossGround = bossController.getBehavior<GroundedBehavior>();
 			bossRun = bossController.getBehavior<RunBehavior>();
 			bossJumpAt = bossController.getBehavior<JumpAtBehavior>();
+
+			bossHurt.setDeathCondition(() => bossGround.isGrounded);
 
 			List<MeleeAtackBehavior> bossAttacks = bossController.getBehaviors<MeleeAtackBehavior>();
 			bossRunAttack = bossAttacks[0];
@@ -113,7 +117,7 @@ namespace _193396
 
 		private IEnumerator spawnAndWait()
 		{
-			yield return new WaitForSeconds(5);
+			yield return new WaitForSeconds(1);
 
 			controller.onEvent("roomCleared", null);
 		}

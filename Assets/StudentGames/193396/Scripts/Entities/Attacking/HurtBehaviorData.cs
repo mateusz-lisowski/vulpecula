@@ -7,6 +7,8 @@ namespace _193396
 	{
 		[Tooltip("Layer detecting whether the ground can instantly kill")]
 		public RuntimeSettings.LayerMaskInput canInstaKillLayer;
+		[Tooltip("Name identifying the entity")]
+		public string killEventName;
 
 		[Space(10)]
 
