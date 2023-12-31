@@ -8,8 +8,6 @@ namespace _193396
 		[System.Serializable]
 		public struct GroundDropping
 		{
-			[Tooltip("Layers that prevent ground respawn")]
-			public RuntimeSettings.LayerMaskInput collidingLayers;
 			[Tooltip("Time before droppable platform breaks")]
 			public float shakeTime;
 			[Tooltip("Time needed for ground to respawn")]
@@ -32,8 +30,6 @@ namespace _193396
 		[System.Serializable]
 		public struct GroundBreaking
 		{
-			[Tooltip("Layers that prevent ground respawn")]
-			public RuntimeSettings.LayerMaskInput collidingLayers;
 			[Tooltip("Time needed for ground to respawn")]
 			public float respawnTime;
 
@@ -54,6 +50,9 @@ namespace _193396
 			public RuntimeSettings.LayerMaskInput slidingLayers;
 		}
 
+		[Tooltip("Layers that prevent ground respawn")]
+		public RuntimeSettings.LayerMaskInput collidingLayers;
+		[Space(5)]
 		public GroundDropping groundDropping;
 		public GroundBreaking groundBreaking;
 		public GroundMoving groundMoving;

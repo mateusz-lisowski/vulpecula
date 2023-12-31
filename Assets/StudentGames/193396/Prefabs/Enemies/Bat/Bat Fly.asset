@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8882418e539156949b3c4beaa344b7dd, type: 3}
   m_Name: Bat Fly
   m_EditorClassIdentifier: 
-  avoidLayers:
-    value: 256
   safeSpaceSmall: 2
   safeSpaceBig: 3.5
   avoidSpeed: 5

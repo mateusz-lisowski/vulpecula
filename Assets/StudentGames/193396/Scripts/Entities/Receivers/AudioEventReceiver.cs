@@ -17,6 +17,7 @@ namespace _193396
 		[Space(5)]
 		public float cooldown = 0f;
 		[Space(5)]
+		public float transitionStartTime = 0f;
 		public float transitionTime = 0f;
 
 		private AudioSource source;
@@ -50,13 +51,13 @@ namespace _193396
 				case Type.Play:
 					if (type == Type.PlayContinue && source.isPlaying)
 						break;
-					if (transitionTime == 0f)
+					if (transitionTime == 0f && transitionStartTime == 0f)
 						source.Play();
 					else
 						StartCoroutine(transition(play: true));
 					break;
 				case Type.Stop:
-					if (transitionTime == 0f)
+					if (transitionTime == 0f && transitionStartTime == 0f)
 						source.Stop();
 					else
 						StartCoroutine(transition(play: false));
@@ -69,6 +70,9 @@ namespace _193396
 		
 		private IEnumerator transition(bool play)
 		{
+			if (transitionStartTime != 0f)
+				yield return new WaitForSeconds(transitionStartTime);
+
 			float timeLeft = transitionTime;
 
 			if (play)

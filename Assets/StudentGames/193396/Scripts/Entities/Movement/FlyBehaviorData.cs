@@ -5,9 +5,6 @@ namespace _193396
 	[CreateAssetMenu(menuName = "Data/Behavior/Fly")]
 	public class FlyBehaviorData : ScriptableObject
 	{
-		[Tooltip("Layers to fly away from")]
-		public RuntimeSettings.LayerMaskInput avoidLayers;
-
 		[Space(10)]
 
 		[Tooltip("Minimum distance to avoid obstacles")]

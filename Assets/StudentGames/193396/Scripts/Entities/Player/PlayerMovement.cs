@@ -28,10 +28,12 @@ namespace _193396
 		[field: SerializeField, ReadOnly] public bool isOnSlope { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isSlopeGrounded { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isPassing { get; private set; }
+		[field: SerializeField, ReadOnly] public bool isInTransition { get; private set; }
 		[field: Space(5)]
 		[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
 		[field: SerializeField, ReadOnly] public bool canGroundDrop { get; private set; }
 		[field: SerializeField, ReadOnly] public bool canTakeGroundDamage { get; private set; }
+		[field: SerializeField, ReadOnly] public bool canGetInstaKilled { get; private set; }
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public int jumpsLeft { get; private set; }
 		[field: SerializeField, ReadOnly] public int dashesLeft { get; private set; }
@@ -63,10 +65,12 @@ namespace _193396
 		private Vector2 groundSlide;
 		private Vector2 moveInput;
 		private bool passingLayersDisabled = false;
+		private bool resetTriggerCollisions = false;
 
 		private int lastEnabledFrame = -1;
 		private int lastJumpFrame = -1;
 		private int lastTurnFrame = -1;
+		private int lastInstaKillFrame = -1;
 
 		private bool currentJumpCuttable = false;
 		private bool jumpCutInput = false;
@@ -103,7 +107,7 @@ namespace _193396
 			lastPassInputTime = float.PositiveInfinity;
 		}
 
-		public override string[] capturableEvents => new string[] { "hit", "slide" };
+		public override string[] capturableEvents => new string[] { "hit", "slide", "respawn" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
@@ -113,6 +117,11 @@ namespace _193396
 					break;
 				case "slide":
 					groundSlide += (Vector2)eventData;
+					break;
+				case "respawn":
+					resetTriggerCollisions = true;
+					if (!isFacingRight)
+						flip();
 					break;
 			}
 		}
@@ -179,34 +188,39 @@ namespace _193396
 			isFacingRight = !isFacingRight;
 			transform.Rotate(0, 180, 0);
 		}
-		private void resetRespawn()
-		{
-			lastEnabledFrame = controller.currentFixedUpdate;
-
-			controller.rigidBody.velocity = Vector2.zero;
-
-			if (!isFacingRight)
-				flip();
-		}
 		private void updateInputOverride()
 		{
-			bool isInTransition = controller.hitbox.gameObject.layer == (int)RuntimeSettings.Layer.PlayerTransition;
+			isInTransition = controller.hitbox.gameObject.layer == (int)RuntimeSettings.Layer.PlayerTransition;
+			bool enterTransition = !input.isEnabled && !isInTransition;
+			bool exitTransition = input.isEnabled && isInTransition;
 
-			if (input.isEnabled && isInTransition)
-				setHitboxLayer(RuntimeSettings.Layer.Player);
-			else if (!input.isEnabled && !isInTransition)
-				setHitboxLayer(RuntimeSettings.Layer.PlayerTransition);
-
-			if (controller.rigidBody.simulated != input.isEnabled)
+			if (enterTransition)
 			{
-				controller.rigidBody.simulated = input.isEnabled;
-				if (input.isEnabled)
-					resetRespawn();
+				setHitboxLayer(RuntimeSettings.Layer.PlayerTransition);
+				controller.rigidBody.isKinematic = true;
+				controller.rigidBody.velocity = Vector2.zero;
+
+				isInTransition = true;
+			}
+			else if (exitTransition)
+			{
+				setHitboxLayer(RuntimeSettings.Layer.Player);
+				controller.rigidBody.isKinematic = false;
+				controller.rigidBody.velocity = Vector2.zero;
+
+				if (resetTriggerCollisions)
+				{
+					controller.hitbox.gameObject.SetActive(false);
+					controller.hitbox.gameObject.SetActive(true);
+					resetTriggerCollisions = false;
+				}
+
+				isInTransition = false;
 			}
 
-			if (input.isEnabled)
+			if (!isInTransition)
 				return;
-
+			
 			lastTurnTime = float.PositiveInfinity;
 			lastGroundedTime = float.PositiveInfinity;
 			lastHurtTime = float.PositiveInfinity;
@@ -278,19 +292,24 @@ namespace _193396
 		}
 		private void updateCollisions()
 		{
-			isGrounded		= input.isEnabled && groundCheck.IsTouchingLayers(currentGroundLayers);
-			isSlopeGrounded = input.isEnabled && slopeCheck.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers);
-			isOnSlope		= input.isEnabled && slopeCheck.IsTouchingLayers(data.run.slopeLayer);
-			isFacingWall	= input.isEnabled && wallCheck.IsTouchingLayers(data.wall.layers);
-			isPassing		= input.isEnabled && passingCheck.IsTouchingLayers(data.platformPassing.layers);
-			canWallJump		= input.isEnabled && withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
-			canGroundDrop	= input.isEnabled && withinCheck.IsTouchingLayers(data.detection.canDropLayer);
-			canTakeGroundDamage = input.isEnabled && groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
+			isGrounded		= groundCheck.IsTouchingLayers(currentGroundLayers);
+			isSlopeGrounded = slopeCheck.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers);
+			isOnSlope		= slopeCheck.IsTouchingLayers(data.run.slopeLayer);
+			isFacingWall	= wallCheck.IsTouchingLayers(data.wall.layers);
+			isPassing		= passingCheck.IsTouchingLayers(data.platformPassing.layers);
+			canWallJump		= withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
+			canGroundDrop	= !isInTransition && withinCheck.IsTouchingLayers(data.detection.canDropLayer);
+			canTakeGroundDamage = !isInTransition && groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
+			canGetInstaKilled = !isInTransition && controller.rigidBody.IsTouchingLayers(data.detection.canInstaKillLayer);
 
 			// disable registering wall collision immediately after turning because wallCheck's hitbox
 			// needs time to get updated
 			if (lastTurnFrame >= controller.currentFixedUpdate - 1)
 				isFacingWall = false;
+
+			// disable insant kill when just insta killed
+			if (lastInstaKillFrame >= controller.currentFixedUpdate - 1)
+				canGetInstaKilled = false;
 
 			// enable grounded when just spawned before groundCheck updates
 			if (lastEnabledFrame >= controller.currentFixedUpdate - 1)
@@ -308,6 +327,17 @@ namespace _193396
 			}
 		}
 
+		private void instaKill()
+		{
+			lastInstaKillFrame = controller.currentFixedUpdate;
+
+			hitData = new HitData();
+			hitData.isVertical = true;
+			hitData.right = transform.right;
+			hitData.strength = 9999;
+
+			controller.onEvent("hit", hitData);
+		}
 		private bool canTriggerGroundDamage()
 		{
 			return canTakeGroundDamage && isGrounded && !isInvulnerable;
@@ -365,6 +395,9 @@ namespace _193396
 		}
 		private void updateHurt()
 		{
+			if (canGetInstaKilled)
+				instaKill();
+
 			if (canTriggerGroundDamage())
 				takeGroundDamage();
 
@@ -372,7 +405,7 @@ namespace _193396
 				hurt();
 			hitData = null;
 
-			if (hurtCooldown <= 0)
+			if (!isInTransition && hurtCooldown <= 0)
 				setInvulnerability(false);
 
 			if (isDistressed && lastHurtTime >= data.hurt.distressTime)
@@ -514,7 +547,7 @@ namespace _193396
 		}
 		private void updateGravityScale()
 		{
-			if (!input.isEnabled)
+			if (isInTransition)
 			{
 				controller.rigidBody.gravityScale = 0;
 			}
@@ -569,7 +602,7 @@ namespace _193396
 
 			updateGravityScale();
 
-			if ((isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wall.jumpMinTime)
+			if (!isInTransition && (isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wall.jumpMinTime)
 			{
 				if (isFalling && lastWallHoldingTime != 0)
 					controller.onEvent("fell", null);

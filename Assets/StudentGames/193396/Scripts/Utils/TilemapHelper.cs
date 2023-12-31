@@ -130,6 +130,19 @@ namespace _193396
 
 			return false;
 		}
+		public static bool isOverlappingLayers(Grid grid, IEnumerable<Vector3Int> coords, LayerMask layerMask)
+		{
+			foreach (Vector3Int coord in coords)
+			{
+				Vector2 min = grid.CellToWorld(coord);
+				Vector2 max = min + (Vector2)grid.cellSize;
+
+				if (Physics2D.OverlapArea(min, max, layerMask))
+					return true;
+			}
+
+			return false;
+		}
 
 		public static void setTile(Tilemap tilemap, TileData tile)
 		{

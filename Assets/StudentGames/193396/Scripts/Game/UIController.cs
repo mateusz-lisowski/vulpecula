@@ -6,9 +6,13 @@ namespace _193396
 	public class UIController : EntityEventReceiver
 	{
 		public PlayerInfo info;
+		public HurtBehavior bossHealth;
 
 		private RectTransform healthTransform;
 		private RectTransform healthLevelTransform;
+
+		private RectTransform bossHealthTransform;
+		private RectTransform bossHealthLevelTransform;
 
 		private TextMeshProUGUI playtime;
 		private TextMeshProUGUI score;
@@ -19,16 +23,20 @@ namespace _193396
 			healthTransform = transform.Find("Canvas/Top-Left/health/fluid").GetComponent<RectTransform>();
 			healthLevelTransform = transform.Find("Canvas/Top-Left/health/level").GetComponent<RectTransform>();
 
+			bossHealthTransform = transform.Find("Canvas/Top/Boss/health/fluid").GetComponent<RectTransform>();
+			bossHealthLevelTransform = transform.Find("Canvas/Top/Boss/health/level").GetComponent<RectTransform>();
+
 			playtime = transform.Find("Canvas/Top-Right/playtime").GetComponent<TextMeshProUGUI>();
 			score = transform.Find("Canvas/Top-Right/score").GetComponent<TextMeshProUGUI>();
 		}
 
 		private void Update()
 		{
-			float y = healthLevelTransform.anchoredPosition.y 
-				- healthLevelTransform.sizeDelta.y * (1f - info.healthNormalized);
+			float healthY = healthLevelTransform.anchoredPosition.y - healthLevelTransform.sizeDelta.y * (1f - info.healthNormalized);
+			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, healthY);
 
-			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, y);
+			float bossHealthX = bossHealthLevelTransform.anchoredPosition.x - bossHealthLevelTransform.sizeDelta.x * (1f - bossHealth.healthNormalized);
+			bossHealthTransform.anchoredPosition = new Vector2(bossHealthX, bossHealthTransform.anchoredPosition.y);
 
 			playtime.text = string.Format("{0:0.00}", info.playtime);
 			score.text = string.Format("Score: {0}", info.score);

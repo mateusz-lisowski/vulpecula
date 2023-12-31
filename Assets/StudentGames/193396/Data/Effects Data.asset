@@ -23,3 +23,5 @@ MonoBehaviour:
     distance: 0.7
     time: 0.3
     updateFrequency: 50
+    direction: {x: 0, y: -1, z: 0}
+    alphaDelta: 1

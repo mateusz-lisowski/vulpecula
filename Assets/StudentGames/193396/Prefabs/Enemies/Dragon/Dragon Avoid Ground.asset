@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dragon Avoid Ground
   m_EditorClassIdentifier: 
   avoidLayers:
-    value: 256
+    value: 1073742080
   strength: 8
   distanceSmall: 1
   distanceBig: 3.5
