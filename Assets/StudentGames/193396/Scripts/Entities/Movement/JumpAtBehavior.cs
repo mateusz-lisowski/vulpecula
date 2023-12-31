@@ -55,10 +55,10 @@ namespace _193396
 			direction.faceTowards(target.position);
 
 			float xt = Mathf.Abs(target.position.x - transform.position.x);
-			float yt = target.position.y - transform.position.y;
+			float yt = Mathf.Min(target.position.y - transform.position.y, xt * data.eccentricity);
 
-			float d = Mathf.Max(4 * data.eccentricity * xt - yt, 0);
-			float distance = Mathf.Min((4 * data.eccentricity * xt * xt) / d, data.maxDistance);
+			float d = 4 * data.eccentricity * xt - yt;
+			float distance =(4 * data.eccentricity * xt * xt) / d;
 
 			float height = distance * data.eccentricity;
 			float force = Mathf.Sqrt(2 * -Physics2D.gravity.y * height);

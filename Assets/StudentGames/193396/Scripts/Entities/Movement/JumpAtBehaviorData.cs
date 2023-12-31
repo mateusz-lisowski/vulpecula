@@ -9,8 +9,6 @@ namespace _193396
 
 		[Tooltip("Maximum reachable height as a scale of the distance")]
 		public float eccentricity = 1f;
-		[Tooltip("Maximum distance that can be jumped (at height = 0)")]
-		public float maxDistance = 6f;
 
 		[Space(5)]
 
