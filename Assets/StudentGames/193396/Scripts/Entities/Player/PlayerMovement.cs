@@ -28,6 +28,7 @@ namespace _193396
 		[field: SerializeField, ReadOnly] public bool isOnSlope { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isSlopeGrounded { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isPassing { get; private set; }
+		[field: SerializeField, ReadOnly] public bool isInTransition { get; private set; }
 		[field: Space(5)]
 		[field: SerializeField, ReadOnly] public bool canWallJump { get; private set; }
 		[field: SerializeField, ReadOnly] public bool canGroundDrop { get; private set; }
@@ -189,7 +190,7 @@ namespace _193396
 		}
 		private void updateInputOverride()
 		{
-			bool isInTransition = controller.hitbox.gameObject.layer == (int)RuntimeSettings.Layer.PlayerTransition;
+			isInTransition = controller.hitbox.gameObject.layer == (int)RuntimeSettings.Layer.PlayerTransition;
 			bool enterTransition = !input.isEnabled && !isInTransition;
 			bool exitTransition = input.isEnabled && isInTransition;
 
@@ -198,6 +199,8 @@ namespace _193396
 				setHitboxLayer(RuntimeSettings.Layer.PlayerTransition);
 				controller.rigidBody.isKinematic = true;
 				controller.rigidBody.velocity = Vector2.zero;
+
+				isInTransition = true;
 			}
 			else if (exitTransition)
 			{
@@ -211,9 +214,11 @@ namespace _193396
 					controller.hitbox.gameObject.SetActive(true);
 					resetTriggerCollisions = false;
 				}
+
+				isInTransition = false;
 			}
 
-			if (input.isEnabled)
+			if (!isInTransition)
 				return;
 			
 			lastTurnTime = float.PositiveInfinity;
@@ -293,9 +298,9 @@ namespace _193396
 			isFacingWall	= wallCheck.IsTouchingLayers(data.wall.layers);
 			isPassing		= passingCheck.IsTouchingLayers(data.platformPassing.layers);
 			canWallJump		= withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
-			canGroundDrop	= input.isEnabled && withinCheck.IsTouchingLayers(data.detection.canDropLayer);
-			canTakeGroundDamage = input.isEnabled && groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
-			canGetInstaKilled = input.isEnabled && controller.rigidBody.IsTouchingLayers(data.detection.canInstaKillLayer);
+			canGroundDrop	= !isInTransition && withinCheck.IsTouchingLayers(data.detection.canDropLayer);
+			canTakeGroundDamage = !isInTransition && groundCheck.IsTouchingLayers(data.detection.canDamageLayer);
+			canGetInstaKilled = !isInTransition && controller.rigidBody.IsTouchingLayers(data.detection.canInstaKillLayer);
 
 			// disable registering wall collision immediately after turning because wallCheck's hitbox
 			// needs time to get updated
@@ -400,7 +405,7 @@ namespace _193396
 				hurt();
 			hitData = null;
 
-			if (input.isEnabled && hurtCooldown <= 0)
+			if (!isInTransition && hurtCooldown <= 0)
 				setInvulnerability(false);
 
 			if (isDistressed && lastHurtTime >= data.hurt.distressTime)
@@ -542,7 +547,7 @@ namespace _193396
 		}
 		private void updateGravityScale()
 		{
-			if (!input.isEnabled)
+			if (isInTransition)
 			{
 				controller.rigidBody.gravityScale = 0;
 			}
@@ -597,7 +602,7 @@ namespace _193396
 
 			updateGravityScale();
 
-			if ((isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wall.jumpMinTime)
+			if (!isInTransition && (isGrounded || lastWallHoldingTime == 0) && lastWallJumpTime > data.wall.jumpMinTime)
 			{
 				if (isFalling && lastWallHoldingTime != 0)
 					controller.onEvent("fell", null);
