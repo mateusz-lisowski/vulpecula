@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _193396
@@ -30,6 +31,7 @@ namespace _193396
 		public Data data;
 
 		private int waitIndex = -1;
+		private List<int> lastRandoms;
 
 
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -69,12 +71,33 @@ namespace _193396
 					animator.SetInteger(parameterName, animator.GetInteger(parameterName) + data.intValue);
 					break;
 				case CallType.SetIntegerRandom:
-					animator.SetInteger(parameterName, UnityEngine.Random.Range(0, data.intValue));
+					animator.SetInteger(parameterName, getRandomInteger());
 					break;
 				case CallType.SetFloat:
 					animator.SetFloat(parameterName, data.floatValue);
 					break;
 			}
+		}
+
+		// Prevent repeating of the same numbers 
+		private int getRandomInteger()
+		{
+			if (lastRandoms == null)
+				lastRandoms = new List<int>();
+
+			if (lastRandoms.Count >= data.intValue)
+				lastRandoms.Clear();
+
+			int val;
+			do
+			{
+				val = UnityEngine.Random.Range(0, data.intValue);
+			}
+			while (lastRandoms.Contains(val));
+
+			lastRandoms.Add(val);
+
+			return val;
 		}
 
 	}
