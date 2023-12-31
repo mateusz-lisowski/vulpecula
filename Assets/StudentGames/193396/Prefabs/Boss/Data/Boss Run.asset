@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Boss Run
   m_EditorClassIdentifier: 
   maxSpeed: 12
-  accelerationCoefficient: 0.6
+  accelerationCoefficient: 0.2
