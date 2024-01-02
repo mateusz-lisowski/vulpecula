@@ -131,10 +131,16 @@ namespace _193396
 
 		public B getBehavior<B>() where B : EntityBehavior
 		{
+			if (behaviors == null)
+				return GetComponent<B>();
+
 			return (B)behaviors.Find(b => b.GetType() == typeof(B));
 		}
 		public List<B> getBehaviors<B>() where B : EntityBehavior
 		{
+			if (behaviors == null)
+				return GetComponents<B>().ToList();
+
 			return behaviors.FindAll(b => b.GetType() == typeof(B)).Cast<B>().ToList();
 		}
 
