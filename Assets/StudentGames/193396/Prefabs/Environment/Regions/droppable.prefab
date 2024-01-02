@@ -222,3 +222,4 @@ MonoBehaviour:
   eventName: break
   eventData: 
   cooldown: 0
+  transitionTime: 0

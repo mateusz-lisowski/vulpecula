@@ -16,20 +16,7 @@ namespace _193396
 			runtimeSettings.mapTagsToLayers(target);
 		}
 
-		public static bool createIfNotExist(out Transform target, Transform parent, string name)
-		{
-			target = parent.Find(name);
-
-			if (target == null)
-			{
-				target = new GameObject(name).transform;
-				target.parent = parent;
-				return true;
-			}
-			else
-				return false;
-		}
-		public static bool createIfNotExist(out Transform target, Transform parent, string name, GameObject prefab)
+		public static bool createIfNotExist(out Transform target, Transform parent, string name, GameObject prefab = null)
 		{
 			target = parent.Find(name);
 
@@ -46,40 +33,56 @@ namespace _193396
 
 		public static GameObject Instantiate(GameObject prefab, Transform parent)
 		{
-			GameObject gameObject;
+			GameObject gameObject = null;
+
+			if (prefab == null)
+				gameObject = new GameObject("Empty");
 
 #if UNITY_EDITOR
 			if (Application.isPlaying)
 			{
 #endif
-				gameObject = Object.Instantiate<GameObject>(prefab, parent);
+				if (gameObject == null)
+					gameObject = Object.Instantiate<GameObject>(prefab, parent);
 				GameManager.instance.runtimeSettings.mapTagsToLayers(gameObject);
 #if UNITY_EDITOR
 			}
 			else
 			{
-				gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
+				if (gameObject == null)
+					gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
 			}
 #endif
 			return gameObject;
 		}
 		public static GameObject Instantiate(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
 		{
-			GameObject gameObject;
+			GameObject gameObject = null;
+
+			if (prefab == null)
+			{
+				gameObject = new GameObject("Empty");
+				gameObject.transform.position = position;
+				gameObject.transform.rotation = rotation;
+			}
 
 #if UNITY_EDITOR
 			if (Application.isPlaying)
 			{
 #endif
-				gameObject = Object.Instantiate<GameObject>(prefab, position, rotation, parent);
+				if (gameObject == null)
+					gameObject = Object.Instantiate<GameObject>(prefab, position, rotation, parent);
 				GameManager.instance.runtimeSettings.mapTagsToLayers(gameObject);
 #if UNITY_EDITOR
 			}
 			else
 			{
-				gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
-				gameObject.transform.position = position;
-				gameObject.transform.rotation = rotation;
+				if (gameObject == null)
+				{
+					gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
+					gameObject.transform.position = position;
+					gameObject.transform.rotation = rotation;
+				}
 			}
 #endif
 			return gameObject;

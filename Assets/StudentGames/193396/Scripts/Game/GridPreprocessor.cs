@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 namespace _193396
@@ -39,11 +37,13 @@ namespace _193396
 		private Tilemap bounceOnBreakTilemap;
 		private Transform groundDroppingGroup;
 		private Transform groundBreakingGroup;
+		private Transform customRegionsGroup;
 		private Transform enemiesGroup;
 		private Transform collectiblesGroup;
 
 		public List<TilemapHelper.Region> groundDroppingRegions;
 		public List<TilemapHelper.Region> groundBreakingRegions;
+		public List<TilemapHelper.Region> customRegions;
 
 
 		private void Awake()
@@ -51,7 +51,7 @@ namespace _193396
 			regenerate();
 		}
 
-		public void regenerate()
+		private void regenerate()
 		{
 			QolUtility.createIfNotExist(out autogenGroup, transform, "Autogen");
 
@@ -85,8 +85,10 @@ namespace _193396
 				transform.GetComponentsInChildren<GroundDroppingController>(), data.terrainData.groundDropping.prefab);
 			createRegions(ref groundBreakingRegions, groundBreakingGroup, 
 				transform.GetComponentsInChildren<GroundBreakingController>(), data.terrainData.groundBreaking.prefab);
+			createRegions(ref customRegions, customRegionsGroup,
+				transform.GetComponentsInChildren<CustomRegionSource>(), null);
 		}
-		public void clear()
+		private void clear()
 		{
 			if (autogenGroup != null)
 			{
@@ -153,6 +155,7 @@ namespace _193396
 
 			QolUtility.createIfNotExist(out groundDroppingGroup, autogenGroup, "Ground Dropping");
 			QolUtility.createIfNotExist(out groundBreakingGroup, autogenGroup, "Ground Breaking");
+			QolUtility.createIfNotExist(out customRegionsGroup, autogenGroup, "Custom Regions");
 			enemiesGroup = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Enemies];
 			collectiblesGroup = GameManager.instance.runtimeGroup[GameManager.RuntimeGroup.Collectibles];
 		}
@@ -199,6 +202,8 @@ namespace _193396
 
 					newEntity.position = position;
 					newEntity.rotation = rotation;
+
+					tilemap.SetTile(coord, null);
 				}
 		}
 		private void createRegions(ref List<TilemapHelper.Region> regions, Transform parent, 

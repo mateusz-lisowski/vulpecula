@@ -123,7 +123,7 @@ namespace _193396
 
 			currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-			currentAttackData.initialize(data);
+			currentAttackData.initialize(controller, data);
 			currentAttackData.setFrameVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 			currentAttackData.setStrength(isStrong ? data.attack.forwardStrongStrength
 				: data.attack.forwardStrength);
@@ -155,7 +155,7 @@ namespace _193396
 
 			currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-			currentAttackData.initialize(data);
+			currentAttackData.initialize(controller, data);
 			currentAttackData.setFrameVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 			currentAttackData.setStrength(data.attack.forwardAirStrength);
 			currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
@@ -187,7 +187,7 @@ namespace _193396
 
 			currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-			currentAttackData.initialize(data);
+			currentAttackData.initialize(controller, data);
 			currentAttackData.setStrength(data.attack.downStrength);
 			currentAttackData.setHitboxSize(attackDownTransform.localScale);
 			currentAttackData.setHitCallback(attackDownHitCallback);

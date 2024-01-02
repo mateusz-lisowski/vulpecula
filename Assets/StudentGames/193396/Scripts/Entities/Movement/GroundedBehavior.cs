@@ -43,6 +43,8 @@ namespace _193396
 
 		public override void onUpdate()
 		{
+			bool wasGrounded = isGrounded;
+
 			if (lastDisabledUpdate < controller.currentUpdate)
 			{
 				isGrounded = groundCheck.IsTouchingLayers(data.groundLayers);
@@ -59,11 +61,15 @@ namespace _193396
 			bool wasFalling = isFalling;
 			isFalling = !isGrounded && controller.rigidBody.velocity.y <= 0;
 
-			foreach (var param in controller.animator.parameters)
-				if (param.name == "isGrounded")
-					controller.animator.SetBool("isGrounded", isGrounded);
-				else if (param.name == "isFalling")
-					controller.animator.SetBool("isFalling", isFalling);
+			if (controller.animator != null)
+				foreach (var param in controller.animator.parameters)
+					if (param.name == "isGrounded")
+						controller.animator.SetBool("isGrounded", isGrounded);
+					else if (param.name == "isFalling")
+						controller.animator.SetBool("isFalling", isFalling);
+
+			if (wasGrounded && !isGrounded)
+				controller.onEvent("lostGround", null);
 
 			if (wasFalling && !isFalling)
 				controller.onEvent("fell", null);

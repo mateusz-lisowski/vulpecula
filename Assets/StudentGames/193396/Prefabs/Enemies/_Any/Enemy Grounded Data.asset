@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Enemy Grounded Data
   m_EditorClassIdentifier: 
   groundLayers:
-    value: 768
+    value: 1073742592
   wallLayers:
-    value: 256
+    value: 1073742080
   passingLayers:
     value: 512
   slopeLayer:

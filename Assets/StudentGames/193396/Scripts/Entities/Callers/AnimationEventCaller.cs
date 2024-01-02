@@ -12,6 +12,7 @@ namespace _193396
 		public StateType type = StateType.Enter;
 		public string eventName;
 
+
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			if (type == StateType.Enter)

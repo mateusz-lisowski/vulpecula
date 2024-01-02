@@ -28,6 +28,9 @@ namespace _193396
 				case SerializedPropertyType.String:
 					valueStr = prop.stringValue;
 					break;
+				case SerializedPropertyType.Enum:
+					valueStr = prop.enumDisplayNames[prop.enumValueIndex];
+					break;
 				case SerializedPropertyType.Vector2:
 					valueStr = prop.vector2Value.ToString();
 					break;

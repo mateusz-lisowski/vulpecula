@@ -237,6 +237,8 @@ namespace _193396
 			public RuntimeSettings.LayerMaskInput canDamageLayer;
 			[Tooltip("Layer detecting whether the ground can drop")]
 			public RuntimeSettings.LayerMaskInput canDropLayer;
+			[Tooltip("Layer detecting whether the ground can instantly kill")]
+			public RuntimeSettings.LayerMaskInput canInstaKillLayer;
 		}
 
 		public Gravity gravity;
