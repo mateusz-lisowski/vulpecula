@@ -17,6 +17,8 @@ namespace _193396
 
 	public class ProjectileBehavior : EntityBehavior
 	{
+		public EntityBehaviorController sourceEntity { get; private set; }
+
 		private Collider2D hitbox;
 
 		private Action<HitData> hitCallback;
@@ -28,14 +30,14 @@ namespace _193396
 		private bool onFixedUpdateResolve = false;
 
 
-		public void initialize(ScriptableObject data)
+		public void initialize(EntityBehaviorController source, ScriptableObject data)
 		{
+			sourceEntity = source;
+
 			if (data is PlayerData)
 				hitLayers = ((PlayerData)data).attack.hitLayers;
-			else if (data is MeleeAttackBehaviorData)
-				hitLayers = ((MeleeAttackBehaviorData)data).hitLayers;
-			else if (data is RangedAttackBehaviorData)
-				hitLayers = ((RangedAttackBehaviorData)data).hitLayers;
+			else if (data is BaseAttackBehaviorData)
+				hitLayers = ((BaseAttackBehaviorData)data).hitLayers;
 			else
 				throw new ApplicationException("Unknown projectile data.");
 		}
@@ -78,7 +80,7 @@ namespace _193396
 
 		public override void onAwake()
 		{
-			hitbox = controller.hitbox.GetComponent<Collider2D>();
+			hitbox = controller.hitbox?.GetComponent<Collider2D>();
 		}
 
 		public override string[] capturableEvents => new string[] { "resolve", "halt" };

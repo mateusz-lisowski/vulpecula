@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace _193396
@@ -14,11 +16,47 @@ namespace _193396
 		public float xSmooth = 8f; // How smoothly the camera catches up with it's target movement in the x axis.
 		public float ySmooth = 8f; // How smoothly the camera catches up with it's target movement in the y axis.
 
+
+		private List<Transform> targetStack = new List<Transform>();
+		private void setTarget(Transform newTarget)
+		{
+			if (target != null)
+				target.gameObject.SendMessageUpwards("onMessage", new EntityMessage("unfocused", null), 
+					SendMessageOptions.DontRequireReceiver);
+
+			target = newTarget;
+			target.gameObject.SendMessageUpwards("onMessage", new EntityMessage("focused", null), 
+				SendMessageOptions.DontRequireReceiver);
+		}
+		public void pushTarget(Transform newTarget)
+		{
+			targetStack.Add(target);
+			setTarget(newTarget);
+		}
+		public void popTarget(Transform oldTarget)
+		{
+			while (target == oldTarget)
+			{
+				setTarget(targetStack.Last());
+				targetStack.RemoveAt(targetStack.Count - 1);
+			}
+
+			targetStack.RemoveAll(t => t == oldTarget);
+		}
+
+
 		private void OnValidate()
 		{
 			Camera camera = transform.GetComponent<Camera>();
 
 			camera.cullingMask = ~hiddenLayers;
+		}
+
+		private void Awake()
+		{
+			var targetTmp = target;
+			target = null;
+			setTarget(targetTmp);
 		}
 
 		private void Update()

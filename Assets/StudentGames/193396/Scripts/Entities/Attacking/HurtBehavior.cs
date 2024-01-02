@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace _193396
@@ -19,6 +20,25 @@ namespace _193396
 
 		private HitData hitData = null;
 
+		private Func<bool> deathCondition;
+		public void setDeathCondition(Func<bool> condition)
+		{
+			deathCondition = condition;
+		}
+
+
+		public float healthNormalized => (float)health / data.health;
+
+		public void tryHeal(int count)
+		{
+			int newHealth = Math.Min(health + count, data.health);
+			int heal = newHealth - health;
+
+			health = newHealth;
+
+			if (heal > 0)
+				controller.onEvent("healed", heal);
+		}
 
 		public override void onAwake()
 		{
@@ -29,13 +49,16 @@ namespace _193396
 			health = data.health;
 		}
 
-		public override string[] capturableEvents => new string[] { "hit" };
+		public override string[] capturableEvents => new string[] { "hit", "heal" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
 			{
 				case "hit":
 					hitData = eventData as HitData;
+					break;
+				case "heal":
+					tryHeal((int)eventData);
 					break;
 			}
 		}
@@ -44,6 +67,9 @@ namespace _193396
 		{
 			lastHurtTime += Time.deltaTime;
 			hurtCooldown -= Time.deltaTime;
+
+			if (controller.rigidBody.IsTouchingLayers(data.canInstaKillLayer))
+				instaKill();
 
 			if (canHurt())
 				if (hitData.strength >= data.maxBlock)
@@ -80,13 +106,23 @@ namespace _193396
 		}
 
 
+		private void instaKill()
+		{
+			hitData = new HitData();
+			hitData.isVertical = true;
+			hitData.right = transform.right;
+			hitData.strength = 9999;
+
+			controller.onEvent("hit", hitData);
+		}
+
 		private bool canHurt()
 		{
-			return hitData != null && hurtCooldown <= 0;
+			return hitData != null && hurtCooldown < 0;
 		}
 		private void setDistressDirection()
 		{
-			if (direction == null)
+			if (direction == null || !data.faceHit)
 				return;
 
 			if (hitData.isVertical)
@@ -129,6 +165,22 @@ namespace _193396
 			controller.onEvent("hurt", (float)health / data.health);
 		}
 
+		private void messageDeath(EntityBehaviorController sourceEntity)
+		{
+			controller.onEvent("died", data.killEventName);
+
+			if (sourceEntity != null)
+				sourceEntity.onEvent("killed", data.killEventName);
+		}
+		private IEnumerator waitForDeathCondition(EntityBehaviorController sourceEntity)
+		{
+			do
+			{
+				yield return null;
+			} while (deathCondition != null && !deathCondition());
+
+			messageDeath(sourceEntity);
+		}
 		private void die()
 		{
 			setDistressDirection();
@@ -137,7 +189,11 @@ namespace _193396
 				controller.spriteRenderer, 0, burst: true));
 
 			controller.onEvent("hurt", 0f);
-			controller.onEvent("died", null);
+
+			if (deathCondition == null || deathCondition())
+				messageDeath(hitData.source?.sourceEntity);
+			else
+				StartCoroutine(waitForDeathCondition(hitData.source?.sourceEntity));			
 		}
 
 		private void block()

@@ -120,7 +120,7 @@ namespace _193396
 				Vector2 hitboxSize = bounds.size;
 				if (currentPosition != position)
 					hitboxSize.y += 0.5f;
-
+				
 				hit = Physics2D.BoxCast(currentPosition, hitboxSize, 0f,
 					dir.normalized, dir.magnitude,
 					isRising ? ground.data.wallLayers : ground.data.groundLayers);
@@ -143,14 +143,16 @@ namespace _193396
 		{
 			Bounds bounds = hitboxBounds();
 
-			int times = Mathf.RoundToInt((data.longSpeed - data.shortSpeed) / 0.5f) + 1;
+			int times = Mathf.RoundToInt((data.longHeight - data.shortHeight) / 0.5f) + 1;
 
 			for (int i = 0; i < times; i++)
 			{
-				speed = Mathf.Lerp(data.longSpeed, data.shortSpeed, times > 1 ? i / (float)(times - 1) : 0);
-				height = Mathf.Lerp(data.longHeight, data.shortHeight, times > 1 ? i / (float)(times - 1) : 0);
+				float lerp = times > 1 ? i / (float)(times - 1) : 0;
 
-				if (tryFindTarget(transform.position, bounds, height, speed))
+				speed = Mathf.Lerp(data.longSpeed, data.shortSpeed, lerp);
+				height = Mathf.Lerp(data.longHeight, data.shortHeight, lerp);
+
+				if (tryFindTarget(transform.position + bounds.center, bounds, height, speed))
 					return true;
 			}
 

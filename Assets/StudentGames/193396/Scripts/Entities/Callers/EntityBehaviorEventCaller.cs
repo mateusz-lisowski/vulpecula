@@ -13,8 +13,16 @@ namespace _193396
 			if (separatorIndex == -1)
 				controller.onEvent(name, null);
 			else
-				controller.onEvent(name.Substring(0, separatorIndex),
-					name.Substring(separatorIndex + 1, name.Length - separatorIndex - 1));
+			{
+				string dataString = name.Substring(separatorIndex + 1, name.Length - separatorIndex - 1);
+				name = name.Substring(0, separatorIndex);
+
+				int dataInt;
+				if (int.TryParse(dataString, out dataInt))
+					controller.onEvent(name, dataInt);
+				else
+					controller.onEvent(name, dataString);
+			}
 		}
 	}
 }

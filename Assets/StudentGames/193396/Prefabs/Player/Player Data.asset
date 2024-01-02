@@ -50,7 +50,7 @@ MonoBehaviour:
     inputBufferTime: 0.1
   run:
     groundLayers:
-      value: 1792
+      value: 536872704
     slopeLayer:
       value: 33554432
     maxSpeed: 7
@@ -102,3 +102,5 @@ MonoBehaviour:
       value: 2097152
     canDropLayer:
       value: 8388608
+    canInstaKillLayer:
+      value: 67108864

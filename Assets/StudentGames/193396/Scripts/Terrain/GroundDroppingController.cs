@@ -71,7 +71,7 @@ namespace _193396
 		private bool canRespawn(List<TilemapHelper.TileData> tiles)
 		{
 			bool canRespawn = !TilemapHelper.isOverlappingLayers(
-				tiles, data.groundDropping.collidingLayers);
+				tiles, data.collidingLayers);
 
 			return canRespawn;
 		}

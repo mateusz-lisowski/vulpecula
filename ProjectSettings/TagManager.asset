@@ -17,6 +17,10 @@ TagManager:
   - Breakable
   - Breakable Explode
   - Slope
+  - Custom Region
+  - Instant Kill
+  - Player Only Ground
+  - Enemy Only Ground
   layers:
   - Default
   - TransparentFX

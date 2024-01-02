@@ -992,6 +992,7 @@ MonoBehaviour:
   eventName: died
   eventData: 
   targetPath: Death
+  timeOffset: 0
 --- !u!1001 &3936774079131997345
 PrefabInstance:
   m_ObjectHideFlags: 0

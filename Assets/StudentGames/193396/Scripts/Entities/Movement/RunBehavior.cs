@@ -23,8 +23,8 @@ namespace _193396
 			direction = controller.getBehavior<FlipBehavior>();
 			ground = controller.getBehavior<GroundedBehavior>();
 
-			wallCheck = transform.Find("Detection/Wall").GetComponent<Collider2D>();
-			fallCheck = transform.Find("Detection/Fall").GetComponent<Collider2D>();
+			wallCheck = transform.Find("Detection/Wall")?.GetComponent<Collider2D>();
+			fallCheck = transform.Find("Detection/Fall")?.GetComponent<Collider2D>();
 		}
 
 		public override void onUpdate()
@@ -55,8 +55,15 @@ namespace _193396
 		}
 		private void updateCollisions()
 		{
-			isFacingWall = wallCheck.IsTouchingLayers(ground.data.wallLayers);
-			isNoGroundAhead = !fallCheck.IsTouchingLayers(ground.data.groundLayers);
+			if (wallCheck != null)
+				isFacingWall = wallCheck.IsTouchingLayers(ground.data.wallLayers);
+			else
+				isFacingWall = false;
+
+			if (fallCheck != null)
+				isNoGroundAhead = !fallCheck.IsTouchingLayers(ground.data.groundLayers);
+			else
+				isNoGroundAhead = false;
 
 			if (isFacingWall && isFacingSlope())
 				isFacingWall = false;
