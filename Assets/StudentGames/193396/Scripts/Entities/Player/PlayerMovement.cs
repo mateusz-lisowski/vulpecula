@@ -545,6 +545,8 @@ namespace _193396
 
 				float wallJumpForce = data.wall.jumpForce;
 				controller.rigidBody.AddForce(wallJumpForce * forceDirection * Vector2.right, ForceMode2D.Impulse);
+
+				transform.position += data.wall.jumpTeleportDistance * forceDirection * Vector3.right;
 			}
 
 			controller.onEvent("jumped", null);

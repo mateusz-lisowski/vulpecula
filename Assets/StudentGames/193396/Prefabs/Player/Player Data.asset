@@ -83,10 +83,11 @@ MonoBehaviour:
     canJumpLayer:
       value: 4194304
     jumpForce: 10
-    jumpInputReduction: 0.6
+    jumpInputReduction: 0.4
     jumpInputReduceTime: 0.6
     jumpTime: 0.35
     jumpMinTime: 0.1
+    jumpTeleportDistance: 0.5
     jumpCoyoteTime: 0.1
   dash:
     distance: 2

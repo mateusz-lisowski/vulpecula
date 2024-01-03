@@ -194,8 +194,13 @@ namespace _193396
 			public float jumpInputReduceTime;
 			[Tooltip("Time to prevent jumping after wall jumping")]
 			public float jumpTime;
+
+			[Space(5)]
+
 			[Tooltip("Minimum time of a wall jump (prevent isGrounded)")]
 			public float jumpMinTime;
+			[Tooltip("Distance moved from wall on a wall jump (prevent collision)")]
+			public float jumpTeleportDistance;
 
 			[Space(10)]
 			[Tooltip("Time after falling off a wall where you can still wall jump")]
