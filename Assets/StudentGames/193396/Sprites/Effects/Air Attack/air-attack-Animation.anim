@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: attack-Air-Animation
+  m_Name: air-attack-Animation
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,15 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: b90fc1f5feb9c73478eadfed1a6f874b, type: 3}
+      value: {fileID: 21300000, guid: a978e05df292f974495b73f21c3ae8f8, type: 3}
     - time: 0.083333336
-      value: {fileID: 21300000, guid: 8923b63b79581524186383c437487b5d, type: 3}
+      value: {fileID: 21300000, guid: 7cf8eacc6cd960145a094d33d5c8283f, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: 28a74ac84cfcc9a4dac147ec9e2df3c3, type: 3}
+      value: {fileID: 21300000, guid: 2ebb3d42809a76c4cb391496fb002dd8, type: 3}
     - time: 0.25
-      value: {fileID: 21300000, guid: c145e383d484fdb438a7086c909f5fce, type: 3}
+      value: {fileID: 21300000, guid: 022b23b15c6367d4ca6c556c07bf190d, type: 3}
+    - time: 0.33333334
+      value: {fileID: 21300000, guid: 11964b325640f4f4fa8a5ed374f08103, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,21 +52,22 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: b90fc1f5feb9c73478eadfed1a6f874b, type: 3}
-    - {fileID: 21300000, guid: 8923b63b79581524186383c437487b5d, type: 3}
-    - {fileID: 21300000, guid: 28a74ac84cfcc9a4dac147ec9e2df3c3, type: 3}
-    - {fileID: 21300000, guid: c145e383d484fdb438a7086c909f5fce, type: 3}
+    - {fileID: 21300000, guid: a978e05df292f974495b73f21c3ae8f8, type: 3}
+    - {fileID: 21300000, guid: 7cf8eacc6cd960145a094d33d5c8283f, type: 3}
+    - {fileID: 21300000, guid: 2ebb3d42809a76c4cb391496fb002dd8, type: 3}
+    - {fileID: 21300000, guid: 022b23b15c6367d4ca6c556c07bf190d, type: 3}
+    - {fileID: 21300000, guid: 11964b325640f4f4fa8a5ed374f08103, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.33333334
+    m_StopTime: 0.4166667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -79,9 +82,9 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.083333336
+  - time: 0.16666667
     functionName: callEvent
-    data: attackForwardAir
+    data: resolve
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

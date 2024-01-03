@@ -64,6 +64,8 @@ namespace _193396
 			public GameObject attackDownPrefab;
 
 			[Space(5)]
+			[Tooltip("Minimum time since touching groud to use air attack")]
+			public float airMinTime;
 			[Tooltip("Maximum time between consecutive forward attacks in a combo")]
 			public float comboResetTime;
 			[Tooltip("Minimum time between two consecutive forward attacks (non-reset)")]

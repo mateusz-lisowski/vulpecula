@@ -221,7 +221,7 @@ namespace _193396
 		}
 		private bool canAttackForwardAir()
 		{
-			return !movement.isGrounded;
+			return movement.lastGroundedTime >= data.attack.airMinTime;
 		}
 		private void updateAttack()
 		{
