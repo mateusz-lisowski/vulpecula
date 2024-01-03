@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canInstaKillLayer:
     value: 67108864
+  killEventName: 
   invulnerabilityTime: 0
   distressTime: 0.1
-  health: 3
+  health: 8
   maxBlock: 0
+  faceHit: 1

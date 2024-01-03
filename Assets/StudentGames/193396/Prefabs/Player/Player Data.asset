@@ -37,10 +37,10 @@ MonoBehaviour:
     comboResetTime: 0.5
     forwardCooldown: 0.6
     downCooldown: 0.8
-    forwardStrength: 1
-    forwardStrongStrength: 2
+    forwardStrength: 2
+    forwardStrongStrength: 4
     forwardAirStrength: 3
-    downStrength: 2
+    downStrength: 4
     forwardSpeed: 2
     forwardAcceleration: 20
     attackDownSlowdown: 10

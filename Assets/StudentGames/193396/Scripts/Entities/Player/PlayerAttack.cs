@@ -100,6 +100,7 @@ namespace _193396
 		private void attackFinish()
 		{
 			movement.isAttacking = false;
+			movement.isAttackLockedDirection = false;
 		}
 
 		private void attackForwardReset()
@@ -128,6 +129,8 @@ namespace _193396
 			currentAttackData.setStrength(isStrong ? data.attack.forwardStrongStrength
 				: data.attack.forwardStrength);
 			currentAttackData.setHitboxSize(currentAttackTransform.localScale);
+
+			movement.isAttackLockedDirection = true;
 		}
 		private void attackForward()
 		{
@@ -159,6 +162,8 @@ namespace _193396
 			currentAttackData.setFrameVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 			currentAttackData.setStrength(data.attack.forwardAirStrength);
 			currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
+
+			movement.isAttackLockedDirection = true;
 		}
 		private void attackForwardAir()
 		{
@@ -192,6 +197,8 @@ namespace _193396
 			currentAttackData.setHitboxSize(attackDownTransform.localScale);
 			currentAttackData.setHitCallback(attackDownHitCallback);
 			currentAttackData.setVertical();
+
+			movement.isAttackLockedDirection = true;
 		}
 		private void attackDown()
 		{
@@ -228,6 +235,7 @@ namespace _193396
 			if (!input.isEnabled || movement.isDistressed)
 			{
 				movement.isAttacking = false;
+				movement.isAttackLockedDirection = false;
 				if (currentAttackData != null)
 					currentAttackData.halt();
 			}

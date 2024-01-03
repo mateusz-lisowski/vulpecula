@@ -18,7 +18,7 @@ MonoBehaviour:
     value: 4096
   attackPrefab: {fileID: 79447156507604420, guid: 0f53139fa6eb81d4eacb14076c840dc5, type: 3}
   cooldown: 2
-  strength: 1
+  strength: 2
   attackRunSpeed: 0
   accelerationCoefficient: 0.8
   provokeLayers:

@@ -18,6 +18,7 @@ namespace _193396
 		[field: SerializeField, ReadOnly] public bool isJumping { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isDashing { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isAttacking { get; set; }
+		[field: SerializeField, ReadOnly] public bool isAttackLockedDirection { get; set; }
 		[field: SerializeField, ReadOnly] public bool isInCombo { get; set; }
 		[field: SerializeField, ReadOnly] public bool isFalling { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
@@ -134,6 +135,7 @@ namespace _193396
 			updateCollisions();
 			updateHurt();
 
+			updateDirection();
 			updateWallFacing();
 
 			updateDash();
@@ -241,10 +243,6 @@ namespace _193396
 			if (input.isInputMoveDown) moveInput.y -= 1;
 
 			isMoving = moveInput.x != 0;
-
-			if (!isDashing && !isDistressed && !isAttacking && !isInCombo)
-				if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
-					flip();
 
 			if (input.isInputJump)
 				lastJumpInputTime = 0;
@@ -431,6 +429,12 @@ namespace _193396
 			}
 		}
 
+		private void updateDirection()
+		{
+			if (!isDashing && !isDistressed && !isAttackLockedDirection && !isInCombo)
+				if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
+					flip();
+		}
 		private void updateWallFacing()
 		{
 			if (!isGrounded && !isDistressed && isFacingWall && canWallJump)

@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 760319798348607893}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.9, y: -0.35000002, z: 0}
-  m_LocalScale: {x: 2.8, y: 2.4, z: 1}
+  m_LocalPosition: {x: 0.9, y: -0.25, z: 0}
+  m_LocalScale: {x: 2.8, y: 2.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5470671596442281111}
@@ -508,8 +508,8 @@ Transform:
   m_GameObject: {fileID: 2859902028959753577}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: -0.35, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.55, z: 1}
+  m_LocalPosition: {x: 0.3, y: -0.4, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.65, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3517095711227960314}
@@ -1823,6 +1823,7 @@ MonoBehaviour:
   <isJumping>k__BackingField: 0
   <isDashing>k__BackingField: 0
   <isAttacking>k__BackingField: 0
+  <isAttackLockedDirection>k__BackingField: 0
   <isInCombo>k__BackingField: 0
   <isFalling>k__BackingField: 0
   <isGrounded>k__BackingField: 0
