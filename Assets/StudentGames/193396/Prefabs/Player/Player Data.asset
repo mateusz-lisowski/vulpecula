@@ -29,12 +29,12 @@ MonoBehaviour:
     hitLayers:
       value: 17760256
     attackForward1Prefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
-    attackForward2Prefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
-    attackForward3Prefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
-    attackForwardAirPrefab: {fileID: 6641364968367758371, guid: 1f8b6b3fea120804a981856592a5e13e, type: 3}
+    attackForward2Prefab: {fileID: 6641364968367758371, guid: 04ce80d5b45946b4892111ad1a7606dc, type: 3}
+    attackForward3Prefab: {fileID: 6641364968367758371, guid: b4c52348065c5ce41b2238b800ba4d5a, type: 3}
+    attackForwardAirPrefab: {fileID: 6641364968367758371, guid: b4c52348065c5ce41b2238b800ba4d5a, type: 3}
     attackDownPrefab: {fileID: 6043542642014291424, guid: c0062cfcf90940f41970d1f7f351004e, type: 3}
     comboResetTime: 0.5
-    forwardCooldown: 0.8
+    forwardCooldown: 0.6
     downCooldown: 0.8
     forwardStrength: 1
     forwardStrongStrength: 2
@@ -47,7 +47,7 @@ MonoBehaviour:
     attackDownHighBounceHeight: 4
     attackDownBounceForce: 10.657403
     attackDownHighBounceForce: 13.480667
-    inputBufferTime: 0.1
+    inputBufferTime: 0.3
   run:
     groundLayers:
       value: 536872704
