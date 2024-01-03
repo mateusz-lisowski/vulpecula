@@ -265,7 +265,7 @@ namespace _193396
 		private bool isGroundedFalsePositive()
 		{
 			// just jumped
-			if (isJumping && !isFalling)
+			if (isJumping && !isFalling && controller.rigidBody.velocity.y > minVerticalMovementVelocity)
 			{
 				// wait for hitbox position update
 				if (!isOnSlope || lastJumpFrame >= controller.currentFixedUpdate - 1)

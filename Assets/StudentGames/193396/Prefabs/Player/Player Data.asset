@@ -65,12 +65,12 @@ MonoBehaviour:
     cooldown: 0.1
     jumpsCount: 2
     force: 10.222222
-    jumpCutGravityMultiplier: 2
+    jumpCutGravityMultiplier: 1.3
     hangingVelocityThreshold: 1
     hangingGravityMultiplier: 0.8
     hangingSpeedMultiplier: 1.2
     coyoteTime: 0.1
-    inputBufferTime: 0.05
+    inputBufferTime: 0.1
   wall:
     layers:
       value: 256
