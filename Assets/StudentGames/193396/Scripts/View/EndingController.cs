@@ -30,7 +30,7 @@ namespace _193396
 		}
 		public void quit()
 		{
-			QolUtility.Quit();
+			MergeController.loadMainMenu();
 		}
 
 		private void Update()

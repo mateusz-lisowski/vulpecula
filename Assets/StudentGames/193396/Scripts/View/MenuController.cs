@@ -71,11 +71,11 @@ namespace _193396
 		}
 		public void loadLevel()
 		{
-			SceneManager.LoadScene("193396");
+			MergeController.loadLevel();
 		}
 		public void loadMenu()
 		{
-			SceneManager.LoadScene("Main Menu");
+			MergeController.loadMainMenu();
 		}
 		public void quit()
 		{

@@ -35,7 +35,6 @@ namespace _193396
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] private int currentTimeDisablersCount = 0;
 
-
 		public void pushTimeDisable() => ++currentTimeDisablersCount;
 		public void popTimeDisable() => --currentTimeDisablersCount;
 
@@ -76,6 +75,7 @@ namespace _193396
 		private void OnDestroy()
 		{
 			runtimeSettings.uninstall();
+			Time.timeScale = 1f;
 		}
 
 		private void Update()
