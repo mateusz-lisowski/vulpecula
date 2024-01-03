@@ -1,12 +1,18 @@
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace _193396
 {
 	public class ReadOnlyAttribute : PropertyAttribute
 	{
 	}
+	public class FlattenAttribute : PropertyAttribute
+	{
+	}
 
+#if UNITY_EDITOR
 	[CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
 	public class ReadOnlyDrawer : PropertyDrawer
 	{
@@ -52,10 +58,6 @@ namespace _193396
 		}
 	}
 
-	public class FlattenAttribute : PropertyAttribute
-	{
-	}
-
 	[CustomPropertyDrawer(typeof(FlattenAttribute))]
 	public class FlattenDrawer : PropertyDrawer
 	{
@@ -66,4 +68,5 @@ namespace _193396
 
 		}
 	}
+#endif
 }

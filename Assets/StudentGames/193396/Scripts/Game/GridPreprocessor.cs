@@ -182,7 +182,7 @@ namespace _193396
 					SpriteRenderer renderer = mapping.prefab.transform.Find("Sprite").GetComponent<SpriteRenderer>();
 
 					Matrix4x4 tileTransform = tilemap.GetTransformMatrix(coord);
-					Quaternion tileRotation = tileTransform.GetR();
+					Quaternion tileRotation = Quaternion.LookRotation(tileTransform.GetColumn(2), tileTransform.GetColumn(1));
 
 					var sprite = tile.sprite;
 					var rendererSprite = renderer.sprite;
@@ -198,7 +198,7 @@ namespace _193396
 					Vector3 position = tilemap.CellToWorld(coord) + new Vector3(0.5f, 0.5f);
 					position -= (Vector3)pivotOffset;
 					position -= offset;
-					position += tileTransform.GetT();
+					position += (Vector3)tileTransform.GetColumn(3);
 
 					newEntity.position = position;
 					newEntity.rotation = rotation;

@@ -53,6 +53,7 @@ namespace _193396
 					gameObject = PrefabUtility.InstantiatePrefab(prefab, parent).GameObject();
 			}
 #endif
+
 			return gameObject;
 		}
 		public static GameObject Instantiate(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
@@ -85,15 +86,29 @@ namespace _193396
 				}
 			}
 #endif
+
 			return gameObject;
 		}
 
 		public static void DestroyExecutableInEditMode(GameObject gameObject)
 		{
+#if UNITY_EDITOR
 			if (Application.isPlaying)
+#endif
 				Object.Destroy(gameObject);
+#if UNITY_EDITOR
 			else
 				Object.DestroyImmediate(gameObject);
+#endif
+		}
+	
+		public static void Quit()
+		{
+#if UNITY_EDITOR
+			EditorApplication.isPlaying = false;
+#else
+			Application.Quit();
+#endif
 		}
 	}
 }

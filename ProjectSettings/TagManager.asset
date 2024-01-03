@@ -21,6 +21,7 @@ TagManager:
   - Instant Kill
   - Player Only Ground
   - Enemy Only Ground
+  - Hidden
   layers:
   - Default
   - TransparentFX

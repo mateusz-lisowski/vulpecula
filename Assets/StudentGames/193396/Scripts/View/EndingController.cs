@@ -30,7 +30,7 @@ namespace _193396
 		}
 		public void quit()
 		{
-			EditorApplication.isPlaying = false;
+			QolUtility.Quit();
 		}
 
 		private void Update()

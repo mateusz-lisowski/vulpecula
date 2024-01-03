@@ -17,7 +17,7 @@ MonoBehaviour:
   serializableTagMapping:
   - name: Untagged
     layer: 0
-  - name: EditorOnly
+  - name: Hidden
     layer: 31
   - name: Player
     layer: 12

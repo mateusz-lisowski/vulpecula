@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -331,3 +332,4 @@ namespace _193396
 		}
 	}
 }
+#endif

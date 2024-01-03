@@ -26,7 +26,7 @@ namespace _193396
 				color = tilemap.GetColor(triggeredCoord);
 				transform = tilemap.GetTransformMatrix(triggeredCoord);
 				sprite = tilemap.GetSprite(triggeredCoord);
-				offset = transform.GetT();
+				offset = transform.GetColumn(3);
 			}
 		}
 
