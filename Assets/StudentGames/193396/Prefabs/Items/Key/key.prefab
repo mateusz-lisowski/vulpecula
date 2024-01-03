@@ -261,6 +261,8 @@ MonoBehaviour:
   eventName: collected
   eventData: 
   cooldown: 0
+  transitionStartTime: 0
+  transitionTime: 0
 --- !u!114 &1421412943213820330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +279,7 @@ MonoBehaviour:
   eventName: collected
   eventData: 
   targetPath: Active
+  timeOffset: 0
 --- !u!1 &4102272683021119266
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +357,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.96875, y: 1.03125}
@@ -568,7 +571,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2.5, y: 4}
