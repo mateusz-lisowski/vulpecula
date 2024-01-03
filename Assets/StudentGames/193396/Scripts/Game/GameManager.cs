@@ -15,6 +15,8 @@ namespace _193396
 				if (activeInstance == null || activeInstance.gameObject.IsDestroyed())
 				{
 					GameObject gameObject = GameObject.FindWithTag("GameController");
+					if (gameObject == null)
+						return null;
 					activeInstance = gameObject.GetComponent<GameManager>();
 					activeInstance.initialize();
 				}
@@ -29,6 +31,13 @@ namespace _193396
 
 		public enum RuntimeGroup { Effects, Enemies, Collectibles, Projectiles, Disinherited }
 		public Dictionary<RuntimeGroup, Transform> runtimeGroup { get; private set; }
+
+		[field: Space(10)]
+		[field: SerializeField, ReadOnly] private int currentTimeDisablersCount = 0;
+
+
+		public void pushTimeDisable() => ++currentTimeDisablersCount;
+		public void popTimeDisable() => --currentTimeDisablersCount;
 
 
 		private void initialize()
@@ -71,7 +80,9 @@ namespace _193396
 
 		private void Update()
 		{
-			if (Input.GetKey(KeyCode.T))
+			if (currentTimeDisablersCount != 0)
+				Time.timeScale = 0f;
+			else if (Input.GetKey(KeyCode.T))
 				Time.timeScale = 0.2f;
 			else
 				Time.timeScale = 1f;

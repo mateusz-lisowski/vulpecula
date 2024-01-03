@@ -7,7 +7,7 @@ namespace _193396
 		public string eventName;
 		public string eventData;
 		[Space(5)]
-		[Tooltip("layers which receive the event on enter")]
+		[Tooltip("Layers which receive the event on enter")]
 		public RuntimeSettings.LayerMaskInput enterLayers;
 
 
