@@ -135,7 +135,6 @@ namespace _193396
 			updateCollisions();
 			updateHurt();
 
-			updateDirection();
 			updateWallFacing();
 
 			updateDash();
@@ -243,6 +242,10 @@ namespace _193396
 			if (input.isInputMoveDown) moveInput.y -= 1;
 
 			isMoving = moveInput.x != 0;
+
+			if (!isDashing && !isDistressed && !isAttackLockedDirection && !isInCombo)
+				if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
+					flip();
 
 			if (input.isInputJump)
 				lastJumpInputTime = 0;
@@ -408,7 +411,10 @@ namespace _193396
 
 			if (isDistressed && lastHurtTime >= data.hurt.distressTime)
 			{
-				flip();
+				if (moveInput.x == 0f)
+					flip();
+				if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
+					flip();
 				isDistressed = false;
 				controller.onEvent("recover", null);
 			}
@@ -429,12 +435,6 @@ namespace _193396
 			}
 		}
 
-		private void updateDirection()
-		{
-			if (!isDashing && !isDistressed && !isAttackLockedDirection && !isInCombo)
-				if ((moveInput.x > 0 && !isFacingRight) || (moveInput.x < 0 && isFacingRight))
-					flip();
-		}
 		private void updateWallFacing()
 		{
 			if (!isGrounded && !isDistressed && isFacingWall && canWallJump)
@@ -699,7 +699,7 @@ namespace _193396
 		{
 			float targetSpeed = moveInput.x * data.run.maxSpeed;
 
-			if (lastWallJumpTime < data.wall.jumpTime)
+			if (lastWallJumpTime < data.wall.jumpInputReduceTime)
 				targetSpeed = Mathf.Lerp(targetSpeed, controller.rigidBody.velocity.x, data.wall.jumpInputReduction);
 
 			if (isDistressed)

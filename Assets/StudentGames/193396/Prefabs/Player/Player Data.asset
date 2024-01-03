@@ -71,7 +71,7 @@ MonoBehaviour:
     hangingGravityMultiplier: 0.8
     hangingSpeedMultiplier: 1.2
     coyoteTime: 0.1
-    inputBufferTime: 0.1
+    inputBufferTime: 0.2
   wall:
     layers:
       value: 256
@@ -84,7 +84,8 @@ MonoBehaviour:
       value: 4194304
     jumpForce: 10
     jumpInputReduction: 0.6
-    jumpTime: 0.6
+    jumpInputReduceTime: 0.6
+    jumpTime: 0.35
     jumpMinTime: 0.1
     jumpCoyoteTime: 0.1
   dash:

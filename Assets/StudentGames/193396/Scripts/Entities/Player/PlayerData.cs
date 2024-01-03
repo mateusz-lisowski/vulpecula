@@ -190,7 +190,9 @@ namespace _193396
 			public float jumpForce;
 			[Tooltip("Input reduction after wall jumping")]
 			[Range(0f, 1f)] public float jumpInputReduction;
-			[Tooltip("Time to reduce the input wall jumping")]
+			[Tooltip("Time to reduce the input after wall jumping")]
+			public float jumpInputReduceTime;
+			[Tooltip("Time to prevent jumping after wall jumping")]
 			public float jumpTime;
 			[Tooltip("Minimum time of a wall jump (prevent isGrounded)")]
 			public float jumpMinTime;
