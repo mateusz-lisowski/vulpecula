@@ -63,7 +63,7 @@ namespace _193396
 				currentAttackData.setHitboxSize(attackTransform.lossyScale);
 			}
 		}
-		protected override void attackInstantiate(Transform attackTransform)
+		protected override ProjectileBehavior attackInstantiate(Transform attackTransform)
 		{
 			foreach (Vector2 direction in data.directions)
 			{
@@ -82,6 +82,8 @@ namespace _193396
 
 				Destroy(currentAttack, data.maxLifetime);
 			}
+
+			return null;
 		}
 	}
 }

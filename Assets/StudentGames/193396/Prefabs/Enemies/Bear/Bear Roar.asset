@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackInstantiateEventName: roar
   provokeDetectionName: Attack/Roar
-  provokeLayers:
-    value: 4096
   hitLayers:
     value: 4096
-  attackPrefab: {fileID: 79447156507604420, guid: 15a2c6be9dd8214479cca35e9eafaf24, type: 3}
+  attackPrefab: {fileID: 79447156507604420, guid: cca1da2e9f5da0b439c96e18fe22ee21, type: 3}
   cooldown: 1
   strength: 1
   attackRunSpeed: 0
   accelerationCoefficient: 0.8
+  provokeLayers:
+    value: 4096

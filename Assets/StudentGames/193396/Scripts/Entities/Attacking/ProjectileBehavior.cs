@@ -21,6 +21,7 @@ namespace _193396
 
 		private Collider2D hitbox;
 
+		private Action resolveCallback;
 		private Action<HitData> hitCallback;
 		private LayerMask hitLayers;
 
@@ -68,6 +69,10 @@ namespace _193396
 					capsuleHitbox.direction = CapsuleDirection2D.Vertical;
 			}
 		}
+		public void setResolveCallback(Action callback)
+		{
+			resolveCallback = callback;
+		}
 		public void setHitCallback(Action<HitData> callback)
 		{
 			hitCallback = callback;
@@ -111,6 +116,9 @@ namespace _193396
 				StartCoroutine(Effects.instance.frameMove.run(transform, frameVelocity, float.PositiveInfinity));
 				frameVelocity = Vector2.zero;
 			}
+
+			if (resolveCallback != null)
+				resolveCallback();
 
 			ContactFilter2D filter = new ContactFilter2D().NoFilter();
 			filter.SetLayerMask(hitLayers);

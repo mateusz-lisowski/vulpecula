@@ -40,7 +40,7 @@ namespace _193396
 		{
 			return isProvoked;
 		}
-		protected override void attackInstantiate(Transform attackTransform)
+		protected override ProjectileBehavior attackInstantiate(Transform attackTransform)
 		{
 			GameObject currentAttack = QolUtility.Instantiate(data.attackPrefab,
 				attackTransform.position, attackTransform.rotation, transform);
@@ -50,6 +50,8 @@ namespace _193396
 			currentAttackData.initialize(controller, data);
 			currentAttackData.setStrength(data.strength);
 			currentAttackData.setHitboxSize(attackTransform.lossyScale);
+
+			return currentAttackData;
 		}
 	}
 }

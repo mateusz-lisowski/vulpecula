@@ -49,8 +49,10 @@ namespace _193396
 				case "attack":
 					if (attackTransforms.ContainsKey(name))
 					{
-						attackInstantiate(attackTransforms[name]);
-						if (name == data.attackInstantiateEventName)
+						var newAttack = attackInstantiate(attackTransforms[name]);
+						if (newAttack != null)
+							newAttack.setResolveCallback(() => { isAttacking = false; newAttack.setResolveCallback(null); });
+						else
 							isAttacking = false;
 					}
 					break;
@@ -76,7 +78,7 @@ namespace _193396
 
 
 		protected abstract bool canAttack();
-		protected abstract void attackInstantiate(Transform attackTransform);
+		protected abstract ProjectileBehavior attackInstantiate(Transform attackTransform);
 
 		private void attack()
 		{

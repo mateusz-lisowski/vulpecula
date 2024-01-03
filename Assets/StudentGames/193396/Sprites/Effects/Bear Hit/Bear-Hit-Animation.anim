@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Bear-Attack-Animation
+  m_Name: Bear-Hit-Animation
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,17 +21,17 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: c86af7aabd8da1946b63b5c69d8dbb68, type: 3}
+      value: {fileID: 21300000, guid: 3397c5b08aa4d04448ba162b0178a60f, type: 3}
     - time: 0.083333336
-      value: {fileID: 21300000, guid: 417bff21efcde834a959fefee4e3f63f, type: 3}
+      value: {fileID: 21300000, guid: b4b63463694d12f47a7726b1de8fcf30, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: 30080aa545e84af4baabc9e8094b62dc, type: 3}
+      value: {fileID: 21300000, guid: 97a281d33ef92994c89cae8dfb1c0a4d, type: 3}
     - time: 0.25
-      value: {fileID: 21300000, guid: 2c3a17480ac7b7748af1a30d989fc255, type: 3}
+      value: {fileID: 21300000, guid: bedba801f70cedc4baae342f372f7410, type: 3}
     - time: 0.33333334
-      value: {fileID: 21300000, guid: 82fe988a85dcd814599f5681f1fc87d3, type: 3}
+      value: {fileID: 21300000, guid: 960dd1fc7fc693e42a7be04e272272b2, type: 3}
     - time: 0.41666666
-      value: {fileID: 21300000, guid: 3e4aaed7366a32c40affffb83482fc7c, type: 3}
+      value: {fileID: 21300000, guid: ff5cf63a193bd1949a5459858c3b766b, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -54,12 +54,12 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: c86af7aabd8da1946b63b5c69d8dbb68, type: 3}
-    - {fileID: 21300000, guid: 417bff21efcde834a959fefee4e3f63f, type: 3}
-    - {fileID: 21300000, guid: 30080aa545e84af4baabc9e8094b62dc, type: 3}
-    - {fileID: 21300000, guid: 2c3a17480ac7b7748af1a30d989fc255, type: 3}
-    - {fileID: 21300000, guid: 82fe988a85dcd814599f5681f1fc87d3, type: 3}
-    - {fileID: 21300000, guid: 3e4aaed7366a32c40affffb83482fc7c, type: 3}
+    - {fileID: 21300000, guid: 3397c5b08aa4d04448ba162b0178a60f, type: 3}
+    - {fileID: 21300000, guid: b4b63463694d12f47a7726b1de8fcf30, type: 3}
+    - {fileID: 21300000, guid: 97a281d33ef92994c89cae8dfb1c0a4d, type: 3}
+    - {fileID: 21300000, guid: bedba801f70cedc4baae342f372f7410, type: 3}
+    - {fileID: 21300000, guid: 960dd1fc7fc693e42a7be04e272272b2, type: 3}
+    - {fileID: 21300000, guid: ff5cf63a193bd1949a5459858c3b766b, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -70,7 +70,7 @@ AnimationClip:
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -85,9 +85,9 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0
+  - time: 0.16666667
     functionName: callEvent
-    data: attack
+    data: resolve
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

@@ -29,7 +29,7 @@ namespace _193396
 			data.source.controller.rigidBody.velocity = Vector2.zero;
 			data.source.controller.onEvent("hit", data);
 		}
-		protected override void attackInstantiate(Transform attackTransform)
+		protected override ProjectileBehavior attackInstantiate(Transform attackTransform)
 		{
 			GameObject currentAttack = QolUtility.Instantiate(data.attackPrefab,
 				attackTransform.position, attackTransform.rotation, transform);
@@ -46,6 +46,8 @@ namespace _193396
 				(chase.lastTargetPosition - (Vector2)transform.position).normalized * data.speed;
 
 			Destroy(currentAttack, data.maxLifetime);
+
+			return currentAttackData;
 		}
 	}
 }
