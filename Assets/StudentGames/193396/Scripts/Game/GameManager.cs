@@ -15,6 +15,8 @@ namespace _193396
 				if (activeInstance == null || activeInstance.gameObject.IsDestroyed())
 				{
 					GameObject gameObject = GameObject.FindWithTag("GameController");
+					if (gameObject == null)
+						return null;
 					activeInstance = gameObject.GetComponent<GameManager>();
 					activeInstance.initialize();
 				}

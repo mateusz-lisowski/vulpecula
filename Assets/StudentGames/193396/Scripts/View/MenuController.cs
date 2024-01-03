@@ -1,11 +1,14 @@
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 namespace _193396
 {
 	public class MenuController : MonoBehaviour
 	{
+		public bool switchable = true;
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public bool isActive { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isVisible { get; private set; }
@@ -25,6 +28,9 @@ namespace _193396
 
 		public void setActive(bool val)
 		{
+			if (!switchable)
+				return;
+
 			setPage("Main");
 
 			bool wasActive = isActive;
@@ -63,6 +69,18 @@ namespace _193396
 			
 			page.transform.SetParent(currentPageParent, false);
 		}
+		public void loadLevel()
+		{
+			SceneManager.LoadScene("193396");
+		}
+		public void loadMenu()
+		{
+			SceneManager.LoadScene("Main Menu");
+		}
+		public void quit()
+		{
+			EditorApplication.isPlaying = false;
+		}
 
 
 		private void Awake()
@@ -89,11 +107,12 @@ namespace _193396
 			bool wasVisible = isVisible;
 			isVisible = group.gameObject.activeSelf && group.alpha != 0f;
 
-			if (isVisible != wasVisible)
-				if (isVisible)
-					GameManager.instance.pushTimeDisable();
-				else
-					GameManager.instance.popTimeDisable();
+			if (GameManager.instance != null)
+				if (isVisible != wasVisible)
+					if (isVisible)
+						GameManager.instance.pushTimeDisable();
+					else
+						GameManager.instance.popTimeDisable();
 		}
 		private void LateUpdate()
 		{
