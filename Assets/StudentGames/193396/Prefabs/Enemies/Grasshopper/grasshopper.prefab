@@ -119,7 +119,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.3, z: 0}
-  m_LocalScale: {x: 1.4, y: 0.8, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3197968024575988460}
@@ -560,10 +560,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4444e3ff1e567a04db6a8c9622ae4d8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 791dfdc42b6d7404d86ce457dec81ed5, type: 2}
-  <isProvoked>k__BackingField: 0
   <isAttacking>k__BackingField: 0
   <attackCooldown>k__BackingField: 0
+  data: {fileID: 11400000, guid: 791dfdc42b6d7404d86ce457dec81ed5, type: 2}
+  <isProvoked>k__BackingField: 0
 --- !u!114 &966967818323690364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -661,6 +661,7 @@ MonoBehaviour:
   eventName: died
   eventData: 
   targetPath: Death
+  timeOffset: 0
 --- !u!1001 &8101235467374851644
 PrefabInstance:
   m_ObjectHideFlags: 0

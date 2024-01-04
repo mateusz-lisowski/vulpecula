@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Grasshopper Jump
   m_EditorClassIdentifier: 
   maxFall: 2
-  longHeight: 4
-  longSpeed: 5
-  shortHeight: 1
-  shortSpeed: 3
+  longHeight: 5
+  longSpeed: 6
+  shortHeight: 2
+  shortSpeed: 4
   cooldown: 2.5
