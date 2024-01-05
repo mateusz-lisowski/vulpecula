@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Boss Grounded Data
   m_EditorClassIdentifier: 
   groundLayers:
-    value: 1073742592
+    value: 1073744640
   wallLayers:
-    value: 1073742080
+    value: 1073744128
   passingLayers:
     value: 512
   slopeLayer:

@@ -1,29 +1,25 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace _193396
 {
 	public class PlayerInput : EntityBehavior
 	{
 		[field: Space(10)]
-		[field: SerializeField, ReadOnly] public bool isEnabled { get; private set; } = true;
+		[field: SerializeField, ReadOnly] public bool isEnabled { get; protected set; } = true;
 		[field: Space(10)]
-		[field: SerializeField, ReadOnly] public bool isInputMoveUp { get; private set; }
-		[field: SerializeField, ReadOnly] public bool isInputMoveDown { get; private set; }
-		[field: SerializeField, ReadOnly] public bool isInputMoveLeft { get; private set; }
-		[field: SerializeField, ReadOnly] public bool isInputMoveRight { get; private set; }
+		[field: SerializeField, ReadOnly] public bool isInputMoveUp { get; protected set; }
+		[field: SerializeField, ReadOnly] public bool isInputMoveDown { get; protected set; }
+		[field: SerializeField, ReadOnly] public bool isInputMoveLeft { get; protected set; }
+		[field: SerializeField, ReadOnly] public bool isInputMoveRight { get; protected set; }
 		[field: Space(5)]
-		[field: SerializeField, ReadOnly] public bool isInputJump { get; private set; }
-		[field: SerializeField, ReadOnly] public bool isInputJumpReleased { get; private set; }
-		[field: SerializeField, ReadOnly] public bool isInputDash { get; private set; }
-		[field: SerializeField, ReadOnly] public bool isInputDashReleased { get; private set; }
-		[field: SerializeField, ReadOnly] public bool isInputPassthrough { get; private set; }
+		[field: SerializeField, ReadOnly] public bool isInputJump { get; protected set; }
+		[field: SerializeField, ReadOnly] public bool isInputJumpReleased { get; protected set; }
+		[field: SerializeField, ReadOnly] public bool isInputDash { get; protected set; }
+		[field: SerializeField, ReadOnly] public bool isInputDashReleased { get; protected set; }
+		[field: SerializeField, ReadOnly] public bool isInputPassthrough { get; protected set; }
 		[field: Space(5)]
-		[field: SerializeField, ReadOnly] public bool isInputAttack { get; private set; }
-		[field: SerializeField, ReadOnly] public bool isInputAttackDown { get; private set; }
+		[field: SerializeField, ReadOnly] public bool isInputAttack { get; protected set; }
+		[field: SerializeField, ReadOnly] public bool isInputAttackDown { get; protected set; }
 
 
 		public override void onUpdate()
@@ -33,8 +29,8 @@ namespace _193396
 			isInputMoveLeft		= isEnabled && Input.GetKey(KeyCode.LeftArrow);
 			isInputMoveRight	= isEnabled && Input.GetKey(KeyCode.RightArrow);
 
-			isInputJump			= isEnabled && (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Space));
-			isInputJumpReleased	= !isEnabled || !(Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.Space));
+			isInputJump			= isEnabled && Input.GetKeyDown(KeyCode.Z);
+			isInputJumpReleased	= !isEnabled || !Input.GetKey(KeyCode.Z);
 
 			isInputDash			= isEnabled && Input.GetKeyDown(KeyCode.C);
 			isInputDashReleased	= !isEnabled || !Input.GetKey(KeyCode.C);

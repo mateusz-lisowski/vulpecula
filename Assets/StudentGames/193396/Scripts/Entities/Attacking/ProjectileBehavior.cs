@@ -31,7 +31,7 @@ namespace _193396
 		private bool onFixedUpdateResolve = false;
 
 
-		public void initialize(EntityBehaviorController source, ScriptableObject data)
+		public void initialize(EntityBehaviorController source, ScriptableObject data, bool ghost = false)
 		{
 			sourceEntity = source;
 
@@ -41,6 +41,14 @@ namespace _193396
 				hitLayers = ((BaseAttackBehaviorData)data).hitLayers;
 			else
 				throw new ApplicationException("Unknown projectile data.");
+
+			if (ghost)
+			{
+				hitLayers = 0;
+				Color ghostColor = controller.spriteRenderer.color;
+				ghostColor.a = 0.5f;
+				controller.spriteRenderer.color = ghostColor;
+			}
 		}
 
 		public void setFrameVelocity(Vector2 vel)

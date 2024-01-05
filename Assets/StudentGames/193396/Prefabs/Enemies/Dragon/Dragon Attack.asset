@@ -15,7 +15,7 @@ MonoBehaviour:
   attackInstantiateEventName: attack
   provokeDetectionName: Attack
   hitLayers:
-    value: 4352
+    value: 6400
   attackPrefab: {fileID: 79447156507604420, guid: e53d8950586232744b6956cefe8b1856, type: 3}
   cooldown: 5
   strength: 2

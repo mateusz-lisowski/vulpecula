@@ -3,15 +3,13 @@ using UnityEngine;
 
 namespace _193396
 {
-	[RequireComponent(typeof(PlayerInfo))]
 	[RequireComponent(typeof(PlayerInput))]
 	public class PlayerMovement : EntityBehavior
 	{
 		const float minVerticalMovementVelocity = 0.01f;
 
-		private PlayerInfo info;
+		public PlayerData data;
 		private PlayerInput input;
-		private PlayerData data => info.data;
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public bool isFacingRight { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isMoving { get; private set; }
@@ -81,11 +79,12 @@ namespace _193396
 		[HideInInspector] public bool registeredDownHitHighJump = false;
 		[HideInInspector] public bool lastAttackDown = false;
 
+		public bool isGhost => controller.hitbox.gameObject.layer == (int)RuntimeSettings.Layer.PlayerGhost;
+
 
 		public override void onAwake()
 		{
-			info = controller.getBehavior<PlayerInfo>();
-			input = controller.getBehavior<PlayerInput>();
+			input = transform.GetComponent<PlayerInput>();
 
 			groundCheck = transform.Find("Detection/Ground").GetComponent<Collider2D>();
 			wallCheck = transform.Find("Detection/Wall").GetComponent<Collider2D>();
@@ -759,6 +758,15 @@ namespace _193396
 			float movement = speedDif * accelRate;
 
 			controller.rigidBody.AddForce(movement * Vector2.up, ForceMode2D.Force);
+		}
+
+
+		public new void setHitboxLayer(RuntimeSettings.Layer layer)
+		{
+			if (isGhost)
+				return;
+
+			base.setHitboxLayer(layer);
 		}
 	}
 }

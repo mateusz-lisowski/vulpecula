@@ -22,6 +22,8 @@ TagManager:
   - Player Only Ground
   - Enemy Only Ground
   - Hidden
+  - Player Ghost
+  - Ghost Ignore Ground
   layers:
   - Default
   - TransparentFX

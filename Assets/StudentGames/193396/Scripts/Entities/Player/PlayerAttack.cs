@@ -2,15 +2,13 @@ using UnityEngine;
 
 namespace _193396
 {
-	[RequireComponent(typeof(PlayerInfo))]
 	[RequireComponent(typeof(PlayerInput))]
 	[RequireComponent(typeof(PlayerMovement))]
 	public class PlayerAttack : EntityBehavior
 	{
-		private PlayerInfo info;
 		private PlayerInput input;
 		private PlayerMovement movement;
-		private PlayerData data => info.data;
+		private PlayerData data => movement.data;
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public bool isAttackDownInput { get; private set; }
 		[field: Space(10)]
@@ -36,8 +34,7 @@ namespace _193396
 
 		public override void onAwake()
 		{
-			info = controller.getBehavior<PlayerInfo>();
-			input = controller.getBehavior<PlayerInput>();
+			input = transform.GetComponent<PlayerInput>();
 			movement = controller.getBehavior<PlayerMovement>();
 
 			attackForwardTransform = transform.Find("Attack/Forward");
@@ -48,6 +45,10 @@ namespace _193396
 			lastAttackInputTime = float.PositiveInfinity;
 			lastAttackTime = float.PositiveInfinity;
 			lastAttackDownTime = float.PositiveInfinity;
+		}
+		public override void onDisable()
+		{
+			movement.isAttacking = false;
 		}
 
 		public override string[] capturableEvents =>
@@ -124,7 +125,7 @@ namespace _193396
 
 			currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-			currentAttackData.initialize(controller, data);
+			currentAttackData.initialize(controller, data, ghost: movement.isGhost);
 			currentAttackData.setFrameVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 			currentAttackData.setStrength(isStrong ? data.attack.forwardStrongStrength
 				: data.attack.forwardStrength);
@@ -158,7 +159,7 @@ namespace _193396
 
 			currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-			currentAttackData.initialize(controller, data);
+			currentAttackData.initialize(controller, data, ghost: movement.isGhost);
 			currentAttackData.setFrameVelocity(new Vector2(controller.rigidBody.velocity.x, 0));
 			currentAttackData.setStrength(data.attack.forwardAirStrength);
 			currentAttackData.setHitboxSize(attackForwardAirTransform.localScale);
@@ -192,7 +193,7 @@ namespace _193396
 
 			currentAttackData = currentAttack.GetComponent<ProjectileBehavior>();
 
-			currentAttackData.initialize(controller, data);
+			currentAttackData.initialize(controller, data, ghost: movement.isGhost);
 			currentAttackData.setStrength(data.attack.downStrength);
 			currentAttackData.setHitboxSize(attackDownTransform.localScale);
 			currentAttackData.setHitCallback(attackDownHitCallback);

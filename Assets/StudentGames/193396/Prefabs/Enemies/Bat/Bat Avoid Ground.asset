@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bat Avoid Ground
   m_EditorClassIdentifier: 
   avoidLayers:
-    value: 1073742080
+    value: 1073744128
   strength: 5
   distanceSmall: 2
   distanceBig: 3.5

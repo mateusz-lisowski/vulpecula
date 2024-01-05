@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4891264046935432204}
   m_Layer: 0
   m_Name: Forward Air
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 4431464414825281603}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Detection
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -606,7 +606,7 @@ GameObject:
   - component: {fileID: 8694989105001187256}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Detection
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -683,7 +683,7 @@ GameObject:
   - component: {fileID: 2484487255520938033}
   m_Layer: 0
   m_Name: Forward
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1336,7 +1336,7 @@ GameObject:
   - component: {fileID: 4346458289546140473}
   m_Layer: 0
   m_Name: Forward Strong
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1607,7 +1607,7 @@ GameObject:
   - component: {fileID: 6080039275774513190}
   m_Layer: 0
   m_Name: Down
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1693,7 +1693,7 @@ GameObject:
   - component: {fileID: 7855963956060272660}
   - component: {fileID: 7745948289286802684}
   m_Layer: 0
-  m_Name: Player
+  m_Name: player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1818,6 +1818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff3a32f6b7c6914090f98055585db25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 18f7920bae5a96143b2fae235a56f260, type: 2}
   <isFacingRight>k__BackingField: 0
   <isMoving>k__BackingField: 0
   <isJumping>k__BackingField: 0
@@ -2035,7 +2036,7 @@ GameObject:
   - component: {fileID: 3837846479717149504}
   m_Layer: 0
   m_Name: Slope
-  m_TagString: Detection
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7142,7 +7143,7 @@ GameObject:
   - component: {fileID: 9085387035526218212}
   m_Layer: 0
   m_Name: Within
-  m_TagString: Detection
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7442,7 +7443,7 @@ GameObject:
   - component: {fileID: 136316937756862674}
   m_Layer: 0
   m_Name: Passing
-  m_TagString: Detection
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

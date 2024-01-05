@@ -15,7 +15,7 @@ MonoBehaviour:
   targetLayers:
     value: 12288
   obstructLayers:
-    value: 1073742592
+    value: 1073744640
   maxDistance: 6
   minDistance: 2
   determinationTime: 6

@@ -22,9 +22,11 @@ namespace _193396
 			Ground = 8,
 			PlatformPassable = 9,
 			PlayerPlatformPassable = 10,
+			GhostIgnoreGround = 11,
 			Player = 12,
 			PlayerInvulnerable = 13,
 			PlayerTransition = 14,
+			PlayerGhost = 15,
 			Enemy = 16,
 			EnemyInvulnerable = 17,
 			EnemyFlying = 18,
@@ -64,6 +66,8 @@ namespace _193396
 			InstantKill,
 			PlayerOnlyGround,
 			EnemyOnlyGround,
+			PlayerGhost,
+			GhostIgnoreGround,
 		}
 
 		[Serializable]
@@ -241,9 +245,11 @@ namespace _193396
 			Ground = 1 << 8,
 			PlatformPassable = 1 << 9,
 			PlayerPlatformPassable = 1 << 10,
+			GhostIgnoreGround = 1 << 11,
 			Player = 1 << 12,
 			PlayerInvulnerable = 1 << 13,
 			PlayerTransition = 1 << 14,
+			PlayerGhost = 1 << 15,
 			Enemy = 1 << 16,
 			EnemyInvulnerable = 1 << 17,
 			EnemyFlying = 1 << 18,
