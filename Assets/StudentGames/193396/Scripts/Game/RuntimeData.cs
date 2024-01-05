@@ -36,7 +36,7 @@ namespace _193396
 
 		private void Awake()
 		{
-			DontDestroyOnLoad(gameObject);
+			//DontDestroyOnLoad(gameObject);
 		}
 	}
 }

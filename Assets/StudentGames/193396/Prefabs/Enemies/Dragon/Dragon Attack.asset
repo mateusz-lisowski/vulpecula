@@ -18,8 +18,8 @@ MonoBehaviour:
     value: 4352
   attackPrefab: {fileID: 79447156507604420, guid: e53d8950586232744b6956cefe8b1856, type: 3}
   cooldown: 5
-  speed: 10
-  maxLifetime: 30
-  strength: 1
+  strength: 2
   attackRunSpeed: 0
   accelerationCoefficient: 0.8
+  speed: 10
+  maxLifetime: 30

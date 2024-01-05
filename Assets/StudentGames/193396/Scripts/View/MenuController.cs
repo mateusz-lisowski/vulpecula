@@ -97,6 +97,14 @@ namespace _193396
 			currentPage = pages.First(p => p.name == "Main");
 
 			isActive = group.gameObject.activeSelf;
+			GameManager.pushCursorHide();
+		}
+		private void OnDestroy()
+		{
+			if (isVisible)
+				GameManager.popTimeDisable();
+			else
+				GameManager.popCursorHide();
 		}
 
 		private void Update()
@@ -107,12 +115,17 @@ namespace _193396
 			bool wasVisible = isVisible;
 			isVisible = group.gameObject.activeSelf && group.alpha != 0f;
 
-			if (GameManager.instance != null)
-				if (isVisible != wasVisible)
-					if (isVisible)
-						GameManager.instance.pushTimeDisable();
-					else
-						GameManager.instance.popTimeDisable();
+			if (isVisible != wasVisible)
+				if (isVisible)
+				{
+					GameManager.pushTimeDisable();
+					GameManager.popCursorHide();
+				}
+				else
+				{
+					GameManager.popTimeDisable();
+					GameManager.pushCursorHide();
+				}
 		}
 		private void LateUpdate()
 		{

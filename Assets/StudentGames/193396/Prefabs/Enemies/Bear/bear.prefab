@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2b546c74e47184dbb9850d3c580d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: c5d907e45bb58d340abef94b5a343c94, type: 2}
+  data: {fileID: 11400000, guid: 58904996e398e1b4e885a4be1409b563, type: 2}
   <isFacingRight>k__BackingField: 0
   <turnCooldown>k__BackingField: 0
   lastDisabledUpdate: -1

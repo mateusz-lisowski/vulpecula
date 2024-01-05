@@ -32,11 +32,14 @@ namespace _193396
 		public enum RuntimeGroup { Effects, Enemies, Collectibles, Projectiles, Disinherited }
 		public Dictionary<RuntimeGroup, Transform> runtimeGroup { get; private set; }
 
-		[field: Space(10)]
-		[field: SerializeField, ReadOnly] private int currentTimeDisablersCount = 0;
+		private static int currentTimeDisablersCount = 0;
+		private static int currentcursorHideCount = 0;
 
-		public void pushTimeDisable() => ++currentTimeDisablersCount;
-		public void popTimeDisable() => --currentTimeDisablersCount;
+		public static void pushTimeDisable() => ++currentTimeDisablersCount;
+		public static void popTimeDisable() => --currentTimeDisablersCount;
+
+		public static void pushCursorHide() { if (currentcursorHideCount++ == 0) showCursor(visible: false); }
+		public static void popCursorHide() { if (--currentcursorHideCount <= 0) showCursor(visible: true); }
 
 
 		private void initialize()
@@ -95,6 +98,12 @@ namespace _193396
 				runtimeDataInstance.transform.parent = transform;
 				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 			}
+		}
+	
+	
+		private static void showCursor(bool visible)
+		{
+			Cursor.visible = visible;
 		}
 	}
 }
