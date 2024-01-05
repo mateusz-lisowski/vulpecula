@@ -161,6 +161,9 @@ namespace _193396
 				case "collectible":
 					runtimeData.score++;
 					break;
+				case "collectible2":
+					runtimeData.score += 5;
+					break;
 				case "key-1":
 				case "key-2":
 				case "key-3":
