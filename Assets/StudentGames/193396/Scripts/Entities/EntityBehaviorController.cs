@@ -26,7 +26,7 @@ namespace _193396
 			{
 				if (name != eventName)
 					return false;
-				if (data == "")
+				if (data == "" || eventData == null)
 					return true;
 
 				string eventDataString = eventData.ToString();

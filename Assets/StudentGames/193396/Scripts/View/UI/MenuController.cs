@@ -97,14 +97,14 @@ namespace _193396
 			currentPage = pages.First(p => p.name == "Main");
 
 			isActive = group.gameObject.activeSelf;
-			GameManager.pushCursorHide();
 		}
 		private void OnDestroy()
 		{
 			if (isVisible)
+			{
 				GameManager.popTimeDisable();
-			else
-				GameManager.popCursorHide();
+				GameManager.pushCursorHide();
+			}
 		}
 
 		private void Update()

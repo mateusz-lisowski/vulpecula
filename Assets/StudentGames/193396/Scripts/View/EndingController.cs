@@ -28,6 +28,10 @@ namespace _193396
 			cameraController.boundary = null;
 			StartCoroutine(moveUp(moveUpTarget.transform));
 		}
+		public void showScore()
+		{
+			transform.Find("game-summary").gameObject.SetActive(true);
+		}
 		public void quit()
 		{
 			MergeController.loadMainMenu();

@@ -18,9 +18,24 @@ namespace _193396
 		private TextMeshProUGUI score;
 
 
+		public float getValue(string name)
+		{
+			switch (name)
+			{
+				case "collectibles": return info.collectibles;
+				case "collectibles2": return info.collectibles2;
+				case "killCount": return info.killCount;
+				case "deathCount": return info.deathCount;
+				case "playtime": return info.playtime;
+				case "score": return info.score();
+				default: return -1;
+			}
+		}
+
 		private void Awake()
 		{
-			healthTransform = transform.Find("Canvas/Top-Left/health/fluid").GetComponent<RectTransform>();
+			healthTransform = transform.Find("Canv" +
+				"as/Top-Left/health/fluid").GetComponent<RectTransform>();
 			healthLevelTransform = transform.Find("Canvas/Top-Left/health/level").GetComponent<RectTransform>();
 
 			bossHealthTransform = transform.Find("Canvas/Top/Boss/health/fluid").GetComponent<RectTransform>();
@@ -28,6 +43,12 @@ namespace _193396
 
 			playtime = transform.Find("Canvas/Top-Right/playtime").GetComponent<TextMeshProUGUI>();
 			score = transform.Find("Canvas/Top-Right/score").GetComponent<TextMeshProUGUI>();
+
+			GameManager.pushCursorHide();
+		}
+		private void OnDestroy()
+		{
+			GameManager.popCursorHide();
 		}
 
 		private void Update()
@@ -39,13 +60,7 @@ namespace _193396
 			bossHealthTransform.anchoredPosition = new Vector2(bossHealthX, bossHealthTransform.anchoredPosition.y);
 
 			playtime.text = string.Format("{0:0.00}", info.playtime);
-			score.text = string.Format("Score: {0}", info.score);
-		}
-
-
-		public override string[] capturableEvents => new string[] { };
-		public override void onEvent(string eventName, object eventData)
-		{
+			score.text = string.Format("Score: {0}", info.collectibles);
 		}
 	}
 }

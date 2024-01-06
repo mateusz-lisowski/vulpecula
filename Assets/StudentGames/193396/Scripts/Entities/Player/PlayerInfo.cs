@@ -12,8 +12,10 @@ namespace _193396
 		{
 			[field: SerializeField, ReadOnly] public float playtime = 0;
 			[field: Space(5)]
-			[field: SerializeField, ReadOnly] public int score = 0;
+			[field: SerializeField, ReadOnly] public int collectibles = 0;
+			[field: SerializeField, ReadOnly] public int collectibles2 = 0;
 			[field: SerializeField, ReadOnly] public int killCount = 0;
+			[field: SerializeField, ReadOnly] public int deathCount = 0;
 			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public bool unlockedKey1 = false;
 			[field: SerializeField, ReadOnly] public bool unlockedKey2 = false;
@@ -33,13 +35,36 @@ namespace _193396
 
 		private List<int> justCollected = new List<int>();
 		private bool justHit = false;
+		private bool stopPlaytime = false;
 
 		private float healingRate = 0f;
 
 
 		public float healthNormalized => (float)health / data.hurt.health;
 		public float playtime => runtimeData.playtime;
-		public float score => runtimeData.score;
+		public int collectibles => runtimeData.collectibles;
+		public int collectibles2 => runtimeData.collectibles2;
+		public int killCount => runtimeData.killCount;
+		public int deathCount => runtimeData.deathCount;
+
+		public int score()
+		{
+			int intScore = 50 * collectibles
+				+ 250 * collectibles2
+				+ 100 * killCount
+				- 500 * deathCount;
+
+			if (intScore <= 0)
+				return 0;
+
+			float optimalTime = 360f;
+			float maxScale = 20f;
+
+			float timeMultiplier = maxScale / ((maxScale - 1) / optimalTime * playtime + 1);
+
+			return Mathf.RoundToInt(intScore * timeMultiplier);
+		}
+
 
 		public void teleportSpawn()
 		{
@@ -80,7 +105,8 @@ namespace _193396
 
 		public override void onUpdate()
 		{
-			runtimeData.playtime += Time.deltaTime;
+			if (!stopPlaytime)
+				runtimeData.playtime += Time.deltaTime;
 
 			justCollected.Clear();
 			justHit = false;
@@ -118,7 +144,10 @@ namespace _193396
 			controller.onEvent("hurt", healthNormalized);
 
 			if (health == 0)
+			{
+				runtimeData.deathCount++;
 				controller.onEvent("died", null);
+			}
 		}
 		private bool tryHeal(int count)
 		{
@@ -187,10 +216,10 @@ namespace _193396
 			switch (collect.name)
 			{
 				case "collectible":
-					runtimeData.score++;
+					runtimeData.collectibles++;
 					break;
 				case "collectible2":
-					runtimeData.score += 5;
+					runtimeData.collectibles2++;
 					break;
 				case "key-1":
 				case "key-2":
@@ -227,6 +256,7 @@ namespace _193396
 			switch (name)
 			{
 				case "boss":
+					stopPlaytime = true;
 					controller.animator.enabled = false;
 					StartCoroutine(Effects.instance.fade.run(controller.spriteRenderer, move: false));
 					isUnhittable = true;

@@ -39,7 +39,7 @@ namespace _193396
 		public static void popTimeDisable() => --currentTimeDisablersCount;
 
 		public static void pushCursorHide() { if (currentcursorHideCount++ == 0) showCursor(visible: false); }
-		public static void popCursorHide() { if (--currentcursorHideCount <= 0) showCursor(visible: true); }
+		public static void popCursorHide() { if (--currentcursorHideCount == 0) showCursor(visible: true); }
 
 
 		private void initialize()
