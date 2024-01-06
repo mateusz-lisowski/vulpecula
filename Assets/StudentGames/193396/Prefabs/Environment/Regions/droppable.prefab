@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  eventName: break
+  eventName: shake
   eventData: 
   cooldown: 0
   transitionStartTime: 0

@@ -378,10 +378,10 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 7918904721939161504, guid: e84eb4fcab84d1145bbd50d92811db83, type: 2}
-  m_audioClip: {fileID: 8300000, guid: bc41d5078f7d2004b94ab7a6791a2b4c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b2c5599068812c64d84ef19778f75fdf, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.55
-  m_Pitch: 3
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -907,7 +907,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 7918904721939161504, guid: e84eb4fcab84d1145bbd50d92811db83, type: 2}
-  m_audioClip: {fileID: 8300000, guid: bc41d5078f7d2004b94ab7a6791a2b4c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 0615b5d4158574d4791ec2794892683c, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -1773,8 +1773,10 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 18f7920bae5a96143b2fae235a56f260, type: 2}
   runtimeData:
     playtime: 0
-    score: 0
+    collectibles: 0
+    collectibles2: 0
     killCount: 0
+    deathCount: 0
     unlockedKey1: 0
     unlockedKey2: 0
     unlockedKey3: 0
@@ -6961,10 +6963,10 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 7918904721939161504, guid: e84eb4fcab84d1145bbd50d92811db83, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 97fa3faf2835a764aa0e8d8780e12259, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 86fb860ab58894a4c91c71124eb324bd, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
-  m_Pitch: 0.5
+  m_Volume: 0.2
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
