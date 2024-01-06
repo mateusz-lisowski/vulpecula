@@ -29,19 +29,38 @@ namespace _193396
 				if (data == "")
 					return true;
 
-				bool isNegation = data.StartsWith('!');
-
-				if (eventData == null)
-					return isNegation ? true : false;
-
 				string eventDataString = eventData.ToString();
-				if (isNegation)
-					eventDataString = '!' + eventDataString;
 
-				if (data == eventDataString)
-					return isNegation ? false : true;
-				else
-					return isNegation ? true : false;
+				var andParts = data.Split("&");
+				foreach (var andPart in andParts)
+				{
+					var orParts = andPart.Split("|");
+					bool result = false;
+					foreach (var orPart in orParts)
+					{
+						bool isNegation = orPart.StartsWith('!');
+
+						if (eventData == null)
+							result = isNegation ? true : false;
+						else
+						{
+							var part = orPart.Substring(isNegation ? 1 : 0);
+
+							if (part == eventDataString)
+								result = isNegation ? false : true;
+							else
+								result = isNegation ? true : false;
+						}
+
+						if (result)
+							break;
+					}
+
+					if (!result)
+						return false;
+				}
+
+				return true;
 			}
 			public bool matches(string eventName, object eventData)
 			{
