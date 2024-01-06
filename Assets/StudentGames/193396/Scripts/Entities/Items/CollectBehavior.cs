@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,11 +52,16 @@ namespace _193396
 			{
 				if (!data.active)
 					runtimeData.isCollected = true;
+				else
+					cooldown = data.cooldown;
 
-				cooldown = data.cooldown;
-				triggerCollect();
-
-				controller.onEvent("collected", data.eventName);
+				if (!(!data.active && data.cooldown != 0f))
+				{
+					triggerCollect();
+					controller.onEvent("collected", data.eventName);
+				}
+				else
+					StartCoroutine(waitCollect());
 			}
 		}
 
@@ -77,6 +83,14 @@ namespace _193396
 
 			foreach (Collider2D contact in contacts)
 				contact.SendMessageUpwards("onMessage", new EntityMessage("collect", collect));
+		}
+
+		private IEnumerator waitCollect()
+		{
+			yield return new WaitForSeconds(data.cooldown);
+
+			triggerCollect();
+			controller.onEvent("collected", data.eventName);
 		}
 
 	}

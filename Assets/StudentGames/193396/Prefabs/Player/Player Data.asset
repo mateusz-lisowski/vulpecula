@@ -51,7 +51,7 @@ MonoBehaviour:
     inputBufferTime: 0.3
   run:
     groundLayers:
-      value: 536872704
+      value: 536874752
     slopeLayer:
       value: 33554432
     maxSpeed: 7
@@ -74,7 +74,7 @@ MonoBehaviour:
     inputBufferTime: 0.2
   wall:
     layers:
-      value: 256
+      value: 2304
     slideMaxSpeed: 20
     slideAcceleration: 1
     slideDeceleration: 6

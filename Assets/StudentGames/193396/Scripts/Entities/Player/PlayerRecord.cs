@@ -38,12 +38,16 @@ namespace _193396
 		{
 			movement = controller.getBehavior<PlayerMovement>();
 		}
-
 		public override void onStart()
 		{
 			base.onStart();
 
 			startPosition = transform.position;
+			restart();
+		}
+		public override void onDisable()
+		{
+			base.onDisable();
 			restart();
 		}
 		private void restart()

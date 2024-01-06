@@ -15,3 +15,6 @@ MonoBehaviour:
   collectingLayers:
     value: 12288
   eventName: key-2
+  active: 0
+  cooldown: 0.3
+  runtimeDataPostfix: 

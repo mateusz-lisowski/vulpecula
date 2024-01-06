@@ -80,6 +80,7 @@ namespace _193396
 		[HideInInspector] public bool lastAttackDown = false;
 
 		public bool isGhost => controller.hitbox.gameObject.layer == (int)RuntimeSettings.Layer.PlayerGhost;
+		public int ghostMask => isGhost ? ~(1 << (int)RuntimeSettings.Layer.GhostIgnoreGround) : ~0;
 
 
 		public override void onAwake()
@@ -272,7 +273,7 @@ namespace _193396
 					return true;
 
 				// is not running up a slope after jumping
-				if (!controller.rigidBody.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers))
+				if (!controller.rigidBody.IsTouchingLayers(currentGroundLayers & ghostMask & ~data.platformPassing.layers))
 					return true;
 			}
 
@@ -292,10 +293,10 @@ namespace _193396
 		}
 		private void updateCollisions()
 		{
-			isGrounded		= groundCheck.IsTouchingLayers(currentGroundLayers);
-			isSlopeGrounded = slopeCheck.IsTouchingLayers(currentGroundLayers & ~data.platformPassing.layers);
+			isGrounded		= groundCheck.IsTouchingLayers(currentGroundLayers & ghostMask);
+			isSlopeGrounded = slopeCheck.IsTouchingLayers(currentGroundLayers & ghostMask & ~data.platformPassing.layers);
 			isOnSlope		= slopeCheck.IsTouchingLayers(data.run.slopeLayer);
-			isFacingWall	= wallCheck.IsTouchingLayers(data.wall.layers);
+			isFacingWall	= wallCheck.IsTouchingLayers(data.wall.layers & ghostMask);
 			isPassing		= passingCheck.IsTouchingLayers(data.platformPassing.layers);
 			canWallJump		= withinCheck.IsTouchingLayers(data.wall.canJumpLayer);
 			canGroundDrop	= !isInTransition && withinCheck.IsTouchingLayers(data.detection.canDropLayer);
