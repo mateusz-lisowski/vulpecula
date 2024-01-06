@@ -42,7 +42,7 @@ AudioSource:
   m_GameObject: {fileID: 921786621081985732}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7918904721939161504, guid: e84eb4fcab84d1145bbd50d92811db83, type: 2}
   m_audioClip: {fileID: 8300000, guid: a5f43236074309148ba78cbc2f9ff02e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -145,6 +145,8 @@ MonoBehaviour:
   eventName: break
   eventData: Breakable Explode
   cooldown: 0
+  transitionStartTime: 0
+  transitionTime: 0
 --- !u!1 &1192047152853868958
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +267,7 @@ AudioSource:
   m_GameObject: {fileID: 2053541292509584273}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7918904721939161504, guid: e84eb4fcab84d1145bbd50d92811db83, type: 2}
   m_audioClip: {fileID: 8300000, guid: 43848e073dc88b9498fe7085e36a9434, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -368,3 +370,5 @@ MonoBehaviour:
   eventName: break
   eventData: Breakable
   cooldown: 0
+  transitionStartTime: 0
+  transitionTime: 0
