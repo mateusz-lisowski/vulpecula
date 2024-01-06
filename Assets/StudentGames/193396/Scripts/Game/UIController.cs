@@ -56,7 +56,7 @@ namespace _193396
 			float healthY = healthLevelTransform.anchoredPosition.y - healthLevelTransform.rect.height * (1f - info.healthNormalized);
 			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, healthY);
 
-			float bossHealthX = bossHealthLevelTransform.anchoredPosition.x - bossHealthLevelTransform.sizeDelta.x * (1f - bossHealth.healthNormalized);
+			float bossHealthX = bossHealthLevelTransform.anchoredPosition.x - bossHealthLevelTransform.rect.width * (1f - bossHealth.healthNormalized);
 			bossHealthTransform.anchoredPosition = new Vector2(bossHealthX, bossHealthTransform.anchoredPosition.y);
 
 			playtime.text = string.Format("{0:0.00}", info.playtime);
