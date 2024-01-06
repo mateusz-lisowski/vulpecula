@@ -41,6 +41,11 @@ namespace _193396
 		public float playtime => runtimeData.playtime;
 		public float score => runtimeData.score;
 
+		public void teleportSpawn()
+		{
+			transform.position = runtimeData.spawnpoint;
+		}
+
 		public override void onAwake()
 		{
 			health = data.hurt.health;
