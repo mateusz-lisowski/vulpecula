@@ -7078,7 +7078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  eventName: healed
+  eventName: startHealing
   eventData: 
   targetPath: Light
   timeOffset: 0
@@ -7095,10 +7095,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  eventName: healed
+  eventName: stopHealing
   eventData: 
   targetPath: Light
-  timeOffset: 0.9
+  timeOffset: 0
 --- !u!1 &8306153363597658653
 GameObject:
   m_ObjectHideFlags: 0

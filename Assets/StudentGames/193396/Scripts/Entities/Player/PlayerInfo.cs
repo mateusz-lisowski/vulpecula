@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,9 +31,10 @@ namespace _193396
 		[Space(5)]
 		[field: SerializeField, ReadOnly] private int health;
 
-
 		private List<int> justCollected = new List<int>();
 		private bool justHit = false;
+
+		private float healingRate = 0f;
 
 
 		public float healthNormalized => (float)health / data.hurt.health;
@@ -106,13 +108,14 @@ namespace _193396
 			justHit = true;
 
 			health = Math.Max(health - hitData.strength, 0);
+			healingRate = 0f;
 
 			controller.onEvent("hurt", healthNormalized);
 
 			if (health == 0)
 				controller.onEvent("died", null);
 		}
-		private void tryHeal(int count)
+		private bool tryHeal(int count)
 		{
 			int newHealth = Math.Min(health + count, data.hurt.health);
 			int heal = newHealth - health;
@@ -120,7 +123,27 @@ namespace _193396
 			health = newHealth;
 
 			if (heal > 0)
+			{
 				controller.onEvent("healed", heal);
+				return true;
+			}
+			else
+				return false;
+		}
+		private IEnumerator startHealing()
+		{
+			controller.onEvent("startHealing", null);
+
+			while (tryHeal(1))
+			{
+				if (healingRate == 0f)
+					break;
+
+				yield return new WaitForSeconds(1f / healingRate);
+			}
+
+			healingRate = 0f;
+			controller.onEvent("stopHealing", null);
 		}
 
 		private void unlock(string name)
@@ -175,7 +198,17 @@ namespace _193396
 					break;
 				default:
 					if (collect.name.StartsWith("heal:"))
-						tryHeal(int.Parse(collect.name.Substring(5)));
+					{
+						float rate = float.Parse(collect.name.Substring(5));
+						bool startNew = healingRate == 0f;
+
+						if (rate > healingRate)
+						{
+							healingRate = rate;
+							if (startNew)
+								StartCoroutine(startHealing());
+						}
+					}
 					else
 						Debug.LogWarning("Collected item of unknown type: " + collect.name);
 					break;
