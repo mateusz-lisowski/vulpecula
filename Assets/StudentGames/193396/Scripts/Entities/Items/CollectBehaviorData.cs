@@ -16,7 +16,7 @@ namespace _193396
 
 		[Tooltip("Can item activate multiple times")]
 		public bool active;
-		[Tooltip("Time between two consecutive item activations, when active, or time needed to active, when not active")]
+		[Tooltip("Time between two consecutive item activations")]
 		public float cooldown;
 
 		[Space(10)]

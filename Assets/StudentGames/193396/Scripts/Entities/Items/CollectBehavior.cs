@@ -55,13 +55,8 @@ namespace _193396
 				else
 					cooldown = data.cooldown;
 
-				if (!(!data.active && data.cooldown != 0f))
-				{
-					triggerCollect();
-					controller.onEvent("collected", data.eventName);
-				}
-				else
-					StartCoroutine(waitCollect());
+				triggerCollect();
+				controller.onEvent("collected", data.eventName);
 			}
 		}
 
@@ -84,14 +79,5 @@ namespace _193396
 			foreach (Collider2D contact in contacts)
 				contact.SendMessageUpwards("onMessage", new EntityMessage("collect", collect));
 		}
-
-		private IEnumerator waitCollect()
-		{
-			yield return new WaitForSeconds(data.cooldown);
-
-			triggerCollect();
-			controller.onEvent("collected", data.eventName);
-		}
-
 	}
 }
