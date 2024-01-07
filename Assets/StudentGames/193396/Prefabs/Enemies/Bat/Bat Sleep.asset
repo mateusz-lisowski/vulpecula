@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Bat Sleep
   m_EditorClassIdentifier: 
   minWakeDistance: 5
-  lockInDistance: 0.1
+  lockInDistance: 0.5
