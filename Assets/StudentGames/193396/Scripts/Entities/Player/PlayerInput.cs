@@ -29,8 +29,8 @@ namespace _193396
 			isInputMoveLeft		= isEnabled && Input.GetKey(KeyCode.LeftArrow);
 			isInputMoveRight	= isEnabled && Input.GetKey(KeyCode.RightArrow);
 
-			isInputJump			= isEnabled && Input.GetKeyDown(KeyCode.Z);
-			isInputJumpReleased	= !isEnabled || !Input.GetKey(KeyCode.Z);
+			isInputJump			= isEnabled && (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Space));
+			isInputJumpReleased	= !isEnabled || !(Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.Space));
 
 			isInputDash			= isEnabled && Input.GetKeyDown(KeyCode.C);
 			isInputDashReleased	= !isEnabled || !Input.GetKey(KeyCode.C);
