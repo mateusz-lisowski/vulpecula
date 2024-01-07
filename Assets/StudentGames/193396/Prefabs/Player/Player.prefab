@@ -230,7 +230,7 @@ AudioSource:
   m_GameObject: {fileID: 1356456561226632121}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7918904721939161504, guid: e84eb4fcab84d1145bbd50d92811db83, type: 2}
   m_audioClip: {fileID: 8300000, guid: 8781c4096f425cb4e8c0ead683de4b50, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.85
@@ -1693,7 +1693,7 @@ GameObject:
   - component: {fileID: 7855963956060272660}
   - component: {fileID: 7745948289286802684}
   m_Layer: 0
-  m_Name: player
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1775,6 +1775,7 @@ MonoBehaviour:
     playtime: 0
     collectibles: 0
     collectibles2: 0
+    damageTaken: 0
     killCount: 0
     deathCount: 0
     unlockedKey1: 0
