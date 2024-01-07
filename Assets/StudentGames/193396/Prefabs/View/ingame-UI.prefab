@@ -2513,6 +2513,10 @@ PrefabInstance:
       propertyPath: infoSource
       value: 
       objectReference: {fileID: 4173409112137792871}
+    - target: {fileID: 6292448972065437155, guid: 06859b27c93f5654db515acdc7665a82, type: 3}
+      propertyPath: infoSource
+      value: 
+      objectReference: {fileID: 4173409112137792871}
     - target: {fileID: 7163185723251206076, guid: 06859b27c93f5654db515acdc7665a82, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
