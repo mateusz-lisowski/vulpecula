@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace _193396
 {
+	[RequireComponent(typeof(Animator))]
     public class EndingController : MonoBehaviour
     {
 		public CameraController cameraController;
@@ -35,6 +36,11 @@ namespace _193396
 		public void quit()
 		{
 			MergeController.loadMainMenu();
+		}
+
+		private void Awake()
+		{
+			transform.GetComponent<Animator>().SetBool("isMerged", MergeController.isMerged());
 		}
 
 		private void Update()
