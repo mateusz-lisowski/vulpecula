@@ -224,6 +224,16 @@ MonoBehaviour:
     animatorName: onRoomCleared
     type: 0
     setBoolean: 0
+  - eventName: jumpBegin
+    eventData: 
+    animatorName: isMidJump
+    type: 1
+    setBoolean: 1
+  - eventName: jumpEnd
+    eventData: 
+    animatorName: isMidJump
+    type: 1
+    setBoolean: 0
 --- !u!95 &490190435741887861
 Animator:
   serializedVersion: 5
