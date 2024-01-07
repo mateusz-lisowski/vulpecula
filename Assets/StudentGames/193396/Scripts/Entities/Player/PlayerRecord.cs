@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
 
 namespace _193396
 {
@@ -122,7 +119,7 @@ namespace _193396
 			{
 				rest = rest.Substring(1);
 
-				data.holdEnd = Time.time + float.Parse(rest);
+				data.holdEnd = Time.time + float.Parse(rest, System.Globalization.CultureInfo.InvariantCulture);
 			}
 
 			return true;

@@ -78,8 +78,10 @@ namespace _193396
 					continue;
 
 				Data highScore;
-				int.TryParse(subelements[0], out highScore.score);
-				float.TryParse(subelements[1], out highScore.time);
+				int.TryParse(subelements[0], System.Globalization.NumberStyles.Float, 
+					System.Globalization.CultureInfo.InvariantCulture, out highScore.score);
+				float.TryParse(subelements[1], System.Globalization.NumberStyles.Float, 
+					System.Globalization.CultureInfo.InvariantCulture, out highScore.time);
 
 				separatedData.Add(highScore);
 			}
@@ -93,7 +95,8 @@ namespace _193396
 			string data = "";
 
 			foreach (var element in separatedData)
-				data += string.Format("{0},{1:0.00};", element.score, element.time);
+				data += string.Format(System.Globalization.CultureInfo.InvariantCulture, 
+					"{0},{1:0.00};", element.score, element.time);
 
 			PlayerPrefs.SetString(highScoresKey, data);
 		}
