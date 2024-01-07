@@ -1218,7 +1218,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1600,7 +1600,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
+  m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 100, y: 208}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6676281510432919462
@@ -1621,7 +1621,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: -13
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -2567,7 +2567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4749497
+      value: 4282939577
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2613,7 +2613,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 400.00003
+      value: 502.01834
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_SizeDelta.y
@@ -2649,11 +2649,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 200.00002
+      value: 251.00917
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -78
+      value: -52
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2673,7 +2673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_text
-      value: Mateusz Lisowski
+      value: ' Mateusz Lisowski'
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_fontSize
@@ -2693,7 +2693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 9026032
+      value: 4287216112
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2739,7 +2739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 400.00003
+      value: 499.51
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_SizeDelta.y
@@ -2775,11 +2775,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 200.00002
+      value: 249.755
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -39
+      value: -26
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2799,7 +2799,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_text
-      value: Adrian Dybowski
+      value: ' Adrian Dybowski'
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_fontSize
@@ -2819,7 +2819,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 2966197
+      value: 4281156277
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3003,7 +3003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 400.00003
+      value: 502.01834
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_SizeDelta.y
@@ -3039,11 +3039,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 200.00002
+      value: 251.00917
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -117
+      value: -78
       objectReference: {fileID: 0}
     - target: {fileID: 3052943362082724752, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3063,7 +3063,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_text
-      value: Wojciech Slomowicz
+      value: ' Wojciech Slomowicz'
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_fontSize
@@ -3083,7 +3083,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8932477402848340356, guid: fbd661aa0b6290a48b8184be539163e5, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 5140387
+      value: 4283330467
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
