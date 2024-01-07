@@ -15,7 +15,6 @@ namespace _193396
 		private RectTransform bossHealthLevelTransform;
 
 		private TextMeshProUGUI playtime;
-		private TextMeshProUGUI score;
 
 
 		public float getValue(string name)
@@ -24,6 +23,7 @@ namespace _193396
 			{
 				case "collectibles": return info.collectibles;
 				case "collectibles2": return info.collectibles2;
+				case "damageTaken": return info.damageTaken;
 				case "killCount": return info.killCount;
 				case "deathCount": return info.deathCount;
 				case "playtime": return info.playtime;
@@ -42,7 +42,6 @@ namespace _193396
 			bossHealthLevelTransform = transform.Find("Canvas/Top/Boss/health/level").GetComponent<RectTransform>();
 
 			playtime = transform.Find("Canvas/Top-Right/playtime").GetComponent<TextMeshProUGUI>();
-			score = transform.Find("Canvas/Top-Right/score").GetComponent<TextMeshProUGUI>();
 
 			GameManager.pushCursorHide();
 		}
@@ -60,7 +59,6 @@ namespace _193396
 			bossHealthTransform.anchoredPosition = new Vector2(bossHealthX, bossHealthTransform.anchoredPosition.y);
 
 			playtime.text = string.Format("{0:0.00}", info.playtime);
-			score.text = string.Format("Score: {0}", info.collectibles);
 		}
 	}
 }

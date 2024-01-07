@@ -14,6 +14,7 @@ namespace _193396
 			[field: Space(5)]
 			[field: SerializeField, ReadOnly] public int collectibles = 0;
 			[field: SerializeField, ReadOnly] public int collectibles2 = 0;
+			[field: SerializeField, ReadOnly] public int damageTaken = 0;
 			[field: SerializeField, ReadOnly] public int killCount = 0;
 			[field: SerializeField, ReadOnly] public int deathCount = 0;
 			[field: Space(5)]
@@ -44,14 +45,17 @@ namespace _193396
 		public float playtime => runtimeData.playtime;
 		public int collectibles => runtimeData.collectibles;
 		public int collectibles2 => runtimeData.collectibles2;
+		public int damageTaken => runtimeData.damageTaken;
 		public int killCount => runtimeData.killCount;
 		public int deathCount => runtimeData.deathCount;
 
 		public int score()
 		{
-			int intScore = 50 * collectibles
+			int intScore = 1000
+				+ 50 * collectibles
 				+ 250 * collectibles2
 				+ 100 * killCount
+				- 10 * damageTaken
 				- 500 * deathCount;
 
 			if (intScore <= 0)
@@ -140,7 +144,10 @@ namespace _193396
 				return;
 			justHit = true;
 
+			int oldHealth = health;
 			health = Math.Max(health - hitData.strength, 0);
+			runtimeData.damageTaken += Math.Max(oldHealth - health, 0);
+
 			healingRate = 0f;
 
 			controller.onEvent("hurt", healthNormalized);
