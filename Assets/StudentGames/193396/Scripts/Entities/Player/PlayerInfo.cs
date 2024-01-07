@@ -68,7 +68,7 @@ namespace _193396
 
 		public void teleportSpawn()
 		{
-			transform.position = runtimeData.spawnpoint;
+			controller.onEvent("hit", new HitData { isVertical = true, right = Vector3.right, strength = 999 });
 		}
 
 		public override void onAwake()
