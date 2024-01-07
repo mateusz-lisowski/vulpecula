@@ -1,19 +1,22 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class HideOnAwake : MonoBehaviour
+namespace _193396
 {
-	private void Awake()
+	public class HideOnAwake : MonoBehaviour
 	{
-		hide(GetComponent<SpriteRenderer>());
-		hide(GetComponent<TilemapRenderer>());
-	}
+		private void Awake()
+		{
+			hide(GetComponent<SpriteRenderer>());
+			hide(GetComponent<TilemapRenderer>());
+		}
 
-	private void hide(Renderer renderer)
-	{
-		if (renderer == null)
-			return;
+		private void hide(Renderer renderer)
+		{
+			if (renderer == null)
+				return;
 
-		renderer.enabled = false;
+			renderer.enabled = false;
+		}
 	}
 }

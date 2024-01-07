@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class MenuPage : MonoBehaviour
+namespace _193396
 {
-	[field: SerializeField] public int order { get; private set; }
+	public class MenuPage : MonoBehaviour
+	{
+		[field: SerializeField] public int order { get; private set; }
+	}
 }
