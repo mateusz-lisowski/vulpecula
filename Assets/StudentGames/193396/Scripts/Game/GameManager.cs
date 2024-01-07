@@ -85,19 +85,8 @@ namespace _193396
 		{
 			if (currentTimeDisablersCount != 0)
 				Time.timeScale = 0f;
-			else if (Input.GetKey(KeyCode.T))
-				Time.timeScale = 0.2f;
 			else
 				Time.timeScale = 1f;
-
-			if (Input.GetKeyDown(KeyCode.U))
-				Debug.Break();
-
-			if (Input.GetKeyDown(KeyCode.R))
-			{
-				runtimeDataInstance.transform.parent = transform;
-				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-			}
 		}
 	
 	
