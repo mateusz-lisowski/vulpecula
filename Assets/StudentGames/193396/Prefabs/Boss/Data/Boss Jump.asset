@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Boss Jump
   m_EditorClassIdentifier: 
   eccentricity: 0.8
-  maxDistance: 100
+  minHeight: 1
   cooldown: 0
   autoResetTarget: 1

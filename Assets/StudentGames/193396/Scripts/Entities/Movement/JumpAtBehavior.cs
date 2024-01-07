@@ -54,18 +54,17 @@ namespace _193396
 
 			direction.faceTowards(target.position);
 
-			float xt = Mathf.Abs(target.position.x - transform.position.x);
+			float xt = Mathf.Max(Mathf.Abs(target.position.x - transform.position.x), 0.01f);
 			float yt = Mathf.Min(target.position.y - transform.position.y, xt * data.eccentricity);
 
-			float d = 4 * data.eccentricity * xt - yt;
-			float distance =(4 * data.eccentricity * xt * xt) / d;
-
-			float height = distance * data.eccentricity;
+			float height = Mathf.Max((4 * data.eccentricity * xt * xt) / (4 * data.eccentricity * xt - yt) * data.eccentricity, 
+				data.minHeight);
 			float force = Mathf.Sqrt(2 * -Physics2D.gravity.y * height);
 
-			float t = Mathf.Sqrt(2 * (height - yt) / -Physics2D.gravity.y);
-			t *= xt / (xt - 0.5f * distance);
-			jumpSpeed = xt / t;
+			float distance = yt == 0f ? xt : 2 * xt * (height - Mathf.Sqrt(height * (height - yt))) / yt;
+
+			float t = 2 * force / -Physics2D.gravity.y;
+			jumpSpeed = distance / t;
 
 			if (force > controller.rigidBody.velocity.y)
 			{
