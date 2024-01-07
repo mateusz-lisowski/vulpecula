@@ -19,7 +19,7 @@ namespace _193396
 
 		private void Awake()
 		{
-			group = transform.Find("Canvas").GetComponent<CanvasGroup>();
+			group = transform.Find("Body").GetComponent<CanvasGroup>();
 
 			innerCheck = transform.Find("Detection/Inner").GetComponent<Collider2D>();
 			outerCheck = transform.Find("Detection/Outer").GetComponent<Collider2D>();
