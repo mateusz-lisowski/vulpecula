@@ -120,6 +120,8 @@ namespace _193396
 				controller.onEvent("collect", new CollectData { id = CollectData.idGenerator, name = "key-2" });
 				controller.onEvent("collect", new CollectData { id = CollectData.idGenerator, name = "key-3" });
 			}
+			else if (Input.GetKeyDown(KeyCode.F3))
+				controller.onEvent("hit", new HitData { isVertical = true, right = Vector3.right, strength = 1 });
 		}
 
 
@@ -170,10 +172,10 @@ namespace _193396
 
 			while (tryHeal(1))
 			{
+				yield return new WaitForSeconds(1f / healingRate);
+
 				if (healingRate == 0f)
 					break;
-
-				yield return new WaitForSeconds(1f / healingRate);
 			}
 
 			healingRate = 0f;
