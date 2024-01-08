@@ -18,5 +18,5 @@ MonoBehaviour:
     value: 1073744128
   maxDistance: 20
   minDistance: 1
-  determinationTime: 3
+  determinationTime: 6
   canCatch: 0
