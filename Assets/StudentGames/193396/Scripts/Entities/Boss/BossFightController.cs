@@ -44,10 +44,14 @@ namespace _193396
 			bossRunAttack = bossAttacks[0];
 
 			Transform bossRoom = transform.Find("Room");
+
 			baseLocation = (new GameObject("Base")).transform;
-			baseLocation.position = boss.position;
-			baseLocation.rotation = boss.rotation;
+			lockTransform(ref baseLocation, boss.transform);
 			baseLocation.parent = bossRoom;
+
+			jumpAtTarget = (new GameObject("Target")).transform;
+			lockTransform(ref jumpAtTarget, boss.transform);
+			jumpAtTarget.parent = bossRoom;
 
 			findPlayerRegion = transform.Find("Room/FindPlayer").GetComponent<Collider2D>();
 			findEnemiesRegion = transform.Find("Room/FindEnemies").GetComponent<Collider2D>();
@@ -56,7 +60,8 @@ namespace _193396
 		}
 
 		public override string[] capturableEvents => new string[] {
-			 "faceAt", "jumpAt", "jumpBegin", "spawnRoom", "clearRoom", "spawnEnd", "enable", "disable" };
+			 "faceAt", "jumpAt", "teleportAt", "jumpBegin", "spawnRoom", 
+			"clearRoom", "spawnEnd", "enable", "disable" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
@@ -65,7 +70,10 @@ namespace _193396
 					bossDirection.faceTowards(stringToTarget((string)eventData).position);
 					break;
 				case "jumpAt":
-					jumpAtTarget = stringToTarget((string)eventData);
+					lockTransform(ref jumpAtTarget, stringToTarget((string)eventData));
+					break;
+				case "teleportAt":
+					boss.transform.position = stringToTarget((string)eventData).position;
 					break;
 				case "jumpBegin":
 					jumpBegin();
@@ -103,6 +111,12 @@ namespace _193396
 			}
 		}
 
+		private void lockTransform(ref Transform toLock, Transform at)
+		{
+			toLock.position = at.position;
+			toLock.rotation = at.rotation;
+		}
+
 		private Transform playerLocation()
 		{
 			ContactFilter2D filter = new ContactFilter2D().NoFilter();
@@ -137,7 +151,6 @@ namespace _193396
 		private void jumpBegin()
 		{
 			bossJumpAt.target = jumpAtTarget;
-			jumpAtTarget = null;
 		}
 
 		private void clearRoom()

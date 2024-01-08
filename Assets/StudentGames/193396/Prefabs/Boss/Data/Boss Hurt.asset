@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Boss Hurt
   m_EditorClassIdentifier: 
   canInstaKillLayer:
-    value: 67108864
+    value: 0
   killEventName: boss
   invulnerabilityTime: 0
   distressTime: 0

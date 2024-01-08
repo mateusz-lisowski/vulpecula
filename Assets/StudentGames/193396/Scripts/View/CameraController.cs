@@ -93,7 +93,6 @@ namespace _193396
 		private void trackPlayer()
 		{
 			Vector3 targetPosition = marginedTarget();
-			Debug.Log("current: " + transform.position + "; target: " + targetPosition);
 			transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
 		}
 
