@@ -1845,8 +1845,7 @@ MonoBehaviour:
   boundary: {fileID: 0}
   xMargin: 1
   yMargin: 1
-  xSmooth: 8
-  ySmooth: 8
+  smoothTime: 0.25
 --- !u!114 &2479184528200104460
 MonoBehaviour:
   m_ObjectHideFlags: 0

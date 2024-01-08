@@ -11,10 +11,11 @@ namespace _193396
 		public Transform target;
 		public PolygonCollider2D boundary;
 
-		public float xMargin = 1f; // Distance in the x axis the player can move before the camera follows.
-		public float yMargin = 1f; // Distance in the y axis the player can move before the camera follows.
-		public float xSmooth = 8f; // How smoothly the camera catches up with it's target movement in the x axis.
-		public float ySmooth = 8f; // How smoothly the camera catches up with it's target movement in the y axis.
+		public float xMargin = 1f;
+		public float yMargin = 1f;
+
+		public float smoothTime = 0.25f;
+		private Vector3 velocity = Vector3.zero;
 
 
 		private List<Transform> targetStack = new List<Transform>();
@@ -66,32 +67,34 @@ namespace _193396
 				keepWithinBoundary();
 		}
 
-		private bool checkXMargin()
+		private Vector3 marginedTarget()
 		{
-			// Returns true if the distance between the camera and the player in the x axis is greater than the x margin.
-			return Mathf.Abs(transform.position.x - target.position.x) > xMargin;
-		}
-		private bool checkYMargin()
-		{
-			// Returns true if the distance between the camera and the player in the y axis is greater than the y margin.
-			return Mathf.Abs(transform.position.y - target.position.y) > yMargin;
+			Vector3 boundedPosition = transform.position;
+			boundedPosition.z = transform.position.z;
+
+			if (Mathf.Abs(transform.position.x - target.position.x) > xMargin)
+			{
+				if (transform.position.x > target.position.x)
+					boundedPosition.x = target.position.x - xMargin;
+				else
+					boundedPosition.x = target.position.x + xMargin;
+			}
+
+			if (Mathf.Abs(transform.position.y - target.position.y) > yMargin)
+			{
+				if (transform.position.y > target.position.y)
+					boundedPosition.y = target.position.y - yMargin;
+				else
+					boundedPosition.y = target.position.y + yMargin;
+			}
+
+			return boundedPosition;
 		}
 		private void trackPlayer()
 		{
-			float targetX = transform.position.x;
-			float targetY = transform.position.y;
-
-			if (checkXMargin())
-			{
-				targetX = Mathf.Lerp(transform.position.x, target.position.x, xSmooth * Time.deltaTime);
-			}
-
-			if (checkYMargin())
-			{
-				targetY = Mathf.Lerp(transform.position.y, target.position.y, ySmooth * Time.deltaTime);
-			}
-
-			transform.position = new Vector3(targetX, targetY, transform.position.z);
+			Vector3 targetPosition = marginedTarget();
+			Debug.Log("current: " + transform.position + "; target: " + targetPosition);
+			transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
 		}
 
 		private static Bounds orthographicBounds(Camera camera)
