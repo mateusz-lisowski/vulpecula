@@ -9,7 +9,7 @@ using UnityEngine.Tilemaps;
 namespace _193396
 {
 	[Serializable]
-	[CreateAssetMenu(menuName = "2D/Tiles/Advanced Rule Tile")]
+	[CreateAssetMenu(menuName = "193396/Tiles/Advanced Rule Tile")]
 	public class AdvancedRuleTile : TileBase
 	{
 		/// <summary>

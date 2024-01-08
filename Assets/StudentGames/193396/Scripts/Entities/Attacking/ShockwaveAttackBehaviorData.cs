@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/ShockwaveAttack")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/ShockwaveAttack")]
 	public class ShockwaveAttackBehaviorData : BaseAttackBehaviorData
 	{
 		[Space(10)]

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Run")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Run")]
 	public class RunBehaviorData : ScriptableObject
 	{
 		[Space(10)]

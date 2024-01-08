@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Hurt")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Hurt")]
 	public class HurtBehaviorData : ScriptableObject
 	{
 		[Tooltip("Layer detecting whether the ground can instantly kill")]

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/HurtKnockback")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/HurtKnockback")]
 	public class HurtKnockbackBehaviorData : ScriptableObject
 	{
 		[SerializeField] private HurtBehaviorData associatedHurtData;

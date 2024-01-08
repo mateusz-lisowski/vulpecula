@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Layers")]
+	[CreateAssetMenu(menuName = "193396/Data/Layers")]
 	public class RuntimeSettings : ScriptableObject, ISerializationCallbackReceiver
 	{
 		public enum Layer

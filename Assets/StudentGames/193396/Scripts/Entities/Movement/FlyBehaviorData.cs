@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Fly")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Fly")]
 	public class FlyBehaviorData : ScriptableObject
 	{
 		[Space(10)]

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Flip")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Flip")]
 	public class FlipBehaviorData : ScriptableObject
 	{
 		[Space(10)]

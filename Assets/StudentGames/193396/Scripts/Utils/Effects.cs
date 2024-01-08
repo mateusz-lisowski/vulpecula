@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Effects")]
+	[CreateAssetMenu(menuName = "193396/Data/Effects")]
 	public class Effects : ScriptableObject
 	{
 		public static Effects instance { get => GameManager.instance.effectsInstance; }

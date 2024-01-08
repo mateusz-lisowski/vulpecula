@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Grounded")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Grounded")]
 	public class GroundBehaviorData : ScriptableObject
 	{
 		[Space(10)]

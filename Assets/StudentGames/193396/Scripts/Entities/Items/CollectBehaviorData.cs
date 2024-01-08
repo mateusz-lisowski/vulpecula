@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Collect")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Collect")]
 	public class CollectBehaviorData : ScriptableObject
 	{
 		[Space(10)]

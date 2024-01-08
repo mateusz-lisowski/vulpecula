@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/RangedAttack")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/RangedAttack")]
 	public class RangedAttackBehaviorData : BaseAttackBehaviorData
 	{
 		[Space(10)]

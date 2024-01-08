@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Jump")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Jump")]
 	public class JumpBehaviorData : ScriptableObject
 	{
 		[Space(10)]

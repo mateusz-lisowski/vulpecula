@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Avoid")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Avoid")]
 	public class AvoidBehaviorData : ScriptableObject
 	{
 		[Tooltip("Layers to avoid")]

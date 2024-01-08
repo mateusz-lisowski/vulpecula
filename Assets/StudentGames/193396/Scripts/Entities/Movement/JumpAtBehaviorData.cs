@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/JumpAt")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/JumpAt")]
 	public class JumpAtBehaviorData : ScriptableObject
 	{
 		[Space(10)]

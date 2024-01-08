@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Player")]
+	[CreateAssetMenu(menuName = "193396/Data/Player")]
 	public class PlayerData : ScriptableObject
 	{
 		[System.Serializable]

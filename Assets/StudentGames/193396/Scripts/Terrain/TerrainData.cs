@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Terrain")]
+	[CreateAssetMenu(menuName = "193396/Data/Terrain")]
 	public class TerrainData : ScriptableObject
 	{
 		[System.Serializable]

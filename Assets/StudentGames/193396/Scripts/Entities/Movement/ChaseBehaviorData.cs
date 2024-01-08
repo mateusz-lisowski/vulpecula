@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _193396
 {
-	[CreateAssetMenu(menuName = "Data/Behavior/Chase")]
+	[CreateAssetMenu(menuName = "193396/Data/Behavior/Chase")]
 	public class ChaseBehaviorData : ScriptableObject
 	{
 		[Tooltip("Layers to chase")]
