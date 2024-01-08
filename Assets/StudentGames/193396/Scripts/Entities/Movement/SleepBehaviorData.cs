@@ -7,7 +7,5 @@ namespace _193396
 	{
 		[Tooltip("Minimum distance from which can be awaken")]
 		public float minWakeDistance = 10f;
-		[Tooltip("Distance from which can lock into sleep position")]
-		public float lockInDistance = 0.1f;
 	}
 }

@@ -10,17 +10,13 @@ namespace _193396
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public Vector2 targetVelocity { get; private set; }
 
-		private FlipBehavior direction;
 		private ChaseBehavior chase;
-		private SleepBehavior sleep;
 		private List<AvoidBehavior> avoids;
 
 
 		public override void onAwake()
 		{
-			direction = controller.getBehavior<FlipBehavior>();
 			chase = controller.getBehavior<ChaseBehavior>();
-			sleep = controller.getBehavior<SleepBehavior>();
 			avoids = controller.getBehaviors<AvoidBehavior>();
 		}
 
@@ -69,7 +65,6 @@ namespace _193396
 		private Vector2 calculateTargetVelocity()
 		{
 			bool isChasing = chase != null && chase.isChasing;
-			bool isReturning = sleep != null && !isChasing;
 
 			List<Vector2> vectors = new List<Vector2>();
 
@@ -79,12 +74,10 @@ namespace _193396
 
 			if (isChasing)
 				vectors.Add((chase.lastTargetPosition - (Vector2)transform.position).normalized * data.flySpeed);
-			else if (isReturning)
-				vectors.Add((sleep.sleepPosition - (Vector2)transform.position).normalized * data.flySpeed);
 
 			Vector2 targetVelocity = findAverageVector(vectors);
 
-			if (!isChasing && !isReturning)
+			if (!isChasing)
 				targetVelocity += Vector2.down * data.fallSpeed;
 
 			return targetVelocity;

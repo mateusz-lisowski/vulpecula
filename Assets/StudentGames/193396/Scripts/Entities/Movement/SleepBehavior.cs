@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace _193396
@@ -13,6 +15,9 @@ namespace _193396
 		[field: SerializeField, ReadOnly] public Vector2 sleepPosition { get; private set; }
 
 		private ChaseBehavior chase;
+
+		private Coroutine returningCoroutine;
+		private bool startSleeping = false;
 
 
 		public override void onAwake()
@@ -30,13 +35,26 @@ namespace _193396
 		{
 			bool wasSleeping = isSleeping;
 
+			if (startSleeping)
+			{
+				isSleeping = true;
+				startSleeping = false;
+			}
+
 			if (isSleeping && chase.isChasing 
 				&& Vector2.Distance(transform.position, chase.lastTargetPosition) <= data.minWakeDistance)
+			{
+				if (returningCoroutine != null)
+					StopCoroutine(returningCoroutine);
+				returningCoroutine = null;
+				StopCoroutine(Effects.instance.fade.run(controller.spriteRenderer, 
+					revert: true, move: false));
+
 				isSleeping = false;
-			
-			if (!isSleeping && !chase.isChasing 
-				&& Vector2.Distance(transform.position, sleepPosition) < data.lockInDistance)
-				isSleeping = true;
+			}
+
+			if (!isSleeping && !chase.isChasing && returningCoroutine == null)
+				returningCoroutine = StartCoroutine(startReturning());
 
 			if (isSleeping)
 				transform.position = sleepPosition;
@@ -53,5 +71,21 @@ namespace _193396
 			return isSleeping;
 		}
 
+
+		private IEnumerator startReturning()
+		{
+			yield return Effects.instance.fade.run(controller.spriteRenderer, move: false);
+
+			returningCoroutine = null;
+
+			if (chase.isChasing)
+				yield break;
+
+			startSleeping = true;
+			transform.position = sleepPosition;
+
+			yield return Effects.instance.fade.run(controller.spriteRenderer,
+				revert: true, move: false);
+		}
 	}
 }

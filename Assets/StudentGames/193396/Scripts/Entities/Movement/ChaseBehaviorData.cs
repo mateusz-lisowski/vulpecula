@@ -21,5 +21,7 @@ namespace _193396
 
 		[Tooltip("Time to chase a lost target")]
 		public float determinationTime = 6f;
+		[Tooltip("Lose determination when cought the target")]
+		public bool canCatch = true;
 	}
 }

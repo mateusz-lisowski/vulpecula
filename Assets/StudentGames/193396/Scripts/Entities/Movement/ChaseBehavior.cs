@@ -27,6 +27,8 @@ namespace _193396
 
 		public override void onUpdate()
 		{
+			bool wasChasing = isChasing;
+
 			lastSeenTime += Time.deltaTime;
 
 			Vector2 targetPosition;
@@ -36,7 +38,7 @@ namespace _193396
 			if (isChasing)
 				lastSeenTime = 0f;
 
-			if (!isChasing && caught)
+			if (!isChasing && caught && data.canCatch)
 				lastSeenTime = data.determinationTime;
 
 			if (!isChasing && lastSeenTime < data.determinationTime)
