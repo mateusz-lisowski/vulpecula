@@ -290,17 +290,17 @@ PlayerSettings:
       m_Height: 512
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 0d9abb12456707f4fb236b0170420366, type: 3}
       m_Width: 256
       m_Height: 256
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 6a8a3ca0155ade44fa2aa4b046877fd9, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 90ca73c008e32b044954006f458b5599, type: 3}
       m_Width: 64
       m_Height: 64
       m_Kind: 0
@@ -315,7 +315,7 @@ PlayerSettings:
       m_Height: 32
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 54c62e8c595e96c4992c284692778d8d, type: 3}
       m_Width: 16
       m_Height: 16
       m_Kind: 0
