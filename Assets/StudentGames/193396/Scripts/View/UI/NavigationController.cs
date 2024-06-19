@@ -3,14 +3,21 @@ using UnityEngine.EventSystems;
 
 namespace _193396
 {
-	public class NavigationController : MonoBehaviour, IPointerDownHandler
+	public class NavigationController : MonoBehaviour, IPointerDownHandler, ISelectHandler
 	{
 		private bool shouldUnselect = false;
+		private bool shouldScroll = false;
 		
 		public bool checkShouldUnselect()
 		{
 			bool result = shouldUnselect;
 			shouldUnselect = false;
+			return result;
+		}
+		public bool checkShouldScroll()
+		{
+			bool result = shouldScroll;
+			shouldScroll = false;
 			return result;
 		}
 
@@ -21,6 +28,12 @@ namespace _193396
 				return;
 
 			shouldUnselect = true;
+			shouldScroll = false;
+		}
+
+		public void OnSelect(BaseEventData eventData)
+		{
+			shouldScroll = true;
 		}
 	}
 }
