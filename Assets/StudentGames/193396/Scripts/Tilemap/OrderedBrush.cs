@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace _193396
 {
-	[CustomGridBrush(true, false, false, "Ordered Brush")]
+	[CustomGridBrush(true, true, true, "Default Brush")]
 	public class OrderedBrush : GridBrush { }
 
 	[CustomEditor(typeof(OrderedBrush))]
