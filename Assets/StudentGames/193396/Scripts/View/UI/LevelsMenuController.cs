@@ -42,7 +42,7 @@ namespace _193396
 
 				page.transform.Find("ui-nested-scrollable-region/label").GetComponent<TextMeshProUGUI>().text = level.name;
 
-				page.transform.GetComponentInChildren<HighScoresController>().sceneName = level.name;
+				page.transform.GetComponentInChildren<HighScoresController>().sceneName = level.sceneName;
 
 				page.transform.Find("Back").GetComponent<Button>().onClick.AddListener(
 					delegate { menu.setPage("Levels"); });
