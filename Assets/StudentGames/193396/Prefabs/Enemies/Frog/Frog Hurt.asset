@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canInstaKillLayer:
     value: 67108864
-  killEventName: 
+  killEventName: frog
   invulnerabilityTime: 0
   distressTime: 0.3
   health: 5
