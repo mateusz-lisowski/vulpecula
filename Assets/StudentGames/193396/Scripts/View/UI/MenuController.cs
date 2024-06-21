@@ -63,7 +63,12 @@ namespace _193396
 		}
 		public void setPage(string pageName)
 		{
-			MenuPage page = pages.First(p => p.name == pageName);
+			MenuPage page = pages.FirstOrDefault(p => p.name == pageName);
+			if (page == null)
+			{
+				pages = transform.GetComponentsInChildren<MenuPage>(includeInactive: true);
+				page = pages.First(p => p.name == pageName);
+			}
 
 			if (isNavigating)
 				forceNavigation = true;
@@ -92,9 +97,9 @@ namespace _193396
 			if (!changedBack)
 				currentPage.lastSelected = null;
 		}
-		public void loadLevel()
+		public void loadLevel(int buildIndex)
 		{
-			MergeController.loadLevel();
+			MergeController.loadLevel(buildIndex);
 		}
 		public void loadMenu()
 		{

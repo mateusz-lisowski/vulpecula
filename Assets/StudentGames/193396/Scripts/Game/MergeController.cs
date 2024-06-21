@@ -21,9 +21,12 @@ namespace _193396
 				SceneManager.LoadSceneAsync("Main Menu");
 			}
 		}
-		public static void loadLevel()
+		public static void loadLevel(int buildIndex)
 		{
-			SceneManager.LoadSceneAsync("193396");
+			if (buildIndex != 0)
+				SceneManager.LoadSceneAsync(buildIndex);
+			else
+				SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
 		}
 	}
 }
