@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _193396
 {
@@ -35,12 +36,7 @@ namespace _193396
 		}
 		public void quit()
 		{
-			MergeController.loadMainMenu();
-		}
-
-		private void Awake()
-		{
-			transform.GetComponent<Animator>().SetBool("isMerged", MergeController.isMerged());
+			SceneManager.LoadSceneAsync("Main Menu");
 		}
 
 		private void Update()

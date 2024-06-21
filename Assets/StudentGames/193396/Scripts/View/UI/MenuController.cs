@@ -99,11 +99,14 @@ namespace _193396
 		}
 		public void loadLevel(int buildIndex)
 		{
-			MergeController.loadLevel(buildIndex);
+			if (buildIndex != 0)
+				SceneManager.LoadSceneAsync(buildIndex);
+			else
+				SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
 		}
 		public void loadMenu()
 		{
-			MergeController.loadMainMenu();
+			SceneManager.LoadSceneAsync("Main Menu");
 		}
 		public void quit()
 		{
