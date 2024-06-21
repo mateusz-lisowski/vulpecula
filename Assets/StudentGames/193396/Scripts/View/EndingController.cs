@@ -11,6 +11,7 @@ namespace _193396
 		public CameraController cameraController;
 		public Transform beginTarget;
 		[Space(5)]
+		public bool longAnimation = false;
 		public float speed = 12f;
 
 		private GameObject moveUpTarget;
@@ -33,10 +34,16 @@ namespace _193396
 		public void showScore()
 		{
 			transform.Find("game-summary").gameObject.SetActive(true);
+			transform.Find("game-summary").GetComponent<Animator>().SetBool("isLong", longAnimation);
 		}
 		public void quit()
 		{
 			SceneManager.LoadSceneAsync("Main Menu");
+		}
+
+		private void Awake()
+		{
+			transform.GetComponent<Animator>().SetBool("isLong", longAnimation);
 		}
 
 		private void Update()
