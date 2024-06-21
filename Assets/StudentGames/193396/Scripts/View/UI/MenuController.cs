@@ -118,14 +118,17 @@ namespace _193396
 		{
 			animator = GetComponent<Animator>();
 
-			group = transform.Find("Canvas").GetComponent<CanvasGroup>();
+			Transform canvas = transform.Find("Canvas");
+			if (canvas == null)
+				canvas = transform;
+			group = canvas.GetComponent<CanvasGroup>();
 
-			navigationController = transform.Find("Canvas/Navigation").gameObject;
+			navigationController = canvas.Find("Navigation").gameObject;
 			navigationControllerSelectable = navigationController.GetComponent<Selectable>();
 
-			inactivePagesParent = transform.Find("Canvas/Inactive");
-			currentPageParent = transform.Find("Canvas/Current");
-			previousPageParent = transform.Find("Canvas/Previous");
+			inactivePagesParent = canvas.Find("Inactive");
+			currentPageParent = canvas.Find("Current");
+			previousPageParent = canvas.Find("Previous");
 
 			pages = transform.GetComponentsInChildren<MenuPage>(includeInactive: true);
 			currentPage = pages.First(p => p.name == "Main");

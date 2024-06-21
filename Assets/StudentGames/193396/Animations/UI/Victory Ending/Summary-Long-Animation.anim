@@ -73,7 +73,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Menu
+    path: Current/Main/Body/Menu
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -112,7 +112,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Color.a
-    path: ui-region/Body/Menu
+    path: Current/Main/Body/Menu
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
     flags: 0
@@ -142,7 +142,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/collectibles/1
+    path: Current/Main/Body/Left/Top/collectibles/1
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -172,7 +172,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/collectibles/2
+    path: Current/Main/Body/Left/Top/collectibles/2
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -202,7 +202,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/damage-taken
+    path: Current/Main/Body/Left/Top/damage-taken
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -232,7 +232,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/deaths
+    path: Current/Main/Body/Left/Top/deaths
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -262,7 +262,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/kills
+    path: Current/Main/Body/Left/Top/kills
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -292,7 +292,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Bottom/score
+    path: Current/Main/Body/Left/Bottom/score
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -322,7 +322,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Bottom/time
+    path: Current/Main/Body/Left/Bottom/time
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -502,7 +502,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Menu
+    path: Current/Main/Body/Menu
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -541,7 +541,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Color.a
-    path: ui-region/Body/Menu
+    path: Current/Main/Body/Menu
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
     flags: 0
@@ -571,7 +571,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/collectibles/1
+    path: Current/Main/Body/Left/Top/collectibles/1
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -601,7 +601,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/collectibles/2
+    path: Current/Main/Body/Left/Top/collectibles/2
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -631,7 +631,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/damage-taken
+    path: Current/Main/Body/Left/Top/damage-taken
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -661,7 +661,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/deaths
+    path: Current/Main/Body/Left/Top/deaths
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -691,7 +691,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Top/kills
+    path: Current/Main/Body/Left/Top/kills
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -721,7 +721,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Bottom/score
+    path: Current/Main/Body/Left/Bottom/score
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -751,7 +751,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: ui-region/Body/Left/Bottom/time
+    path: Current/Main/Body/Left/Bottom/time
     classID: 1
     script: {fileID: 0}
     flags: 0
