@@ -62,7 +62,7 @@ namespace _193396
 		}
 
 
-		private static List<Data> readLevels()
+		public static List<Data> readLevels()
 		{
 			List<Data> separatedData = new List<Data>();
 

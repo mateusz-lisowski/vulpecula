@@ -7,6 +7,7 @@ namespace _193396
 	{
 		[field: SerializeField] public int order { get; private set; }
 		[field: SerializeField] public GameObject firstSelectedGameObject { get; private set; }
+		[field: SerializeField] public GameObject backupFirstSelectedGameObject { get; private set; }
 
 		[HideInInspector] public GameObject lastSelected;
 
@@ -25,8 +26,12 @@ namespace _193396
 					lastSelected = EventSystem.current.currentSelectedGameObject;
 			}
 
-			if (lastSelected == null)
-				lastSelected = firstSelectedGameObject;
+			if (lastSelected == null) {
+				if (firstSelectedGameObject != null && firstSelectedGameObject.activeSelf)
+					lastSelected = firstSelectedGameObject;
+				else
+					lastSelected = backupFirstSelectedGameObject;
+			}
 		}
 	}
 }

@@ -5437,7 +5437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7724731360670616704, guid: a9d7ba9e41016af4c954f6b54afd0926, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: loadLevel
+      value: loadLevelRelative
       objectReference: {fileID: 0}
     - target: {fileID: 7724731360670616704, guid: a9d7ba9e41016af4c954f6b54afd0926, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

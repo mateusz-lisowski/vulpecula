@@ -99,10 +99,40 @@ namespace _193396
 		}
 		public void loadLevel(int buildIndex)
 		{
-			if (buildIndex != 0)
+			SceneManager.LoadSceneAsync(buildIndex);
+		}
+		public void loadLevelRelative(int relativeIndex)
+		{
+			int buildIndex = SceneManager.GetActiveScene().buildIndex;
+
+			if (relativeIndex == 0 || !canLoadLevelRelative(relativeIndex))
+			{
 				SceneManager.LoadSceneAsync(buildIndex);
-			else
-				SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+				return;
+			}
+
+			var levels = LevelsMenuController.readLevels();
+			var level = levels.Find(l => l.buildIndex == buildIndex);
+
+			var relativeLevel = levels.Find(l => l.index == level.index + relativeIndex);
+
+			SceneManager.LoadSceneAsync(relativeLevel.buildIndex);
+		}
+		public bool canLoadLevelRelative(int relativeIndex)
+		{
+			int buildIndex = SceneManager.GetActiveScene().buildIndex;
+
+			var levels = LevelsMenuController.readLevels();
+			int levelIndex = levels.FindIndex(l => l.buildIndex == buildIndex);
+			if (levelIndex < 0)
+				return false;
+			var level = levels[levelIndex];
+
+			var relativeLevelIndex = levels.FindIndex(l => l.index == level.index + relativeIndex);
+			if (relativeLevelIndex < 0)
+				return false;
+
+			return true;
 		}
 		public void loadMenu()
 		{
