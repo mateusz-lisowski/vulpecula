@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c999a51b1c68c5541bb667963be18f7e, type: 3}
   m_Name: Slug Hurt
   m_EditorClassIdentifier: 
+  canInstaKillLayer:
+    value: 0
+  killEventName: slug
   invulnerabilityTime: 0
   distressTime: 0
   health: 1
   maxBlock: 5
+  faceHit: 1

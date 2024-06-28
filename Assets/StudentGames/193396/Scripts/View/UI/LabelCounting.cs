@@ -39,7 +39,7 @@ namespace _193396
 		}
 		private IEnumerator count(float value)
 		{
-			for (float t = 0f; t < time; t += Time.deltaTime)
+			for (float t = 0f; t < time; t += Time.unscaledDeltaTime)
 			{
 				setLabel(value, t / time);
 				yield return null;

@@ -34,12 +34,14 @@ namespace _193396
 
 		private void Awake()
 		{
-			healthTransform = transform.Find("Canv" +
-				"as/Top-Left/health/fluid").GetComponent<RectTransform>();
+			healthTransform = transform.Find("Canvas/Top-Left/health/fluid").GetComponent<RectTransform>();
 			healthLevelTransform = transform.Find("Canvas/Top-Left/health/level").GetComponent<RectTransform>();
 
-			bossHealthTransform = transform.Find("Canvas/Top/Boss/health/fluid").GetComponent<RectTransform>();
-			bossHealthLevelTransform = transform.Find("Canvas/Top/Boss/health/level").GetComponent<RectTransform>();
+			if (bossHealth != null)
+			{
+				bossHealthTransform = transform.Find("Canvas/Top/Boss/health/fluid").GetComponent<RectTransform>();
+				bossHealthLevelTransform = transform.Find("Canvas/Top/Boss/health/level").GetComponent<RectTransform>();
+			}
 
 			playtime = transform.Find("Canvas/Top-Right/playtime").GetComponent<TextMeshProUGUI>();
 
@@ -52,11 +54,16 @@ namespace _193396
 
 		private void Update()
 		{
-			float healthY = healthLevelTransform.anchoredPosition.y - healthLevelTransform.rect.height * (1f - info.healthNormalized);
+			float healthY = healthLevelTransform.anchoredPosition.y 
+				- healthLevelTransform.rect.height * (1f - info.healthNormalized);
 			healthTransform.anchoredPosition = new Vector2(healthTransform.anchoredPosition.x, healthY);
 
-			float bossHealthX = bossHealthLevelTransform.anchoredPosition.x - bossHealthLevelTransform.rect.width * (1f - bossHealth.healthNormalized);
-			bossHealthTransform.anchoredPosition = new Vector2(bossHealthX, bossHealthTransform.anchoredPosition.y);
+			if (bossHealth != null)
+			{
+				float bossHealthX = bossHealthLevelTransform.anchoredPosition.x 
+					- bossHealthLevelTransform.rect.width * (1f - bossHealth.healthNormalized);
+				bossHealthTransform.anchoredPosition = new Vector2(bossHealthX, bossHealthTransform.anchoredPosition.y);
+			}
 
 			playtime.text = string.Format("{0:0.00}", info.playtime);
 		}

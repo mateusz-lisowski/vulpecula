@@ -17,7 +17,9 @@ namespace _193396
 			public int score;
 			public float time;
 		}
-	
+
+		public string sceneName;
+		[Space(5)]
 		public GameObject scorePrefab;
 
 		private const int maxNumberOfHighScores = 25;
@@ -25,12 +27,13 @@ namespace _193396
 		private const string highScoresKey = "HighScores193396";
 
 
-		public static void addScore(Data data)
+		public static void addScore(string sceneName, Data data)
 		{
-			if (data.score > PlayerPrefs.GetInt(highScoreKey, 0))
-				PlayerPrefs.SetInt(highScoreKey, data.score);
+			if (sceneName == "193396")
+				if (data.score > PlayerPrefs.GetInt(highScoreKey, 0))
+					PlayerPrefs.SetInt(highScoreKey, data.score);
 
-			var highScores = readHighScores();
+			var highScores = readHighScores(sceneName);
 
 			var index = highScores.BinarySearch(data);
 			if (index < 0) index = ~index;
@@ -41,13 +44,13 @@ namespace _193396
 				if (highScores.Count > maxNumberOfHighScores)
 					highScores.RemoveRange(maxNumberOfHighScores, highScores.Count - maxNumberOfHighScores);
 
-				saveHighScores(highScores);
+				saveHighScores(sceneName, highScores);
 			}
 		}
 
 		void Start()
 		{
-			var highScores = readHighScores();
+			var highScores = readHighScores(sceneName);
 			int index = 0;
 
 			foreach (var highScore in highScores)
@@ -64,9 +67,16 @@ namespace _193396
 		}
 
 
-		private static List<Data> readHighScores()
+		private static string sceneHighScoresKey(string sceneName)
 		{
-			string data = PlayerPrefs.GetString(highScoresKey, "");
+			if (sceneName == "193396")
+				return highScoresKey;
+			else
+				return string.Format("{0}-{1}", highScoresKey, sceneName);
+		}
+		private static List<Data> readHighScores(string sceneName)
+		{
+			string data = PlayerPrefs.GetString(sceneHighScoresKey(sceneName), "");
 
 			List<Data> separatedData = new List<Data>();
 
@@ -90,7 +100,7 @@ namespace _193396
 
 			return separatedData;
 		}
-		private static void saveHighScores(List<Data> separatedData)
+		private static void saveHighScores(string sceneName, List<Data> separatedData)
 		{
 			string data = "";
 
@@ -98,7 +108,7 @@ namespace _193396
 				data += string.Format(System.Globalization.CultureInfo.InvariantCulture, 
 					"{0},{1:0.00};", element.score, element.time);
 
-			PlayerPrefs.SetString(highScoresKey, data);
+			PlayerPrefs.SetString(sceneHighScoresKey(sceneName), data);
 		}
 	}
 }

@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace _193396
 {
@@ -12,9 +17,14 @@ namespace _193396
 		[field: Space(10)]
 		[field: SerializeField, ReadOnly] public bool isActive { get; private set; }
 		[field: SerializeField, ReadOnly] public bool isVisible { get; private set; }
+		[field: SerializeField, ReadOnly] public bool isNavigating { get; private set; }
 
 		private Animator animator;
 		private CanvasGroup group;
+
+		private GameObject navigationController;
+		private Selectable navigationControllerSelectable;
+		private bool forceNavigation = false;
 
 		private Transform inactivePagesParent;
 		private Transform currentPageParent;
@@ -31,8 +41,6 @@ namespace _193396
 			if (!switchable)
 				return;
 
-			setPage("Main");
-
 			bool wasActive = isActive;
 			isActive = val;
 
@@ -40,21 +48,38 @@ namespace _193396
 			{
 				if (isActive)
 				{
+					isNavigating = false;
+					forceNavigation = false;
+					pages.All(p => p.lastSelected = null);
 					group.gameObject.SetActive(true);
 					animator.SetTrigger("onActivate");
+					animator.ResetTrigger("onDeactivate");
 				}
 				else
 					animator.SetTrigger("onDeactivate");
 			}
+
+			setPage("Main");
 		}
 		public void setPage(string pageName)
 		{
-			MenuPage page = pages.First(p => p.name == pageName);
+			MenuPage page = pages.FirstOrDefault(p => p.name == pageName);
+			if (page == null)
+			{
+				pages = transform.GetComponentsInChildren<MenuPage>(includeInactive: true);
+				page = pages.First(p => p.name == pageName);
+			}
+
+			if (isNavigating)
+				forceNavigation = true;
+			EventSystem.current.SetSelectedGameObject(null);
 
 			if (currentPage.order == page.order)
 				return;
 
-			if (page.order > currentPage.order)
+			bool changedBack = page.order < currentPage.order;
+
+			if (!changedBack)
 				animator.SetTrigger("onPageChange");
 			else
 				animator.SetTrigger("onPageChangeReverse");
@@ -68,14 +93,50 @@ namespace _193396
 			currentPage = page;
 			
 			page.transform.SetParent(currentPageParent, false);
+
+			if (!changedBack)
+				currentPage.lastSelected = null;
 		}
-		public void loadLevel()
+		public void loadLevel(int buildIndex)
 		{
-			MergeController.loadLevel();
+			SceneManager.LoadSceneAsync(buildIndex);
+		}
+		public void loadLevelRelative(int relativeIndex)
+		{
+			int buildIndex = SceneManager.GetActiveScene().buildIndex;
+
+			if (relativeIndex == 0 || !canLoadLevelRelative(relativeIndex))
+			{
+				SceneManager.LoadSceneAsync(buildIndex);
+				return;
+			}
+
+			var levels = LevelsMenuController.readLevels();
+			var level = levels.Find(l => l.buildIndex == buildIndex);
+
+			var relativeLevel = levels.Find(l => l.index == level.index + relativeIndex);
+
+			SceneManager.LoadSceneAsync(relativeLevel.buildIndex);
+		}
+		public bool canLoadLevelRelative(int relativeIndex)
+		{
+			int buildIndex = SceneManager.GetActiveScene().buildIndex;
+
+			var levels = LevelsMenuController.readLevels();
+			int levelIndex = levels.FindIndex(l => l.buildIndex == buildIndex);
+			if (levelIndex < 0)
+				return false;
+			var level = levels[levelIndex];
+
+			var relativeLevelIndex = levels.FindIndex(l => l.index == level.index + relativeIndex);
+			if (relativeLevelIndex < 0)
+				return false;
+
+			return true;
 		}
 		public void loadMenu()
 		{
-			MergeController.loadMainMenu();
+			SceneManager.LoadSceneAsync("Main Menu");
 		}
 		public void quit()
 		{
@@ -87,11 +148,17 @@ namespace _193396
 		{
 			animator = GetComponent<Animator>();
 
-			group = transform.Find("Canvas").GetComponent<CanvasGroup>();
+			Transform canvas = transform.Find("Canvas");
+			if (canvas == null)
+				canvas = transform;
+			group = canvas.GetComponent<CanvasGroup>();
 
-			inactivePagesParent = transform.Find("Canvas/Inactive");
-			currentPageParent = transform.Find("Canvas/Current");
-			previousPageParent = transform.Find("Canvas/Previous");
+			navigationController = canvas.Find("Navigation").gameObject;
+			navigationControllerSelectable = navigationController.GetComponent<Selectable>();
+
+			inactivePagesParent = canvas.Find("Inactive");
+			currentPageParent = canvas.Find("Current");
+			previousPageParent = canvas.Find("Previous");
 
 			pages = transform.GetComponentsInChildren<MenuPage>(includeInactive: true);
 			currentPage = pages.First(p => p.name == "Main");
@@ -131,6 +198,36 @@ namespace _193396
 		{
 			if (!group.gameObject.activeSelf)
 				group.alpha = 0f;
+
+			if (isActive)
+			{
+				if (EventSystem.current.currentSelectedGameObject != null)
+				{
+					NavigationController pointerUnselect;
+					if (EventSystem.current.currentSelectedGameObject.TryGetComponent(out pointerUnselect))
+						if (pointerUnselect.checkShouldUnselect())
+							EventSystem.current.SetSelectedGameObject(null);
+				}
+
+				if (EventSystem.current.currentSelectedGameObject == null)
+					if (!forceNavigation)
+						EventSystem.current.SetSelectedGameObject(navigationController);
+					else
+						EventSystem.current.SetSelectedGameObject(currentPage.lastSelected);
+
+				isNavigating = EventSystem.current.currentSelectedGameObject != navigationController;
+				forceNavigation = false;
+
+				Selectable selectable;
+				if (currentPage.lastSelected != null 
+					&& currentPage.lastSelected.TryGetComponent(out selectable))
+				{
+					Navigation nav = new Navigation();
+					nav.mode = Navigation.Mode.Explicit;
+					nav.selectOnUp = nav.selectOnDown = nav.selectOnLeft = nav.selectOnRight = selectable;
+					navigationControllerSelectable.navigation = nav;
+				}
+			}
 		}
 
 	}

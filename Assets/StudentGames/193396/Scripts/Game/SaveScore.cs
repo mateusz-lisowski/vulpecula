@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _193396
 {
@@ -12,7 +13,7 @@ namespace _193396
             newScore.score = (int)infoSource.getValue("score");
             newScore.time = infoSource.getValue("playtime");
 
-			HighScoresController.addScore(newScore);
+			HighScoresController.addScore(SceneManager.GetActiveScene().name, newScore);
         }
     }
 }
