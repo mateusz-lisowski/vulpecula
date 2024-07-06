@@ -93,7 +93,7 @@ namespace _193396
 		}
 
 		public override string[] capturableEvents => new string[] { 
-			"hit", "collect", "killed", "respawn", "focused", "unfocused" };
+			"hit", "collect", "killed", "respawn", "focused", "unfocused", "regionEnter" };
 		public override void onEvent(string eventName, object eventData)
 		{
 			switch (eventName)
@@ -104,6 +104,7 @@ namespace _193396
 				case "respawn": respawn(); break;
 				case "focused": controller.onEvent("inputEnable", null); break;
 				case "unfocused": controller.onEvent("inputDisable", null); break;
+				case "regionEnter": if ((string)eventData == "victory") won(); break;
 			}
 		}
 
@@ -259,6 +260,13 @@ namespace _193396
 					isUnhittable = true;
 					break;
 			}
+		}
+		private void won()
+		{
+			stopPlaytime = true;
+			controller.animator.enabled = false;
+			StartCoroutine(Effects.instance.fade.run(controller.spriteRenderer, move: false));
+			isUnhittable = true;
 		}
 	}
 }

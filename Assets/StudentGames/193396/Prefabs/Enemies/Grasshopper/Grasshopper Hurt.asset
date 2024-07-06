@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canInstaKillLayer:
     value: 67108864
+  killEventName: grasshopper
   invulnerabilityTime: 0
   distressTime: 0.4
   health: 3
   maxBlock: 0
+  faceHit: 1
